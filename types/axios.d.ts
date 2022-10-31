@@ -1,5 +1,11 @@
-type ErrorReseponseData = {
+export type ErrorResponse = {
   success: boolean;
-  code: number;
-  data: { message: string; statusCode: number } | { error: string; statusCode: 400; message: string[] }; // class validator error
+  status: number;
+  data: { error?: string; statusCode: number; message: string | string[] }; // class validator error
+};
+
+export type SuccessResponse<T = any> = {
+  success: boolean;
+  status: number;
+  data: T;
 };

@@ -1,13 +1,30 @@
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Pressable, Text, TextInput, View } from 'react-native';
-import axios, { AxiosError } from 'axios';
-import Config from 'react-native-config';
-import apiRequest from '../api';
+import { useMutation, useQueryClient } from 'react-query';
+import { loginApi, LoginApiResponseData } from '../api/auth/login';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import { ErrorResponse, SuccessResponse } from '../../types/axios';
+
+type LoginMutationParams = {
+  email: string;
+  password: string;
+};
 
 const SignIn = () => {
+  const queryClient = useQueryClient();
+
   const [email, setEmail] = useState('login2@naver.com');
   const [password, setPassword] = useState('123123qq');
-  const [loading, setLoading] = useState(false);
+
+  const removeJwt = async () => {
+    try {
+      await EncryptedStorage.removeItem('accessToken');
+    } catch (error) {
+      console.info(error);
+    }
+
+    Alert.alert('remove token');
+  };
 
   const onChangeEmail = (value: string) => {
     setEmail(value);
@@ -18,29 +35,34 @@ const SignIn = () => {
   };
 
   const onPressLoginButton = async () => {
-    if (loading) {
+    if (loginMutation.isLoading) {
       return;
     }
-    try {
-      const response = await apiRequest.post('/users/login', { email, password });
-      const responseData = response.data;
-
-      if (response.status === 200) {
-        Alert.alert('login success');
-        return;
-      } else if (responseData.error) {
-        Alert.alert(responseData.message);
-      } else {
-        Alert.alert('아이디와 비밀번호를 입력해주세요.');
-      }
-    } catch (error: any | AxiosError) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-      } else {
-        Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    }
+    loginMutation.mutate({ email, password });
   };
+
+  const loginMutation = useMutation<SuccessResponse<LoginApiResponseData> & ErrorResponse, Error, LoginMutationParams>(
+    'login',
+    ({ email, password }) => loginApi({ email, password }),
+    {
+      onError: (error, variable, context) => {},
+      onSuccess: async (responseData, variables, context) => {
+        if (responseData.status === 200) {
+          Alert.alert('login success');
+          queryClient.invalidateQueries('loginUser');
+          await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+        } else if (responseData.data.error) {
+          const message =
+            Array.isArray(responseData.data.message) && responseData.data.message.length > 0
+              ? responseData.data.message[0]
+              : (responseData.data.message as string);
+          Alert.alert(message);
+        } else {
+          Alert.alert('이메일과 비밀번호를 입력해주세요.');
+        }
+      },
+    }
+  );
 
   return (
     <View>
@@ -48,6 +70,9 @@ const SignIn = () => {
       <TextInput value={password} onChangeText={onChangePassword} style={{ borderWidth: 1 }} />
       <Pressable onPress={onPressLoginButton}>
         <Text>로그인</Text>
+      </Pressable>
+      <Pressable onPress={removeJwt}>
+        <Text>토큰삭제</Text>
       </Pressable>
     </View>
   );
