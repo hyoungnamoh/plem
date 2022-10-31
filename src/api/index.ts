@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 import Config from 'react-native-config';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const apiRequest = axios.create({
   baseURL: Config.API_URL,
@@ -9,7 +10,12 @@ const apiRequest = axios.create({
 apiRequest.defaults.timeout = 5000;
 
 apiRequest.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    const token = await EncryptedStorage.getItem('accessToken');
+    if (config.headers && token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -20,8 +26,7 @@ apiRequest.interceptors.request.use(
 
 apiRequest.interceptors.response.use(
   (response) => {
-    const res = response.data;
-    return res;
+    return response;
   },
   (error) => {
     console.info(error);
