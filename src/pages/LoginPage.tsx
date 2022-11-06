@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Pressable, Text, TextInput, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginApi, LoginApiResponseData } from '../api/auth/login';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { ErrorResponse, SuccessResponse } from '../../types/axios';
+import UnderlineSvg from '../assets/images/Vector 671.svg';
+import { useRoute } from '@react-navigation/native';
 
 type LoginMutationParams = {
   email: string;
   password: string;
 };
 
-const SignIn = () => {
+const LoginPage = () => {
   const queryClient = useQueryClient();
 
   const [email, setEmail] = useState('login2@naver.com');
@@ -64,18 +66,54 @@ const SignIn = () => {
     }
   );
 
+  const onPressFindPassword = () => {
+    Alert.alert('비밀번호 찾기 버튼');
+  };
+  const route = useRoute();
   return (
-    <View>
-      <TextInput value={email} onChangeText={onChangeEmail} style={{ borderWidth: 1 }} />
-      <TextInput value={password} onChangeText={onChangePassword} style={{ borderWidth: 1 }} />
-      <Pressable onPress={onPressLoginButton}>
-        <Text>로그인</Text>
+    <View style={{ backgroundColor: '#F4F1E8', flex: 1, paddingTop: 300 }}>
+      <View style={{ paddingHorizontal: 20, flex: 1 }}>
+        <View>
+          <Text>이메일</Text>
+          <TextInput
+            value={email}
+            onChangeText={onChangeEmail}
+            style={{ marginTop: 10 }}
+            placeholder={'plam@plam.com'}
+          />
+          <View style={{ marginTop: 6 }}>
+            <UnderlineSvg width={'100%'} />
+          </View>
+        </View>
+        <View style={{ marginTop: 40 }}>
+          <Text>비밀번호</Text>
+          <TextInput
+            value={password}
+            onChangeText={onChangePassword}
+            style={{ marginTop: 10 }}
+            placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
+            secureTextEntry
+          />
+          <View style={{ marginTop: 6 }}>
+            <UnderlineSvg width={'100%'} />
+          </View>
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: 30 }}>
+          <Pressable onPress={onPressLoginButton}>
+            <Text>비밀번호 찾기</Text>
+          </Pressable>
+        </View>
+      </View>
+      <Pressable
+        style={{ height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}
+        onPress={onPressLoginButton}>
+        <Text style={{ color: '#fff' }}>로그인</Text>
       </Pressable>
-      <Pressable onPress={removeJwt}>
+      {/* <Pressable onPress={removeJwt}>
         <Text>토큰삭제</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 };
 
-export default SignIn;
+export default LoginPage;

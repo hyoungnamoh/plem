@@ -1,8 +1,9 @@
+import { useRoute } from '@react-navigation/native';
 import { Alert, Pressable, Text, View } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { useQueryClient } from 'react-query';
 
-const Main = () => {
+const MainPage = () => {
   const queryClient = useQueryClient();
   const removeJwt = async () => {
     try {
@@ -14,8 +15,9 @@ const Main = () => {
 
     Alert.alert('remove token');
   };
+
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: '#F4F1E8' }}>
       <Text>하위 로그인 하셨네요</Text>
       <Pressable onPress={removeJwt}>
         <Text>토큰삭제</Text>
@@ -24,4 +26,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;

@@ -1,11 +1,16 @@
-import SignIn from './src/pages/SignIn';
+import LoginPage from './src/pages/LoginPage';
 import SignUp from './src/pages/SignUp';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useQuery } from 'react-query';
 import { getLoginUserApi, LoginUser } from './src/api/users/getLoginUserApi';
-import Main from './src/pages/Main';
+import MainPage from './src/pages/MainPage';
 import { SuccessResponse } from './types/axios';
+import PageHeader from './src/components/PageHeader';
+import { Alert, Button, Image, Pressable, SafeAreaView } from 'react-native';
+import { NavigationContainerRefWithCurrent, useNavigationState, useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import IntroPage from './src/pages/IntroPage';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -14,25 +19,38 @@ export type LoggedInParamList = {
   Complete: { orderId: string };
 };
 export type RootStackParamList = {
-  SignIn: undefined;
+  IntroPage: undefined;
+  LoginPage: undefined;
   SignUp: undefined;
 };
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function AppInner() {
+function AppInner({ routeName }: { routeName: string }) {
   const { isLoading, data, isError } = useQuery<SuccessResponse<LoginUser>>('loginUser', getLoginUserApi);
-
-  return data?.data.email ? (
-    <Tab.Navigator>
-      <Tab.Screen name="Main" component={Main} options={{ title: '메인페이지' }} />
-    </Tab.Navigator>
-  ) : (
-    <Stack.Navigator initialRouteName="SignIn">
-      <Stack.Screen name="SignIn" component={SignIn} options={{ title: '로그인' }} />
-      <Stack.Screen name="SignUp" component={SignUp} options={{ title: '회원가입' }} />
-    </Stack.Navigator>
+  const isLoginPage = routeName === 'LoginPage';
+  return (
+    <>
+      {isLoginPage && <SafeAreaView style={{ flex: 0, backgroundColor: '#F4F1E8' }} />}
+      <SafeAreaView style={{ flex: 1, backgroundColor: isLoginPage ? '#000' : '#F4F1E8' }}>
+        {data?.data.email ? (
+          <Tab.Navigator>
+            <Tab.Screen name="MainPage" component={MainPage} />
+          </Tab.Navigator>
+        ) : (
+          <Stack.Navigator
+            initialRouteName="IntroPage"
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="IntroPage" component={IntroPage} />
+            <Stack.Screen name="LoginPage" component={LoginPage} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+          </Stack.Navigator>
+        )}
+      </SafeAreaView>
+    </>
   );
 }
 
