@@ -40,7 +40,7 @@ function AppInner({ routeName }: { routeName: string }) {
           </Tab.Navigator>
         ) : (
           <Stack.Navigator
-            initialRouteName="IntroPage"
+            initialRouteName="LoginPage"
             screenOptions={{
               headerShown: false,
             }}>

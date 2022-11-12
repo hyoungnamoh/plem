@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Alert, Image, Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginApi, LoginApiResponseData } from '../api/auth/login';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { ErrorResponse, SuccessResponse } from '../../types/axios';
 import UnderlineSvg from '../assets/images/Vector 671.svg';
 import { useRoute } from '@react-navigation/native';
+import MainSVGFrame from '../components/MainSVGFrame';
 
 type LoginMutationParams = {
   email: string;
@@ -71,47 +72,54 @@ const LoginPage = () => {
   };
   const route = useRoute();
   return (
-    <View style={{ backgroundColor: '#F4F1E8', flex: 1, paddingTop: 300 }}>
-      <View style={{ paddingHorizontal: 20, flex: 1 }}>
-        <View>
-          <Text>이메일</Text>
-          <TextInput
-            value={email}
-            onChangeText={onChangeEmail}
-            style={{ marginTop: 10 }}
-            placeholder={'plam@plam.com'}
-          />
-          <View style={{ marginTop: 6 }}>
-            <UnderlineSvg width={'100%'} />
+    <View style={{ flex: 1 }}>
+      <ScrollView style={{ backgroundColor: '#F4F1E8', flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: 'yellow' }}>
+          <View style={{ alignItems: 'center' }}>
+            <MainSVGFrame />
+          </View>
+          <View style={{ paddingHorizontal: 20 }}>
+            <View>
+              <Text>이메일</Text>
+              <TextInput
+                value={email}
+                onChangeText={onChangeEmail}
+                style={{ marginTop: 10 }}
+                placeholder={'plam@plam.com'}
+              />
+              <View style={{ marginTop: 6 }}>
+                <UnderlineSvg />
+              </View>
+            </View>
+            <View style={{ marginTop: 40 }}>
+              <Text>비밀번호</Text>
+              <TextInput
+                value={password}
+                onChangeText={onChangePassword}
+                style={{ marginTop: 10 }}
+                placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
+                secureTextEntry
+              />
+              <View style={{ marginTop: 6 }}>
+                <UnderlineSvg />
+              </View>
+            </View>
+          </View>
+          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: 30 }}>
+            <Pressable onPress={onPressLoginButton}>
+              <Text>비밀번호 찾기</Text>
+            </Pressable>
           </View>
         </View>
-        <View style={{ marginTop: 40 }}>
-          <Text>비밀번호</Text>
-          <TextInput
-            value={password}
-            onChangeText={onChangePassword}
-            style={{ marginTop: 10 }}
-            placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
-            secureTextEntry
-          />
-          <View style={{ marginTop: 6 }}>
-            <UnderlineSvg width={'100%'} />
-          </View>
-        </View>
-        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: 30 }}>
-          <Pressable onPress={onPressLoginButton}>
-            <Text>비밀번호 찾기</Text>
-          </Pressable>
-        </View>
-      </View>
+        {/* <Pressable onPress={removeJwt}>
+        <Text>토큰삭제</Text>
+      </Pressable> */}
+      </ScrollView>
       <Pressable
         style={{ height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}
         onPress={onPressLoginButton}>
         <Text style={{ color: '#fff' }}>로그인</Text>
       </Pressable>
-      {/* <Pressable onPress={removeJwt}>
-        <Text>토큰삭제</Text>
-      </Pressable> */}
     </View>
   );
 };
