@@ -26,6 +26,11 @@ target 'Plem' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'FirebaseAnalytics' # Add the Firebase pod for Google Analytics
+  pod 'Firebase/Messaging'
+
+  pod 'GoogleUtilities', :modular_headers => true
+
   target 'PlemTests' do
     inherit! :complete
     # Pods for testing
