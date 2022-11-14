@@ -28,6 +28,7 @@ target 'Plem' do
 
   pod 'FirebaseAnalytics' # Add the Firebase pod for Google Analytics
   pod 'Firebase/Messaging'
+  pod 'FirebaseCore', :modular_headers => true
 
   pod 'GoogleUtilities', :modular_headers => true
 

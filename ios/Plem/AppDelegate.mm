@@ -6,6 +6,11 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+// firebase fcm
+#import <Firebase.h> 
+#import <UserNotifications/UserNotifications.h>
+#import <RNCPushNotificationIOS.h>
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -15,11 +20,6 @@
 #import <ReactCommon/RCTTurboModuleManager.h>
 
 #import <react/config/ReactNativeConfig.h>
-
-// firebase fcm
-#import <Firebase.h> 
-#import <UserNotifications/UserNotifications.h>
-#import <RNCPushNotificationIOS.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
@@ -61,12 +61,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 {
   RCTAppSetupPrepareApp(application);
 
-  // firebase fcm
-  if ([FIRApp default] == nil) {
-    [FIRApp configure];
-  }
-  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-
 #if RCT_NEW_ARCH_ENABLED
   _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
   _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
@@ -75,6 +69,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
 #endif
 
+  // firebase fcm
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   NSDictionary *initProps = [self prepareInitialProps];
   UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"Plem", initProps);
 
