@@ -1,0 +1,18 @@
+import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native';
+import PlemText from '../Atoms/PlemText';
+
+const UnderlineText = (props: TextProps & Pick<PressableProps, 'onPress'>) => {
+  return (
+    <Pressable onPress={props.onPress}>
+      <PlemText {...props} style={[styles.underlineText, props.style]}>
+        {props.children}
+      </PlemText>
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  underlineText: { textDecorationLine: 'underline' },
+});
+
+export default UnderlineText;
