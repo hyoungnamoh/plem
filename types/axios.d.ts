@@ -1,7 +1,7 @@
 export type ErrorResponse = {
   success: boolean;
   status: number;
-  data: { error?: string; statusCode: number; message: string | string[] }; // class validator error
+  data: { error?: string; statusCode: number; message: string }; // class validator error
 };
 
 export type SuccessResponse<T = any> = {
@@ -9,3 +9,5 @@ export type SuccessResponse<T = any> = {
   status: number;
   data: T;
 };
+
+export type ApiResponse<T = any> = SuccessResponse<T> & ErrorResponse;

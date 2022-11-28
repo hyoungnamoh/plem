@@ -1,27 +1,35 @@
-import { useRoute } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Alert, Pressable, Text, View } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { useQueryClient } from 'react-query';
+import { useSetRecoilState } from 'recoil';
+import { LoggedInStackParamList } from '../../AppInner';
+import MainSVGFrame from '../components/MainSVGFrame';
+import { loggedInState } from '../states/loggedInState';
 
-const MainPage = () => {
+type MainPageProps = NativeStackScreenProps<LoggedInStackParamList, 'MainPage'>;
+
+const MainPage = ({ navigation }: MainPageProps) => {
   const queryClient = useQueryClient();
+  const setLoggedIn = useSetRecoilState(loggedInState);
+
   const removeJwt = async () => {
     try {
       await EncryptedStorage.removeItem('accessToken');
       queryClient.setQueryData('loginUser', { data: {} });
+      setLoggedIn(false);
     } catch (error) {
       console.info(error);
     }
-
     Alert.alert('remove token');
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F1E8' }}>
-      <Text>하위 로그인 하셨네요</Text>
-      <Pressable onPress={removeJwt}>
-        <Text>토큰삭제</Text>
-      </Pressable>
+      <View style={{ alignItems: 'center' }}>
+        <MainSVGFrame />
+      </View>
+      <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} />
     </View>
   );
 };
