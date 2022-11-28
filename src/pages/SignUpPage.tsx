@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import PlemText from '../components/Atoms/PlemText';
-import PlemTextInput from '../components/Atoms/PlemTextInput';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
-import UnderlineTextInput from '../components/UnderLineTextInput';
+import UnderlineTextInput from '../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 const SignUpPage = () => {
@@ -79,7 +69,7 @@ const SignUpPage = () => {
 const styles = StyleSheet.create({
   page: { backgroundColor: '#F4F1E8', flex: 1 },
   content: { paddingHorizontal: 15 },
-  titleWrapper: { marginTop: 12 },
+  titleWrapper: { marginTop: 12, paddingHorizontal: 4 },
   title: { fontSize: 28, lineHeight: 36 },
   emailWrapper: { marginTop: 40 },
   label: { fontSize: 14 },

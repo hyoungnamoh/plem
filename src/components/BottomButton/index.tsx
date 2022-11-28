@@ -20,7 +20,10 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
   },
-  buttonTitle: { color: '#fff', fontSize: 18 },
+  buttonTitle: {
+    color: '#fff',
+    fontSize: 20,
+  },
 });
 
 export default BottomButton;

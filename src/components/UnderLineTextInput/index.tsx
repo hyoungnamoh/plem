@@ -6,7 +6,7 @@ const UnderlineTextInput = (props: UnderlineTextInputProps) => {
   return (
     <View {...props.wrapperProps}>
       <PlemTextInput {...props} />
-      <Image source={require('../../assets/images/underline.png')} style={{ marginTop: 12 }} />
+      <Image source={require('../../assets/images/underline.png')} style={{ marginTop: 12, width: '100%' }} />
     </View>
   );
 };
