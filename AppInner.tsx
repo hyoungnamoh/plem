@@ -6,7 +6,6 @@ import { useQuery } from 'react-query';
 import { getLoginUserApi, LoginUser } from './src/api/users/getLoginUserApi';
 import MainPage from './src/pages/MainPage';
 import { SuccessResponse } from './types/axios';
-import PageHeader from './src/components/PageHeader';
 import { Alert, Button, Image, Pressable, SafeAreaView } from 'react-native';
 import { NavigationContainerRefWithCurrent, useNavigationState, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -15,34 +14,37 @@ import { loggedInState } from './src/states/loggedInState';
 import { useRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
 
-export type LoggedInParamList = {
-  Orders: undefined;
-  Settings: undefined;
-  Delivery: undefined;
-  Complete: { orderId: string };
+export type LoggedInStackParamList = {
+  MainPage: undefined;
 };
-export type RootStackParamList = {
-  IntroPage: undefined;
+
+export type LoggedOutStackParamList = {
   LoginPage: undefined;
   SignUpPage: undefined;
+  FindPassword: undefined;
+  IntroPage: undefined;
+  MainPage: undefined;
 };
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
 function AppInner({ routeName }: { routeName: string }) {
-  const { isLoading, data, isError } = useQuery<SuccessResponse<LoginUser>>('loginUser', getLoginUserApi);
+  // const { isLoading, data, isError } = useQuery<SuccessResponse<LoginUser>>('loginUser', getLoginUserApi);
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-  const [bottomSafeArea, setbBottomSafeArea] = useRecoilState(bottomSafeAreaState);
-  const isLoginPage = routeName === 'LoginPage';
+  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+
   return (
     <>
       {bottomSafeArea === '#000' && <SafeAreaView style={{ flex: 0, backgroundColor: '#F4F1E8' }} />}
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
-        {data?.data.email ? (
-          <Tab.Navigator>
-            <Tab.Screen name="MainPage" component={MainPage} />
-          </Tab.Navigator>
+        {loggedIn ? (
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="MainPage" component={MainPage} />
+          </Stack.Navigator>
         ) : (
           <Stack.Navigator
             initialRouteName="IntroPage"

@@ -1,33 +1,35 @@
 import { useState } from 'react';
-import { Alert, Image, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginApi, LoginApiResponseData } from '../api/auth/login';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { ErrorResponse, SuccessResponse } from '../../types/axios';
-import UnderlineSvg from '../assets/images/Vector 671.svg';
-import { useRoute } from '@react-navigation/native';
-import MainSVGFrame from '../components/MainSVGFrame';
+import { ApiResponse } from '../../types/axios';
+import PlemText from '../components/Atoms/PlemText';
+import UnderlineTextInput from '../components/UnderlineTextInput';
+import Header from '../components/Header';
+import BlackButton from '../components/BlackButton';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { LoggedOutStackParamList } from '../../AppInner';
+import UnderlineText from '../components/UnderlineText';
+import { useRecoilState } from 'recoil';
+import { loggedInState } from '../states/loggedInState';
+import Loading from '../components/Loading';
+import { AxiosError } from 'axios';
 
 type LoginMutationParams = {
   email: string;
   password: string;
 };
 
-const LoginPage = () => {
+type LoginPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'LoginPage'>;
+
+const LoginPage = ({ navigation }: LoginPageProps) => {
   const queryClient = useQueryClient();
 
-  const [email, setEmail] = useState('login2@naver.com');
-  const [password, setPassword] = useState('123123qq');
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
-  const removeJwt = async () => {
-    try {
-      await EncryptedStorage.removeItem('accessToken');
-    } catch (error) {
-      console.info(error);
-    }
-
-    Alert.alert('remove token');
-  };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onChangeEmail = (value: string) => {
     setEmail(value);
@@ -44,84 +46,89 @@ const LoginPage = () => {
     loginMutation.mutate({ email, password });
   };
 
-  const loginMutation = useMutation<SuccessResponse<LoginApiResponseData> & ErrorResponse, Error, LoginMutationParams>(
+  const loginMutation = useMutation<ApiResponse<LoginApiResponseData>, AxiosError, LoginMutationParams>(
     'login',
     ({ email, password }) => loginApi({ email, password }),
     {
-      onError: (error, variable, context) => {},
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
-          Alert.alert('login success');
           queryClient.invalidateQueries('loginUser');
+          setLoggedIn(true);
           await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+          navigation.navigate('MainPage');
         } else if (responseData.data.error) {
-          const message =
-            Array.isArray(responseData.data.message) && responseData.data.message.length > 0
-              ? responseData.data.message[0]
-              : (responseData.data.message as string);
-          Alert.alert(message);
+          Alert.alert(responseData.data.message);
         } else {
           Alert.alert('이메일과 비밀번호를 입력해주세요.');
         }
       },
+      onError: (error, variable, context) => {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info(error.name + ': ', error.message);
+      },
     }
   );
 
-  const onPressFindPassword = () => {
+  const onPressFindAccount = () => {
     Alert.alert('비밀번호 찾기 버튼');
   };
-  const route = useRoute();
+
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ backgroundColor: '#F4F1E8', flex: 1 }}>
-        <View style={{ flex: 1, backgroundColor: 'yellow' }}>
-          <View style={{ alignItems: 'center' }}>
-            <MainSVGFrame />
-          </View>
-          <View style={{ paddingHorizontal: 20 }}>
-            <View>
-              <Text>이메일</Text>
-              <TextInput
-                value={email}
-                onChangeText={onChangeEmail}
-                style={{ marginTop: 10 }}
-                placeholder={'plam@plam.com'}
-              />
-              <View style={{ marginTop: 6 }}>
-                <UnderlineSvg />
-              </View>
-            </View>
-            <View style={{ marginTop: 40 }}>
-              <Text>비밀번호</Text>
-              <TextInput
-                value={password}
-                onChangeText={onChangePassword}
-                style={{ marginTop: 10 }}
-                placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
-                secureTextEntry
-              />
-              <View style={{ marginTop: 6 }}>
-                <UnderlineSvg />
-              </View>
-            </View>
-          </View>
-          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: 30 }}>
-            <Pressable onPress={onPressLoginButton}>
-              <Text>비밀번호 찾기</Text>
-            </Pressable>
+    <View style={styles.page}>
+      <Header />
+      <View style={styles.content}>
+        <View>
+          <PlemText style={{ fontSize: 28 }}>돌아오셨군요!</PlemText>
+          <PlemText style={{ fontSize: 28 }}>다시 만나 반가워요.</PlemText>
+        </View>
+        <View style={{ marginTop: 40 }}>
+          <PlemText>이메일</PlemText>
+          <UnderlineTextInput
+            wrapperProps={{ style: { marginTop: 12 } }}
+            value={email}
+            onChangeText={onChangeEmail}
+            placeholder={'이메일을 입력해 주세요.'}
+          />
+          <View style={{ marginTop: 32 }}>
+            <PlemText>비밀번호</PlemText>
+            <UnderlineTextInput
+              wrapperProps={{ style: { marginTop: 12 } }}
+              value={password}
+              onChangeText={onChangePassword}
+              placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
+              secureTextEntry
+            />
           </View>
         </View>
-        {/* <Pressable onPress={removeJwt}>
-        <Text>토큰삭제</Text>
-      </Pressable> */}
-      </ScrollView>
-      <Pressable
-        style={{ height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}
-        onPress={onPressLoginButton}>
-        <Text style={{ color: '#fff' }}>로그인</Text>
-      </Pressable>
+        <View style={styles.buttonContainer}>
+          <BlackButton onPress={onPressLoginButton} style={{ marginTop: 40 }}>
+            <PlemText style={{ color: '#fff' }}>로그인</PlemText>
+          </BlackButton>
+          <UnderlineText style={styles.findAccount} onPress={onPressFindAccount}>
+            아이디 비밀번호 찾기
+          </UnderlineText>
+        </View>
+      </View>
+      {loginMutation.isLoading && <Loading />}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  findAccount: {
+    marginTop: 32,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+  },
+  page: {
+    flex: 1,
+    backgroundColor: '#F4F1E8',
+  },
+  content: {
+    paddingHorizontal: 15,
+    marginTop: 12,
+  },
+});
 
 export default LoginPage;
