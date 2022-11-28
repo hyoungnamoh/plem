@@ -1,23 +1,43 @@
-import { Pressable, Text, View } from 'react-native';
-import Plemon from '../assets/images/logo_plemon.svg';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Image, StyleSheet, View } from 'react-native';
+import { LoggedOutStackParamList } from '../../AppInner';
+import PlemText from '../components/Atoms/PlemText';
+import BlackButton from '../components/BlackButton';
+import UnderlineText from '../components/UnderlineText';
 
-const IntroPage = () => {
+type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
+
+const IntroPage = ({ navigation }: IntroPageProps) => {
+  const onPressTogetherButton = () => {
+    navigation.navigate('SignUpPage');
+  };
+
+  const onPressAlreadyHaveAccountButton = () => {
+    navigation.navigate('LoginPage');
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 }}>
-      <Plemon>
-        <Text>되겠니?</Text>
-      </Plemon>
-      <Text>플렘과 함께하는 계획적인 일상</Text>
-      <Text>회원님의 소중한 계획을 잃어버리지 않으려면</Text>
-      <Text>간단한 회원가입이 필요해요!</Text>
-      <Pressable style={{ backgroundColor: '#000' }}>
-        <Text style={{ color: '#fff' }}>시작하기</Text>
-      </Pressable>
-      <Pressable style={{ borderColor: '#000', borderWidth: 1 }}>
-        <Text>계정이 이미 있어요</Text>
-      </Pressable>
+    <View style={styles.page}>
+      <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+      <View style={{ height: 100, backgroundColor: 'yellow' }} />
+      <View style={styles.buttonContainer}>
+        <BlackButton onPress={onPressTogetherButton}>
+          <PlemText style={styles.togetherButtonText}>함께하기</PlemText>
+        </BlackButton>
+        <UnderlineText style={styles.alreadyHaveAccountText} onPress={onPressAlreadyHaveAccountButton}>
+          계정이 이미 있어요
+        </UnderlineText>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  page: { flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 },
+  logo: { width: 202, height: 60, marginTop: 120 },
+  buttonContainer: { alignItems: 'center' },
+  togetherButtonText: { color: '#fff' },
+  alreadyHaveAccountText: { marginTop: 32 },
+});
 
 export default IntroPage;
