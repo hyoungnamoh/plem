@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
+import { SuccessResponse } from '../../types/axios';
+import { checkDuplicateEmail } from '../api/users/checkDuplicateEmail';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
+import { validator } from '../helper/validator';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 const SignUpPage = () => {
@@ -18,8 +22,27 @@ const SignUpPage = () => {
     setbBottomSafeArea('#000');
   }, []);
 
+  const { data, refetch: checkEmail } = useQuery<SuccessResponse<boolean>>(
+    ['checkDuplicateEmail', username],
+    () => checkDuplicateEmail({ email: username }),
+    { enabled: false }
+  );
+
   const onPressNextButton = () => {
-    console.log('next');
+    if (!validator({ value: username, type: 'email' })) {
+      Alert.alert('이메일 형식을 확인해주세요.');
+      return;
+    }
+    if (!validator({ value: password, type: 'password' })) {
+      Alert.alert('비밀번호 형식을 확인해주세요.');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+      return;
+    }
+
+    checkEmail();
   };
 
   return (
@@ -48,6 +71,8 @@ const SignUpPage = () => {
             onChangeText={setPassword}
             placeholder="영문, 숫자 포함 8~20자리"
             wrapperProps={{ style: styles.inputWrapper }}
+            secureTextEntry
+            maxLength={20}
           />
         </View>
         <View style={styles.passwordWrapper}>
@@ -58,6 +83,7 @@ const SignUpPage = () => {
             onChangeText={setPasswordConfirm}
             placeholder="영문, 숫자 포함 8~20자리"
             wrapperProps={{ style: styles.inputWrapper }}
+            secureTextEntry
           />
         </View>
       </View>
@@ -67,15 +93,36 @@ const SignUpPage = () => {
 };
 
 const styles = StyleSheet.create({
-  page: { backgroundColor: '#F4F1E8', flex: 1 },
-  content: { paddingHorizontal: 15 },
-  titleWrapper: { marginTop: 12, paddingHorizontal: 4 },
-  title: { fontSize: 28, lineHeight: 36 },
-  emailWrapper: { marginTop: 40 },
-  label: { fontSize: 14 },
-  input: { fontSize: 18 },
-  inputWrapper: { marginTop: 12 },
-  passwordWrapper: { marginTop: 32 },
+  page: {
+    backgroundColor: '#F4F1E8',
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: 15,
+  },
+  titleWrapper: {
+    marginTop: 12,
+    paddingHorizontal: 4,
+  },
+  title: {
+    fontSize: 28,
+    lineHeight: 36,
+  },
+  emailWrapper: {
+    marginTop: 40,
+  },
+  label: {
+    fontSize: 14,
+  },
+  input: {
+    fontSize: 18,
+  },
+  inputWrapper: {
+    marginTop: 12,
+  },
+  passwordWrapper: {
+    marginTop: 32,
+  },
 });
 
 export default SignUpPage;
