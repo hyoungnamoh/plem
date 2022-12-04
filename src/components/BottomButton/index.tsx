@@ -1,11 +1,21 @@
+import { useEffect } from 'react';
 import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import { useRecoilState } from 'recoil';
+import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import PlemText from '../Atoms/PlemText';
 
 type BottomButtonProps = { title: string };
-const BottomButton = ({ onPress, title }: PressableProps & BottomButtonProps) => {
+const BottomButton = (props: PressableProps & BottomButtonProps) => {
+  const { title, ...propsWithoutTitle } = props;
+  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+
+  useEffect(() => {
+    setBottomSafeArea(props.disabled ? '#AAAAAA' : '#000');
+  }, [props.disabled]);
+
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <PlemText style={styles.buttonTitle}>{title}</PlemText>
+    <Pressable style={[styles.button, { backgroundColor: bottomSafeArea }]} {...propsWithoutTitle}>
+      <PlemText style={styles.buttonTitle}>{props.title}</PlemText>
     </Pressable>
   );
 };
@@ -15,7 +25,6 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
     position: 'absolute',
     width: '100%',
     bottom: 0,

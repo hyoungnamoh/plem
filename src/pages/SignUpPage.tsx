@@ -1,35 +1,59 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
-import { SuccessResponse } from '../../types/axios';
+import { LoggedOutStackParamList } from '../../AppInner';
+import { ApiResponse, SuccessResponse } from '../../types/axios';
 import { checkDuplicateEmail } from '../api/users/checkDuplicateEmail';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { validator } from '../helper/validator';
-import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
-const SignUpPage = () => {
-  const [username, setUsername] = useState('');
+type SignUpPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'SignUpPage'>;
+
+const SignUpPage = ({ navigation }: SignUpPageProps) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const setbBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const [isValidatedEmail, setIsValidatedEmail] = useState(true);
+  const [isValidatedPassword, setIsValidatedPassword] = useState(true);
+  const [isValiDatedPasswordConfirm, setIsValidatedPasswordConfirm] = useState(true);
 
-  useEffect(() => {
-    setbBottomSafeArea('#000');
-  }, []);
+  const hasEmptyValue = !email || !password || !passwordConfirm;
 
-  const { data, refetch: checkEmail } = useQuery<SuccessResponse<boolean>>(
-    ['checkDuplicateEmail', username],
-    () => checkDuplicateEmail({ email: username }),
-    { enabled: false }
+  useEffect(() => {}, []);
+
+  const { refetch: checkEmail } = useQuery<ApiResponse<boolean>>(
+    ['checkDuplicateEmail', email],
+    () => checkDuplicateEmail({ email: email }),
+    {
+      enabled: false,
+      onError: (error) => {
+        Alert.alert('error');
+        console.info('error', error);
+      },
+      onSuccess: (responseData) => {
+        if (responseData.status === 200) {
+          navigation.navigate('NicknameSettingPage');
+        } else if (responseData.status === 400) {
+          Alert.alert('이미 사용중인 이메일입니다.');
+        } else {
+          Alert.alert(responseData.data.message);
+        }
+      },
+    }
   );
 
+  const isValidatedAccount = () => {
+    return isValidatedEmail && isValidatedPassword && isValiDatedPasswordConfirm && !hasEmptyValue;
+  };
+
   const onPressNextButton = () => {
-    if (!validator({ value: username, type: 'email' })) {
+    if (!validator({ value: email, type: 'email' })) {
       Alert.alert('이메일 형식을 확인해주세요.');
       return;
     }
@@ -45,6 +69,30 @@ const SignUpPage = () => {
     checkEmail();
   };
 
+  const onBlurEmail = () => {
+    if (!email) {
+      setIsValidatedEmail(true);
+      return;
+    }
+    setIsValidatedEmail(validator({ value: email, type: 'email' }));
+  };
+
+  const onBlurPassword = () => {
+    if (!password) {
+      setIsValidatedPassword(true);
+      return;
+    }
+    setIsValidatedPassword(validator({ value: password, type: 'password' }));
+  };
+
+  const onBlurPasswordConfirm = () => {
+    if (!passwordConfirm) {
+      setIsValidatedPasswordConfirm(true);
+      return;
+    }
+    setIsValidatedPasswordConfirm(password === passwordConfirm);
+  };
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.page}>
       <Header />
@@ -54,14 +102,17 @@ const SignUpPage = () => {
           <PlemText style={styles.title}>입력해 주세요.</PlemText>
         </View>
         <View style={styles.emailWrapper}>
-          <PlemText style={styles.label}>이메일</PlemText>
+          <PlemText style={[styles.label, { color: isValidatedEmail ? '#000' : '#E40C0C' }]}>이메일</PlemText>
           <UnderlineTextInput
             style={styles.input}
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
             placeholder="이메일을 입력해 주세요."
             wrapperProps={{ style: styles.inputWrapper }}
+            onBlur={onBlurEmail}
+            isInvalidValue={!isValidatedEmail}
           />
+          {!isValidatedEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
         </View>
         <View style={styles.passwordWrapper}>
           <PlemText style={styles.label}>비밀번호</PlemText>
@@ -73,6 +124,8 @@ const SignUpPage = () => {
             wrapperProps={{ style: styles.inputWrapper }}
             secureTextEntry
             maxLength={20}
+            onBlur={onBlurPassword}
+            isInvalidValue={!isValidatedPassword}
           />
         </View>
         <View style={styles.passwordWrapper}>
@@ -84,10 +137,12 @@ const SignUpPage = () => {
             placeholder="영문, 숫자 포함 8~20자리"
             wrapperProps={{ style: styles.inputWrapper }}
             secureTextEntry
+            onBlur={onBlurPasswordConfirm}
+            isInvalidValue={!isValiDatedPasswordConfirm}
           />
         </View>
       </View>
-      <BottomButton title="다음" onPress={onPressNextButton} />
+      <BottomButton title="다음" onPress={onPressNextButton} disabled={!isValidatedAccount()} />
     </KeyboardAwareScrollView>
   );
 };
@@ -122,6 +177,11 @@ const styles = StyleSheet.create({
   },
   passwordWrapper: {
     marginTop: 32,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#E40C0C',
+    marginTop: 5,
   },
 });
 

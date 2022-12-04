@@ -13,6 +13,6 @@ export const validator = ({ value, type }: { value: string; type: 'email' | 'pas
     case 'phone':
       return reg.phone.test(value);
     default:
-      return value;
+      return false;
   }
 };
