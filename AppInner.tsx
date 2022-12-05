@@ -13,6 +13,9 @@ import IntroPage from './src/pages/IntroPage';
 import { loggedInState } from './src/states/loggedInState';
 import { useRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
+import NicknameSettingPage from './src/pages/NicknameSettingPage';
+import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
+import EmailVerifyPage from './src/pages/EmailVerifyPage';
 
 export type LoggedInStackParamList = {
   MainPage: undefined;
@@ -21,9 +24,10 @@ export type LoggedInStackParamList = {
 export type LoggedOutStackParamList = {
   LoginPage: undefined;
   SignUpPage: undefined;
-  FindPassword: undefined;
   IntroPage: undefined;
-  MainPage: undefined;
+  NicknameSettingPage: { email: string; password: string };
+  EmailVerifyIntroPage: { email: string; password: string; nickname: string };
+  EmailVerifyPage: { email: string; password: string; nickname: string };
 };
 
 const Tab = createBottomTabNavigator();
@@ -36,7 +40,7 @@ function AppInner({ routeName }: { routeName: string }) {
 
   return (
     <>
-      {bottomSafeArea === '#000' && <SafeAreaView style={{ flex: 0, backgroundColor: '#F4F1E8' }} />}
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#F4F1E8' }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {loggedIn ? (
           <Stack.Navigator
@@ -54,6 +58,9 @@ function AppInner({ routeName }: { routeName: string }) {
             <Stack.Screen name="IntroPage" component={IntroPage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
             <Stack.Screen name="SignUpPage" component={SignUpPage} />
+            <Stack.Screen name="NicknameSettingPage" component={NicknameSettingPage} />
+            <Stack.Screen name="EmailVerifyIntroPage" component={EmailVerifyIntroPage} />
+            <Stack.Screen name="EmailVerifyPage" component={EmailVerifyPage} />
           </Stack.Navigator>
         )}
       </SafeAreaView>

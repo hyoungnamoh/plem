@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     height: 30,
     paddingHorizontal: 10,
   },
-  chartWrapper: {
+  chartWrap: {
     justifyContent: 'center',
     alignItems: 'center',
     height: 345,

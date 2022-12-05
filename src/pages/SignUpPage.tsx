@@ -12,10 +12,13 @@ import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { validator } from '../helper/validator';
+import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type SignUpPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'SignUpPage'>;
 
 const SignUpPage = ({ navigation }: SignUpPageProps) => {
+  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -24,8 +27,6 @@ const SignUpPage = ({ navigation }: SignUpPageProps) => {
   const [isValiDatedPasswordConfirm, setIsValidatedPasswordConfirm] = useState(true);
 
   const hasEmptyValue = !email || !password || !passwordConfirm;
-
-  useEffect(() => {}, []);
 
   const { refetch: checkEmail } = useQuery<ApiResponse<boolean>>(
     ['checkDuplicateEmail', email],
@@ -38,7 +39,7 @@ const SignUpPage = ({ navigation }: SignUpPageProps) => {
       },
       onSuccess: (responseData) => {
         if (responseData.status === 200) {
-          navigation.navigate('NicknameSettingPage');
+          navigation.navigate('NicknameSettingPage', { email, password });
         } else if (responseData.status === 400) {
           Alert.alert('이미 사용중인 이메일입니다.');
         } else {
@@ -97,45 +98,45 @@ const SignUpPage = ({ navigation }: SignUpPageProps) => {
     <KeyboardAwareScrollView contentContainerStyle={styles.page}>
       <Header />
       <View style={styles.content}>
-        <View style={styles.titleWrapper}>
+        <View style={styles.titleWrap}>
           <PlemText style={styles.title}>이메일과 비밀번호를</PlemText>
           <PlemText style={styles.title}>입력해 주세요.</PlemText>
         </View>
-        <View style={styles.emailWrapper}>
+        <View style={styles.emailWrap}>
           <PlemText style={[styles.label, { color: isValidatedEmail ? '#000' : '#E40C0C' }]}>이메일</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={email}
             onChangeText={setEmail}
             placeholder="이메일을 입력해 주세요."
-            wrapperProps={{ style: styles.inputWrapper }}
+            wrapperProps={{ style: styles.inputWrap }}
             onBlur={onBlurEmail}
             isInvalidValue={!isValidatedEmail}
           />
           {!isValidatedEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
         </View>
-        <View style={styles.passwordWrapper}>
+        <View style={styles.passwordWrap}>
           <PlemText style={styles.label}>비밀번호</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
             placeholder="영문, 숫자 포함 8~20자리"
-            wrapperProps={{ style: styles.inputWrapper }}
+            wrapperProps={{ style: styles.inputWrap }}
             secureTextEntry
             maxLength={20}
             onBlur={onBlurPassword}
             isInvalidValue={!isValidatedPassword}
           />
         </View>
-        <View style={styles.passwordWrapper}>
+        <View style={styles.passwordWrap}>
           <PlemText style={styles.label}>비밀번호 확인</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={passwordConfirm}
             onChangeText={setPasswordConfirm}
             placeholder="영문, 숫자 포함 8~20자리"
-            wrapperProps={{ style: styles.inputWrapper }}
+            wrapperProps={{ style: styles.inputWrap }}
             secureTextEntry
             onBlur={onBlurPasswordConfirm}
             isInvalidValue={!isValiDatedPasswordConfirm}
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 15,
   },
-  titleWrapper: {
+  titleWrap: {
     marginTop: 12,
     paddingHorizontal: 4,
   },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 36,
   },
-  emailWrapper: {
+  emailWrap: {
     marginTop: 40,
   },
   label: {
@@ -172,10 +173,10 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 18,
   },
-  inputWrapper: {
+  inputWrap: {
     marginTop: 12,
   },
-  passwordWrapper: {
+  passwordWrap: {
     marginTop: 32,
   },
   errorText: {

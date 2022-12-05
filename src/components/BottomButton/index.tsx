@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { Pressable, PressableProps, StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -8,6 +9,10 @@ type BottomButtonProps = { title: string };
 const BottomButton = (props: PressableProps & BottomButtonProps) => {
   const { title, ...propsWithoutTitle } = props;
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+
+  useFocusEffect(() => {
+    setBottomSafeArea(props.disabled ? '#AAAAAA' : '#000');
+  });
 
   useEffect(() => {
     setBottomSafeArea(props.disabled ? '#AAAAAA' : '#000');
