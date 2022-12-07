@@ -28,6 +28,7 @@ export type LoggedOutStackParamList = {
   NicknameSettingPage: { email: string; password: string };
   EmailVerifyIntroPage: { email: string; password: string; nickname: string };
   EmailVerifyPage: { email: string; password: string; nickname: string };
+  MainPage: undefined;
 };
 
 const Tab = createBottomTabNavigator();

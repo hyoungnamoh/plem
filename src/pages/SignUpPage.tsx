@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse, SuccessResponse } from '../../types/axios';
-import { checkDuplicateEmail } from '../api/users/checkDuplicateEmail';
+import { checkDuplicateEmail } from '../api/auth/checkDuplicateEmail';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';

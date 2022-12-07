@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
-import { loginApi, LoginApiResponseData } from '../api/auth/login';
+import { loginApi, LoginApiResponse } from '../api/auth/login';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { ApiResponse } from '../../types/axios';
 import PlemText from '../components/Atoms/PlemText';
@@ -46,7 +46,7 @@ const LoginPage = ({ navigation }: LoginPageProps) => {
     loginMutation.mutate({ email, password });
   };
 
-  const loginMutation = useMutation<ApiResponse<LoginApiResponseData>, AxiosError, LoginMutationParams>(
+  const loginMutation = useMutation<ApiResponse<LoginApiResponse>, AxiosError, LoginMutationParams>(
     'login',
     ({ email, password }) => loginApi({ email, password }),
     {
