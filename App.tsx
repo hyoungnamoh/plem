@@ -8,7 +8,6 @@ import AppInner from './AppInner';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isLoggedIn, setisLoggedIn] = useState(false);
   const navigationRef = createNavigationContainerRef();
   const [routeName, setRouteName] = useState('');
   return (

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   titleWrap: {
-    marginTop: 12,
+    marginTop: 20,
     paddingHorizontal: 4,
   },
   title: {

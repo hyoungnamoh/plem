@@ -9,7 +9,7 @@ type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage
 
 const IntroPage = ({ navigation }: IntroPageProps) => {
   const onPressTogetherButton = () => {
-    navigation.navigate('SignUpPage');
+    navigation.navigate('EmailVerifyPage');
   };
 
   const onPressAlreadyHaveAccountButton = () => {
@@ -33,11 +33,25 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
 };
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 },
-  logo: { width: 202, height: 60, marginTop: 120 },
-  buttonContainer: { alignItems: 'center' },
-  togetherButtonText: { color: '#fff' },
-  alreadyHaveAccountText: { marginTop: 32 },
+  page: {
+    flex: 1,
+    backgroundColor: '#F4F1E8',
+    paddingHorizontal: 15,
+  },
+  logo: {
+    width: 202,
+    height: 60,
+    marginTop: 120,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+  },
+  togetherButtonText: {
+    color: '#fff',
+  },
+  alreadyHaveAccountText: {
+    marginTop: 32,
+  },
 });
 
 export default IntroPage;

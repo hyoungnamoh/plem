@@ -21,7 +21,7 @@ const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) 
   });
 
   const onPressVerify = () => {
-    navigation.navigate('EmailVerifyPage', { email, password, nickname });
+    // navigation.navigate('EmailVerifyPage', { email, password, nickname });
   };
 
   const onPressNoVerify = () => {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     paddingBottom: 36,
   },
   titleWrap: {
-    marginTop: 12,
+    marginTop: 20,
     paddingHorizontal: 4,
   },
   title: {

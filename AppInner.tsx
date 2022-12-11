@@ -1,14 +1,9 @@
 import LoginPage from './src/pages/LoginPage';
-import SignUpPage from './src/pages/SignUpPage';
+import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useQuery } from 'react-query';
-import { getLoginUserApi, LoginUser } from './src/api/users/getLoginUserApi';
 import MainPage from './src/pages/MainPage';
-import { SuccessResponse } from './types/axios';
-import { Alert, Button, Image, Pressable, SafeAreaView } from 'react-native';
-import { NavigationContainerRefWithCurrent, useNavigationState, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { loggedInState } from './src/states/loggedInState';
 import { useRecoilState } from 'recoil';
@@ -23,11 +18,11 @@ export type LoggedInStackParamList = {
 
 export type LoggedOutStackParamList = {
   LoginPage: undefined;
-  SignUpPage: undefined;
+  PasswordSettingPage: { email: string };
   IntroPage: undefined;
   NicknameSettingPage: { email: string; password: string };
   EmailVerifyIntroPage: { email: string; password: string; nickname: string };
-  EmailVerifyPage: { email: string; password: string; nickname: string };
+  EmailVerifyPage: undefined;
   MainPage: undefined;
 };
 
@@ -58,7 +53,7 @@ function AppInner({ routeName }: { routeName: string }) {
             }}>
             <Stack.Screen name="IntroPage" component={IntroPage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
-            <Stack.Screen name="SignUpPage" component={SignUpPage} />
+            <Stack.Screen name="PasswordSettingPage" component={PasswordSettingPage} />
             <Stack.Screen name="NicknameSettingPage" component={NicknameSettingPage} />
             <Stack.Screen name="EmailVerifyIntroPage" component={EmailVerifyIntroPage} />
             <Stack.Screen name="EmailVerifyPage" component={EmailVerifyPage} />
