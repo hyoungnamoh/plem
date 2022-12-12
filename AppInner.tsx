@@ -11,6 +11,11 @@ import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
 import NicknameSettingPage from './src/pages/NicknameSettingPage';
 import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
 import EmailVerifyPage from './src/pages/EmailVerifyPage';
+import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
+import { UseMutationResult } from 'react-query';
+import { ApiResponse } from './types/axios';
+import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmail';
+import { AxiosError } from 'axios';
 
 export type LoggedInStackParamList = {
   MainPage: undefined;
@@ -24,6 +29,15 @@ export type LoggedOutStackParamList = {
   EmailVerifyIntroPage: { email: string; password: string; nickname: string };
   EmailVerifyPage: undefined;
   MainPage: undefined;
+  NotReceivedMailPage: {
+    usePostVerificationEmail: UseMutationResult<
+      ApiResponse<PostVerificationEmailResponse>,
+      AxiosError<unknown, any>,
+      PostVerificationEmailParams,
+      unknown
+    >;
+    email: string;
+  };
 };
 
 const Tab = createBottomTabNavigator();
@@ -57,6 +71,7 @@ function AppInner({ routeName }: { routeName: string }) {
             <Stack.Screen name="NicknameSettingPage" component={NicknameSettingPage} />
             <Stack.Screen name="EmailVerifyIntroPage" component={EmailVerifyIntroPage} />
             <Stack.Screen name="EmailVerifyPage" component={EmailVerifyPage} />
+            <Stack.Screen name="NotReceivedMailPage" component={NotReceivedMailPage} />
           </Stack.Navigator>
         )}
       </SafeAreaView>

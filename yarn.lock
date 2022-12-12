@@ -1160,10 +1160,10 @@
   "resolved" "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz"
   "version" "1.2.1"
 
-"@hyoungnamoh/react-native-easy-toast@^0.0.4":
-  "integrity" "sha512-hYMqS9ocKIz8k1IWlf6ZpVt8EZEYUNc3y+9CigAehqF4d001/gCDN1WU5+FQ+wSCPWBKlg8m6IUBPHB7xSsP6A=="
-  "resolved" "https://registry.npmjs.org/@hyoungnamoh/react-native-easy-toast/-/react-native-easy-toast-0.0.4.tgz"
-  "version" "0.0.4"
+"@hyoungnamoh/react-native-easy-toast@^0.0.5":
+  "integrity" "sha512-2mjapZoGOPSa3GYeMkQwDF35a/Rn+P5bY1VTSEeaHRAU+IjFKs0gGIXzchaoYjrIlAXgavvJdQuAzqeY1XNekw=="
+  "resolved" "https://registry.npmjs.org/@hyoungnamoh/react-native-easy-toast/-/react-native-easy-toast-0.0.5.tgz"
+  "version" "0.0.5"
   dependencies:
     "deprecated-react-native-prop-types" "^2.3.0"
     "prop-types" "^15.6.0"

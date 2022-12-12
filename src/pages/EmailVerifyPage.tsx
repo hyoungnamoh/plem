@@ -41,44 +41,41 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     setBottomSafeArea('#F4F1E8');
   }, []);
 
-  const {
-    isLoading: sendEmailLoading,
-    mutate: sendEmail,
-    data,
-  } = useMutation<ApiResponse<PostVerificationEmailResponse>, AxiosError, PostVerificationEmailParams>(
-    'verificationCode',
-    ({ email }) => postVerificationEmail({ email }),
-    {
-      onSuccess: async (responseData, variables, context) => {
-        if (responseData.status === 200) {
-          setReceivedCode(`${responseData.data.verificationCode}`);
-          setIsSent(true);
-          toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
-          console.log(`${responseData.data.verificationCode}`);
-        } else if (responseData.data) {
-          Alert.alert(responseData.data);
-        } else {
-          Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-          console.info('verificationCode: ', responseData);
-        }
-      },
-      onError: (error, variable, context) => {
+  const usePostVerificationEmail = useMutation<
+    ApiResponse<PostVerificationEmailResponse>,
+    AxiosError,
+    PostVerificationEmailParams
+  >('verificationCode', ({ email }) => postVerificationEmail({ email }), {
+    onSuccess: async (responseData, variables, context) => {
+      if (responseData.status === 200) {
+        setReceivedCode(`${responseData.data.verificationCode}`);
+        setIsSent(true);
+        toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
+        console.log(`${responseData.data.verificationCode}`);
+      } else if (responseData.data) {
+        Alert.alert(responseData.data);
+      } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info(error.name + ': ', error.message);
-      },
-    }
-  );
+        console.info('verificationCode: ', responseData);
+      }
+    },
+    onError: (error, variable, context) => {
+      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+      console.info(error.name + ': ', error.message);
+    },
+  });
+
+  const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;
 
   const onPressSend = () => {
     if (sendEmailLoading) {
       return;
     }
-
     sendEmail({ email });
   };
 
   const onPressNotReceived = () => {
-    setOpenModal(true);
+    navigation.navigate('NotReceivedMailPage', { usePostVerificationEmail, email });
   };
 
   const onChangeEmail = (value: string) => {
@@ -92,7 +89,8 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
 
   const onPressVerify = () => {
     if (verificationCode === receivedCode) {
-      Alert.alert('인증완료!');
+      navigation.navigate('PasswordSettingPage', { email });
+      return;
     }
     Alert.alert('인증번호가 일치하지 않습니다.');
   };
@@ -144,7 +142,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
                 maxLength={6}
               />
             </View>
-            <View style={{ alignItems: 'center', marginTop: 32 }}>
+            <View style={styles.notReceivedButtonWrap}>
               <UnderlineText style={{ color: '#444444' }} onPress={onPressNotReceived}>
                 인증 메일을 받지 못하셨나요?
               </UnderlineText>
@@ -219,6 +217,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'LeeSeoyun',
     fontSize: 16,
+  },
+  notReceivedButtonWrap: {
+    alignItems: 'center',
+    marginTop: 32,
   },
 });
 
