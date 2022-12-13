@@ -8,10 +8,10 @@ import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse } from '../../types/axios';
 import {
-  postVerificationEmail,
+  postVerificationEmailApi,
   PostVerificationEmailParams,
   PostVerificationEmailResponse,
-} from '../api/auth/postVerificationEmail';
+} from '../api/auth/postVerificationEmailApi';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
@@ -29,10 +29,8 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
 
   const [email, setEmail] = useState('zzzsh789@naver.com');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
-  const [openModal, setOpenModal] = useState(true);
   const [verificationCode, setVerificationCode] = useState('');
   const [receivedCode, setReceivedCode] = useState('');
-
   const [isSent, setIsSent] = useState(false);
 
   const toastRef = useRef<Toast>(null);
@@ -45,10 +43,12 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     ApiResponse<PostVerificationEmailResponse>,
     AxiosError,
     PostVerificationEmailParams
-  >('verificationCode', ({ email }) => postVerificationEmail({ email }), {
+  >('verificationCode', ({ email }) => postVerificationEmailApi({ email }), {
     onSuccess: async (responseData, variables, context) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
+        // test
+        setVerificationCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
         toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
         console.log(`${responseData.data.verificationCode}`);

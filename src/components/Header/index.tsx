@@ -22,7 +22,7 @@ const Header = (props: HeaderProps) => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     height: 60,
     justifyContent: 'center',
   },

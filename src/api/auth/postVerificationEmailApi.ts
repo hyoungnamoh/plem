@@ -9,7 +9,7 @@ export type PostVerificationEmailParams = {
   email: string;
 };
 
-export const postVerificationEmail = async ({ email }: PostVerificationEmailParams) => {
+export const postVerificationEmailApi = async ({ email }: PostVerificationEmailParams) => {
   const response = await apiRequest.post<SuccessResponse<PostVerificationEmailResponse> & ErrorResponse>(
     '/users/verification-code',
     {

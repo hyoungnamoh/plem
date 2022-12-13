@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
-import { loginApi, LoginApiResponse } from '../api/auth/login';
+import { loginApi, LoginResponse } from '../api/auth/loginApi';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { ApiResponse } from '../../types/axios';
 import PlemText from '../components/Atoms/PlemText';
@@ -46,8 +46,8 @@ const LoginPage = ({ navigation }: LoginPageProps) => {
     loginMutation.mutate({ email, password });
   };
 
-  const loginMutation = useMutation<ApiResponse<LoginApiResponse>, AxiosError, LoginMutationParams>(
-    'login',
+  const loginMutation = useMutation<ApiResponse<LoginResponse>, AxiosError, LoginMutationParams>(
+    'loginApi',
     ({ email, password }) => loginApi({ email, password }),
     {
       onSuccess: async (responseData, variables, context) => {
@@ -56,8 +56,8 @@ const LoginPage = ({ navigation }: LoginPageProps) => {
           setLoggedIn(true);
           await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
           navigation.navigate('MainPage');
-        } else if (responseData.data.error) {
-          Alert.alert(responseData.data.message);
+        } else if (responseData.data) {
+          Alert.alert(responseData.data);
         } else {
           Alert.alert('이메일과 비밀번호를 입력해주세요.');
         }

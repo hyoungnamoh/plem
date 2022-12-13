@@ -6,10 +6,11 @@ import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse, SuccessResponse } from '../../types/axios';
-import { checkDuplicateEmail } from '../api/auth/checkDuplicateEmail';
+import { checkDuplicateEmailApi } from '../api/auth/checkDuplicateEmailApi';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
+import UnderlineText from '../components/UnderlineText';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { validator } from '../helper/validator';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
@@ -17,10 +18,11 @@ import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 
 const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
+  const { email } = route.params;
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
 
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [password, setPassword] = useState('123123qq');
+  const [passwordConfirm, setPasswordConfirm] = useState('123123qq');
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
   const [isInvalidPasswordConfirm, setIsInvalidPasswordConfirm] = useState(false);
 
@@ -31,15 +33,15 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   };
 
   const onPressNextButton = () => {
-    // if (!validator({ value: password, type: 'password' })) {
-    //   Alert.alert('비밀번호 형식을 확인해주세요.');
-    //   return;
-    // }
-    // if (password !== passwordConfirm) {
-    //   Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
-    //   return;
-    // }
-    // checkEmail();
+    if (!validator({ value: password, type: 'password' })) {
+      Alert.alert('비밀번호 형식을 확인해주세요.');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+      return;
+    }
+    navigation.navigate('NicknameSettingPage', { email, password });
   };
 
   const onChangePassword = (value: string) => {

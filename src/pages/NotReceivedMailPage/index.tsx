@@ -7,11 +7,6 @@ import { useMutation } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../../AppInner';
 import { ApiResponse } from '../../../types/axios';
-import {
-  postVerificationEmail,
-  PostVerificationEmailParams,
-  PostVerificationEmailResponse,
-} from '../../api/auth/postVerificationEmail';
 import PlemText from '../../components/Atoms/PlemText';
 import BlackButton from '../../components/BlackButton';
 import Header from '../../components/Header';
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
     paddingBottom: 36,
   },
   content: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     flex: 1,
     paddingBottom: 36,
   },

@@ -14,7 +14,7 @@ import EmailVerifyPage from './src/pages/EmailVerifyPage';
 import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
 import { UseMutationResult } from 'react-query';
 import { ApiResponse } from './types/axios';
-import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmail';
+import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmailApi';
 import { AxiosError } from 'axios';
 
 export type LoggedInStackParamList = {

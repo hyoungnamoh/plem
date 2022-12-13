@@ -1,13 +1,18 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useMutation } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
+import { ApiResponse } from '../../types/axios';
+import { signUpApi, SignUpParams, SignUpResponse } from '../api/auth/signUpApi';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
+import UnderlineText from '../components/UnderlineText';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
@@ -17,8 +22,35 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
   const { email, password } = route.params;
   const [nickname, setNickname] = useState('');
 
+  const useSignUp = useMutation<ApiResponse<SignUpResponse>, AxiosError, SignUpParams>(
+    'useSignUp',
+    ({ email }) => signUpApi({ email, password, nickname }),
+    {
+      onSuccess: async (responseData, variables, context) => {
+        if (responseData.status === 200) {
+          navigation.navigate('SignUpSuccessPage', { nickname });
+        } else if (responseData.data) {
+          Alert.alert(responseData.data);
+        } else {
+          Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+          console.info('useSignUp: ', responseData);
+        }
+      },
+      onError: (error, variable, context) => {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info(error.name + ': ', error.message);
+      },
+    }
+  );
+
+  const { isLoading: signUpLoading, mutate: signUp, data } = useSignUp;
+
   const onPressNextButton = () => {
-    navigation.navigate('EmailVerifyIntroPage', { email, password, nickname });
+    if (signUpLoading) {
+      return;
+    }
+    navigation.navigate('SignUpSuccessPage', { nickname });
+    // signUp({ email, password, nickname });
   };
 
   return (
@@ -31,16 +63,21 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
         </View>
         <View style={styles.nicknameWrap}>
           <PlemText>닉네임</PlemText>
-          <UnderlineTextInput
-            style={styles.input}
-            value={nickname}
-            onChangeText={setNickname}
-            placeholder="닉네임을 입력해 주세요."
-            wrapperProps={{ style: styles.inputWrap }}
-          />
+          <View>
+            <UnderlineTextInput
+              style={styles.input}
+              value={nickname}
+              onChangeText={setNickname}
+              placeholder="닉네임을 입력해 주세요."
+              wrapperProps={{ style: styles.inputWrap }}
+            />
+            <View style={styles.randomButtonWrap}>
+              <UnderlineText style={styles.randomButton}>랜덤짓기</UnderlineText>
+            </View>
+          </View>
         </View>
       </View>
-      <BottomButton title="다음" onPress={onPressNextButton} disabled={false} />
+      <BottomButton title="가입 완료하기" onPress={onPressNextButton} disabled={false} />
     </KeyboardAwareScrollView>
   );
 };
@@ -69,9 +106,18 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 18,
+    width: '80%',
   },
   inputWrap: {
     marginTop: 12,
+  },
+  randomButtonWrap: {
+    position: 'absolute',
+    marginTop: 12,
+    right: 0,
+  },
+  randomButton: {
+    fontSize: 16,
   },
 });
 
