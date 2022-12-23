@@ -11,10 +11,12 @@ import BlackButton from '../components/BlackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LoggedOutStackParamList } from '../../AppInner';
 import UnderlineText from '../components/UnderlineText';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loggedInState } from '../states/loggedInState';
 import Loading from '../components/Loading';
 import { AxiosError } from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
+import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type LoginMutationParams = {
   email: string;
@@ -23,13 +25,18 @@ type LoginMutationParams = {
 
 type LoginPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'LoginPage'>;
 
-const LoginPage = ({ navigation }: LoginPageProps) => {
+const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const queryClient = useQueryClient();
+  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
 
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useFocusEffect(() => {
+    setBottomSafeArea('#F4F1E8');
+  });
 
   const onChangeEmail = (value: string) => {
     setEmail(value);
@@ -73,14 +80,28 @@ const LoginPage = ({ navigation }: LoginPageProps) => {
     Alert.alert('비밀번호 찾기 버튼');
   };
 
+  const getTitle = () => {
+    if (route.params?.from === 'SignUpSuccessPage') {
+      return (
+        <>
+          <PlemText style={{ fontSize: 28 }}>작심천일의 시작</PlemText>
+          <PlemText style={{ fontSize: 28 }}>플렘에 오신 걸 환영합니다.</PlemText>
+        </>
+      );
+    }
+    return (
+      <>
+        <PlemText style={{ fontSize: 28 }}>돌아오셨군요!</PlemText>
+        <PlemText style={{ fontSize: 28 }}>다시 만나 반가워요.</PlemText>
+      </>
+    );
+  };
+
   return (
     <View style={styles.page}>
       <Header />
       <View style={styles.content}>
-        <View>
-          <PlemText style={{ fontSize: 28 }}>돌아오셨군요!</PlemText>
-          <PlemText style={{ fontSize: 28 }}>다시 만나 반가워요.</PlemText>
-        </View>
+        <View>{getTitle()}</View>
         <View style={{ marginTop: 40 }}>
           <PlemText>이메일</PlemText>
           <UnderlineTextInput
@@ -105,7 +126,7 @@ const LoginPage = ({ navigation }: LoginPageProps) => {
             <PlemText style={{ color: '#fff' }}>로그인</PlemText>
           </BlackButton>
           <UnderlineText style={styles.findAccount} onPress={onPressFindAccount}>
-            아이디 비밀번호 찾기
+            비밀번호가 생각나지 않으시나요?
           </UnderlineText>
         </View>
       </View>

@@ -21,8 +21,8 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   const { email } = route.params;
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
 
-  const [password, setPassword] = useState('123123qq');
-  const [passwordConfirm, setPasswordConfirm] = useState('123123qq');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
   const [isInvalidPasswordConfirm, setIsInvalidPasswordConfirm] = useState(false);
 

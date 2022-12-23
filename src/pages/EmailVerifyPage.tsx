@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation, useQueryClient } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse } from '../../types/axios';
 import {
@@ -20,14 +20,16 @@ import UnderlineTextInput from '../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { validator } from '../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
+import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
 const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   const queryClient = useQueryClient();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
 
-  const [email, setEmail] = useState('zzzsh789@naver.com');
+  const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [receivedCode, setReceivedCode] = useState('');
@@ -47,10 +49,10 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     onSuccess: async (responseData, variables, context) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
-        // test
-        setVerificationCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
         toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
+        setIsVerifiedEmail(false);
+        setVerificationCode(''); // 재발송 시 사용
         console.log(`${responseData.data.verificationCode}`);
       } else if (responseData.data) {
         Alert.alert(responseData.data);
@@ -79,6 +81,25 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   };
 
   const onChangeEmail = (value: string) => {
+    if (isVerifiedEmail) {
+      Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
+        {
+          text: '아니요',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: '네',
+          onPress: () => {
+            setIsVerifiedEmail(false);
+            setIsSent(false);
+            setVerificationCode('');
+          },
+        },
+      ]);
+      return;
+    }
+
     setEmail(value);
     if (!value) {
       setIsInvalidEmail(false);
@@ -89,6 +110,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
 
   const onPressVerify = () => {
     if (verificationCode === receivedCode) {
+      setIsVerifiedEmail(true);
       navigation.navigate('PasswordSettingPage', { email });
       return;
     }
@@ -140,6 +162,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
                 placeholder={'인증번호 여섯자리를 입력해 주세요.'}
                 keyboardType={'number-pad'}
                 maxLength={6}
+                editable={!isVerifiedEmail}
               />
             </View>
             <View style={styles.notReceivedButtonWrap}>

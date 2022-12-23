@@ -1,13 +1,22 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, StyleSheet, View } from 'react-native';
+import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import UnderlineText from '../components/UnderlineText';
+import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
 
 const IntroPage = ({ navigation }: IntroPageProps) => {
+  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+
+  useFocusEffect(() => {
+    setBottomSafeArea('#F4F1E8');
+  });
+
   const onPressTogetherButton = () => {
     navigation.navigate('EmailVerifyPage');
   };

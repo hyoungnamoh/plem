@@ -16,13 +16,14 @@ import { UseMutationResult } from 'react-query';
 import { ApiResponse } from './types/axios';
 import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmailApi';
 import { AxiosError } from 'axios';
+import SignUpSuccessPage from './src/pages/SignUpSuccessPage';
 
 export type LoggedInStackParamList = {
   MainPage: undefined;
 };
 
 export type LoggedOutStackParamList = {
-  LoginPage: undefined;
+  LoginPage: { from?: string } | undefined;
   PasswordSettingPage: { email: string };
   IntroPage: undefined;
   NicknameSettingPage: { email: string; password: string };
@@ -37,6 +38,9 @@ export type LoggedOutStackParamList = {
       unknown
     >;
     email: string;
+  };
+  SignUpSuccessPage: {
+    nickname: string;
   };
 };
 
@@ -72,6 +76,7 @@ function AppInner({ routeName }: { routeName: string }) {
             <Stack.Screen name="EmailVerifyIntroPage" component={EmailVerifyIntroPage} />
             <Stack.Screen name="EmailVerifyPage" component={EmailVerifyPage} />
             <Stack.Screen name="NotReceivedMailPage" component={NotReceivedMailPage} />
+            <Stack.Screen name="SignUpSuccessPage" component={SignUpSuccessPage} />
           </Stack.Navigator>
         )}
       </SafeAreaView>

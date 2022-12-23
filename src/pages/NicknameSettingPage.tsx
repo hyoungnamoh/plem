@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse } from '../../types/axios';
 import { signUpApi, SignUpParams, SignUpResponse } from '../api/auth/signUpApi';
@@ -15,12 +15,34 @@ import Header from '../components/Header';
 import UnderlineText from '../components/UnderlineText';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 
 type NicknameSettingPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NicknameSettingPage'>;
 
 const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) => {
   const { email, password } = route.params;
+  const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
+  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+
   const [nickname, setNickname] = useState('');
+
+  const canSignUp = email && password && nickname && isVerifiedEmail;
+
+  useEffect(() => {
+    if (canSignUp) {
+      setBottomSafeArea('#000');
+    } else {
+      setBottomSafeArea('#AAAAAA');
+    }
+  }, [email, password, nickname, isVerifiedEmail]);
+
+  useFocusEffect(() => {
+    if (canSignUp) {
+      setBottomSafeArea('#000');
+    } else {
+      setBottomSafeArea('#AAAAAA');
+    }
+  });
 
   const useSignUp = useMutation<ApiResponse<SignUpResponse>, AxiosError, SignUpParams>(
     'useSignUp',
@@ -28,6 +50,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
     {
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
+          setIsVerifiedEmail(false);
           navigation.navigate('SignUpSuccessPage', { nickname });
         } else if (responseData.data) {
           Alert.alert(responseData.data);
@@ -49,8 +72,8 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
     if (signUpLoading) {
       return;
     }
-    navigation.navigate('SignUpSuccessPage', { nickname });
-    // signUp({ email, password, nickname });
+
+    signUp({ email, password, nickname });
   };
 
   return (
@@ -77,7 +100,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
           </View>
         </View>
       </View>
-      <BottomButton title="가입 완료하기" onPress={onPressNextButton} disabled={false} />
+      <BottomButton title="가입 완료하기" onPress={onPressNextButton} disabled={!canSignUp} />
     </KeyboardAwareScrollView>
   );
 };
