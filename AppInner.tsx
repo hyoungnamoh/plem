@@ -18,7 +18,7 @@ import { PostVerificationEmailParams, PostVerificationEmailResponse } from './sr
 import { AxiosError } from 'axios';
 import SignUpSuccessPage from './src/pages/SignUpSuccessPage';
 import FindPasswordPage from './src/pages/FindPasswordPage';
-import CalenderPage from './src/pages/CalenderPage';
+import CalendarPage from './src/pages/CalendarPage';
 import PlanChartListPage from './src/pages/PlanChartList';
 import SettingPage from './src/pages/SettingPage';
 import PlemText from './src/components/Atoms/PlemText';
@@ -88,7 +88,7 @@ function AppInner({ routeName }: { routeName: string }) {
             />
             <Tab.Screen
               name="CalendarPage"
-              component={CalenderPage}
+              component={CalendarPage}
               options={{
                 headerShown: false,
               }}

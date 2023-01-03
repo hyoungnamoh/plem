@@ -2,6 +2,7 @@ import { Image, StyleSheet, TextInputProps, View, ViewProps } from 'react-native
 import PlemTextInput from '../Atoms/PlemTextInput';
 
 type UnderlineTextInputProps = TextInputProps & { wrapperProps?: ViewProps; isInvalidValue?: boolean };
+
 const UnderlineTextInput = (props: UnderlineTextInputProps) => {
   return (
     <View {...props.wrapperProps}>

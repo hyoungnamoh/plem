@@ -1,16 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
-import { ApiResponse, SuccessResponse } from '../../types/axios';
-import { checkDuplicateEmailApi } from '../api/auth/checkDuplicateEmailApi';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
-import UnderlineText from '../components/UnderlineText';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { validator } from '../helper/validator';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';

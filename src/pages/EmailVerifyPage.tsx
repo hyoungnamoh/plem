@@ -16,11 +16,11 @@ import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineText from '../components/UnderlineText';
-import UnderlineTextInput from '../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { validator } from '../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
+import UnderlineTextInput from '../components/UnderlineTextInput';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
@@ -53,6 +53,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
         toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
         setIsVerifiedEmail(false);
         setVerificationCode(''); // 재발송 시 사용
+        // test
         console.log(`${responseData.data.verificationCode}`);
       } else if (responseData.data) {
         Alert.alert(responseData.data);

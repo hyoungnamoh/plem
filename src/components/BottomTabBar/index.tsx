@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'absolute',
     bottom: 0,
+    backgroundColor: '#F4F1E8',
   },
   bottomTabBarLine: {
     flex: 1,

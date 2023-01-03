@@ -5,7 +5,6 @@ import { loginApi, LoginResponse } from '../api/auth/loginApi';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { ApiResponse } from '../../types/axios';
 import PlemText from '../components/Atoms/PlemText';
-import UnderlineTextInput from '../components/UnderlineTextInput';
 import Header from '../components/Header';
 import BlackButton from '../components/BlackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -17,6 +16,7 @@ import Loading from '../components/Loading';
 import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import UnderlineTextInput from '../components/UnderlineTextInput';
 
 type LoginMutationParams = {
   email: string;
@@ -62,7 +62,6 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
           queryClient.invalidateQueries('loginUser');
           setLoggedIn(true);
           await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
-          navigation.navigate('MainPage');
         } else if (responseData.data) {
           Alert.alert(responseData.data);
         } else {
@@ -77,22 +76,22 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   );
 
   const onPressFindAccount = () => {
-    Alert.alert('비밀번호 찾기 버튼');
+    navigation.navigate('FindPasswordPage');
   };
 
   const getTitle = () => {
     if (route.params?.from === 'SignUpSuccessPage') {
       return (
         <>
-          <PlemText style={{ fontSize: 28 }}>작심천일의 시작</PlemText>
-          <PlemText style={{ fontSize: 28 }}>플렘에 오신 걸 환영합니다.</PlemText>
+          <PlemText style={styles.titleText}>작심천일의 시작</PlemText>
+          <PlemText style={styles.titleText}>플렘에 오신 걸 환영합니다.</PlemText>
         </>
       );
     }
     return (
       <>
-        <PlemText style={{ fontSize: 28 }}>돌아오셨군요!</PlemText>
-        <PlemText style={{ fontSize: 28 }}>다시 만나 반가워요.</PlemText>
+        <PlemText style={styles.titleText}>돌아오셨군요!</PlemText>
+        <PlemText style={styles.titleText}>다시 만나 반가워요.</PlemText>
       </>
     );
   };
@@ -149,6 +148,9 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 15,
     marginTop: 12,
+  },
+  titleText: {
+    fontSize: 28,
   },
 });
 
