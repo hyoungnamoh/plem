@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 
-const checkBoxImage = require('../../assets/images/checkbox.png');
+const checkBoxImage = require('../../assets/images/checked_white.png');
 
 const StartPlemButtonTitle = () => (
   <View style={styles.wrap}>
