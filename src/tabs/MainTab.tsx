@@ -1,13 +1,18 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddChartPage from '../pages/AddChartPage';
+import AddPlanPage from '../pages/AddPlanPage';
 import MainPage from '../pages/MainPage';
 import RepeatSettingPage from '../pages/RepeatSettingPage';
+import SelectRepeatDatePage from '../pages/SelectRepeatDatePage';
+import SetPlanNotificationPage from '../pages/SetPlanNotificationPage';
 
 export type MainTabStackParamList = {
   MainPage: undefined;
   AddChartPage: undefined;
   RepeatSettingPage: undefined;
-  // PasswordSettingPage: { email: string };
+  SelectRepeatDatePage: undefined;
+  AddPlanPage: undefined;
+  SetPlanNotificationPage: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainTabStackParamList>();
@@ -22,6 +27,9 @@ const MainTab = () => {
       <Stack.Screen name="MainPage" component={MainPage} />
       <Stack.Screen name="AddChartPage" component={AddChartPage} />
       <Stack.Screen name="RepeatSettingPage" component={RepeatSettingPage} />
+      <Stack.Screen name="SelectRepeatDatePage" component={SelectRepeatDatePage} />
+      <Stack.Screen name="AddPlanPage" component={AddPlanPage} />
+      <Stack.Screen name="SetPlanNotificationPage" component={SetPlanNotificationPage} />
     </Stack.Navigator>
   );
 };
