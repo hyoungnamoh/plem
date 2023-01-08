@@ -24,7 +24,7 @@ const Header = (props: HeaderProps) => {
         <PlemText style={styles.title}>{props.title}</PlemText>
       </View>
       <Pressable hitSlop={5} {...props.buttonProps}>
-        <PlemText>{props.buttonName}</PlemText>
+        <PlemText style={{ color: props.buttonProps?.disabled ? '#AAAAAA' : '#000000' }}>{props.buttonName}</PlemText>
       </Pressable>
     </View>
   );
