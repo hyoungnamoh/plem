@@ -51,10 +51,10 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
 
     const sortedRepeatDays = repeatDays.sort((a, b) => a - b);
     setChart({ ...chart, repeatDays: sortedRepeatDays });
-    setChartStorage({ ...chart, repeatDays: sortedRepeatDays });
+    setStorageChartData({ ...chart, repeatDays: sortedRepeatDays });
   };
 
-  const setChartStorage = async (chartData: AddPlanChart) => {
+  const setStorageChartData = async (chartData: AddPlanChart) => {
     await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
   };
 

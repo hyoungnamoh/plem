@@ -7,7 +7,6 @@ import { AddPlanChart, PlanChart, PlanNotification, Repeats } from '../../../typ
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import { addPlanChartState } from '../../states/addPlanChartState';
 import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
@@ -40,7 +39,7 @@ const SetPlanNotificationPage = ({ navigation }: SetPlanNotificationPageProps) =
     setNotification(option);
   };
 
-  const setChartStorage = async (chartData: AddPlanChart) => {
+  const setStorageChartData = async (chartData: AddPlanChart) => {
     await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
   };
 

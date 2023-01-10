@@ -40,4 +40,8 @@ export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'upda
   plans: AddPlan[];
 };
 
-export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt'>;
+export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt' | 'subPlans'> & {
+  subPlans: AddSubPlan[];
+};
+
+export type AddSubPlan = Omit<SubPlan, 'PlanId' | 'createdAt' | 'id' | 'updatedAt'>;

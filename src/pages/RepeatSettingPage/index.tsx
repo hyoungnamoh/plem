@@ -71,7 +71,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
     setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 'days' || e === 'off')));
   };
 
-  const setChartStorage = async (chartData: AddPlanChart) => {
+  const setStorageChartData = async (chartData: AddPlanChart) => {
     await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
   };
 
@@ -82,7 +82,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       copiedChart.repeatDays = [];
     }
     setChart(copiedChart);
-    setChartStorage(copiedChart);
+    setStorageChartData(copiedChart);
 
     navigation.goBack();
   };

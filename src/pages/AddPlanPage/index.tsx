@@ -11,6 +11,8 @@ import { useRecoilState } from 'recoil';
 import { addPlanDefault, addPlanState } from '../../states/addPlanState';
 import { notiOptiosList } from '../SetPlanNotificationPage';
 import { addPlanChartState } from '../../states/addPlanChartState';
+import { AddPlanChart } from '../../../types/chart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -30,8 +32,13 @@ const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
     setPlan(addPlanDefault);
   }, []);
 
+  const setStorageChartData = async (chartData: AddPlanChart) => {
+    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
+  };
+
   const onPressAddPlan = () => {
     setChart({ ...chart, plans: [...chart.plans, plan] });
+    setStorageChartData({ ...chart, plans: [...chart.plans, plan] });
     navigation.goBack();
   };
 
