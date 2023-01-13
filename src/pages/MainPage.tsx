@@ -11,63 +11,20 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { ApiResponse } from '../../types/axios';
-import { getPlanChart, PlanChart } from '../api/plans/getPlanChart';
+import { getPlanChart } from '../api/plans/getPlanChart';
+import { MainTabStackParamList } from '../tabs/MainTab';
+import { PlanChart } from '../../types/chart';
 
-type MainPageProps = NativeStackScreenProps<LoggedInTabParamList, 'MainPage'>;
+type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
 const underlineImage = require('../assets/images/underline.png');
 const checkedImage = require('../assets/images/checked_black.png');
 const uncheckedImage = require('../assets/images/unchecked_black.png');
-const notificationImage = require('../assets/images/notification.png');
-
-const testData = [
-  {
-    id: 1,
-    startAt: dayjs('2022-12-18 00:00'),
-    endAt: dayjs('2022-12-18 12:00'),
-    name: '귀염둥이 생일파티',
-    subPlans: [
-      {
-        id: 1,
-        startAt: dayjs('2022-12-18 00:00'),
-        endAt: dayjs('2022-12-18 06:00'),
-        name: '축하댄스',
-      },
-      {
-        id: 2,
-        startAt: dayjs('2022-12-18 06:00'),
-        endAt: dayjs('2022-12-18 12:00'),
-        name: '댄스축하',
-      },
-    ],
-  },
-  {
-    id: 2,
-    startAt: dayjs('2022-12-18 12:00'),
-    endAt: dayjs('2022-12-19 00:00'),
-    name: '귀염둥이랑 데이트',
-    subPlans: [
-      {
-        id: 3,
-        startAt: dayjs('2022-12-18 12:00'),
-        endAt: dayjs('2022-12-18 14:00'),
-        name: '밥먹기',
-      },
-      {
-        id: 4,
-        startAt: dayjs('2022-12-18 14:00'),
-        endAt: dayjs('2022-12-19 20:00'),
-        name: '산책',
-      },
-      {
-        id: 5,
-        startAt: dayjs('2022-12-18 20:00'),
-        endAt: dayjs('2022-12-19 00:00'),
-        name: '드라이브',
-      },
-    ],
-  },
-];
+const notificationOnImage = require('../assets/images/notification_on.png');
+const notificationOffImage = require('../assets/images/notification_off.png');
+const yellowLineImage = require('../assets/images/yellow_line.png');
+const mainTitleLogoImage = require('../assets/images/main_title_logo.png');
+const addChartImage = require('../assets/images/add_chart.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const queryClient = useQueryClient();
@@ -112,41 +69,51 @@ const MainPage = ({ navigation }: MainPageProps) => {
     await AsyncStorage.setItem('plan_checked_list', JSON.stringify(checkedList));
   };
 
-  const { isLoading, data, isError } = useQuery<ApiResponse<PlanChart>>('getPlanChart', () =>
-    getPlanChart({ id: 284 })
-  );
+  const onPressAddChart = () => {
+    navigation.navigate('AddChartPage');
+  };
+
+  const {
+    isLoading,
+    data: planChartData,
+    isError,
+  } = useQuery<ApiResponse<PlanChart>>('getPlanChart', () => getPlanChart({ id: 285 }));
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 }}>
-      <View style={{ alignItems: 'center' }}>{/* <MainSVGFrame /> */}</View>
+    <View style={styles.page}>
+      <View style={{ height: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Pressable>
+          <Image source={mainTitleLogoImage} />
+        </Pressable>
+        <Pressable onPress={onPressAddChart}>
+          <Image source={addChartImage} />
+        </Pressable>
+      </View>
+      <View style={styles.chartWrap}>{/* <MainSVGFrame /> */}</View>
       <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>
           <PlemText style={styles.currentTimesText}>10:00 - 12:00</PlemText>
         </View>
-        <Image source={underlineImage} style={{ width: '100%', marginTop: 8 }} />
+        <Image source={underlineImage} style={styles.doItNowUnderline} />
         <KeyboardAwareScrollView contentContainerStyle={styles.doItNowContent} contentInset={{ bottom: 80 }}>
-          {testData.map((plan) => {
+          {planChartData?.data.plans.map((plan) => {
             return (
               <View key={`plan${plan.id}`}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <PlemText style={{}}>{plan.name}</PlemText>
-                    <View style={{ backgroundColor: '#F4F1E8', flex: 1 }} />
-                    <Image
-                      source={require('../assets/images/yellow_line.png')}
-                      style={{ width: '100%', position: 'absolute', zIndex: -1 }}
-                    />
+                <View style={styles.planWrap}>
+                  <View style={styles.yellowLineText}>
+                    <PlemText>{plan.name}</PlemText>
+                    <Image source={yellowLineImage} style={styles.yellowLine} />
                   </View>
-                  <Image source={notificationImage} />
+                  <Image source={true ? notificationOnImage : notificationOffImage} />
                 </View>
                 {plan.subPlans.map((sub) => {
                   const isChecked = checkedList.includes(sub.id);
                   return (
                     <Pressable
                       key={`subPlan${sub.id}`}
-                      style={{ flexDirection: 'row', alignItems: 'center', height: 40 }}
+                      style={styles.subPlan}
                       onPress={() => onPressSubPlanRow(sub.id)}>
                       <Image source={isChecked ? checkedImage : uncheckedImage} />
                       <PlemText style={{ marginLeft: 4 }}>{sub.name}</PlemText>
@@ -163,14 +130,35 @@ const MainPage = ({ navigation }: MainPageProps) => {
 };
 
 const styles = StyleSheet.create({
+  page: { flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 },
+  chartWrap: { alignItems: 'center' },
   doItNowHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  doItNowUnderline: { width: '100%', marginTop: 8 },
   currentTimesText: {
     fontSize: 16,
   },
   doItNowContent: {},
+  planWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  yellowLineText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  yellowLine: {
+    width: '100%',
+    position: 'absolute',
+    zIndex: -1,
+  },
+  subPlan: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 40,
+  },
 });
 
 export default MainPage;
