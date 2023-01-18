@@ -106,7 +106,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
                     <PlemText>{plan.name}</PlemText>
                     <Image source={yellowLineImage} style={styles.yellowLine} />
                   </View>
-                  <Image source={true ? notificationOnImage : notificationOffImage} />
+                  <Image source={plan.notification ? notificationOnImage : notificationOffImage} />
                 </View>
                 {plan.subPlans.map((sub) => {
                   const isChecked = checkedList.includes(sub.id);

@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AddPlan } from '../../types/chart';
 import AddChartPage from '../pages/AddChartPage';
 import AddPlanPage from '../pages/AddPlanPage';
 import MainPage from '../pages/MainPage';
@@ -11,7 +12,7 @@ export type MainTabStackParamList = {
   AddChartPage: undefined;
   RepeatSettingPage: undefined;
   SelectRepeatDatePage: undefined;
-  AddPlanPage: undefined;
+  AddPlanPage: { planIndex?: number } | undefined;
   SetPlanNotificationPage: undefined;
 };
 

@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
@@ -13,6 +13,9 @@ import { notiOptiosList } from '../SetPlanNotificationPage';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { AddPlanChart } from '../../../types/chart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BottomButton from '../../components/BottomButton';
+import { cloneDeep } from 'lodash';
+import { PickerIOS } from '@react-native-picker/picker';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -20,16 +23,22 @@ const arrowDownImage = require('../../assets/images/arrow_down.png');
 
 type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
 
-const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
+const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
+  const isModify = route.params?.planIndex !== undefined;
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [plan, setPlan] = useRecoilState(addPlanState);
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));
   const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
+  const [pickValue, setPickerValue] = useState(1);
 
   useEffect(() => {
-    setPlan(addPlanDefault);
+    if (isModify) {
+      setPlan(chart.plans[route.params.planIndex]);
+    }
+
+    return () => setPlan(addPlanDefault);
   }, []);
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
@@ -37,8 +46,16 @@ const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
   };
 
   const onPressAddPlan = () => {
-    setChart({ ...chart, plans: [...chart.plans, plan] });
-    setStorageChartData({ ...chart, plans: [...chart.plans, plan] });
+    const copiedChart = cloneDeep(chart);
+    if (isModify) {
+      copiedChart.plans[route.params?.planIndex] = plan;
+      setChart(copiedChart);
+      setStorageChartData(copiedChart);
+    } else {
+      setChart({ ...copiedChart, plans: [...copiedChart.plans, plan] });
+      setStorageChartData({ ...copiedChart, plans: [...copiedChart.plans, plan] });
+    }
+
     navigation.goBack();
   };
 
@@ -47,13 +64,21 @@ const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
   };
 
   const onPressStartTimeConfirm = (date: Date) => {
-    setStartTime(dayjs(date));
+    const newStartTime = dayjs(date);
+    setStartTime(newStartTime);
     setOpenStartTimePicker(false);
+    if (endTime.diff(newStartTime) < 600000) {
+      setEndTime(newStartTime.add(10, 'minute'));
+      setPlan({ ...plan, startTime: date, endTime: newStartTime.add(10, 'minute').toDate() });
+      return;
+    }
+    setPlan({ ...plan, startTime: date });
   };
 
   const onPressEndTimeConfirm = (date: Date) => {
     setEndTime(dayjs(date));
     setOpenEndTimePicker(false);
+    setPlan({ ...plan, endTime: date });
   };
 
   const onPressStartTimeCancel = () => {
@@ -76,26 +101,29 @@ const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
     setPlan({ ...plan, name: value });
   };
 
-  const getMaxStartTime = () => {
-    if (!endTime) {
-      return;
-    }
-    return endTime.subtract(10, 'minute').toDate();
+  const getMinEndTime = () => {
+    return startTime.add(10, 'minute').toDate();
   };
 
-  const getMinEndTime = () => {
-    if (!startTime) {
+  const onPressDelete = () => {
+    if (!isModify) {
       return;
     }
-    return startTime.add(10, 'minute').toDate();
+    const copiedChart = cloneDeep(chart);
+    copiedChart.plans.splice(route.params?.planIndex, 1);
+    setChart(copiedChart);
+    setStorageChartData(copiedChart);
+
+    navigation.goBack();
   };
 
   return (
     <View style={styles.page}>
       <Header
         title="계획 추가"
-        buttonName={'등록'}
-        buttonProps={{ onPress: onPressAddPlan, disabled: !plan.name || !startTime || !endTime }}
+        buttonName={'삭제'}
+        buttonProps={{ onPress: onPressDelete, style: { display: isModify ? 'flex' : 'none' } }}
+        buttonNameProps={{ style: { color: '#E40C0C' } }}
       />
       <View style={styles.content}>
         <View>
@@ -155,7 +183,7 @@ const AddPlanPage = ({ navigation }: AddPlanPageProps) => {
         locale="en_GB"
         is24Hour={true}
         minuteInterval={5}
-        maximumDate={getMaxStartTime()}
+        // maximumDate={getMaxStartTime()}
       />
       <DateTimePickerModal
         isVisible={openEndTimePicker}

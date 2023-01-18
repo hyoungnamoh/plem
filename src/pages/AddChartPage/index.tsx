@@ -109,6 +109,10 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
     setStorageChartData(copiedChart);
   };
 
+  const onPressModifyPlan = ({ planIndex }: { planIndex: number }) => {
+    navigation.navigate('AddPlanPage', { planIndex: planIndex });
+  };
+
   return (
     <View style={styles.page}>
       <Header title={'계획표 추가'} buttonName={'등록'} buttonProps={{ onPress: onPressAddChart }} />
@@ -141,10 +145,10 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
             return (
               <View key={`plan_${planIndex}}`}>
                 <View style={styles.planWrap}>
-                  <View style={styles.yellowLineText}>
+                  <Pressable style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
                     <PlemText>{plan.name}</PlemText>
                     <Image source={yellowLineImage} style={styles.yellowLine} />
-                  </View>
+                  </Pressable>
                   <View style={styles.notificationContainer}>
                     <PlemText>
                       {dayjs(plan.startTime).format('HH:mm')} : {dayjs(plan.endTime).format('HH:mm')}
