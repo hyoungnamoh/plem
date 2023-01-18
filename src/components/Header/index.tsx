@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Image, Pressable, PressableProps, StyleSheet, View } from 'react-native';
+import { Image, Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
 
 type HeaderProps = {
@@ -8,6 +8,7 @@ type HeaderProps = {
   title?: string;
   buttonName?: string;
   buttonProps?: PressableProps;
+  buttonNameProps?: TextProps;
 };
 
 const backImage = require('../../assets/images/top_ic_back.png');
@@ -24,7 +25,9 @@ const Header = (props: HeaderProps) => {
         <PlemText style={styles.title}>{props.title}</PlemText>
       </View>
       <Pressable hitSlop={5} {...props.buttonProps}>
-        <PlemText style={{ color: props.buttonProps?.disabled ? '#AAAAAA' : '#000000' }}>{props.buttonName}</PlemText>
+        <PlemText style={{ color: props.buttonProps?.disabled ? '#AAAAAA' : '#000000' }} {...props.buttonNameProps}>
+          {props.buttonName}
+        </PlemText>
       </Pressable>
     </View>
   );
