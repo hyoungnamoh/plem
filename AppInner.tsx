@@ -2,7 +2,7 @@ import LoginPage from './src/pages/LoginPage';
 import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native';
+import { Pressable, SafeAreaView, View } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { loggedInState } from './src/states/loggedInState';
 import { useRecoilState } from 'recoil';
@@ -24,6 +24,8 @@ import MainTab from './src/tabs/MainTab';
 import CalendarTab from './src/tabs/CalendarTab';
 import PlanChartListTab from './src/tabs/PlanChartListTab';
 import SettingTab from './src/tabs/SettingTab';
+import { timePickerState } from './src/states/timePickerState';
+import TimePicker from './src/components/TimePicker';
 
 export type LoggedInTabParamList = {
   MainTab: undefined;
@@ -62,6 +64,7 @@ function AppInner({ routeName }: { routeName: string }) {
   // const { isLoading, data, isError } = useQuery<SuccessResponse<LoginUser>>('loginUser', getLoginUserApi);
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+  const [timePicker, setBackgroundMaskState] = useRecoilState(timePickerState);
 
   useEffect(() => {
     loginCheck();
@@ -76,6 +79,7 @@ function AppInner({ routeName }: { routeName: string }) {
 
   return (
     <>
+      {timePicker.visible && <TimePicker />}
       <SafeAreaView style={{ flex: 0, backgroundColor: '#F4F1E8' }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {loggedIn ? (

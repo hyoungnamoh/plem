@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomButton from '../../components/BottomButton';
 import { cloneDeep } from 'lodash';
 import { PickerIOS } from '@react-native-picker/picker';
+import { timePickerState } from '../../states/timePickerState';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -27,11 +28,14 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
   const isModify = route.params?.planIndex !== undefined;
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [plan, setPlan] = useRecoilState(addPlanState);
+  const [timePicker, setBackgroundMaskState] = useRecoilState(timePickerState);
+
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));
   const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
   const [pickValue, setPickerValue] = useState(1);
+  const [openTest, setOpenTest] = useState(false);
 
   useEffect(() => {
     if (isModify) {
@@ -196,6 +200,64 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         minuteInterval={5}
         minimumDate={getMinEndTime()}
       />
+      <Pressable
+        onPress={() => {
+          setOpenTest(true);
+          setBackgroundMaskState({
+            visible: true,
+            onPress: () => {
+              setOpenTest(false);
+              setBackgroundMaskState({ visible: false });
+            },
+          });
+        }}>
+        <PlemText>누르시오</PlemText>
+      </Pressable>
+      {/* {openTest && (
+        <Pressable
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'center',
+            borderWidth: 1,
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            zIndex: 1100,
+          }}
+          onPress={() => {
+            setOpenTest(false);
+            setBackgroundMaskState({ visible: true });
+          }}>
+          <View style={{}}>
+            <PickerIOS
+              style={{ flex: 1, width: Dimensions.get('screen').width / 3, height: 400, fontFamily: 'LeeSeoyun' }}
+              selectedValue={pickValue}
+              onValueChange={(value) => setPickerValue(value as number)}>
+              <PickerIOS.Item value={1} label="1" />
+              <PickerIOS.Item value={2} label="2" />
+              <PickerIOS.Item value={3} label="3" />
+              <PickerIOS.Item value={4} label="4" />
+              <PickerIOS.Item value={5} label="5" />
+            </PickerIOS>
+          </View>
+          <View>
+            <PickerIOS
+              style={{
+                flex: 1,
+                width: Dimensions.get('screen').width / 3,
+                height: 400,
+              }}>
+              <PickerIOS.Item value={1} label="1" />
+              <PickerIOS.Item value={2} label="2" />
+              <PickerIOS.Item value={3} label="3" />
+              <PickerIOS.Item value={4} label="4" />
+              <PickerIOS.Item value={5} label="5" />
+            </PickerIOS>
+          </View>
+        </Pressable>
+      )} */}
+      <BottomButton title={'등록'} disabled={!plan.name || !startTime || !endTime} onPress={onPressAddPlan} />
     </View>
   );
 };
