@@ -11,6 +11,7 @@ import PlemText from '../../components/Atoms/PlemText';
 import BlackButton from '../../components/BlackButton';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
+import { MAIN_COLOR } from '../../constants';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 
 type NotReceivedMailPage = NativeStackScreenProps<LoggedOutStackParamList, 'NotReceivedMailPage'>;
@@ -20,7 +21,7 @@ const NotReceivedMailPage = ({ route, navigation }: NotReceivedMailPage) => {
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
 
   useEffect(() => {
-    setBottomSafeArea('#F4F1E8');
+    setBottomSafeArea(MAIN_COLOR);
   }, []);
   const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;
 
@@ -74,7 +75,7 @@ const NotReceivedMailPage = ({ route, navigation }: NotReceivedMailPage) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
     paddingBottom: 36,
   },

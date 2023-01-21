@@ -14,6 +14,7 @@ import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineText from '../components/UnderlineText';
 import UnderlineTextInput from '../components/UnderlineTextInput';
+import { MAIN_COLOR } from '../constants';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 
@@ -107,7 +108,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   content: {

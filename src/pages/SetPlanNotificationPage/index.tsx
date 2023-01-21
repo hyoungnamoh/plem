@@ -7,6 +7,7 @@ import { AddPlanChart, PlanChart, PlanNotification, Repeats } from '../../../typ
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
+import { MAIN_COLOR } from '../../constants';
 import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
@@ -68,7 +69,7 @@ const SetPlanNotificationPage = ({ navigation }: SetPlanNotificationPageProps) =
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   listWrap: {

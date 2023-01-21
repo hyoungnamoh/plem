@@ -7,6 +7,7 @@ import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
+import { MAIN_COLOR } from '../../constants';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
@@ -73,7 +74,7 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   daysOfMonthWrap: {

@@ -8,6 +8,7 @@ import { DaysOfWeek, DaysOfWeekKor } from '../../../types/date';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
+import { MAIN_COLOR } from '../../constants';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
@@ -112,7 +113,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   listWrap: {

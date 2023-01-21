@@ -1,7 +1,14 @@
 import { View } from 'react-native';
+import PlemText from '../../components/Atoms/PlemText';
 
 const CalendarPage = () => {
-  return <View style={{ height: '100%', backgroundColor: 'red', paddingBottom: 200 }}></View>;
+  return (
+    <View style={{ flex: 1 }}>
+      <View>
+        <PlemText>하이</PlemText>
+      </View>
+    </View>
+  );
 };
 
 export default CalendarPage;

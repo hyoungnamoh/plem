@@ -21,6 +21,7 @@ import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { validator } from '../../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../../states/isVerifiedEmailState';
+import { MAIN_COLOR } from '../../constants';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 
@@ -38,7 +39,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
   const toastRef = useRef<Toast>(null);
 
   useEffect(() => {
-    setBottomSafeArea('#F4F1E8');
+    setBottomSafeArea(MAIN_COLOR);
   }, []);
 
   const usePostVerificationEmail = useMutation<
@@ -180,7 +181,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   content: {

@@ -21,6 +21,7 @@ import { validator } from '../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
+import { MAIN_COLOR } from '../constants';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
@@ -38,7 +39,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   const toastRef = useRef<Toast>(null);
 
   useEffect(() => {
-    setBottomSafeArea('#F4F1E8');
+    setBottomSafeArea(MAIN_COLOR);
   }, []);
 
   const usePostVerificationEmail = useMutation<
@@ -185,7 +186,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   content: {

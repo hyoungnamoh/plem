@@ -1,5 +1,6 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { MAIN_COLOR } from '../../constants';
 
 const BottomTabs = [
   {
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'absolute',
     bottom: 0,
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
   },
   bottomTabBarLine: {
     flex: 1,

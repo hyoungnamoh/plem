@@ -14,6 +14,7 @@ import { ApiResponse } from '../../types/axios';
 import { getPlanChart } from '../api/plans/getPlanChart';
 import { MainTabStackParamList } from '../tabs/MainTab';
 import { PlanChart } from '../../types/chart';
+import { MAIN_COLOR } from '../constants';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -130,7 +131,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
 };
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: '#F4F1E8', paddingHorizontal: 15 },
+  page: { flex: 1, backgroundColor: MAIN_COLOR, paddingHorizontal: 15 },
   chartWrap: { alignItems: 'center' },
   doItNowHeader: {
     flexDirection: 'row',

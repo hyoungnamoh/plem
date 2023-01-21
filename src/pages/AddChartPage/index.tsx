@@ -12,6 +12,7 @@ import { MainTabStackParamList } from '../../tabs/MainTab';
 import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
+import { MAIN_COLOR } from '../../constants';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -189,7 +190,7 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   underlineButtonWrap: {

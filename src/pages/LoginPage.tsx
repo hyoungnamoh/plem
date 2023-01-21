@@ -17,6 +17,7 @@ import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
+import { MAIN_COLOR } from '../constants';
 
 type LoginMutationParams = {
   email: string;
@@ -35,7 +36,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const [password, setPassword] = useState('');
 
   useFocusEffect(() => {
-    setBottomSafeArea('#F4F1E8');
+    setBottomSafeArea(MAIN_COLOR);
   });
 
   const onChangeEmail = (value: string) => {
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
   },
   content: {
     paddingHorizontal: 15,

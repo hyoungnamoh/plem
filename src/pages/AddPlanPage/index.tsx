@@ -17,6 +17,7 @@ import BottomButton from '../../components/BottomButton';
 import { cloneDeep } from 'lodash';
 import { PickerIOS } from '@react-native-picker/picker';
 import { timePickerState } from '../../states/timePickerState';
+import { MAIN_COLOR } from '../../constants';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -264,7 +265,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   underlineButtonWrap: {

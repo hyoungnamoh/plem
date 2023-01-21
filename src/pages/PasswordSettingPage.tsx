@@ -8,6 +8,7 @@ import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
+import { MAIN_COLOR } from '../constants';
 import { validator } from '../helper/validator';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
@@ -101,7 +102,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     flex: 1,
   },
   content: {

@@ -6,6 +6,7 @@ import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import UnderlineText from '../components/UnderlineText';
+import { MAIN_COLOR } from '../constants';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
@@ -14,7 +15,7 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
 
   useFocusEffect(() => {
-    setBottomSafeArea('#F4F1E8');
+    setBottomSafeArea(MAIN_COLOR);
   });
 
   const onPressTogetherButton = () => {
@@ -44,7 +45,7 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: '#F4F1E8',
+    backgroundColor: MAIN_COLOR,
     paddingHorizontal: 15,
   },
   logo: {
