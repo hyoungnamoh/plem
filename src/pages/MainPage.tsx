@@ -14,7 +14,7 @@ import { ApiResponse } from '../../types/axios';
 import { getPlanChart } from '../api/plans/getPlanChart';
 import { MainTabStackParamList } from '../tabs/MainTab';
 import { PlanChart } from '../../types/chart';
-import { MAIN_COLOR } from '../constants';
+import { MAIN_COLOR } from '../constants/color';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -25,7 +25,7 @@ const notificationOnImage = require('../assets/images/notification_on.png');
 const notificationOffImage = require('../assets/images/notification_off.png');
 const yellowLineImage = require('../assets/images/yellow_line.png');
 const mainTitleLogoImage = require('../assets/images/main_title_logo.png');
-const addChartImage = require('../assets/images/add_chart.png');
+const addChartImage = require('../assets/images/plus.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const queryClient = useQueryClient();

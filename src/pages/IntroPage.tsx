@@ -6,7 +6,7 @@ import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import UnderlineText from '../components/UnderlineText';
-import { MAIN_COLOR } from '../constants';
+import { MAIN_COLOR } from '../constants/color';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;

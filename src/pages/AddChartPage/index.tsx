@@ -12,7 +12,7 @@ import { MainTabStackParamList } from '../../tabs/MainTab';
 import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
-import { MAIN_COLOR } from '../../constants';
+import { MAIN_COLOR } from '../../constants/color';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');

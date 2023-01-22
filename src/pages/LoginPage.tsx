@@ -17,7 +17,7 @@ import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants';
+import { MAIN_COLOR } from '../constants/color';
 
 type LoginMutationParams = {
   email: string;

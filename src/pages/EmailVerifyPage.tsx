@@ -21,7 +21,7 @@ import { validator } from '../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants';
+import { MAIN_COLOR } from '../constants/color';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 

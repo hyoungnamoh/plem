@@ -21,7 +21,7 @@ import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { validator } from '../../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../../states/isVerifiedEmailState';
-import { MAIN_COLOR } from '../../constants';
+import { MAIN_COLOR } from '../../constants/color';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 

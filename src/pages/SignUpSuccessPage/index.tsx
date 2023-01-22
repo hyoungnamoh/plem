@@ -12,7 +12,7 @@ import BlackButton from '../../components/BlackButton';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../../constants';
+import { MAIN_COLOR } from '../../constants/color';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import StartPlemButtonTitle from './StartPlemButtonTitle';
 

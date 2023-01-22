@@ -17,7 +17,7 @@ import BottomButton from '../../components/BottomButton';
 import { cloneDeep } from 'lodash';
 import { PickerIOS } from '@react-native-picker/picker';
 import { timePickerState } from '../../states/timePickerState';
-import { MAIN_COLOR } from '../../constants';
+import { MAIN_COLOR } from '../../constants/color';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');

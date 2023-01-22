@@ -8,7 +8,7 @@ import { DaysOfWeek, DaysOfWeekKor } from '../../../types/date';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants';
+import { MAIN_COLOR } from '../../constants/color';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
