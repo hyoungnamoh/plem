@@ -2,6 +2,8 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import { MAIN_COLOR } from '../../constants/color';
 
+export const BOTTOM_TAB_HEIGHT = 56;
+
 const BottomTabs = [
   {
     key: 'MainPage',
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    height: 56,
+    height: BOTTOM_TAB_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
   },

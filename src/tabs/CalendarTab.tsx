@@ -5,7 +5,6 @@ import MainPage from '../pages/MainPage';
 
 export type CalendarTabStackParamList = {
   CalendarPage: undefined;
-  // PasswordSettingPage: { email: string };
 };
 
 const Stack = createNativeStackNavigator<CalendarTabStackParamList>();

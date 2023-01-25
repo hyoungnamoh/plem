@@ -4,7 +4,7 @@ import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import { useRecoilState } from 'recoil';
@@ -179,7 +179,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           <Image source={underlineImage} style={styles.underlineImage} />
         </View>
       </View>
-      <DateTimePickerModal
+      {/* <DateTimePickerModal
         isVisible={openStartTimePicker}
         mode="time"
         onConfirm={onPressStartTimeConfirm}
@@ -200,7 +200,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         is24Hour={true}
         minuteInterval={5}
         minimumDate={getMinEndTime()}
-      />
+      /> */}
       <Pressable
         onPress={() => {
           setOpenTest(true);
