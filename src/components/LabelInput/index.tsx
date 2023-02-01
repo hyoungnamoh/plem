@@ -11,7 +11,7 @@ const LabelInput = (props: LabelInputProps) => {
   return (
     <View>
       <PlemText style={styles.label}>{label}</PlemText>
-      <UnderlineTextInput {...props} style={{ marginTop: 12 }} />
+      <UnderlineTextInput {...props} style={[styles.underlineInput, props.style]} />
     </View>
   );
 };
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
   },
+  underlineInput: { marginTop: 12 },
 });
 
 export default LabelInput;

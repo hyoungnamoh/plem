@@ -14,6 +14,8 @@ import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
+import OptionsRowButton from '../../components/OptionsRowButton';
+import PaletteInput from '../../components/PaletteInput';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../../constants/color';
 import { DAYS_OF_WEEK } from '../../constants/date';
@@ -26,7 +28,6 @@ const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
 const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
 const circleStrokeImage = require('../../assets/images/circle_stroke.png');
-// const addScheduleModal = require('../../assets/images/add_schedule_modal.png');
 
 type CalendarPagePageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddCalendarPage'>;
 
@@ -58,16 +59,9 @@ const AddCalendarPage = ({ navigation, route }: CalendarPagePageProps) => {
         buttonNameProps={{ style: { color: '#E40C0C' } }}
       />
       <View style={styles.content}>
-        <View>
-          <LabelInput label={'일정명'} value={name} />
-          {/* <PlemText style={styles.label}>계획명</PlemText>
-          <UnderlineTextInput
-            value={name}
-            onChangeText={setName}
-            style={{ marginTop: 12 }}
-            maxLength={14}
-            placeholder={'최대 14글자'}
-          /> */}
+        <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
+        <View style={{ marginTop: 32 }}>
+          <PaletteInput label="카테고리" value={'daily'} />
         </View>
         <View>
           <PlemText style={[styles.label, { marginTop: 32 }]}>시간</PlemText>
@@ -97,14 +91,12 @@ const AddCalendarPage = ({ navigation, route }: CalendarPagePageProps) => {
               <Image source={underlineImage} style={styles.underlineImage} />
             </View>
           </View>
-          <View style={styles.underlineButtonWrap}>
-            <PlemText>알림</PlemText>
-            <Pressable style={styles.underlineButton} onPress={() => null}>
-              <PlemText>하이</PlemText>
-              <Image source={arrowRightImage} style={styles.arrowRightImage} />
-            </Pressable>
+          <View style={{ marginTop: 32 }}>
+            <OptionsRowButton label="알림" value="없음" />
           </View>
-          <Image source={underlineImage} style={styles.underlineImage} />
+          <View style={{ marginTop: 32 }}>
+            <OptionsRowButton label="반복" value="안 함" />
+          </View>
         </View>
       </View>
       <BottomButton title={'등록'} disabled={false} onPress={onPressAddSchedule} />
