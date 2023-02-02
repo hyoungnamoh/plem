@@ -34,7 +34,7 @@ const CATEGORY_LIST: { [key in Category]: { label: CategoryKor; value: Category;
   },
 } as const;
 
-const PaletteInput = ({ label, value }: { label: string; value: Category }) => {
+const PaletteInputRowRow = ({ label, value }: { label: string; value: Category }) => {
   const category = CATEGORY_LIST[value];
 
   return (
@@ -52,9 +52,6 @@ const PaletteInput = ({ label, value }: { label: string; value: Category }) => {
 };
 
 const styles = StyleSheet.create({
-  // wrap: {
-  //   hei
-  // },
   label: {
     fontSize: 14,
   },
@@ -77,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaletteInput;
+export default PaletteInputRowRow;

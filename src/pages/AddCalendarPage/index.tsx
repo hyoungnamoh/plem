@@ -14,8 +14,9 @@ import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
-import OptionsRowButton from '../../components/OptionsRowButton';
-import PaletteInput from '../../components/PaletteInput';
+import OptionsInputRow from '../../components/OptionsInputRow';
+import PaletteInputRow from '../../components/PaletteInputRow';
+import SwitchInputRow from '../../components/SwitchInputRow';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../../constants/color';
 import { DAYS_OF_WEEK } from '../../constants/date';
@@ -61,7 +62,10 @@ const AddCalendarPage = ({ navigation, route }: CalendarPagePageProps) => {
       <View style={styles.content}>
         <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
         <View style={{ marginTop: 32 }}>
-          <PaletteInput label="카테고리" value={'daily'} />
+          <PaletteInputRow label="카테고리" value={'daily'} />
+        </View>
+        <View style={{ marginTop: 32 }}>
+          <SwitchInputRow label={'하루 종일'} value={false} />
         </View>
         <View>
           <PlemText style={[styles.label, { marginTop: 32 }]}>시간</PlemText>
@@ -92,10 +96,10 @@ const AddCalendarPage = ({ navigation, route }: CalendarPagePageProps) => {
             </View>
           </View>
           <View style={{ marginTop: 32 }}>
-            <OptionsRowButton label="알림" value="없음" />
+            <OptionsInputRow label="알림" value="없음" />
           </View>
           <View style={{ marginTop: 32 }}>
-            <OptionsRowButton label="반복" value="안 함" />
+            <OptionsInputRow label="반복" value="안 함" />
           </View>
         </View>
       </View>
