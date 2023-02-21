@@ -74,14 +74,14 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
   };
 
   const getRepeatOptions = () => {
-    if (chart.repeats === null) {
+    if (chart.repeats.includes(null)) {
       return '안 함';
     }
     if (chart.repeats.includes(7) && chart.repeatDays) {
       return chart.repeatDays.map((date) => `${date}일`).join(', ');
     }
     return repeatOptionList
-      .filter((option) => chart.repeats?.includes(option.value!))
+      .filter((option) => chart.repeats.includes(option.value))
       .sort((a, b) => a.value! - b.value!)
       .map((option) => option.day)
       .join(', ');

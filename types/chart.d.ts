@@ -34,7 +34,7 @@ export type PlanChart = {
   repeatDays: number[];
 };
 
-export type Repeats = null | (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[];
+export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[];
 
 export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'updatedAt' | 'plans'> & {
   plans: AddPlan[];
