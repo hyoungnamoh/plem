@@ -5,7 +5,7 @@ import AddPlanPage from '../pages/AddPlanPage';
 import MainPage from '../pages/MainPage';
 import RepeatSettingPage from '../pages/RepeatSettingPage';
 import SelectRepeatDatePage from '../pages/SelectRepeatDatePage';
-import SetPlanNotificationPage from '../pages/SetPlanNotificationPage';
+import PlanNotiSettingPage from '../pages/PlanNotiSettingPage';
 
 export type MainTabStackParamList = {
   MainPage: undefined;
@@ -13,7 +13,7 @@ export type MainTabStackParamList = {
   RepeatSettingPage: undefined;
   SelectRepeatDatePage: undefined;
   AddPlanPage: { planIndex?: number } | undefined;
-  SetPlanNotificationPage: undefined;
+  PlanNotiSettingPage: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainTabStackParamList>();
@@ -30,7 +30,7 @@ const MainTab = () => {
       <Stack.Screen name="RepeatSettingPage" component={RepeatSettingPage} />
       <Stack.Screen name="SelectRepeatDatePage" component={SelectRepeatDatePage} />
       <Stack.Screen name="AddPlanPage" component={AddPlanPage} />
-      <Stack.Screen name="SetPlanNotificationPage" component={SetPlanNotificationPage} />
+      <Stack.Screen name="PlanNotiSettingPage" component={PlanNotiSettingPage} />
     </Stack.Navigator>
   );
 };

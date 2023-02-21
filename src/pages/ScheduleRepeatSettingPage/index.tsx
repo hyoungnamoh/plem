@@ -10,6 +10,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/color';
 import { addPlanChartState } from '../../states/addPlanChartState';
+import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 type RepeatOptionKor =
@@ -23,48 +24,43 @@ type RepeatOptionKor =
   | '일요일마다'
   | '날짜 지정';
 
-type RepeatOptionItemValue = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-
 export type RepeatOptionItem = {
   key: DaysOfWeek | 'off' | 'days';
-  value: RepeatOptionItemValue;
+  value: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   label: RepeatOptionKor;
   day?: DaysOfWeekKor;
 };
 
 export const repeatOptionList: RepeatOptionItem[] = [
-  { key: 'off', value: null, label: '안 함' },
-  { key: 'mon', value: 0, label: '월요일마다', day: '월' },
-  { key: 'tue', value: 1, label: '화요일마다', day: '화' },
-  { key: 'wed', value: 2, label: '수요일마다', day: '수' },
-  { key: 'thu', value: 3, label: '목요일마다', day: '목' },
-  { key: 'fri', value: 4, label: '금요일마다', day: '금' },
-  { key: 'sat', value: 5, label: '토요일마다', day: '토' },
-  { key: 'sun', value: 6, label: '일요일마다', day: '일' },
-  { key: 'days', value: 7, label: '날짜 지정' },
+  { key: 'off', value: 0, label: '안 함' },
+  { key: 'mon', value: 1, label: '월요일마다', day: '월' },
+  { key: 'tue', value: 2, label: '화요일마다', day: '화' },
+  { key: 'wed', value: 3, label: '수요일마다', day: '수' },
+  { key: 'thu', value: 4, label: '목요일마다', day: '목' },
+  { key: 'fri', value: 5, label: '금요일마다', day: '금' },
+  { key: 'sat', value: 6, label: '토요일마다', day: '토' },
+  { key: 'sun', value: 7, label: '일요일마다', day: '일' },
+  { key: 'days', value: 8, label: '날짜 지정' },
 ];
 
-type RepeatSettingPageProps = NativeStackScreenProps<MainTabStackParamList, 'RepeatSettingPage'>;
+type RepeatSettingPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'ScheduleRepeatSettingPage'>;
 
 const checkImage = require('../../assets/images/check.png');
 
-const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
+const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [repeatOptions, setRepeatOptions] = useState<Repeats>(chart.repeats);
 
   useEffect(() => {}, []);
 
-  const onPressRepeatOption = (option: RepeatOptionItemValue) => {
-    if (option === null) {
-      setRepeatOptions(null);
+  const onPressRepeatOption = (option: DaysOfWeek | 'off' | 'days') => {
+    if (option === 'off') {
+      setRepeatOptions(['off']);
       return;
     }
-    if (option === 7) {
-      setRepeatOptions([7]);
-      navigation.navigate('SelectRepeatDatePage');
-      return;
-    }
-    if (!repeatOptions) {
+    if (option === 'days') {
+      setRepeatOptions(['days']);
+      // navigation.navigate('SelectRepeatDatePage');
       return;
     }
     if (repeatOptions.includes(option)) {
@@ -74,7 +70,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       setRepeatOptions(copiedOptions);
       return;
     }
-    setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 7 || e === null)));
+    setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 'days' || e === 'off')));
   };
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
@@ -82,12 +78,9 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   };
 
   const onPressBottomButton = () => {
-    if (!repeatOptions) {
-      return;
-    }
     const copiedChart = { ...chart };
     copiedChart.repeats = repeatOptions;
-    if (!repeatOptions.includes(7)) {
+    if (!repeatOptions.includes('days')) {
       copiedChart.repeatDays = [];
     }
     setChart(copiedChart);
@@ -102,15 +95,14 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       <View style={styles.listWrap}>
         {repeatOptionList.map((repeat) => {
           return (
-            <Pressable key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
+            <Pressable key={repeat.key} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.key)}>
               <PlemText>{repeat.label}</PlemText>
-              {(!repeatOptions && !repeat.value) ||
-                (repeatOptions?.includes(repeat.value!) && <Image source={checkImage} />)}
+              {repeatOptions.includes(repeat.key) && <Image source={checkImage} />}
             </Pressable>
           );
         })}
         <View style={styles.infoMessageWrap}>
-          {repeatOptions?.includes(7) && chart.repeatDays.length > 0 && (
+          {repeatOptions.includes('days') && chart.repeatDays.length > 0 && (
             <PlemText style={styles.infoMessage}>매월 {chart.repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
           )}
         </View>
@@ -142,4 +134,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RepeatSettingPage;
+export default ScheduleRepeatSettingPage;

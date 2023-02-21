@@ -105,7 +105,7 @@ const CalendarPage = ({ navigation }: CalendarPagePageProps) => {
   };
 
   const onPressAddSchedule = () => {
-    navigation.navigate('AddCalendarPage');
+    navigation.navigate('AddSchedulePage');
   };
 
   return (

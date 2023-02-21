@@ -34,7 +34,7 @@ export type PlanChart = {
   repeatDays: number[];
 };
 
-export type Repeats = (DaysOfWeek | 'off' | 'days' | number)[];
+export type Repeats = null | (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[];
 
 export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'updatedAt' | 'plans'> & {
   plans: AddPlan[];
@@ -45,3 +45,10 @@ export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt
 };
 
 export type AddSubPlan = Omit<SubPlan, 'PlanId' | 'createdAt' | 'id' | 'updatedAt'>;
+
+export type PlanNotiOptionKor = '없음' | '이벤트 당시' | '5분 전' | '10분 전' | '15분 전' | '30분 전' | '1시간 전';
+
+export type PlanNotiOptionItem = {
+  key: PlanNotification;
+  label: PlanNotiOptionKor;
+};

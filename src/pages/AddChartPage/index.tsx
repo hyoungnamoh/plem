@@ -74,15 +74,15 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
   };
 
   const getRepeatOptions = () => {
-    if (chart.repeats.includes('off')) {
+    if (chart.repeats === null) {
       return '안 함';
     }
-    if (chart.repeats.includes('days') && chart.repeatDays) {
+    if (chart.repeats.includes(7) && chart.repeatDays) {
       return chart.repeatDays.map((date) => `${date}일`).join(', ');
     }
     return repeatOptionList
-      .filter((option) => chart.repeats.includes(option.key))
-      .sort((a, b) => a.value - b.value)
+      .filter((option) => chart.repeats?.includes(option.value!))
+      .sort((a, b) => a.value! - b.value!)
       .map((option) => option.day)
       .join(', ');
   };

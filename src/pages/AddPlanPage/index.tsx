@@ -9,7 +9,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import { useRecoilState } from 'recoil';
 import { addPlanDefault, addPlanState } from '../../states/addPlanState';
-import { notiOptiosList } from '../SetPlanNotificationPage';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { AddPlanChart } from '../../../types/chart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +17,7 @@ import { cloneDeep } from 'lodash';
 import { PickerIOS } from '@react-native-picker/picker';
 import { timePickerState } from '../../states/timePickerState';
 import { MAIN_COLOR } from '../../constants/color';
+import { notiOptiosList } from '../PlanNotiSettingPage';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -65,7 +65,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
   };
 
   const onPressSetNotification = () => {
-    navigation.navigate('SetPlanNotificationPage');
+    navigation.navigate('PlanNotiSettingPage');
   };
 
   const onPressStartTimeConfirm = (date: Date) => {

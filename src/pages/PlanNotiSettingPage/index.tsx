@@ -3,20 +3,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, PlanChart, PlanNotification, Repeats } from '../../../types/chart';
+import { AddPlanChart, PlanChart, PlanNotification, PlanNotiOptionItem, Repeats } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/color';
 import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
-
-type PlanNotiOptionKor = '없음' | '이벤트 당시' | '5분 전' | '10분 전' | '15분 전' | '30분 전' | '1시간 전';
-
-export type PlanNotiOptionItem = {
-  key: PlanNotification;
-  label: PlanNotiOptionKor;
-};
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: 0, label: '없음' },
@@ -28,11 +21,11 @@ export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: 60, label: '1시간 전' },
 ];
 
-type SetPlanNotificationPageProps = NativeStackScreenProps<MainTabStackParamList, 'SetPlanNotificationPage'>;
+type SetPlanNotificationPageProps = NativeStackScreenProps<MainTabStackParamList, 'PlanNotiSettingPage'>;
 
 const checkImage = require('../../assets/images/check.png');
 
-const SetPlanNotificationPage = ({ navigation }: SetPlanNotificationPageProps) => {
+const PlanNotiSettingPage = ({ navigation }: SetPlanNotificationPageProps) => {
   const [plan, setPlan] = useRecoilState(addPlanState);
   const [notification, setNotification] = useState<PlanNotification>(plan.notification);
 
@@ -89,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetPlanNotificationPage;
+export default PlanNotiSettingPage;
