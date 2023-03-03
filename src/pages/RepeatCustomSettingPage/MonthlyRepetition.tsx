@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, useState } from 'react';
 import { Dimensions, ImageBackground, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import { Dropdown, DropdownItem } from '../../components/Dropdown';
@@ -25,8 +25,13 @@ const DAYS_OF_MONTH = [
   { value: 6, label: '토요일' },
 ];
 
-const MonthlyRepetition = () => {
-  const [selectedDates, setSelectedDates] = useState<number[]>([]);
+type MonthlyRepetitionProps = {
+  selectedDates: number[];
+  setSelectedDates: Dispatch<React.SetStateAction<number[]>>;
+};
+
+const MonthlyRepetition = ({ selectedDates, setSelectedDates }: MonthlyRepetitionProps) => {
+  // const [selectedDates, setSelectedDates] = useState<number[]>([]);
   const [hasCondition, setHasCondition] = useState(false);
   const [openWeekList, setOpenWeekList] = useState(false);
   const [openDayList, setOpenDayList] = useState(false);
