@@ -40,10 +40,6 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
     }
   };
 
-  const setStorageChartData = async (chartData: AddSchedule) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
-  };
-
   const onPressBottomButton = () => {
     const copiedSchedule = { ...schedule };
     copiedSchedule.repeat = repeatOption;

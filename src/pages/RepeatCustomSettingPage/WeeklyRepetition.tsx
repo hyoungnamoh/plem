@@ -1,72 +1,57 @@
-import { useState } from 'react';
-import { Dimensions, ImageBackground, Pressable, View } from 'react-native';
+import { Dispatch, useState } from 'react';
+import { Dimensions, Image, ImageBackground, Pressable, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import SwitchInputRow from '../../components/SwitchInputRow';
 
 const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
+const checkImage = require('../../assets/images/check.png');
 
-const WeeklyRepetition = () => {
-  const [selectedDates, setSelectedDates] = useState<number[]>([]);
-  const [hasCondition, setHasCondition] = useState(false);
+const REPEAT_DAY_LIST = [
+  { value: 0, label: '일요일마다' },
+  { value: 1, label: '월요일마다' },
+  { value: 2, label: '화요일마다' },
+  { value: 3, label: '수요일마다' },
+  { value: 4, label: '목요일마다' },
+  { value: 5, label: '금요일마다' },
+  { value: 6, label: '토요일마다' },
+];
 
-  const datesOfMonth = Array.from(new Array(31).fill(0), (_, index) => index + 1);
+type WeeklyRepetitionProps = {
+  selectedDates: number[];
+  setSelectedDates: Dispatch<React.SetStateAction<number[]>>;
+};
 
-  const onPressDate = (item: number) => {
+const WeeklyRepetition = ({ selectedDates, setSelectedDates }: WeeklyRepetitionProps) => {
+  const onPressRepeatDay = (item: { label: string; value: number }) => {
     let newArray = [...selectedDates];
-
-    if (selectedDates.includes(item)) {
-      newArray = selectedDates.filter((day) => day !== item);
+    if (selectedDates.includes(item.value)) {
+      newArray = selectedDates.filter((day) => day !== item.value);
     } else {
-      newArray.push(item);
+      newArray.push(item.value);
     }
 
+    newArray.sort((a, b) => a - b);
     setSelectedDates(newArray);
-  };
-
-  const dateComponents = datesOfMonth.map((date) => {
-    const isSelectedDate = selectedDates.includes(date);
-    return (
-      <Pressable
-        key={date}
-        onPress={() => onPressDate(date)}
-        style={{
-          width: Math.floor(Dimensions.get('screen').width / 7),
-          alignItems: 'center',
-          height: 52,
-          justifyContent: 'center',
-        }}>
-        <ImageBackground
-          source={isSelectedDate ? currentDayStickerImage : null}
-          resizeMode="cover"
-          style={{ width: 24, height: 22, justifyContent: 'center', alignItems: 'center' }}
-          imageStyle={{ display: isSelectedDate ? 'flex' : 'none' }}>
-          <PlemText
-            style={{
-              color: isSelectedDate ? '#fff' : '#000',
-            }}>
-            {date}
-          </PlemText>
-        </ImageBackground>
-      </Pressable>
-    );
-  });
-
-  const onPressCondition = () => {
-    setHasCondition(!hasCondition);
   };
 
   return (
     <View style={{ marginTop: 32 }}>
-      <SwitchInputRow label="조건지정" value={hasCondition} style={{}} onPress={onPressCondition} />
-      <View
-        style={{
-          marginTop: 12,
-          height: 48,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}>
-        {dateComponents}
-      </View>
+      {REPEAT_DAY_LIST.map((item) => {
+        return (
+          <Pressable
+            style={{
+              height: 44,
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: '100%',
+              justifyContent: 'space-between',
+            }}
+            onPress={() => onPressRepeatDay(item)}>
+            <PlemText>{item.label}</PlemText>
+            {selectedDates.includes(item.value) && <Image source={checkImage} style={{ alignSelf: 'flex-start' }} />}
+          </Pressable>
+        );
+      })}
     </View>
   );
 };

@@ -1,12 +1,14 @@
-import { Dispatch, useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import { Dimensions, ImageBackground, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { RepeatSpecificCondition } from '../../../types/calendar';
+import { DaysOfWeekNum } from '../../../types/date';
 import PlemText from '../../components/Atoms/PlemText';
 import { Dropdown, DropdownItem } from '../../components/Dropdown';
 import SwitchInputRow from '../../components/SwitchInputRow';
 
 const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
 
-const WEEK_LIST = [
+export const WEEK_LIST = [
   { label: '첫 번째', value: 1 },
   { label: '두 번째', value: 2 },
   { label: '세 번째', value: 3 },
@@ -28,10 +30,10 @@ const DAYS_OF_MONTH = [
 type MonthlyRepetitionProps = {
   selectedDates: number[];
   setSelectedDates: Dispatch<React.SetStateAction<number[]>>;
+  setRepeatCondition: Dispatch<React.SetStateAction<RepeatSpecificCondition | null>>;
 };
 
-const MonthlyRepetition = ({ selectedDates, setSelectedDates }: MonthlyRepetitionProps) => {
-  // const [selectedDates, setSelectedDates] = useState<number[]>([]);
+const MonthlyRepetition = ({ selectedDates, setSelectedDates, setRepeatCondition }: MonthlyRepetitionProps) => {
   const [hasCondition, setHasCondition] = useState(false);
   const [openWeekList, setOpenWeekList] = useState(false);
   const [openDayList, setOpenDayList] = useState(false);
@@ -39,6 +41,20 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates }: MonthlyRepetitio
   const [day, setDay] = useState<DropdownItem>(DAYS_OF_MONTH[0]);
 
   const datesOfMonth = Array.from(new Array(31).fill(0), (_, index) => index + 1);
+
+  useEffect(() => {
+    setRepeatCondition({ week: week.value as number, day: day.value as DaysOfWeekNum });
+  }, [week, day]);
+
+  useEffect(() => {
+    if (!hasCondition) {
+      setWeek(WEEK_LIST[0]);
+      setDay(DAYS_OF_MONTH[0]);
+      setRepeatCondition(null);
+    } else {
+      setRepeatCondition({ week: week.value as number, day: day.value as DaysOfWeekNum });
+    }
+  }, [hasCondition]);
 
   const onPressDate = (item: number) => {
     let newArray = [...selectedDates];
@@ -49,6 +65,7 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates }: MonthlyRepetitio
       newArray.push(item);
     }
 
+    newArray.sort((a, b) => a - b);
     setSelectedDates(newArray);
   };
 
