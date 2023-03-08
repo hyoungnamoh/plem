@@ -10,9 +10,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/color';
 import { DAYS_OF_WEEK } from '../../constants/date';
+import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { AddScheduleModal } from './AddScheduleModal';
 
@@ -24,6 +26,8 @@ const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 type CalendarPagePageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
 const CalendarPage = ({ navigation }: CalendarPagePageProps) => {
+  const [schedule, setSchedule] = useRecoilState(addScheduleState);
+
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const [selectedDate, setSelectedDate] = useState<null | number>(null);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);

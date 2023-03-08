@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -24,6 +24,7 @@ import { DAYS_OF_WEEK } from '../../constants/date';
 import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { notiOptiosList } from '../ScheduleNotiSettingPage';
+import { repeatOptionList } from '../ScheduleRepeatSettingPage';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -70,69 +71,75 @@ const AddSchedulePage = ({ navigation, route }: CalendarPagePageProps) => {
   };
 
   return (
-    <View style={styles.page}>
-      <Header
-        title="일정 추가"
-        buttonName={'삭제'}
-        buttonProps={{ onPress: onPressDelete }}
-        buttonNameProps={{ style: { color: '#E40C0C' } }}
-      />
-      <View style={styles.content}>
-        <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
-        <View style={{ marginTop: 32, zIndex: 1000 }}>
-          <PaletteInputRow
-            label="카테고리"
-            value={'daily'}
-            onPress={onClickPalette}
-            open={openPalette}
-            palettePosition={{ x: -10, y: 8 }}
-          />
-        </View>
-        <View style={{ marginTop: 32 }}>
-          <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
-        </View>
-        <View>
-          <PlemText style={[styles.label, { marginTop: 32 }]}>시간</PlemText>
-          <View style={styles.timeInputContainer}>
-            <View style={{ flex: 1 }}>
-              <View style={styles.timeInputWrap}>
-                <PlemText>시작 시간</PlemText>
-                <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
-                  <PlemText style={{ color: startTime ? '#000000' : '#AAAAAA' }}>
-                    {startTime ? startTime.format('HH:mm') : '00:00'}
-                  </PlemText>
-                  <Image source={arrowDownImage} style={styles.arrowDownImage} />
-                </Pressable>
-              </View>
-              <Image source={underlineImage} style={styles.underlineImage} />
-            </View>
-            <View style={{ flex: 1, marginLeft: 15 }}>
-              <View style={styles.timeInputWrap}>
-                <PlemText>종료 시간</PlemText>
-                <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
-                  <PlemText style={{ color: endTime ? '#000000' : '#AAAAAA' }}>
-                    {endTime ? endTime.format('HH:mm') : '00:00'}
-                  </PlemText>
-                  <Image source={arrowDownImage} style={styles.arrowDownImage} />
-                </Pressable>
-              </View>
-              <Image source={underlineImage} style={styles.underlineImage} />
-            </View>
-          </View>
-          <View style={{ marginTop: 32 }}>
-            <OptionsInputRow
-              label={'알림'}
-              value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
-              onPress={onPressSetNotification}
+    <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
+      <View style={styles.page}>
+        <Header
+          title="일정 추가"
+          buttonName={'삭제'}
+          buttonProps={{ onPress: onPressDelete }}
+          buttonNameProps={{ style: { color: '#E40C0C' } }}
+        />
+        <View style={styles.content}>
+          <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
+          <View style={{ marginTop: 32, zIndex: 1000 }}>
+            <PaletteInputRow
+              label="카테고리"
+              value={'daily'}
+              onPress={onClickPalette}
+              open={openPalette}
+              palettePosition={{ x: -10, y: 8 }}
             />
           </View>
           <View style={{ marginTop: 32 }}>
-            <OptionsInputRow label={'반복'} value={'안 함'} onPress={onPressRepeatSetting} />
+            <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
+          </View>
+          <View>
+            <PlemText style={[styles.label, { marginTop: 32 }]}>시간</PlemText>
+            <View style={styles.timeInputContainer}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.timeInputWrap}>
+                  <PlemText>시작 시간</PlemText>
+                  <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
+                    <PlemText style={{ color: startTime ? '#000000' : '#AAAAAA' }}>
+                      {startTime ? startTime.format('HH:mm') : '00:00'}
+                    </PlemText>
+                    <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                  </Pressable>
+                </View>
+                <Image source={underlineImage} style={styles.underlineImage} />
+              </View>
+              <View style={{ flex: 1, marginLeft: 15 }}>
+                <View style={styles.timeInputWrap}>
+                  <PlemText>종료 시간</PlemText>
+                  <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
+                    <PlemText style={{ color: endTime ? '#000000' : '#AAAAAA' }}>
+                      {endTime ? endTime.format('HH:mm') : '00:00'}
+                    </PlemText>
+                    <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                  </Pressable>
+                </View>
+                <Image source={underlineImage} style={styles.underlineImage} />
+              </View>
+            </View>
+            <View style={{ marginTop: 32 }}>
+              <OptionsInputRow
+                label={'알림'}
+                value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
+                onPress={onPressSetNotification}
+              />
+            </View>
+            <View style={{ marginTop: 32 }}>
+              <OptionsInputRow
+                label={'반복'}
+                value={repeatOptionList.find((option) => option.value === schedule.repeat)?.label || '안 함'}
+                onPress={onPressRepeatSetting}
+              />
+            </View>
           </View>
         </View>
+        <BottomButton title={'등록'} disabled={false} onPress={onPressAddSchedule} />
       </View>
-      <BottomButton title={'등록'} disabled={false} onPress={onPressAddSchedule} />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
