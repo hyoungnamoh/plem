@@ -1,63 +1,12 @@
-import { Image, Pressable, ScrollView, ScrollViewProps, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
+import { Dropdown, DropdownProps } from '../Dropdown';
 
-const underlineImage = require('../../assets/images/underline.png');
-const arrowDownImage = require('../../assets/images/arrow_down.png');
-
-export type DropdownItem = { label: string; value: string | number };
-
-export const DropdownWithLabel = ({
-  label,
-  open,
-  list,
-  onPressRow,
-  onChange,
-  value,
-}: {
-  label: string;
-  open: boolean;
-  list: DropdownItem[];
-  scrollViewProps?: ScrollViewProps;
-  onPressRow: () => void;
-  onChange: (item: DropdownItem) => void;
-  value: DropdownItem;
-}) => {
-  const onChangeItem = (item: DropdownItem) => {
-    onChange(item);
-  };
-
+export const DropdownWithLabel = ({ label, ...dropdownProps }: { label: string } & DropdownProps) => {
   return (
     <View>
       <PlemText style={styles.label}>{label}</PlemText>
-      <Pressable style={styles.underlineButtonWrap} onPress={onPressRow}>
-        <PlemText>{value.label}</PlemText>
-        <View style={styles.paletteButton}>
-          <Image source={arrowDownImage} />
-        </View>
-      </Pressable>
-      <Image source={underlineImage} style={styles.underlineImage} />
-      {open && (
-        <View>
-          <ScrollView
-            contentContainerStyle={{ paddingVertical: 12, paddingHorizontal: 16 }}
-            style={{
-              width: '100%',
-              height: 196,
-              backgroundColor: '#fff',
-              borderColor: '#000',
-              borderRadius: 5,
-              borderWidth: 2,
-              position: 'absolute',
-              top: 8,
-            }}>
-            {list.map((item) => (
-              <Pressable style={{ height: 40, justifyContent: 'center' }} onPress={() => onChangeItem(item)}>
-                <PlemText>{item.label}</PlemText>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-      )}
+      <Dropdown {...dropdownProps} />
     </View>
   );
 };
