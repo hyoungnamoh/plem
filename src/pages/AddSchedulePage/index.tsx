@@ -34,9 +34,9 @@ const daysLineImage = require('../../assets/images/calendar_days_line.png');
 const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
 const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 
-type CalendarPagePageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
+type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
-const AddSchedulePage = ({ navigation, route }: CalendarPagePageProps) => {
+const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));

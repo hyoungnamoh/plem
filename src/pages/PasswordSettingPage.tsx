@@ -73,7 +73,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
             style={styles.input}
             value={password}
             onChangeText={onChangePassword}
-            placeholder="영문, 숫자 포함 8~20자리"
+            placeholder="영문, 숫자 포함 8-20자리"
             wrapperProps={{ style: styles.inputWrap }}
             secureTextEntry
             maxLength={20}
@@ -87,7 +87,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
             style={styles.input}
             value={passwordConfirm}
             onChangeText={onChangePasswordConfirm}
-            placeholder="영문, 숫자 포함 8~20자리"
+            placeholder="영문, 숫자 포함 8-20자리"
             wrapperProps={{ style: styles.inputWrap }}
             secureTextEntry
             isInvalidValue={isInvalidPasswordConfirm}
