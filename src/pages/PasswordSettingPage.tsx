@@ -90,6 +90,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
             placeholder="영문, 숫자 포함 8-20자리"
             wrapperProps={{ style: styles.inputWrap }}
             secureTextEntry
+            maxLength={20}
             isInvalidValue={isInvalidPasswordConfirm}
           />
           {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
