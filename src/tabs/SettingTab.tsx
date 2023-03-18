@@ -18,6 +18,11 @@ export type SettingTabStackParamList = {
   ModifyNickNamePage: undefined;
   ModifyEmailPage: undefined;
   ModifyPasswordPage: undefined;
+  VersionInfoPage: undefined;
+  DirectInquiryPage: undefined;
+  TutorialReplayPage: undefined;
+  UsingServiceTermPage: undefined;
+  PrivateInfoTermPage: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingTabStackParamList>();
