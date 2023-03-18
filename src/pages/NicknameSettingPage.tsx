@@ -12,7 +12,7 @@ import { signUpApi, SignUpParams, SignUpResponse } from '../api/auth/signUpApi';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
-import UnderlineText from '../components/UnderlineText';
+import UnderlineButton from '../components/UnderlineButton';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/color';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
@@ -96,7 +96,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
               wrapperProps={{ style: styles.inputWrap }}
             />
             <View style={styles.randomButtonWrap}>
-              <UnderlineText style={styles.randomButton}>랜덤짓기</UnderlineText>
+              <UnderlineButton style={styles.randomButton}>랜덤짓기</UnderlineButton>
             </View>
           </View>
         </View>

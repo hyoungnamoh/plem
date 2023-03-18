@@ -1,7 +1,7 @@
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/top_ic_close.svg';
 import PaletteBlue from '../../../assets/images/palette_blue.svg';
-import UnderlineText from '../../../components/UnderlineText';
+import UnderlineButton from '../../../components/UnderlineButton';
 import { BOTTOM_TAB_HEIGHT } from '../../../components/BottomTabBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../../../components/Atoms/PlemText';
@@ -50,7 +50,7 @@ export const AddScheduleModal = ({ open, date, close, onPressAddSchedule }: AddS
               <PlemText style={styles.scheduleText}>귀염둥생일</PlemText>
             </View>
             <View style={styles.addScheduleButton}>
-              <UnderlineText onPress={onPressAddSchedule}>일정 추가하기</UnderlineText>
+              <UnderlineButton onPress={onPressAddSchedule}>일정 추가하기</UnderlineButton>
             </View>
           </KeyboardAwareScrollView>
         </View>

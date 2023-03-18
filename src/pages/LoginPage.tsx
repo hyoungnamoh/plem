@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import BlackButton from '../components/BlackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LoggedOutStackParamList } from '../../AppInner';
-import UnderlineText from '../components/UnderlineText';
+import UnderlineButton from '../components/UnderlineButton';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loggedInState } from '../states/loggedInState';
 import Loading from '../components/Loading';
@@ -125,9 +125,9 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
           <BlackButton onPress={onPressLoginButton} style={{ marginTop: 40 }}>
             <PlemText style={{ color: '#fff' }}>로그인</PlemText>
           </BlackButton>
-          <UnderlineText style={styles.findAccount} onPress={onPressFindAccount}>
+          <UnderlineButton style={styles.findAccount} onPress={onPressFindAccount}>
             비밀번호가 생각나지 않으시나요?
-          </UnderlineText>
+          </UnderlineButton>
         </View>
       </View>
       {loginMutation.isLoading && <Loading />}

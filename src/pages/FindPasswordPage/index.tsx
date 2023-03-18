@@ -15,7 +15,7 @@ import {
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import UnderlineText from '../../components/UnderlineText';
+import UnderlineButton from '../../components/UnderlineButton';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { validator } from '../../helper/validator';
@@ -163,9 +163,9 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
               />
             </View>
             <View style={styles.notReceivedButtonWrap}>
-              <UnderlineText style={{ color: '#444444' }} onPress={onPressNotReceived}>
+              <UnderlineButton style={{ color: '#444444' }} onPress={onPressNotReceived}>
                 인증 메일을 받지 못하셨나요?
-              </UnderlineText>
+              </UnderlineButton>
             </View>
           </>
         )}

@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
-import UnderlineText from '../components/UnderlineText';
+import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/color';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
@@ -34,9 +34,9 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
         <BlackButton onPress={onPressTogetherButton}>
           <PlemText style={styles.togetherButtonText}>함께하기</PlemText>
         </BlackButton>
-        <UnderlineText style={styles.alreadyHaveAccountText} onPress={onPressAlreadyHaveAccountButton}>
+        <UnderlineButton style={styles.alreadyHaveAccountText} onPress={onPressAlreadyHaveAccountButton}>
           계정이 이미 있어요
-        </UnderlineText>
+        </UnderlineButton>
       </View>
     </View>
   );

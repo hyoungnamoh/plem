@@ -7,7 +7,7 @@ import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import Header from '../components/Header';
-import UnderlineText from '../components/UnderlineText';
+import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/color';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
@@ -48,9 +48,9 @@ const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) 
           <BlackButton onPress={onPressVerify}>
             <PlemText style={styles.verificateButtonText}>인증하기</PlemText>
           </BlackButton>
-          <UnderlineText style={styles.noVerificateButtonText} onPress={onPressNoVerify}>
+          <UnderlineButton style={styles.noVerificateButtonText} onPress={onPressNoVerify}>
             나중에 인증하기
-          </UnderlineText>
+          </UnderlineButton>
         </View>
       </View>
     </KeyboardAwareScrollView>
