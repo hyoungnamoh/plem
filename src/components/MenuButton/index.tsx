@@ -5,12 +5,15 @@ import { MenuItem } from '../../constants/menu';
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 
 const MenuButton = ({ item, onPress }: { item: MenuItem; onPress: (menu: MenuItem) => void }) => {
+  const { title, labelProps, label, arrow = true } = item;
   return (
     <Pressable style={styles.buttonRow} onPress={() => onPress(item)}>
       <PlemText>{item.title}</PlemText>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <PlemText style={{ marginRight: 8 }}>{item.label}</PlemText>
-        <Image source={arrowRightImage} />
+        <PlemText {...item.labelProps} style={[{ marginRight: 8 }, item.labelProps?.style]}>
+          {item.label}
+        </PlemText>
+        {arrow ? <Image source={arrowRightImage} /> : null}
       </View>
     </Pressable>
   );

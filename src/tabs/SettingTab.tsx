@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountSettingPage from '../pages/AccountSettingPage';
 import AddChartPage from '../pages/AddChartPage';
 import CustommerSupportPage from '../pages/CustommerSupportPage';
+import DirectInquiryPage from '../pages/DirectInquiryPage';
 import ModifyEmailPage from '../pages/ModifyEmailPage';
 import ModifyNickNamePage from '../pages/ModifyNickNamePage';
 import ModifyPasswordPage from '../pages/ModifyPasswordPage';
@@ -42,6 +43,7 @@ const SettingTab = () => {
       <Stack.Screen name="ModifyNickNamePage" component={ModifyNickNamePage} />
       <Stack.Screen name="ModifyEmailPage" component={ModifyEmailPage} />
       <Stack.Screen name="ModifyPasswordPage" component={ModifyPasswordPage} />
+      <Stack.Screen name="DirectInquiryPage" component={DirectInquiryPage} />
     </Stack.Navigator>
   );
 };

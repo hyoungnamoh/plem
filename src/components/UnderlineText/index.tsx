@@ -1,18 +1,26 @@
-import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native';
-import PlemText from '../Atoms/PlemText';
+import { forwardRef } from 'react';
+import { Image, StyleSheet, TextProps, View, ViewProps } from 'react-native';
+import PlemTextInput from '../Atoms/PlemTextInput';
 
-const UnderlineText = (props: TextProps & Pick<PressableProps, 'onPress'>) => {
+export type UnderlineTextProps = { wrapperProps?: ViewProps; isInvalidValue?: boolean } & TextProps;
+
+const UnderlineText = forwardRef<HTMLInputElement, UnderlineTextProps>((props, ref) => {
   return (
-    <Pressable onPress={props.onPress}>
-      <PlemText {...props} style={[styles.underlineText, props.style]}>
-        {props.children}
-      </PlemText>
-    </Pressable>
+    <View {...props.wrapperProps}>
+      <PlemTextInput {...props} />
+      <Image
+        source={require('../../assets/images/underline.png')}
+        style={[styles.underline, { tintColor: props.isInvalidValue ? '#E40C0C' : '#000' }]}
+      />
+    </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
-  underlineText: { textDecorationLine: 'underline' },
+  underline: {
+    marginTop: 12,
+    width: '100%',
+  },
 });
 
 export default UnderlineText;
