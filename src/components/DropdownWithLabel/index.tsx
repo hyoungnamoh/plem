@@ -4,7 +4,7 @@ import { Dropdown, DropdownProps } from '../Dropdown';
 
 export const DropdownWithLabel = ({ label, ...dropdownProps }: { label: string } & DropdownProps) => {
   return (
-    <View>
+    <View style={{ zIndex: 1 }}>
       <PlemText style={styles.label}>{label}</PlemText>
       <Dropdown {...dropdownProps} />
     </View>

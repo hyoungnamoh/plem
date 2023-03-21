@@ -29,9 +29,9 @@ const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
         <ScrollView>
           {ACCOUNT_SETTING_PAGE_MENUES.map((menu) => {
             if (menu.value === 'ModifyNickNamePage') menu.label = '오도도링';
-            return <MenuButton item={menu} onPress={onPressMenu} />;
+            return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
           })}
-          <Pressable style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
+          <Pressable key={'withDrawal'} style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
             <PlemText style={styles.withDrawalMenuTitle}>탈퇴하기</PlemText>
           </Pressable>
         </ScrollView>

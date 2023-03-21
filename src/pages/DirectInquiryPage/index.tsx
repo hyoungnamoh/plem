@@ -11,18 +11,27 @@ import BlackButton from '../../components/BlackButton';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
-const inquiryTypeList = [{ label: '버그 신고', value: 'bug' }];
+const inquiryTypeList = [
+  { label: '계정 관련', value: 'account' },
+  { label: '기능 관련', value: 'function' },
+  { label: '버그 신고', value: 'bug' },
+  { label: '건의 사항', value: 'proposal' },
+  { label: '기타', value: 'etc' },
+];
 
 const inquiryInput = require('../../assets/images/white_board_345x210.png');
 
 const DirectInquiryPage = ({}: DirectInquiryPageProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [inquiryType, setInquiryType] = useState(inquiryTypeList[0]);
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
 
   const onChangeType = () => {};
 
-  const onPressDrondown = () => {};
+  const onPressDrondown = () => {
+    setOpenDropdown(!openDropdown);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
@@ -34,7 +43,7 @@ const DirectInquiryPage = ({}: DirectInquiryPageProps) => {
           list={inquiryTypeList}
           onChange={onChangeType}
           onPressRow={onPressDrondown}
-          value={inquiryTypeList[0]}
+          value={inquiryType}
         />
         <View style={{ marginTop: 32 }}>
           <LabelInput

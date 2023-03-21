@@ -24,7 +24,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
       <Image source={underlineGrayImage} style={styles.headerLine} />
       <ScrollView contentContainerStyle={styles.buttonList}>
         {SETTING_PAGE_MENUS.map((menu) => {
-          return <MenuButton item={menu} onPress={onPressMenu} />;
+          return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
         })}
       </ScrollView>
     </View>

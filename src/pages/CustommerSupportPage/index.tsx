@@ -24,7 +24,7 @@ const CustommerSupportPage = ({ navigation }: CustommerSupportPageProps) => {
               menu.labelProps = { style: { color: '#888888', fontSize: 14 } };
               menu.arrow = false;
             }
-            return <MenuButton item={menu} onPress={onPressMenu} />;
+            return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
           })}
         </ScrollView>
       </View>
