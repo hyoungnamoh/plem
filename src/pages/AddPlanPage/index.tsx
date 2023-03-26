@@ -4,7 +4,6 @@ import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
-// import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import { useRecoilState } from 'recoil';
@@ -18,6 +17,7 @@ import { PickerIOS } from '@react-native-picker/picker';
 import { timePickerState } from '../../states/timePickerState';
 import { MAIN_COLOR } from '../../constants/color';
 import { notiOptiosList } from '../PlanNotiSettingPage';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -29,13 +29,12 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
   const isModify = route.params?.planIndex !== undefined;
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [plan, setPlan] = useRecoilState(addPlanState);
-  const [timePicker, setBackgroundMaskState] = useRecoilState(timePickerState);
 
-  const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
-  const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
+  const [openStartPicker, setOpenStartTimePicker] = useState(false);
+  const [openEndPicker, setOpenEndTimePicker] = useState(false);
   const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));
-  const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
-  const [pickValue, setPickerValue] = useState(1);
+  const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 01:00'));
+  const [name, setName] = useState('');
 
   useEffect(() => {
     if (isModify) {
@@ -56,10 +55,22 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
       setChart(copiedChart);
       setStorageChartData(copiedChart);
     } else {
-      setChart({ ...copiedChart, plans: [...copiedChart.plans, plan] });
-      setStorageChartData({ ...copiedChart, plans: [...copiedChart.plans, plan] });
-    }
+      const startHour = startTime.get('hour');
+      const startMin = startTime.get('minute');
+      const endHour = endTime.get('hour');
+      const endMin = endTime.get('minute');
 
+      const newPlan = {
+        ...plan,
+        name,
+        startTime: { hour: startHour, minute: startMin },
+        endTime: { hour: endHour, minute: endMin },
+      };
+
+      setPlan(newPlan);
+      setChart({ ...copiedChart, plans: [...copiedChart.plans, newPlan] });
+      setStorageChartData({ ...copiedChart, plans: [...copiedChart.plans, newPlan] });
+    }
     navigation.goBack();
   };
 
@@ -67,29 +78,25 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
     navigation.navigate('PlanNotiSettingPage');
   };
 
-  const onPressStartTimeConfirm = (date: Date) => {
+  const onPressStartConfirm = (date: Date) => {
     const newStartTime = dayjs(date);
-    setStartTime(newStartTime);
-    setOpenStartTimePicker(false);
     if (endTime.diff(newStartTime) < 600000) {
       setEndTime(newStartTime.add(10, 'minute'));
-      setPlan({ ...plan, startTime: date, endTime: newStartTime.add(10, 'minute').toDate() });
-      return;
     }
-    setPlan({ ...plan, startTime: date });
-  };
-
-  const onPressEndTimeConfirm = (date: Date) => {
-    setEndTime(dayjs(date));
-    setOpenEndTimePicker(false);
-    setPlan({ ...plan, endTime: date });
-  };
-
-  const onPressStartTimeCancel = () => {
+    setStartTime(newStartTime);
     setOpenStartTimePicker(false);
   };
 
-  const onPressEndTimeCancel = () => {
+  const onPressEndConfirm = (date: Date) => {
+    setEndTime(dayjs(date));
+    setOpenEndTimePicker(false);
+  };
+
+  const onPressStartCancel = () => {
+    setOpenStartTimePicker(false);
+  };
+
+  const onPressEndCancel = () => {
     setOpenEndTimePicker(false);
   };
 
@@ -102,7 +109,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
   };
 
   const onChangeName = (value: string) => {
-    setPlan({ ...plan, name: value });
+    setName(value);
   };
 
   const getMinEndTime = () => {
@@ -133,7 +140,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         <View>
           <PlemText style={styles.label}>계획명</PlemText>
           <UnderlineTextInput
-            value={plan.name}
+            value={name}
             onChangeText={onChangeName}
             style={{ marginTop: 12 }}
             maxLength={14}
@@ -178,18 +185,27 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           <Image source={underlineImage} style={styles.underlineImage} />
         </View>
       </View>
-      <Pressable
-        onPress={() => {
-          setBackgroundMaskState({
-            visible: true,
-            onPress: () => {
-              setBackgroundMaskState({ visible: false });
-            },
-          });
-        }}>
-        <PlemText>누르시오</PlemText>
-      </Pressable>
-      <BottomButton title={'등록'} disabled={!plan.name || !startTime || !endTime} onPress={onPressAddPlan} />
+      <BottomButton title={'등록'} disabled={!name || !startTime || !endTime} onPress={onPressAddPlan} />
+      <DateTimePickerModal
+        isVisible={openStartPicker}
+        mode="time"
+        onConfirm={onPressStartConfirm}
+        onCancel={onPressStartCancel}
+        locale="en_GB"
+        is24Hour
+        minuteInterval={10}
+        date={startTime.toDate()}
+      />
+      <DateTimePickerModal
+        isVisible={openEndPicker}
+        mode="time"
+        onConfirm={onPressEndConfirm}
+        onCancel={onPressEndCancel}
+        locale="en_GB"
+        is24Hour
+        minuteInterval={10}
+        date={endTime.toDate()}
+      />
     </View>
   );
 };

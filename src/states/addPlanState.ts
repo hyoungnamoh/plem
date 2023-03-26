@@ -6,8 +6,8 @@ export const addPlanDefault: AddPlan = {
   name: '',
   subPlans: [],
   notification: 0,
-  startTime: dayjs('2023-01-08 00:00').toDate(),
-  endTime: dayjs('2023-01-08 00:10').toDate(),
+  startTime: { hour: 0, minute: 0 },
+  endTime: { hour: 1, minute: 0 },
 };
 
 export const addPlanState = atom<AddPlan>({

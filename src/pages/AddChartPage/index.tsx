@@ -13,6 +13,7 @@ import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
 import { MAIN_COLOR } from '../../constants/color';
+import { timePadStart } from '../../helper/timePadStart';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -143,6 +144,8 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
           data={chart.plans}
           extraData={chart.plans}
           renderItem={({ item: plan, index: planIndex }) => {
+            const { hour: startHour, minute: startMinute } = plan.startTime;
+            const { hour: endHour, minute: endMinute } = plan.endTime;
             return (
               <View key={`plan_${planIndex}}`}>
                 <View style={styles.planWrap}>
@@ -152,7 +155,8 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
                   </Pressable>
                   <View style={styles.notificationContainer}>
                     <PlemText>
-                      {dayjs(plan.startTime).format('HH:mm')} : {dayjs(plan.endTime).format('HH:mm')}
+                      {`${timePadStart(startHour)}:${timePadStart(startMinute)}`} -{' '}
+                      {`${timePadStart(endHour)}:${timePadStart(endMinute)}`}
                     </PlemText>
                     <Image
                       source={plan.notification ? notificationOnImage : notificationOffImage}
