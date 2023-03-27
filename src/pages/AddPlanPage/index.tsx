@@ -1,132 +1,44 @@
-import dayjs, { Dayjs } from 'dayjs';
-import { useEffect, useState } from 'react';
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from '../../tabs/MainTab';
-import { useRecoilState } from 'recoil';
-import { addPlanDefault, addPlanState } from '../../states/addPlanState';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import { AddPlanChart } from '../../../types/chart';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomButton from '../../components/BottomButton';
-import { cloneDeep } from 'lodash';
-import { PickerIOS } from '@react-native-picker/picker';
-import { timePickerState } from '../../states/timePickerState';
 import { MAIN_COLOR } from '../../constants/color';
 import { notiOptiosList } from '../PlanNotiSettingPage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { useAddPlan } from './useAddPlan';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
 
-type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
+export type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
 
 const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
-  const isModify = route.params?.planIndex !== undefined;
-  const [chart, setChart] = useRecoilState(addPlanChartState);
-  const [plan, setPlan] = useRecoilState(addPlanState);
-
-  const [openStartPicker, setOpenStartTimePicker] = useState(false);
-  const [openEndPicker, setOpenEndTimePicker] = useState(false);
-  const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));
-  const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 01:00'));
-  const [name, setName] = useState('');
-
-  useEffect(() => {
-    if (isModify) {
-      setPlan(chart.plans[route.params.planIndex]);
-    }
-
-    return () => setPlan(addPlanDefault);
-  }, []);
-
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
-  };
-
-  const onPressAddPlan = () => {
-    const copiedChart = cloneDeep(chart);
-    if (isModify) {
-      copiedChart.plans[route.params?.planIndex] = plan;
-      setChart(copiedChart);
-      setStorageChartData(copiedChart);
-    } else {
-      const startHour = startTime.get('hour');
-      const startMin = startTime.get('minute');
-      const endHour = endTime.get('hour');
-      const endMin = endTime.get('minute');
-
-      const newPlan = {
-        ...plan,
-        name,
-        startTime: { hour: startHour, minute: startMin },
-        endTime: { hour: endHour, minute: endMin },
-      };
-
-      setPlan(newPlan);
-      setChart({ ...copiedChart, plans: [...copiedChart.plans, newPlan] });
-      setStorageChartData({ ...copiedChart, plans: [...copiedChart.plans, newPlan] });
-    }
-    navigation.goBack();
-  };
-
-  const onPressSetNotification = () => {
-    navigation.navigate('PlanNotiSettingPage');
-  };
-
-  const onPressStartConfirm = (date: Date) => {
-    const newStartTime = dayjs(date);
-    if (endTime.diff(newStartTime) < 600000) {
-      setEndTime(newStartTime.add(10, 'minute'));
-    }
-    setStartTime(newStartTime);
-    setOpenStartTimePicker(false);
-  };
-
-  const onPressEndConfirm = (date: Date) => {
-    setEndTime(dayjs(date));
-    setOpenEndTimePicker(false);
-  };
-
-  const onPressStartCancel = () => {
-    setOpenStartTimePicker(false);
-  };
-
-  const onPressEndCancel = () => {
-    setOpenEndTimePicker(false);
-  };
-
-  const onPressSetStart = () => {
-    setOpenStartTimePicker(true);
-  };
-
-  const onPressSetEnd = () => {
-    setOpenEndTimePicker(true);
-  };
-
-  const onChangeName = (value: string) => {
-    setName(value);
-  };
-
-  const getMinEndTime = () => {
-    return startTime.add(10, 'minute').toDate();
-  };
-
-  const onPressDelete = () => {
-    if (!isModify) {
-      return;
-    }
-    const copiedChart = cloneDeep(chart);
-    copiedChart.plans.splice(route.params?.planIndex, 1);
-    setChart(copiedChart);
-    setStorageChartData(copiedChart);
-
-    navigation.goBack();
-  };
+  const {
+    onPressDelete,
+    isModify,
+    name,
+    onChangeName,
+    onPressSetStart,
+    startTime,
+    onPressSetEnd,
+    endTime,
+    onPressSetNotification,
+    plan,
+    onPressAddPlan,
+    openStartPicker,
+    onPressStartConfirm,
+    onPressStartCancel,
+    openEndPicker,
+    onPressEndConfirm,
+    onPressEndCancel,
+  } = useAddPlan({
+    route,
+    navigation,
+  });
 
   return (
     <View style={styles.page}>
