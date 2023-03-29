@@ -7,15 +7,19 @@ import PlemTextInput from '../Atoms/PlemTextInput';
 
 const uncheckedImage = require('../../assets/images/unchecked_black.png');
 
-const SubPlanInput = ({ planIndex }: { planIndex: number }) => {
+const SubPlanInput = ({
+  planIndex,
+  saveSubPlan,
+}: {
+  planIndex: number;
+  saveSubPlan: ({ planIndex, subPlanName }: { planIndex: number; subPlanName: string }) => void;
+}) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
 
   const [subPlan, setSubPlan] = useState('');
 
   const onEndEditingSubPlan = ({ planIndex, subPlanName }: { planIndex: number; subPlanName: string }) => {
-    const copiedChart = cloneDeep(chart);
-    copiedChart.plans[planIndex].subPlans = [...copiedChart.plans[planIndex].subPlans, { name: subPlanName }];
-    setChart(copiedChart);
+    saveSubPlan({ planIndex, subPlanName });
     setSubPlan('');
   };
 

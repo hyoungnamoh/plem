@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
-import { addPlanChartState } from '../../states/addPlanChartState';
+import { addPlanChartDefault, addPlanChartState } from '../../states/addPlanChartState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
@@ -31,8 +31,8 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
 
   useEffect(() => {
     initChartData();
-    // ??
-    // return () => setChart(addPlanChartDefault);
+
+    return () => setChart(addPlanChartDefault);
   }, []);
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
@@ -40,34 +40,37 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
   };
 
   const initChartData = async () => {
-    // await AsyncStorage.removeItem('chart_data');
     const item = await AsyncStorage.getItem('chart_data');
     const chartData = item ? (JSON.parse(item) as AddPlanChart) : null;
 
     // test
-    setChart(chart);
+    // setChart(chart);
+
     if (!chartData) {
       return;
     }
-    // Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
-    //   {
-    //     text: '아니요',
-    //     onPress: async () => {
-    //       await AsyncStorage.removeItem('chart_data');
-    //     },
-    //     style: 'cancel',
-    //   },
-    //   {
-    //     text: '네',
-    //     onPress: () => {
-    //       setChart(chartData);
-    //     },
-    //   },
-    // ]);
+    Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
+      {
+        text: '아니요',
+        onPress: async () => {
+          await AsyncStorage.removeItem('chart_data');
+        },
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          setChart(chartData);
+        },
+      },
+    ]);
   };
 
   const onPressAddChart = () => {
     Alert.alert('등록~');
+    console.log(JSON.stringify(chart));
+    // 계획표 초기화
+    //
   };
 
   const onPressRepeatSetting = () => {
@@ -104,9 +107,16 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
     );
   };
 
-  const onPressDeleteSubPlan = ({ planIndex, subPlanIndex }: { planIndex: number; subPlanIndex: number }) => {
+  const deleteSubPlan = ({ planIndex, subPlanIndex }: { planIndex: number; subPlanIndex: number }) => {
     const copiedChart = cloneDeep(chart);
     copiedChart.plans[planIndex].subPlans.splice(subPlanIndex, 1);
+    setChart(copiedChart);
+    setStorageChartData(copiedChart);
+  };
+
+  const saveSubPlan = ({ planIndex, subPlanName }: { planIndex: number; subPlanName: string }) => {
+    const copiedChart = cloneDeep(chart);
+    copiedChart.plans[planIndex].subPlans = [...copiedChart.plans[planIndex].subPlans, { name: subPlanName }];
     setChart(copiedChart);
     setStorageChartData(copiedChart);
   };
@@ -123,7 +133,9 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
           <View style={styles.underlineButtonWrap}>
             <PlemText>반복</PlemText>
             <Pressable style={styles.underlineButton} onPress={onPressRepeatSetting}>
-              <PlemText>{getRepeatOptions()}</PlemText>
+              <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
+                {getRepeatOptions()}
+              </PlemText>
               <Image source={arrowImage} style={styles.arrowImage} />
             </Pressable>
           </View>
@@ -174,14 +186,14 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
                           <Image source={uncheckedImage} />
                           <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
                         </View>
-                        <Pressable onPress={() => onPressDeleteSubPlan({ planIndex, subPlanIndex })}>
+                        <Pressable onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
                           <Image source={subPlanDeleteImage} style={{ marginLeft: 4 }} />
                         </Pressable>
                       </View>
                     );
                   }}
                 />
-                <SubPlanInput planIndex={planIndex} />
+                <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
               </View>
             );
           }}
@@ -205,6 +217,9 @@ const styles = StyleSheet.create({
   underlineButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 15,
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   underlineImage: {
     width: '100%',

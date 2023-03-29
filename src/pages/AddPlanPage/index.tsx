@@ -9,6 +9,7 @@ import { MAIN_COLOR } from '../../constants/color';
 import { notiOptiosList } from '../PlanNotiSettingPage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useAddPlan } from './useAddPlan';
+import { timePadStart } from '../../helper/timePadStart';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -35,6 +36,8 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
     openEndPicker,
     onPressEndConfirm,
     onPressEndCancel,
+    getStartPickerValue,
+    getEndPickerValue,
   } = useAddPlan({
     route,
     navigation,
@@ -66,8 +69,8 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               <View style={styles.timeInputWrap}>
                 <PlemText>시작 시간</PlemText>
                 <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
-                  <PlemText style={{ color: startTime ? '#000000' : '#AAAAAA' }}>
-                    {startTime ? startTime.format('HH:mm') : '00:00'}
+                  <PlemText style={{ color: '#000000' }}>
+                    {`${timePadStart(startTime.hour)}:${timePadStart(startTime.minute)}`}
                   </PlemText>
                   <Image source={arrowDownImage} style={styles.arrowDownImage} />
                 </Pressable>
@@ -78,8 +81,8 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               <View style={styles.timeInputWrap}>
                 <PlemText>종료 시간</PlemText>
                 <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
-                  <PlemText style={{ color: endTime ? '#000000' : '#AAAAAA' }}>
-                    {endTime ? endTime.format('HH:mm') : '00:00'}
+                  <PlemText style={{ color: '#000000' }}>
+                    {`${timePadStart(endTime.hour)}:${timePadStart(endTime.minute)}`}
                   </PlemText>
                   <Image source={arrowDownImage} style={styles.arrowDownImage} />
                 </Pressable>
@@ -106,7 +109,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         locale="en_GB"
         is24Hour
         minuteInterval={10}
-        date={startTime.toDate()}
+        date={getStartPickerValue()}
       />
       <DateTimePickerModal
         isVisible={openEndPicker}
@@ -116,7 +119,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         locale="en_GB"
         is24Hour
         minuteInterval={10}
-        date={endTime.toDate()}
+        date={getEndPickerValue()}
       />
     </View>
   );

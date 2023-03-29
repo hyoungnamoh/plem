@@ -24,7 +24,6 @@ import MainTab from './src/tabs/MainTab';
 import CalendarTab from './src/tabs/CalendarTab';
 import PlanChartListTab from './src/tabs/PlanChartListTab';
 import SettingTab from './src/tabs/SettingTab';
-import TimePicker from './src/components/TimePicker';
 import { timePickerState } from './src/states/timePickerState';
 import { MAIN_COLOR } from './src/constants/color';
 
@@ -80,7 +79,6 @@ function AppInner({ routeName }: { routeName: string }) {
 
   return (
     <>
-      {timePicker.visible && <TimePicker />}
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {loggedIn ? (

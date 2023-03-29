@@ -17,9 +17,11 @@ export type Plan = {
   updatedAt: null;
   subPlans: SubPlan[];
   notification: PlanNotification;
-  startTime: { hour: number; minute: number };
-  endTime: { hour: number; minute: number };
+  startTime: PlanTime;
+  endTime: PlanTime;
 };
+
+export type PlanTime = { hour: number; minute: number };
 
 export type PlanNotification = 0 | 1 | 5 | 10 | 15 | 30 | 60;
 
