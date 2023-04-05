@@ -5,7 +5,7 @@ import { AddPlan } from '../../types/chart';
 export const addPlanDefault: AddPlan = {
   name: '',
   subPlans: [],
-  notification: 0,
+  notification: null,
   startHour: 0,
   startMin: 0,
   endHour: 1,

@@ -10,6 +10,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/color';
 import { addPlanChartState } from '../../states/addPlanChartState';
+import { repeatDaysDefault, repeatDaysState } from '../../states/repeatDaysState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 type RepeatOptionKor =
@@ -50,8 +51,13 @@ const checkImage = require('../../assets/images/check.png');
 const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [repeatOptions, setRepeatOptions] = useState<Repeats>(chart.repeats);
+  // const [repeatDays, setSelectedDays] = useState<number[]>(chart.repeatDays ? [...chart.repeatDays] : []);
+  const [repeatDays, setRepeatDays] = useRecoilState(repeatDaysState);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setRepeatDays(chart.repeatDays ? [...chart.repeatDays] : []);
+    return () => setRepeatDays(repeatDaysDefault);
+  }, []);
 
   const onPressRepeatOption = (option: RepeatOptionItemValue) => {
     if (option === null) {
@@ -82,6 +88,8 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
     copiedChart.repeats = repeatOptions;
     if (!repeatOptions.includes(7)) {
       copiedChart.repeatDays = [];
+    } else {
+      copiedChart.repeatDays = repeatDays;
     }
     setChart(copiedChart);
     setStorageChartData(copiedChart);
@@ -102,8 +110,8 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           );
         })}
         <View style={styles.infoMessageWrap}>
-          {repeatOptions.includes(7) && chart.repeatDays && chart.repeatDays.length > 0 && (
-            <PlemText style={styles.infoMessage}>매월 {chart.repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
+          {repeatOptions.includes(7) && repeatDays && repeatDays.length > 0 && (
+            <PlemText style={styles.infoMessage}>매월 {repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
           )}
         </View>
       </View>

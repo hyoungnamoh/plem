@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Dimensions, Image, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart } from '../../../types/chart';
@@ -9,6 +9,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/color';
 import { addPlanChartState } from '../../states/addPlanChartState';
+import { repeatDaysState } from '../../states/repeatDaysState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 const calendarStickerImage = require('../../assets/images/calendar_sticker.png');
@@ -17,13 +18,14 @@ type SelectRepeatDatePageProps = NativeStackScreenProps<MainTabStackParamList, '
 
 const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
+  const [repeatDays, setRepeatDays] = useRecoilState(repeatDaysState);
+  const [selectedDays, setSelectedDays] = useState(repeatDays ? [...repeatDays] : []);
 
   const renderDaysOfMonth = () => {
     const days = [];
-    const repeatDays = chart.repeatDays ? [...chart.repeatDays] : [];
 
     for (let i = 1; i < 32; i++) {
-      const isSelected = repeatDays.includes(i);
+      const isSelected = selectedDays.includes(i);
       days.push(
         <Pressable key={`day_${i}`} style={styles.dayButton} onPress={() => onPressDay(i)}>
           {isSelected ? (
@@ -41,33 +43,35 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
   };
 
   const onPressDay = (day: number) => {
-    const repeatDays = chart.repeatDays ? [...chart.repeatDays] : [];
-
-    if (repeatDays.includes(day)) {
-      const index = repeatDays.findIndex((e) => e === day);
-      repeatDays.splice(index, 1);
+    if (selectedDays.includes(day)) {
+      const index = selectedDays.findIndex((e) => e === day);
+      selectedDays.splice(index, 1);
     } else {
-      repeatDays.push(day);
+      selectedDays.push(day);
     }
 
-    const sortedRepeatDays = repeatDays.sort((a, b) => a - b);
-    setChart({ ...chart, repeatDays: sortedRepeatDays });
-    setStorageChartData({ ...chart, repeatDays: sortedRepeatDays });
+    const sortedRepeatDays = selectedDays.sort((a, b) => a - b);
+    setRepeatDays([...sortedRepeatDays]);
   };
 
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
+  const onPressComplete = () => {
+    setSelectedDays(selectedDays);
+    navigation.goBack();
   };
 
   return (
     <View style={styles.page}>
       <Header title="날짜 지정" />
+      <PlemText style={styles.notice}>
+        {'계획표가 중복되는 경우, 날짜 지정 반복으로\n설정된 계획표가 우선으로 노출됩니다.'}
+      </PlemText>
       <View style={styles.daysOfMonthWrap}>{renderDaysOfMonth()}</View>
       <View style={styles.infoMessageWrap}>
-        {chart.repeatDays && chart.repeatDays.length > 0 ? (
-          <PlemText style={styles.infoMessage}>매월 {chart.repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
+        {selectedDays.length > 0 ? (
+          <PlemText style={styles.infoMessage}>매월 {selectedDays.join('일, ')}일 마다 반복됩니다</PlemText>
         ) : null}
       </View>
+      <BottomButton title={'완료'} disabled={selectedDays.length === 0} onPress={onPressComplete} />
     </View>
   );
 };
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
   daysOfMonthWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 20,
+    marginTop: 16,
   },
   infoMessageWrap: {
     paddingHorizontal: 20,
@@ -103,6 +107,12 @@ const styles = StyleSheet.create({
   },
   selectedDayText: {
     color: '#fff',
+  },
+  notice: {
+    lineHeight: 22,
+    marginLeft: 20,
+    marginTop: 12,
+    color: '#444444',
   },
 });
 
