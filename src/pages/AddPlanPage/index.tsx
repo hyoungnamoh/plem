@@ -22,11 +22,13 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
     onPressDelete,
     isModify,
     name,
+    startHour,
+    startMin,
+    endHour,
+    endMin,
     onChangeName,
     onPressSetStart,
-    startTime,
     onPressSetEnd,
-    endTime,
     onPressSetNotification,
     plan,
     onPressAddPlan,
@@ -70,7 +72,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                 <PlemText>시작 시간</PlemText>
                 <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
                   <PlemText style={{ color: '#000000' }}>
-                    {`${timePadStart(startTime.hour)}:${timePadStart(startTime.minute)}`}
+                    {`${timePadStart(startHour)}:${timePadStart(startMin)}`}
                   </PlemText>
                   <Image source={arrowDownImage} style={styles.arrowDownImage} />
                 </Pressable>
@@ -81,9 +83,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               <View style={styles.timeInputWrap}>
                 <PlemText>종료 시간</PlemText>
                 <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
-                  <PlemText style={{ color: '#000000' }}>
-                    {`${timePadStart(endTime.hour)}:${timePadStart(endTime.minute)}`}
-                  </PlemText>
+                  <PlemText style={{ color: '#000000' }}>{`${timePadStart(endHour)}:${timePadStart(endMin)}`}</PlemText>
                   <Image source={arrowDownImage} style={styles.arrowDownImage} />
                 </Pressable>
               </View>
@@ -100,7 +100,17 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           <Image source={underlineImage} style={styles.underlineImage} />
         </View>
       </View>
-      <BottomButton title={'등록'} disabled={!name || !startTime || !endTime} onPress={onPressAddPlan} />
+      <BottomButton
+        title={'등록'}
+        disabled={
+          !name ||
+          !(typeof startHour === 'number') ||
+          !(typeof startMin === 'number') ||
+          !(typeof endHour === 'number') ||
+          !(typeof endMin === 'number')
+        }
+        onPress={onPressAddPlan}
+      />
       <DateTimePickerModal
         isVisible={openStartPicker}
         mode="time"

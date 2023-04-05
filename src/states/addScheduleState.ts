@@ -9,7 +9,8 @@ export const addScheduleDefault: AddSchedule = {
   repeatDays: [],
   notification: 0,
   startTime: dayjs('2023-01-08 00:00').toDate(),
-  endTime: dayjs('2023-01-08 00:10').toDate(),
+  endTime: dayjs('2023-01-08 00:10').toDate(), // FIXME
+  // customRepeat: { week: number; day: DaysOfWeekNum },
 };
 
 export const addScheduleState = atom<AddSchedule>({

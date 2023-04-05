@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, PlanChart, Repeats } from '../../../types/chart';
+import { AddPlanChart, Repeats } from '../../../types/chart';
 import { DaysOfWeek, DaysOfWeekKor } from '../../../types/date';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
@@ -102,7 +102,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           );
         })}
         <View style={styles.infoMessageWrap}>
-          {repeatOptions.includes(7) && chart.repeatDays.length > 0 && (
+          {repeatOptions.includes(7) && chart.repeatDays && chart.repeatDays.length > 0 && (
             <PlemText style={styles.infoMessage}>매월 {chart.repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
           )}
         </View>

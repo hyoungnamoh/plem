@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, PlanChart, PlanNotification, PlanNotiOptionItem, Repeats } from '../../../types/chart';
+import { AddPlanChart, PlanChart, PlanNotification, PlanNotiOptionItem } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
@@ -12,8 +12,8 @@ import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
-  { key: 0, label: '없음' },
-  { key: 1, label: '이벤트 당시' },
+  { key: null, label: '없음' },
+  { key: 0, label: '이벤트 당시' },
   { key: 5, label: '5분 전' },
   { key: 10, label: '10분 전' },
   { key: 15, label: '15분 전' },

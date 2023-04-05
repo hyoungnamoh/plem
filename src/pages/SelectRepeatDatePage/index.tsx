@@ -20,7 +20,7 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
 
   const renderDaysOfMonth = () => {
     const days = [];
-    const repeatDays = [...chart.repeatDays];
+    const repeatDays = chart.repeatDays ? [...chart.repeatDays] : [];
 
     for (let i = 1; i < 32; i++) {
       const isSelected = repeatDays.includes(i);
@@ -41,7 +41,7 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
   };
 
   const onPressDay = (day: number) => {
-    const repeatDays = [...chart.repeatDays];
+    const repeatDays = chart.repeatDays ? [...chart.repeatDays] : [];
 
     if (repeatDays.includes(day)) {
       const index = repeatDays.findIndex((e) => e === day);
@@ -64,9 +64,9 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
       <Header title="날짜 지정" />
       <View style={styles.daysOfMonthWrap}>{renderDaysOfMonth()}</View>
       <View style={styles.infoMessageWrap}>
-        {chart.repeatDays.length > 0 && (
+        {chart.repeatDays && chart.repeatDays.length > 0 ? (
           <PlemText style={styles.infoMessage}>매월 {chart.repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
-        )}
+        ) : null}
       </View>
     </View>
   );

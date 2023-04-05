@@ -17,13 +17,15 @@ export type Plan = {
   updatedAt: null;
   subPlans: SubPlan[];
   notification: PlanNotification;
-  startTime: PlanTime;
-  endTime: PlanTime;
+  startHour: number;
+  startMin: number;
+  endHour: number;
+  endMin: number;
 };
 
-export type PlanTime = { hour: number; minute: number };
+// export type PlanTime = { hour: number; minute: number };
 
-export type PlanNotification = 0 | 1 | 5 | 10 | 15 | 30 | 60;
+export type PlanNotification = null | 0 | 5 | 10 | 15 | 30 | 60; // 안함 | 당시 | 5분전 | 10분전 | 15분전 | 30분전 | 1시간전
 
 export type PlanChart = {
   id: number;
@@ -33,10 +35,10 @@ export type PlanChart = {
   updatedAt: null;
   plans: Plan[];
   repeats: Repeats;
-  repeatDays: number[];
+  repeatDays?: number[];
 };
 
-export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[];
+export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[]; // 안함 | 일 | 월 | 화 | 수 | 목 | 금 | 토 | 날짜 지정
 
 export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'updatedAt' | 'plans'> & {
   plans: AddPlan[];

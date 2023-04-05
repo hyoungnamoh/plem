@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
   },
   blackBox: { width: '100%', position: 'absolute' },
 });

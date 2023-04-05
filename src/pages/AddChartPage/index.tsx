@@ -14,6 +14,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
 import { MAIN_COLOR } from '../../constants/color';
 import { timePadStart } from '../../helper/timePadStart';
+import { useMutation } from 'react-query';
+import { ApiResponse } from '../../../types/axios';
+import { AxiosError } from 'axios';
+import { addChartApi } from '../../api/plans/addChartApi';
+import PlemTextInput from '../../components/Atoms/PlemTextInput';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -49,26 +54,50 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
     if (!chartData) {
       return;
     }
-    Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
-      {
-        text: '아니요',
-        onPress: async () => {
-          await AsyncStorage.removeItem('chart_data');
-        },
-        style: 'cancel',
-      },
-      {
-        text: '네',
-        onPress: () => {
-          setChart(chartData);
-        },
-      },
-    ]);
+    // Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
+    //   {
+    //     text: '아니요',
+    //     onPress: async () => {
+    //       await AsyncStorage.removeItem('chart_data');
+    //     },
+    //     style: 'cancel',
+    //   },
+    //   {
+    //     text: '네',
+    //     onPress: () => {
+    //       setChart(chartData);
+    //     },
+    //   },
+    // ]);
+    setChart(chartData);
   };
 
+  const usePostVerificationEmail = useMutation<ApiResponse, AxiosError, AddPlanChart>(
+    'verificationCode',
+    () => addChartApi(chart),
+    {
+      onSuccess: async (responseData, variables, context) => {
+        if (responseData.status === 200) {
+          console.log(responseData);
+        } else {
+          Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+          console.info('verificationCode: ', responseData);
+        }
+      },
+      onError: (error, variable, context) => {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info(error.name + ': ', error.message);
+      },
+    }
+  );
+
   const onPressAddChart = () => {
-    Alert.alert('등록~');
+    const { isLoading: addChartLoading, mutate: addChart, data } = usePostVerificationEmail;
     console.log(JSON.stringify(chart));
+    if (addChartLoading) {
+      return;
+    }
+    addChart(chart);
     // 계획표 초기화
     //
   };
@@ -125,10 +154,21 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
     navigation.navigate('AddPlanPage', { planIndex: planIndex });
   };
 
+  const onChanageName = (value: string) => {
+    const copiedChart = cloneDeep(chart);
+    copiedChart.name = value;
+    setChart(copiedChart);
+  };
+
   return (
     <View style={styles.page}>
       <Header title={'계획표 추가'} buttonName={'등록'} buttonProps={{ onPress: onPressAddChart }} />
       <View style={{ paddingHorizontal: 15 }}>
+        <PlemTextInput
+          value={chart.name}
+          onChangeText={onChanageName}
+          style={{ borderColor: 'black', borderWidth: 1 }}
+        />
         <View style={styles.optionRow}>
           <View style={styles.underlineButtonWrap}>
             <PlemText>반복</PlemText>
@@ -156,8 +196,7 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
           data={chart.plans}
           extraData={chart.plans}
           renderItem={({ item: plan, index: planIndex }) => {
-            const { hour: startHour, minute: startMinute } = plan.startTime;
-            const { hour: endHour, minute: endMinute } = plan.endTime;
+            const { startHour, startMin, endHour, endMin } = plan;
             return (
               <View key={`plan_${planIndex}}`}>
                 <View style={styles.planWrap}>
@@ -167,11 +206,11 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
                   </Pressable>
                   <View style={styles.notificationContainer}>
                     <PlemText>
-                      {`${timePadStart(startHour)}:${timePadStart(startMinute)}`} -{' '}
-                      {`${timePadStart(endHour)}:${timePadStart(endMinute)}`}
+                      {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
+                      {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
                     </PlemText>
                     <Image
-                      source={plan.notification ? notificationOnImage : notificationOffImage}
+                      source={plan.notification === null ? notificationOffImage : notificationOnImage}
                       style={{ marginLeft: 4 }}
                     />
                   </View>

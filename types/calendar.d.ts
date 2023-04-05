@@ -16,7 +16,7 @@ export type Schedule = {
 
 export type RepeatSpecificCondition = { week: number; day: DaysOfWeekNum };
 
-export type ScheduleNotification = 0 | 1 | 5 | 10 | 15 | 30 | 60;
+export type ScheduleNotification = null | 0 | 5 | 10 | 15 | 30 | 60;
 
 export type AddSchedule = Omit<Schedule, 'createdAt' | 'id' | 'updatedAt'>;
 

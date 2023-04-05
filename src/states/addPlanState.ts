@@ -6,8 +6,12 @@ export const addPlanDefault: AddPlan = {
   name: '',
   subPlans: [],
   notification: 0,
-  startTime: { hour: 0, minute: 0 },
-  endTime: { hour: 1, minute: 0 },
+  startHour: 0,
+  startMin: 0,
+  endHour: 1,
+  endMin: 0,
+  // startTime: { hour: 0, minute: 0 },
+  // endTime: { hour: 1, minute: 0 },
 };
 
 export const addPlanState = atom<AddPlan>({

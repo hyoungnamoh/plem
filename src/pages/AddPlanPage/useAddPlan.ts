@@ -2,9 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs, { Dayjs } from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanPageProps } from '.';
-import { AddPlan, AddPlanChart, PlanTime } from '../../../types/chart';
+import { AddPlan, AddPlanChart } from '../../../types/chart';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { addPlanDefault, addPlanState } from '../../states/addPlanState';
 
@@ -15,16 +16,24 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const [openStartPicker, setOpenStartTimePicker] = useState(false);
   const [openEndPicker, setOpenEndTimePicker] = useState(false);
-  const [startTime, setStartTime] = useState<PlanTime>({ hour: 0, minute: 0 });
-  const [endTime, setEndTime] = useState<PlanTime>({ hour: 1, minute: 0 });
+  const [startHour, setStartHour] = useState(0);
+  const [startMin, setStartMin] = useState(0);
+  const [endHour, setEndHour] = useState(1);
+  const [endMin, setEndMin] = useState(0);
+  // const [startTime, setStartTime] = useState<PlanTime>({ hour: 0, minute: 0 });
+  // const [endTime, setEndTime] = useState<PlanTime>({ hour: 1, minute: 0 });
   const [name, setName] = useState('');
 
   useEffect(() => {
     if (isModify) {
       const modifyPlan = chart.plans[route.params.planIndex];
       setName(modifyPlan.name);
-      setStartTime(modifyPlan.startTime);
-      setEndTime(modifyPlan.endTime);
+      setStartHour(modifyPlan.startHour);
+      setStartMin(modifyPlan.startMin);
+      setEndHour(modifyPlan.endHour);
+      setEndMin(modifyPlan.endMin);
+      // setStartTime(modifyPlan.startTime);
+      // setEndTime(modifyPlan.endTime);
 
       // setPlan(chart.plans[route.params.planIndex]);
     }
@@ -37,8 +46,8 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   };
 
   const isInvalidTime = () => {
-    const start = dayjs().set('hour', startTime.hour).set('minute', startTime.minute);
-    const end = dayjs().set('hour', endTime.hour).set('minute', endTime.minute);
+    const start = dayjs().set('hour', startHour).set('minute', startMin);
+    const end = dayjs().set('hour', endHour).set('minute', endMin);
     return start.isAfter(end) || start.isSame(end);
   };
 
@@ -48,10 +57,10 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
       if (isModify && pIndex === route.params?.planIndex) {
         return;
       }
-      const planStart = today.set('hour', p.startTime.hour).set('minute', p.startTime.minute);
-      const planEnd = today.set('hour', p.endTime.hour).set('minute', p.endTime.minute);
-      const checkValueStart = today.set('hour', startTime.hour).set('minute', startTime.minute);
-      const checkValueEnd = today.set('hour', endTime.hour).set('minute', endTime.minute);
+      const planStart = today.set('hour', p.startHour).set('minute', p.startMin);
+      const planEnd = today.set('hour', p.endHour).set('minute', p.endMin);
+      const checkValueStart = today.set('hour', startHour).set('minute', startMin);
+      const checkValueEnd = today.set('hour', endHour).set('minute', endMin);
       return (
         duplicateTimeCheck(checkValueStart, planStart, planEnd) ||
         duplicateTimeCheck(checkValueEnd, planStart, planEnd) ||
@@ -70,22 +79,26 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const onPressAddPlan = () => {
     if (isInvalidTime()) {
-      return alert('종료시간이 시작시간과\n같거나 빠를 수 없습니다.');
+      return Alert.alert('종료시간이 시작시간과\n같거나 빠를 수 없습니다.');
     }
     if (isDuplicatedTime()) {
-      return alert('시간이 중복되는 계획이 있어요.');
+      return Alert.alert('시간이 중복되는 계획이 있어요.');
     }
 
     const copiedChart = cloneDeep(chart);
-    const startHour = startTime.hour;
-    const startMin = startTime.minute;
-    const endHour = endTime.hour;
-    const endMin = endTime.minute;
-    const newPlan = {
+    // const startHour = startHour;
+    // const startMin = startMin;
+    // const endHour = endHour;
+    // const endMin = endMin;
+    const newPlan: AddPlan = {
       ...plan,
       name,
-      startTime: { hour: startHour, minute: startMin },
-      endTime: { hour: endHour, minute: endMin },
+      startHour,
+      startMin,
+      endHour,
+      endMin,
+      // startTime: { hour: startHour, minute: startMin },
+      // endTime: { hour: endHour, minute: endMin },
     };
 
     if (isModify) {
@@ -102,8 +115,8 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const plansSortingByTime = (plans: AddPlan[]) => {
     return plans.sort((a, b) => {
-      const aStartTime = `${a.startTime.hour}:${a.startTime.minute}`;
-      const bStartTime = `${b.startTime.hour}:${b.startTime.minute}`;
+      const aStartTime = `${a.startHour}:${a.startMin}`;
+      const bStartTime = `${b.startHour}:${b.startMin}`;
       return aStartTime.localeCompare(bStartTime);
     });
   };
@@ -114,17 +127,23 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const onPressStartConfirm = (date: Date) => {
     const newStart = dayjs(date);
-    const end = dayjs().set('hour', endTime.hour).set('minute', endTime.minute);
+    const end = dayjs().set('hour', endHour).set('minute', endMin);
     if (end.diff(newStart) < 600000) {
       const newEnd = newStart.add(10, 'minute');
-      setEndTime({ hour: newEnd.get('hour'), minute: newEnd.get('minute') });
+      setEndHour(newEnd.get('hour'));
+      setEndMin(newEnd.get('minute'));
+      // setEndTime({ hour: newEnd.get('hour'), minute: newEnd.get('minute') });
     }
-    setStartTime({ hour: newStart.get('hour'), minute: newStart.get('minute') });
+    setStartHour(newStart.get('hour'));
+    setStartMin(newStart.get('minute'));
+    // setStartTime({ hour: newStart.get('hour'), minute: newStart.get('minute') });
     setOpenStartTimePicker(false);
   };
 
   const onPressEndConfirm = (date: Date) => {
-    setEndTime({ hour: date.getHours(), minute: date.getMinutes() });
+    setEndHour(date.getHours());
+    setEndMin(date.getMinutes());
+    // setEndTime({ hour: date.getHours(), minute: date.getMinutes() });
     setOpenEndTimePicker(false);
   };
 
@@ -146,15 +165,15 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const getStartPickerValue = () => {
     const date = new Date();
-    date.setHours(startTime.hour);
-    date.setMinutes(startTime.minute);
+    date.setHours(startHour);
+    date.setMinutes(startMin);
     return date;
   };
 
   const getEndPickerValue = () => {
     const date = new Date();
-    date.setHours(endTime.hour);
-    date.setMinutes(endTime.minute);
+    date.setHours(endHour);
+    date.setMinutes(endMin);
     return date;
   };
 
@@ -180,9 +199,11 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     name,
     onChangeName,
     onPressSetStart,
-    startTime,
+    startHour,
+    startMin,
+    endHour,
+    endMin,
     onPressSetEnd,
-    endTime,
     onPressSetNotification,
     plan,
     onPressAddPlan,
