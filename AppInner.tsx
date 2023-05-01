@@ -2,7 +2,7 @@ import LoginPage from './src/pages/LoginPage';
 import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Pressable, SafeAreaView, View } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { loggedInState } from './src/states/loggedInState';
 import { useRecoilState } from 'recoil';
@@ -11,7 +11,7 @@ import NicknameSettingPage from './src/pages/NicknameSettingPage';
 import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
 import EmailVerifyPage from './src/pages/EmailVerifyPage';
 import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
-import { UseMutationResult } from 'react-query';
+import { UseMutationResult, useIsFetching, useIsMutating } from 'react-query';
 import { ApiResponse } from './types/axios';
 import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmailApi';
 import { AxiosError } from 'axios';
@@ -24,8 +24,8 @@ import MainTab from './src/tabs/MainTab';
 import CalendarTab from './src/tabs/CalendarTab';
 import PlanChartListTab from './src/tabs/PlanChartListTab';
 import SettingTab from './src/tabs/SettingTab';
-import { timePickerState } from './src/states/timePickerState';
 import { MAIN_COLOR } from './src/constants/color';
+import Loading from './src/components/Loading';
 
 export type LoggedInTabParamList = {
   MainTab: undefined;
@@ -61,10 +61,10 @@ const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
 function AppInner({ routeName }: { routeName: string }) {
-  // const { isLoading, data, isError } = useQuery<SuccessResponse<LoginUser>>('loginUser', getLoginUserApi);
+  const isFetching = useIsFetching();
+  const isMutating = useIsMutating();
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
-  const [timePicker, setBackgroundMaskState] = useRecoilState(timePickerState);
 
   useEffect(() => {
     loginCheck();
@@ -81,6 +81,7 @@ function AppInner({ routeName }: { routeName: string }) {
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
+        {isFetching || isMutating ? <Loading /> : null}
         {loggedIn ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>
