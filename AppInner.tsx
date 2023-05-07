@@ -63,6 +63,7 @@ const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 function AppInner({ routeName }: { routeName: string }) {
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
+
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
 
@@ -81,7 +82,7 @@ function AppInner({ routeName }: { routeName: string }) {
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
-        {isFetching || isMutating ? <Loading /> : null}
+        {isFetching ? <Loading /> : null}
         {loggedIn ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>
