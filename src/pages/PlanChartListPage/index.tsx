@@ -32,14 +32,13 @@ const PlanChartListPage = () => {
   const isEmpty = charts && charts.length < 1;
 
   const editComplete = () => {
-    queryClient.invalidateQueries('chartList');
     setIsEditing(false);
   };
 
   const edit = () => {
     setIsEditing(true);
   };
-  console.log(data.data);
+
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       {/* <Loading /> */}
@@ -54,7 +53,7 @@ const PlanChartListPage = () => {
       </View>
       {charts.length > 0 ? (
         isEditing ? (
-          <DraggableChartList charts={charts} />
+          <DraggableChartList charts={charts} setCharts={setCharts} />
         ) : (
           <ChartList list={charts} />
         )

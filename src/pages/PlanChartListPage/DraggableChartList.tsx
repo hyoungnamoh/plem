@@ -1,14 +1,26 @@
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import DraggableChartItem from './DraggableChartItem';
 import { PlanChart } from '../../../types/chart';
-import { View } from 'react-native';
-import { useState } from 'react';
+import { Alert, View } from 'react-native';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useUpdateChartsOrder } from '../../hooks/mutaions/useUpdateList';
 
-const DraggableChartList = ({ charts }: { charts: PlanChart[] }) => {
+const DraggableChartList = ({
+  charts,
+  setCharts,
+}: {
+  charts: PlanChart[];
+  setCharts: Dispatch<SetStateAction<PlanChart[]>>;
+}) => {
   const { mutate: updateChartsOrder } = useUpdateChartsOrder({
-    onSuccess: ({ success, data }) => console.log('success', success, data),
-    onError: ({ message }) => console.log('error', message),
+    onSuccess: ({ success, data }) => {
+      if (!success) {
+        Alert.alert(data);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+    },
   });
   const [list, setList] = useState<PlanChart[]>(charts);
 
@@ -20,6 +32,8 @@ const DraggableChartList = ({ charts }: { charts: PlanChart[] }) => {
 
       return newChart;
     });
+
+    setCharts(newList);
     setList(newList);
 
     // DB 업데이트
