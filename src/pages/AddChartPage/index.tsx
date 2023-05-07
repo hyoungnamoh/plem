@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -14,11 +13,12 @@ import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
 import { MAIN_COLOR } from '../../constants/color';
 import { timePadStart } from '../../helper/timePadStart';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiResponse } from '../../../types/axios';
 import { AxiosError } from 'axios';
-import { addChartApi } from '../../api/plans/addChartApi';
+import { addPlanChartApi } from '../../api/charts/addPlanChartApi';
 import PlemTextInput from '../../components/Atoms/PlemTextInput';
+import { updateChartApi } from '../../api/charts/updateChartApi';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -30,9 +30,11 @@ const subPlanDeleteImage = require('../../assets/images/sub_plan_delete.png');
 
 type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChartPage'>;
 
-const AddChartPage = ({ navigation }: AddChartPageProps) => {
-  const [chart, setChart] = useRecoilState(addPlanChartState);
+const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
+  const queryClient = useQueryClient();
+  const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
+  const isEdit = !!route.params?.chart;
 
   useEffect(() => {
     initChartData();
@@ -51,34 +53,56 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
     // test
     // setChart(chart);
 
+    if (route.params?.chart) {
+      setChart(route.params.chart);
+      return;
+    }
+
     if (!chartData) {
       return;
     }
-    // Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
-    //   {
-    //     text: '아니요',
-    //     onPress: async () => {
-    //       await AsyncStorage.removeItem('chart_data');
-    //     },
-    //     style: 'cancel',
-    //   },
-    //   {
-    //     text: '네',
-    //     onPress: () => {
-    //       setChart(chartData);
-    //     },
-    //   },
-    // ]);
-    setChart(chartData);
+
+    Alert.alert('작성하던 계획표가 있어요. 이어서 작성할까요?', '', [
+      {
+        text: '아니요',
+        onPress: async () => {
+          await AsyncStorage.removeItem('chart_data');
+        },
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          setChart(chartData);
+        },
+      },
+    ]);
+    // setChart(chartData);
   };
 
-  const usePostVerificationEmail = useMutation<ApiResponse, AxiosError, AddPlanChart>(
-    'verificationCode',
-    () => addChartApi(chart),
+  const useAddChart = useMutation<ApiResponse, AxiosError, AddPlanChart>('addChart', () => addPlanChartApi(chart), {
+    onSuccess: async (responseData, variables, context) => {
+      if (responseData.status === 200) {
+        queryClient.invalidateQueries('chartList');
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('verificationCode: ', responseData);
+      }
+    },
+    onError: (error, variable, context) => {
+      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+      console.info(error.name + ': ', error.message);
+    },
+  });
+
+  const useUpdateChart = useMutation<ApiResponse, AxiosError, AddPlanChart>(
+    'updateChart',
+    () => updateChartApi(chart),
     {
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
           console.log(responseData);
+          queryClient.invalidateQueries('chartList');
         } else {
           Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
           console.info('verificationCode: ', responseData);
@@ -92,14 +116,20 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
   );
 
   const onPressAddChart = () => {
-    const { isLoading: addChartLoading, mutate: addChart, data } = usePostVerificationEmail;
-    console.log(JSON.stringify(chart));
+    const { isLoading: addChartLoading, mutate: addChart, data } = useAddChart;
+
     if (addChartLoading) {
       return;
     }
     addChart(chart);
-    // 계획표 초기화
-    //
+  };
+
+  const onPressUpdate = () => {
+    const { isLoading: updateChartLoading, mutate: updateChart, data } = useUpdateChart;
+    if (updateChartLoading) {
+      return;
+    }
+    updateChart(chart);
   };
 
   const onPressRepeatSetting = () => {
@@ -162,7 +192,11 @@ const AddChartPage = ({ navigation }: AddChartPageProps) => {
 
   return (
     <View style={styles.page}>
-      <Header title={'계획표 추가'} buttonName={'등록'} buttonProps={{ onPress: onPressAddChart }} />
+      <Header
+        title={isEdit ? '계획표 수정' : '계획표 추가'}
+        buttonName={isEdit ? '완료' : '등록'}
+        buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
+      />
       <View style={{ paddingHorizontal: 15 }}>
         <PlemTextInput
           value={chart.name}

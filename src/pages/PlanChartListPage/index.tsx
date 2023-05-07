@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import Accordion from 'react-native-collapsible/Accordion';
-import { useQuery } from 'react-query';
+import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { useQuery, useQueryClient } from 'react-query';
 import { ApiResponse } from '../../../types/axios';
 import { PlanChart } from '../../../types/chart';
 import { getPlanChartList } from '../../api/charts/getPlanChartList';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/color';
-import { numToDayKorParser } from '../../helper/numToDayKorParser';
-import DraggableFlatList from 'react-native-draggable-flatlist';
-import DraggableChartItem from './DraggableChartItem';
-import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar';
 import ChartList from './ChartList';
-import Loading from '../../components/Loading';
+import DraggableChartList from './DraggableChartList';
 
 const surprisedPlemImage = require('../../assets/images/surprised_plem.png');
 
 const PlanChartListPage = () => {
+  const queryClient = useQueryClient();
   const { isLoading, data, isError, status } = useQuery<ApiResponse<PlanChart[]>>({
     queryKey: ['chartList'],
     queryFn: getPlanChartList,
@@ -36,17 +32,14 @@ const PlanChartListPage = () => {
   const isEmpty = charts && charts.length < 1;
 
   const editComplete = () => {
+    queryClient.invalidateQueries('chartList');
     setIsEditing(false);
   };
 
   const edit = () => {
     setIsEditing(true);
   };
-
-  const onDragEnd = (data: PlanChart[]) => {
-    // setFavoriteMenu(data);
-  };
-
+  console.log(data.data);
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       {/* <Loading /> */}
@@ -59,18 +52,13 @@ const PlanChartListPage = () => {
           </PlemText>
         </Pressable>
       </View>
-      {charts ? (
-        <ChartList list={charts} />
+      {charts.length > 0 ? (
+        isEditing ? (
+          <DraggableChartList charts={charts} />
+        ) : (
+          <ChartList list={charts} />
+        )
       ) : (
-        // <DraggableFlatList
-        //   data={charts}
-        //   // style={styles.draggableFlatList}
-        //   renderItem={({ item, drag, isActive }) => <DraggableChartItem item={item} drag={drag} isActive={isActive} />}
-        //   ListFooterComponent={<View style={{ marginBottom: 20 }} />}
-        //   keyExtractor={(item) => `draggable-item-${item.id}`}
-        //   onDragEnd={({ data }) => onDragEnd(data)}
-        //   contentContainerStyle={{ paddingBottom: 100 }}
-        // />
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: '60%' }}>
           <Image source={surprisedPlemImage} />
           <PlemText style={{ fontSize: 14, color: '#888888', marginTop: 20 }}>만들어진 계획표가 없어요.</PlemText>

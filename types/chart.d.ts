@@ -60,3 +60,5 @@ export type PlanNotiOptionItem = {
   key: PlanNotification;
   label: PlanNotiOptionKor;
 };
+
+export type UpdateChartOrdersBody = { chartOrders: { id: number; order: number }[] };
