@@ -1,13 +1,14 @@
 import { forwardRef } from 'react';
 import { Image, StyleSheet, TextProps, View, ViewProps } from 'react-native';
 import PlemTextInput from '../Atoms/PlemTextInput';
+import PlemText from '../Atoms/PlemText';
 
 export type UnderlineTextProps = { wrapperProps?: ViewProps; isInvalidValue?: boolean } & TextProps;
 
 const UnderlineText = forwardRef<HTMLInputElement, UnderlineTextProps>((props, ref) => {
   return (
     <View {...props.wrapperProps}>
-      <PlemTextInput {...props} />
+      <PlemText {...props} />
       <Image
         source={require('../../assets/images/underline.png')}
         style={[styles.underline, { tintColor: props.isInvalidValue ? '#E40C0C' : '#000' }]}

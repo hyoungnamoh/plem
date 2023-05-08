@@ -9,11 +9,13 @@ import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
 import LabelText from '../../components/LabelText';
 import PlemText from '../../components/Atoms/PlemText';
+import { useRecoilValue } from 'recoil';
+import { loggedInUserState } from '../../states/loggedInUserState';
 
 type AccountSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'AccountSettingPage'>;
 
 const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
-  const [email, setEmail] = useState('zzzsh789@naver.com');
+  const loggedInUser = useRecoilValue(loggedInUserState);
 
   const onPressMenu = (menu: MenuItem) => {
     navigation.navigate(menu.value);
@@ -21,14 +23,17 @@ const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
 
   const onPressWithdrawal = () => {};
 
+  if (!loggedInUser) {
+    return null;
+  }
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       <Header title="계정 설정" />
       <View style={styles.content}>
-        <LabelText label="연동된 이메일">zzzsh789@naver.com</LabelText>
+        <LabelText label="연동된 이메일">{loggedInUser.email}</LabelText>
         <ScrollView>
           {ACCOUNT_SETTING_PAGE_MENUES.map((menu) => {
-            if (menu.value === 'ModifyNickNamePage') menu.label = '오도도링';
+            if (menu.value === 'ModifyNickNamePage') menu.label = loggedInUser.nickname;
             return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
           })}
           <Pressable key={'withDrawal'} style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
