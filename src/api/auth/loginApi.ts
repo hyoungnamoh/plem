@@ -3,6 +3,7 @@ import { ErrorResponse, SuccessResponse } from '../../../types/axios';
 
 export type LoginResponse = {
   accessToken: string;
+  refreshToken: string;
 };
 
 export const loginApi = async ({ email, password }: { email: string; password: string }) => {

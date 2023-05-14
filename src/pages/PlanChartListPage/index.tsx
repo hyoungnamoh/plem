@@ -19,17 +19,13 @@ const PlanChartListPage = () => {
   });
   const [charts, setCharts] = useState<PlanChart[]>(data?.data || []);
   const [isEditing, setIsEditing] = useState(false);
+  const isEmpty = charts && charts.length < 1;
 
   useEffect(() => {
     if (status === 'success') {
       setCharts(data.data);
     }
   }, [status, data]);
-
-  const accordionData = charts.map((chart) => {
-    return { title: chart.name };
-  });
-  const isEmpty = charts && charts.length < 1;
 
   const editComplete = () => {
     setIsEditing(false);

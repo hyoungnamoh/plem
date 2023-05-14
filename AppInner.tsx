@@ -93,7 +93,7 @@ function AppInner({ routeName }: { routeName: string }) {
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {isFetching ? <Loading /> : null}
-        {loggedInUser ? (
+        {loggedInUser?.id ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>
             <Tab.Screen

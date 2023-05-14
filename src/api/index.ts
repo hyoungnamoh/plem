@@ -3,11 +3,11 @@ import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 const apiRequest = axios.create({
-  baseURL: Config.API_URL,
+  baseURL: 'http://192.168.219.100:3030',
   validateStatus: (status) => status < 500,
 });
 
-apiRequest.defaults.timeout = 5000;
+apiRequest.defaults.timeout = 100000;
 
 apiRequest.interceptors.request.use(
   async (config) => {
@@ -25,7 +25,10 @@ apiRequest.interceptors.request.use(
 );
 
 apiRequest.interceptors.response.use(
-  (response) => {
+  async (response) => {
+    if (response.data.newAccessToken) {
+      await EncryptedStorage.setItem('accessToken', response.data.newAccessToken);
+    }
     return response;
   },
   (error) => {

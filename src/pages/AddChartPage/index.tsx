@@ -101,7 +101,6 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     {
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
-          console.log(responseData);
           queryClient.invalidateQueries('chartList');
         } else {
           Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');

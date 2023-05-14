@@ -11,13 +11,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LoggedOutStackParamList } from '../../AppInner';
 import UnderlineButton from '../components/UnderlineButton';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { loggedInState } from '../states/loggedInState';
 import Loading from '../components/Loading';
 import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/color';
+import { loggedInUserState } from '../states/loggedInUserState';
+import { LoggedInUser } from '../../types/user';
+import jwt_decode from 'jwt-decode';
 
 type LoginMutationParams = {
   email: string;
@@ -29,8 +31,7 @@ type LoginPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'LoginPage
 const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const queryClient = useQueryClient();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
-
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,8 +62,10 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
           queryClient.invalidateQueries('loginUser');
-          setLoggedIn(true);
+          const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
           await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+          await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
+          setLoggedInUser(user);
         } else if (responseData.data) {
           Alert.alert(responseData.data);
         } else {
