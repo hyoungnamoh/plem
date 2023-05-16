@@ -1,22 +1,43 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/color';
 import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menu';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInUserState } from '../../states/loggedInUserState';
+import { useLogout } from '../../hooks/mutaions/useLogout';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const underlineGrayImage = require('../../assets/images/underline_gray.png');
 
 type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'SettingPage'>;
 
 const SettingPage = ({ navigation }: SettingPageProps) => {
-  const loggedInUser = useRecoilValue(loggedInUserState);
+  const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const onSuccessLogout = async () => {
+    setLoggedInUser(null);
+    await EncryptedStorage.removeItem('accessToken');
+  };
+
+  const { mutate: logout } = useLogout({
+    onSuccess: onSuccessLogout,
+    onError: (e) => {
+      console.info('useLogout Error: ', e);
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+    },
+  });
 
   const onPressMenu = (menu: MenuItem) => {
+    if (!menu.value) {
+      return;
+    }
     navigation.navigate(menu.value);
+  };
+
+  const onPressLogout = () => {
+    logout();
   };
 
   if (!loggedInUser) {
@@ -34,6 +55,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
         {SETTING_PAGE_MENUS.map((menu) => {
           return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
         })}
+        <MenuButton key={'logout_menu'} item={{ title: '로그아웃', arrow: false }} onPress={onPressLogout} />
       </ScrollView>
     </View>
   );
