@@ -52,7 +52,7 @@ const DraggableChartList = ({
       data={list}
       renderItem={({ item, drag, isActive }) => <DraggableChartItem item={item} drag={drag} isActive={isActive} />}
       ListFooterComponent={<View style={{ marginBottom: 20 }} />}
-      keyExtractor={(item) => `draggable-item-${item.id}`}
+      keyExtractor={(item) => `draggableChart${item.id}`}
       onDragEnd={({ data }) => onDragEnd(data)}
       contentContainerStyle={{ paddingBottom: 100 }}
     />

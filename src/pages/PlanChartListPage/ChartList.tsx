@@ -20,7 +20,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
 
   const renderAccordionHeader = (content: PlanChart, index: number, isActive: boolean) => {
     return (
-      <View style={styles.header}>
+      <View key={`header${content.id}`} style={styles.header}>
         <Pressable style={styles.headerContent} onPress={() => navigation.navigate('AddChartPage', { chart: content })}>
           <View style={styles.test} />
           <View style={styles.headerInfo}>
@@ -38,7 +38,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
 
   const renderAccordionContent = (content: PlanChart, index: number, isActive: boolean) => {
     return (
-      <View style={styles.content}>
+      <View key={`content${content.id}`} style={styles.content}>
         <View style={styles.test} />
         <View>
           {content.plans.map((plan) => {
@@ -48,7 +48,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
             const endMin = String(plan.endMin).padStart(2, '0');
 
             return (
-              <View style={styles.contentRowContainer}>
+              <View key={`plan${content.id}${plan.id}`} style={styles.contentRowContainer}>
                 <View style={styles.contentRow}>
                   <PlemText style={styles.planInfo} numberOfLines={1}>
                     {plan.name}
@@ -69,14 +69,14 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
 
   const renderAccordionFooter = (content: PlanChart, index: number, isActive: boolean, sections: PlanChart[]) => {
     return (
-      <>
+      <View key={`footer${content.id}`}>
         <Image source={lineGray} style={{ width: Dimensions.get('window').width }} />
         {list.length - 1 === index ? (
           <Pressable style={styles.writeButton} onPress={() => navigation.navigate('AddChartPage')}>
             <PlemText>계획표 작성</PlemText>
           </Pressable>
         ) : null}
-      </>
+      </View>
     );
   };
 
@@ -93,6 +93,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
       renderAsFlatList={true}
       touchableComponent={TouchableOpacity}
       containerStyle={{ marginBottom: BOTTOM_TAB_HEIGHT }}
+      keyExtractor={(item) => `chart${item.id}`}
     />
   );
 };

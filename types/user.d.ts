@@ -7,3 +7,7 @@ export type LoggedInUser = {
   isCertified: 0 | 1;
   nickname: string;
 };
+
+export type UpdateNicknameBody = {
+  nickname: string;
+};
