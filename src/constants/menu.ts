@@ -4,7 +4,7 @@ import { SettingTabStackParamList } from '../tabs/SettingTab';
 
 export type MenuItem = {
   title: string;
-  value: keyof SettingTabStackParamList;
+  value?: keyof SettingTabStackParamList;
   label?: string;
   labelProps?: TextProps;
   arrow?: boolean;

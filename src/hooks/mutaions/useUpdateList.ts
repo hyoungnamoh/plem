@@ -8,7 +8,7 @@ import { Alert } from 'react-native';
 export const useUpdateChartsOrder = ({
   onSuccess,
   onError,
-}: Omit<UseMutationOptions<ApiResponse, AxiosError, UpdateChartOrdersBody>, 'mutationKey'>) => {
+}: Omit<UseMutationOptions<ApiResponse, AxiosError, UpdateChartOrdersBody>, 'updateChartsOrder'>) => {
   return useMutation<ApiResponse, AxiosError, UpdateChartOrdersBody>('updateChartsOrder', updateChartsOrderApi, {
     onSuccess,
     onError,
