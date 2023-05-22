@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { AddPlanChart, UpdateChartOrdersBody } from '../../../types/chart';
 import { updateChartsOrderApi } from '../../api/charts/updateChartsOrderApi';
 import { Alert } from 'react-native';
-import { UpdateNicknameBody, UpdateNicknameResponse, updateNicknameApi } from '../../api/charts/updateNickname';
+import { UpdateNicknameBody, UpdateNicknameResponse, updateNicknameApi } from '../../api/charts/updateNicknameApi';
 
 export const useUpdateNickname = ({
   onSuccess,

@@ -45,10 +45,11 @@ export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[]; // 안함 | 일 
 // export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'updatedAt' | 'orderNum'> & {
 //   plans: AddPlan[];
 // };
-export type AddPlanChart = Pick<PlanChart, 'name' | 'repeats' | 'repeatDays'> &
-  Partial<PlanChart> & { plans: AddPlan[] };
+export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'removedAt' | 'updatedAt' | 'plans'> & {
+  plans: AddPlan[];
+};
 
-export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt'> & {
+export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt' | 'subPlans'> & {
   subPlans: AddSubPlan[];
 };
 

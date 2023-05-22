@@ -3,7 +3,7 @@ import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useQuery, useQueryClient } from 'react-query';
 import { ApiResponse } from '../../../types/axios';
 import { PlanChart } from '../../../types/chart';
-import { getPlanChartList } from '../../api/charts/getPlanChartList';
+import { getPlanChartList } from '../../api/charts/getPlanChartListApi';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/color';
 import ChartList from './ChartList';
