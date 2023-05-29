@@ -2,7 +2,7 @@ import axios, { AxiosRequestHeaders } from 'axios';
 import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-const MAX_REQUESTS_COUNT = 20;
+const MAX_REQUESTS_COUNT = 10;
 const INTERVAL_MS = 500;
 let pendingRequest = 0;
 
@@ -61,7 +61,7 @@ apiRequest.interceptors.response.use(
         console.log('accessTokenResponse Error', error);
       }
     }
-    //TODO: api 호출하는 쪽에서 할지?
+
     if (response.status === 411 || response.status === 420) {
       await EncryptedStorage.removeItem('accessToken');
       await EncryptedStorage.removeItem('refreshToken');

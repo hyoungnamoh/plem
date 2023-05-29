@@ -1,15 +1,5 @@
 import { useCallback } from 'react';
-import {
-  Alert,
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  ScrollViewProps,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { FlatList, Image, Pressable, ScrollViewProps, StyleSheet, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
 
 const underlineImage = require('../../assets/images/underline.png');

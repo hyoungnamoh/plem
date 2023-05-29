@@ -1,8 +1,10 @@
 import apiRequest from '..';
 import { ApiResponse, ErrorResponse, SuccessResponse } from '../../../types/axios';
-import { AddPlanChart, PlanChart } from '../../../types/chart';
+import { AddPlanChart } from '../../../types/chart';
 
-export const updateChartApi = async (chart: AddPlanChart) => {
-  const response = await apiRequest.put<ApiResponse>(`/plan-charts/${chart.id}`, chart);
+type UpdateChartBody = AddPlanChart & { id: number };
+
+export const updateChartApi = async (body: UpdateChartBody) => {
+  const response = await apiRequest.put<ApiResponse>(`/plan-charts/${body.id}`, body);
   return response.data;
 };

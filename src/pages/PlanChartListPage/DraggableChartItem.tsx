@@ -1,11 +1,26 @@
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
+import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
 
 const hamburgerbarImage = require('../../assets/images/hamburgerbar.png');
 
 const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: () => void; isActive: boolean }) => {
-  const onPressClone = () => {};
+  const { mutate: updateChartsOrder } = useCloneChart({
+    onSuccess: ({ success, data }) => {
+      if (!success) {
+        Alert.alert(data);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+    },
+  });
+
+  const onPressClone = (id: number) => {
+    updateChartsOrder({ id });
+  };
+
   const onPressRemove = () => {};
   return (
     <View style={styles.wrap}>
@@ -22,7 +37,7 @@ const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: (
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.cloneButton} hitSlop={8} onPress={onPressClone}>
+        <Pressable style={styles.cloneButton} hitSlop={8} onPress={() => onPressClone(item.id)}>
           <PlemText style={styles.cloneText}>복사</PlemText>
         </Pressable>
         <Pressable style={styles.removeButton} hitSlop={8} onPress={onPressRemove}>
