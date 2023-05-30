@@ -2,6 +2,7 @@ import { Alert, Dimensions, Image, Pressable, StyleSheet, View } from 'react-nat
 import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
+import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
 
 const hamburgerbarImage = require('../../assets/images/hamburgerbar.png');
 
@@ -17,11 +18,24 @@ const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: (
     },
   });
 
+  const { mutate: deleteChart } = useDeleteChart({
+    onSuccess: ({ success, data }) => {
+      if (!success) {
+        Alert.alert(data);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+    },
+  });
+
   const onPressClone = (id: number) => {
     updateChartsOrder({ id });
   };
 
-  const onPressRemove = () => {};
+  const onPressDelete = (id: number) => {
+    deleteChart({ id });
+  };
   return (
     <View style={styles.wrap}>
       <View style={styles.contentContainer}>
@@ -40,7 +54,7 @@ const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: (
         <Pressable style={styles.cloneButton} hitSlop={8} onPress={() => onPressClone(item.id)}>
           <PlemText style={styles.cloneText}>복사</PlemText>
         </Pressable>
-        <Pressable style={styles.removeButton} hitSlop={8} onPress={onPressRemove}>
+        <Pressable style={styles.removeButton} hitSlop={8} onPress={() => onPressDelete(item.id)}>
           <PlemText style={styles.removeText}>삭제</PlemText>
         </Pressable>
       </View>
