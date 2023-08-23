@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useSetRecoilState } from 'recoil';
 import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
@@ -10,13 +9,33 @@ import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/color';
 import { validator } from '../helper/validator';
-import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import { useUpdatePassword } from '../hooks/mutaions/useUpdatePassword';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 
 const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
-  const { email } = route.params;
-  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const { email, isFindingPassword } = route.params;
+  const {
+    isLoading: updateLoading,
+    mutate: updatePassword,
+    data,
+  } = useUpdatePassword({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        Alert.alert('비밀번호 재설정이 완료되었습니다.');
+        navigation.popToTop();
+        navigation.push('LoginPage');
+      } else if (responseData.data) {
+        Alert.alert(responseData.data);
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+      }
+    },
+    onError: (error, variable, context) => {
+      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+      console.info(error.name + ': ', error.message);
+    },
+  });
 
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -29,16 +48,31 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
     return isInvalidPassword || isInvalidPasswordConfirm || hasEmptyValue;
   };
 
-  const onPressNextButton = () => {
+  const passwordValidate = () => {
     if (!validator({ value: password, type: 'password' })) {
       Alert.alert('비밀번호 형식을 확인해주세요.');
-      return;
+      return false;
     }
     if (password !== passwordConfirm) {
       Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const onPressNextButton = () => {
+    if (!passwordValidate()) {
       return;
     }
     navigation.navigate('NicknameSettingPage', { email, password });
+  };
+
+  const onPressCompleteButton = () => {
+    if (!passwordValidate()) {
+      return;
+    }
+    updatePassword({ email, password });
   };
 
   const onChangePassword = (value: string) => {
@@ -96,7 +130,11 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
           {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
         </View>
       </View>
-      <BottomButton title="다음" onPress={onPressNextButton} disabled={isInvalidAccount()} />
+      <BottomButton
+        title={isFindingPassword ? '재설정 완료하기' : '다음'}
+        onPress={isFindingPassword ? onPressCompleteButton : onPressNextButton}
+        disabled={isInvalidAccount()}
+      />
     </KeyboardAwareScrollView>
   );
 };

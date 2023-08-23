@@ -40,18 +40,20 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
 
   useEffect(() => {
     setBottomSafeArea(MAIN_COLOR);
+
+    return () => setIsVerifiedEmail(false);
   }, []);
 
   const usePostVerificationEmail = useMutation<
     ApiResponse<PostVerificationEmailResponse>,
     AxiosError,
     PostVerificationEmailParams
-  >('verificationCode', ({ email }) => postVerificationEmailApi({ email }), {
+  >('verificationCode', ({ email, isReset }) => postVerificationEmailApi({ email, isReset }), {
     onSuccess: async (responseData, variables, context) => {
       if (responseData.status === 200) {
+        toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
         setReceivedCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
-        toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
         setIsVerifiedEmail(false);
         setVerificationCode(''); // 재발송 시 사용
         console.log(`${responseData.data.verificationCode}`);
@@ -74,7 +76,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
     if (sendEmailLoading) {
       return;
     }
-    sendEmail({ email });
+    sendEmail({ email, isReset: true });
   };
 
   const onPressNotReceived = () => {
@@ -82,25 +84,25 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
   };
 
   const onChangeEmail = (value: string) => {
-    if (isVerifiedEmail) {
-      Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
-        {
-          text: '아니요',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {
-          text: '네',
-          onPress: () => {
-            setIsVerifiedEmail(false);
-            setIsSent(false);
-            setVerificationCode('');
-          },
-        },
-      ]);
-      return;
-    }
-
+    // 인증번호 발송 시 수정 못하도록 하기 때문에 필요없어짐
+    // if (isVerifiedEmail) {
+    //   Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
+    //     {
+    //       text: '아니요',
+    //       onPress: () => {},
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: '네',
+    //       onPress: () => {
+    //         setIsVerifiedEmail(false);
+    //         setIsSent(false);
+    //         setVerificationCode('');
+    //       },
+    //     },
+    //   ]);
+    //   return;
+    // }
     setEmail(value);
     if (!value) {
       setIsInvalidEmail(false);
@@ -112,7 +114,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
   const onPressVerify = () => {
     if (verificationCode === receivedCode) {
       setIsVerifiedEmail(true);
-      navigation.navigate('PasswordSettingPage', { email });
+      navigation.navigate('PasswordSettingPage', { email, isFindingPassword: true });
       return;
     }
     Alert.alert('인증번호가 일치하지 않습니다.');
@@ -144,6 +146,8 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
             placeholder="이메일을 입력해 주세요."
             wrapperProps={{ style: styles.inputWrap }}
             isInvalidValue={isInvalidEmail}
+            editable={!isSent}
+            selectTextOnFocus={isSent}
           />
           {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
         </View>

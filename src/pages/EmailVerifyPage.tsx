@@ -40,6 +40,8 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
 
   useEffect(() => {
     setBottomSafeArea(MAIN_COLOR);
+
+    return () => setIsVerifiedEmail(false);
   }, []);
 
   const usePostVerificationEmail = useMutation<
