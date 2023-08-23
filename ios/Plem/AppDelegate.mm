@@ -1,4 +1,6 @@
 #import "AppDelegate.h"
+#import "RNSplashScreen.h"  // here
+
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -93,6 +95,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
+  [RNSplashScreen show];  // here
 
   return YES;
 }

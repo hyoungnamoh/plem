@@ -28,8 +28,10 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
 
   return (
     <View style={styles.page}>
-      <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-      <View style={{ height: 100, backgroundColor: 'yellow' }} />
+      <View>
+        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+        <PlemText style={styles.descriptionText}>{'계획대로 흘러가는\n온전한 하루'}</PlemText>
+      </View>
       <View style={styles.buttonContainer}>
         <BlackButton onPress={onPressTogetherButton}>
           <PlemText style={styles.togetherButtonText}>함께하기</PlemText>
@@ -47,11 +49,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: MAIN_COLOR,
     paddingHorizontal: 15,
+    justifyContent: 'space-between',
+    paddingBottom: 36,
   },
   logo: {
     width: 202,
     height: 60,
-    marginTop: 120,
+    marginTop: 156,
   },
   buttonContainer: {
     alignItems: 'center',
@@ -62,6 +66,11 @@ const styles = StyleSheet.create({
   alreadyHaveAccountText: {
     marginTop: 32,
   },
+  descriptionText: {
+    fontSize: 28,
+    marginTop: 24,
+  },
+  logoContainer: {},
 });
 
 export default IntroPage;

@@ -28,6 +28,7 @@ import Loading from './src/components/Loading';
 import jwt_decode from 'jwt-decode';
 import { loggedInUserState } from './src/states/loggedInUserState';
 import { LoggedInUser } from './types/user';
+import SplashScreen from 'react-native-splash-screen';
 
 export type LoggedInTabParamList = {
   MainTab: undefined;
@@ -59,8 +60,6 @@ export type LoggedOutStackParamList = {
   FindPasswordPage: undefined;
 };
 
-type Token = {};
-
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
@@ -76,14 +75,17 @@ function AppInner({ routeName }: { routeName: string }) {
   }, []);
 
   const loginCheck = async () => {
+    // await EncryptedStorage.removeItem('accessToken');
     const token = await EncryptedStorage.getItem('accessToken');
     if (!token) {
+      SplashScreen.hide();
       setLoggedInUser(null);
       return;
     }
 
     const user = jwt_decode<LoggedInUser>(token);
     setLoggedInUser(user);
+    SplashScreen.hide();
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
