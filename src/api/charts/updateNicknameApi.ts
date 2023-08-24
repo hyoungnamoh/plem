@@ -6,8 +6,10 @@ export type UpdateNicknameBody = {
 };
 
 export type UpdateNicknameResponse = {
-  refreshToken: string;
+  refreshToken: string; // 닉네임 변경으로 인한 accesstoken 재설정을 위함
   accessToken: string;
+  id: number;
+  nickname: string;
 };
 
 export const updateNicknameApi = async (body: UpdateNicknameBody) => {

@@ -85,24 +85,24 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   };
 
   const onChangeEmail = (value: string) => {
-    if (isVerifiedEmail) {
-      Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
-        {
-          text: '아니요',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {
-          text: '네',
-          onPress: () => {
-            setIsVerifiedEmail(false);
-            setIsSent(false);
-            setVerificationCode('');
-          },
-        },
-      ]);
-      return;
-    }
+    // if (isVerifiedEmail) {
+    //   Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
+    //     {
+    //       text: '아니요',
+    //       onPress: () => {},
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: '네',
+    //       onPress: () => {
+    //         setIsVerifiedEmail(false);
+    //         setIsSent(false);
+    //         setVerificationCode('');
+    //       },
+    //     },
+    //   ]);
+    //   return;
+    // }
 
     setEmail(value);
     if (!value) {
@@ -151,6 +151,8 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
             placeholder="이메일을 입력해 주세요."
             wrapperProps={{ style: styles.inputWrap }}
             isInvalidValue={isInvalidEmail}
+            editable={!isSent}
+            selectTextOnFocus={isSent}
           />
           {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
         </View>

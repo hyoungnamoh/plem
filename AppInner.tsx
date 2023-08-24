@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
 import NicknameSettingPage from './src/pages/NicknameSettingPage';
 import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
@@ -29,6 +29,7 @@ import jwt_decode from 'jwt-decode';
 import { loggedInUserState } from './src/states/loggedInUserState';
 import { LoggedInUser } from './types/user';
 import SplashScreen from 'react-native-splash-screen';
+import { disableLoadingState } from './src/states/disableLoadingState';
 
 export type LoggedInTabParamList = {
   MainTab: undefined;
@@ -68,7 +69,8 @@ function AppInner({ routeName }: { routeName: string }) {
   const isMutating = useIsMutating();
 
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
-  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+  const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
+  const disableLoading = useRecoilValue(disableLoadingState);
 
   useEffect(() => {
     loginCheck();
@@ -89,12 +91,12 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
-
+  console.log(isFetching, isMutating, !disableLoading);
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
-        {isFetching ? <Loading /> : null}
+        {(isFetching || isMutating) && !disableLoading ? <Loading /> : null}
         {loggedInUser?.id ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>
