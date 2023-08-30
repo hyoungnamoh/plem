@@ -5,7 +5,7 @@ import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import BottomButton from '../../components/BottomButton';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { notiOptiosList } from '../PlanNotiSettingPage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useAddPlan } from './useAddPlan';

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Header from '../../components/Header';
 import SwitchInputRow from '../../components/SwitchInputRow';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 
 type NotificationSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NotificationSettingPage'>;

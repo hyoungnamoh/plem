@@ -23,7 +23,7 @@ import MainTab from './src/tabs/MainTab';
 import CalendarTab from './src/tabs/CalendarTab';
 import PlanChartListTab from './src/tabs/PlanChartListTab';
 import SettingTab from './src/tabs/SettingTab';
-import { MAIN_COLOR } from './src/constants/color';
+import { MAIN_COLOR } from './src/constants/colors';
 import Loading from './src/components/Loading';
 import jwt_decode from 'jwt-decode';
 import { loggedInUserState } from './src/states/loggedInUserState';

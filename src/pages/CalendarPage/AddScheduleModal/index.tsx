@@ -8,7 +8,7 @@ import PlemText from '../../../components/Atoms/PlemText';
 
 import AddScheduleModalSVG from '../../../assets/images/add_schedule_modal.svg';
 import { Dayjs } from 'dayjs';
-import { NUMBER_TO_DAY_KOR } from '../../../constants/date';
+import { NUMBER_TO_DAY_KOR } from '../../../constants/dates';
 import { DaysOfWeekNum } from '../../../../types/date';
 import { Dispatch, SetStateAction } from 'react';
 

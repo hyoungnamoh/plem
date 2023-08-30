@@ -7,7 +7,7 @@ import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants/color';
+import { MAIN_COLOR } from '../constants/colors';
 import { validator } from '../helper/validator';
 import { useUpdatePassword } from '../hooks/mutaions/useUpdatePassword';
 

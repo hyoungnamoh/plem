@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from '@hyoungnamoh/react-native-easy-toast';

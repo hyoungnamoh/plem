@@ -11,7 +11,7 @@ import PlemText from '../../components/Atoms/PlemText';
 import BlackButton from '../../components/BlackButton';
 import Header from '../../components/Header';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 
 type NotReceivedMailPage = NativeStackScreenProps<LoggedOutStackParamList, 'NotReceivedMailPage'>;

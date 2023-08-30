@@ -2,12 +2,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { lazy, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import UnderlineButton from '../../components/UnderlineButton';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import { loggedInUserState } from '../../states/loggedInUserState';
 import { useUpdateNickname } from '../../hooks/mutaions/useUpdateNickname';
@@ -16,6 +16,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { LoggedInUser } from '../../../types/user';
 import { ADJECTIVES } from '../../constants/adjectives';
 import { NOUNS } from '../../constants/nouns';
+import { makeNickname } from '../../utils/makeNickname';
 
 type ModifyNickNamePageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyNickNamePage'>;
 
@@ -49,9 +50,7 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
   };
 
   const onPressMakeNickname = () => {
-    const adjectiveIndex = Math.floor(Math.random() * ADJECTIVES.length);
-    const nounIndex = Math.floor(Math.random() * NOUNS.length);
-    setNickname(`${ADJECTIVES[adjectiveIndex]} ${NOUNS[nounIndex]}`);
+    setNickname(makeNickname());
   };
 
   if (!loggedInUser) {

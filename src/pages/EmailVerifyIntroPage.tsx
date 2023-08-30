@@ -8,7 +8,7 @@ import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import Header from '../components/Header';
 import UnderlineButton from '../components/UnderlineButton';
-import { MAIN_COLOR } from '../constants/color';
+import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type EmailVerifyIntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyIntroPage'>;

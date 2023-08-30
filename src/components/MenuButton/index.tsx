@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
-import { MenuItem } from '../../constants/menu';
+import { MenuItem } from '../../constants/menus';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 

@@ -7,7 +7,7 @@ import { AddPlanChart, PlanChart, PlanNotification, PlanNotiOptionItem } from '.
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 

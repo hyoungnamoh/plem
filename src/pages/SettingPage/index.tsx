@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Alert, Dimensions, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
-import { MAIN_COLOR } from '../../constants/color';
-import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menu';
+import { MAIN_COLOR } from '../../constants/colors';
+import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menus';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
 import { useRecoilState, useRecoilValue } from 'recoil';

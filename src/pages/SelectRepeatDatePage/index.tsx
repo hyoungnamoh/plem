@@ -7,7 +7,7 @@ import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { repeatDaysState } from '../../states/repeatDaysState';
 import { MainTabStackParamList } from '../../tabs/MainTab';

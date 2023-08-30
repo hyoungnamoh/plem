@@ -16,7 +16,7 @@ import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants/color';
+import { MAIN_COLOR } from '../constants/colors';
 import { loggedInUserState } from '../states/loggedInUserState';
 import { LoggedInUser } from '../../types/user';
 import jwt_decode from 'jwt-decode';

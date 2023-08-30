@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
-import { MAIN_COLOR } from '../../constants/color';
-import { DAYS_OF_WEEK } from '../../constants/date';
+import { MAIN_COLOR } from '../../constants/colors';
+import { DAYS_OF_WEEK } from '../../constants/dates';
 import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { AddScheduleModal } from './AddScheduleModal';

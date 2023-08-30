@@ -5,7 +5,7 @@ import { ApiResponse } from '../../../types/axios';
 import { PlanChart } from '../../../types/chart';
 import { getPlanChartList } from '../../api/charts/getPlanChartListApi';
 import PlemText from '../../components/Atoms/PlemText';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import ChartList from './ChartList';
 import DraggableChartList from './DraggableChartList';
 

@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/color';
-import { ACCOUNT_SETTING_PAGE_MENUES, MenuItem } from '../../constants/menu';
+import { MAIN_COLOR } from '../../constants/colors';
+import { ACCOUNT_SETTING_PAGE_MENUES, MenuItem } from '../../constants/menus';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
 import LabelText from '../../components/LabelText';

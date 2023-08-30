@@ -11,7 +11,7 @@ import { MainTabStackParamList } from '../../tabs/MainTab';
 import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
-import { MAIN_COLOR } from '../../constants/color';
+import { MAIN_COLOR } from '../../constants/colors';
 import { timePadStart } from '../../helper/timePadStart';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiResponse } from '../../../types/axios';

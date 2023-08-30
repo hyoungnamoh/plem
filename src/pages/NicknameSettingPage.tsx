@@ -14,9 +14,10 @@ import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
 import UnderlineButton from '../components/UnderlineButton';
 import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants/color';
+import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
+import { makeNickname } from '../utils/makeNickname';
 
 type NicknameSettingPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NicknameSettingPage'>;
 
@@ -77,6 +78,10 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
     signUp({ email, password, nickname });
   };
 
+  const onPressMakeNickname = () => {
+    setNickname(makeNickname());
+  };
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.page}>
       <Header />
@@ -96,7 +101,9 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
               wrapperProps={{ style: styles.inputWrap }}
             />
             <View style={styles.randomButtonWrap}>
-              <UnderlineButton style={styles.randomButton}>랜덤짓기</UnderlineButton>
+              <UnderlineButton style={styles.randomButton} onPress={onPressMakeNickname}>
+                랜덤짓기
+              </UnderlineButton>
             </View>
           </View>
         </View>
