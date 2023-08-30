@@ -2,7 +2,6 @@ import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/top_ic_close.svg';
 import PaletteBlue from '../../../assets/images/palette_blue.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
-import { BOTTOM_TAB_HEIGHT } from '../../../components/BottomTabBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../../../components/Atoms/PlemText';
 
@@ -10,7 +9,7 @@ import AddScheduleModalSVG from '../../../assets/images/add_schedule_modal.svg';
 import { Dayjs } from 'dayjs';
 import { NUMBER_TO_DAY_KOR } from '../../../constants/dates';
 import { DaysOfWeekNum } from '../../../../types/date';
-import { Dispatch, SetStateAction } from 'react';
+import { BOTTOM_TAB_HEIGHT } from '../../../components/BottomTabBar/constants';
 
 type AddScheduleModalProps = {
   open: boolean;

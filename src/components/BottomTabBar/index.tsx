@@ -1,31 +1,8 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import { MAIN_COLOR } from '../../constants/colors';
+import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
 
-export const BOTTOM_TAB_HEIGHT = 56;
-
-const BottomTabs = [
-  {
-    key: 'MainPage',
-    active: require('../../assets/images/bottom_lemon_active.png'),
-    inactive: require('../../assets/images/bottom_lemon_inactive.png'),
-  },
-  {
-    key: 'CalendarPage',
-    active: require('../../assets/images/bottom_calendar_active.png'),
-    inactive: require('../../assets/images/bottom_calendar_inactive.png'),
-  },
-  {
-    key: 'PlanChartListPage',
-    active: require('../../assets/images/bottom_list_active.png'),
-    inactive: require('../../assets/images/bottom_list_inactive.png'),
-  },
-  {
-    key: 'SettingPage',
-    active: require('../../assets/images/bottom_setting_active.png'),
-    inactive: require('../../assets/images/bottom_setting_inactive.png'),
-  },
-];
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
     <View style={styles.bottomTabBar}>
@@ -66,7 +43,7 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.tab}>
-              <Image source={isFocused ? BottomTabs[index].active : BottomTabs[index].inactive} />
+              <Image source={isFocused ? BOTTOM_TABS[index].active : BOTTOM_TABS[index].inactive} />
             </Pressable>
           );
         })}
