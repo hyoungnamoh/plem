@@ -3,26 +3,41 @@ import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
 import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
+import { Dispatch, SetStateAction } from 'react';
 
 const hamburgerbarImage = require('../../assets/images/hamburgerbar.png');
 
-const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: () => void; isActive: boolean }) => {
-  const { mutate: updateChartsOrder } = useCloneChart({
-    onSuccess: ({ success, data }) => {
-      if (!success) {
-        Alert.alert(data);
-      }
+const DraggableChartItem = ({
+  item,
+  drag,
+  isActive,
+  onDeleteUpdate,
+  onCloneUpdate,
+}: {
+  item: PlanChart;
+  drag: () => void;
+  isActive: boolean;
+  onDeleteUpdate: ({ id }: { id: number }) => void;
+  onCloneUpdate: ({ newItem }: { newItem: PlanChart; originId: number }) => void;
+}) => {
+  const { mutate: cloneChart } = useCloneChart({
+    onSuccess: ({ data }) => {
+      console.log(data);
+      onCloneUpdate({ newItem: data, originId: item.id });
     },
-    onError: (e) => {
+    onError: (error) => {
+      console.info('useCloneChart onError Error: ', error);
       Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
     },
   });
 
   const { mutate: deleteChart } = useDeleteChart({
-    onSuccess: ({ success, data }) => {
+    onSuccess: ({ success, data }, { id }) => {
       if (!success) {
         Alert.alert(data);
+        return;
       }
+      onDeleteUpdate({ id });
     },
     onError: (e) => {
       Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
@@ -30,7 +45,7 @@ const DraggableChartItem = ({ item, drag, isActive }: { item: PlanChart; drag: (
   });
 
   const onPressClone = (id: number) => {
-    updateChartsOrder({ id });
+    cloneChart({ id });
   };
 
   const onPressDelete = (id: number) => {
