@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useUpdateChartsOrder } from '../../hooks/mutaions/useUpdateList';
 import { useSetRecoilState } from 'recoil';
 import { disableLoadingState } from '../../states/disableLoadingState';
+import { useQueryClient } from 'react-query';
 
 const DraggableChartList = ({
   charts,
@@ -14,6 +15,9 @@ const DraggableChartList = ({
   charts: PlanChart[];
   setCharts: Dispatch<SetStateAction<PlanChart[]>>;
 }) => {
+  const queryClient = useQueryClient();
+  const [list, setList] = useState<PlanChart[]>(charts);
+  const setDisableLoading = useSetRecoilState(disableLoadingState);
   const { mutate: updateChartsOrder } = useUpdateChartsOrder({
     onSuccess: ({ success, data }) => {
       setDisableLoading(false);
@@ -30,8 +34,6 @@ const DraggableChartList = ({
       setDisableLoading(true);
     },
   });
-  const [list, setList] = useState<PlanChart[]>(charts);
-  const setDisableLoading = useSetRecoilState(disableLoadingState);
 
   const onDragEnd = (updatedCharts: PlanChart[]) => {
     // 프론트 리스트 순위 변경
@@ -60,6 +62,7 @@ const DraggableChartList = ({
     const newList = [...list].filter((item) => item.id !== id);
     setList(newList);
     setCharts(newList);
+    queryClient.invalidateQueries('chartList');
   };
 
   const onCloneUpdate = ({ newItem, originId }: { newItem: PlanChart; originId: number }) => {

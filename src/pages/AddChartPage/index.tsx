@@ -13,12 +13,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
 import { MAIN_COLOR } from '../../constants/colors';
 import { timePadStart } from '../../helper/timePadStart';
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiResponse } from '../../../types/axios';
-import { AxiosError } from 'axios';
-import { addPlanChartApi } from '../../api/charts/addPlanChartApi';
+import { useQueryClient } from 'react-query';
 import PlemTextInput from '../../components/Atoms/PlemTextInput';
-import { updateChartApi } from '../../api/charts/updateChartApi';
+import { useAddChart } from '../../hooks/mutaions/useAddChart';
+import { useUpdateChart } from '../../hooks/mutaions/useUpdateChart';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -35,6 +33,37 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
   const isEdit = !!route.params?.chart;
+
+  const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        queryClient.invalidateQueries('chartList');
+        navigation.navigate('PlanChartListPage');
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('useAddChart Error: ', responseData);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+      console.info('useAddChart Error: ', e);
+    },
+  });
+
+  const { isLoading: updateChartLoading, mutate: updateChart } = useUpdateChart({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        queryClient.invalidateQueries('chartList');
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('verificationCode: ', responseData);
+      }
+    },
+    onError: (error) => {
+      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+      console.info(error.name + ': ', error.message);
+    },
+  });
 
   useEffect(() => {
     initChartData();
@@ -80,43 +109,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     // setChart(chartData);
   };
 
-  const useAddChart = useMutation<ApiResponse, AxiosError, AddPlanChart>('addChart', () => addPlanChartApi(chart), {
-    onSuccess: async (responseData, variables, context) => {
-      if (responseData.status === 200) {
-        queryClient.invalidateQueries('chartList');
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('verificationCode: ', responseData);
-      }
-    },
-    onError: (error, variable, context) => {
-      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-      console.info(error.name + ': ', error.message);
-    },
-  });
-
-  const useUpdateChart = useMutation<ApiResponse, AxiosError, AddPlanChart>(
-    'updateChart',
-    () => updateChartApi(chart),
-    {
-      onSuccess: async (responseData, variables, context) => {
-        if (responseData.status === 200) {
-          queryClient.invalidateQueries('chartList');
-        } else {
-          Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-          console.info('verificationCode: ', responseData);
-        }
-      },
-      onError: (error, variable, context) => {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info(error.name + ': ', error.message);
-      },
-    }
-  );
-
   const onPressAddChart = () => {
-    const { isLoading: addChartLoading, mutate: addChart, data } = useAddChart;
-
     if (addChartLoading) {
       return;
     }
@@ -124,7 +117,6 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const onPressUpdate = () => {
-    const { isLoading: updateChartLoading, mutate: updateChart, data } = useUpdateChart;
     if (updateChartLoading) {
       return;
     }

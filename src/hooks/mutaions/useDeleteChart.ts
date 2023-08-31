@@ -4,5 +4,5 @@ import { AxiosError } from 'axios';
 import { DeleteChartBody, deleteChartApi } from '../../api/charts/deleteChartApi';
 
 export const useDeleteChart = (options: UseMutationOptions<ApiResponse, AxiosError, DeleteChartBody>) => {
-  return useMutation<ApiResponse, AxiosError, DeleteChartBody>('cloneChart', (body) => deleteChartApi(body), options);
+  return useMutation<ApiResponse, AxiosError, DeleteChartBody>('deleteChart', (body) => deleteChartApi(body), options);
 };

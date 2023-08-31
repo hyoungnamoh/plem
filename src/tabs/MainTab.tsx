@@ -14,6 +14,7 @@ export type MainTabStackParamList = {
   SelectRepeatDatePage: undefined;
   AddPlanPage?: { planIndex?: number };
   PlanNotiSettingPage: undefined;
+  PlanChartListPage: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainTabStackParamList>();

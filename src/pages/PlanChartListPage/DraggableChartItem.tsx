@@ -22,7 +22,6 @@ const DraggableChartItem = ({
 }) => {
   const { mutate: cloneChart } = useCloneChart({
     onSuccess: ({ data }) => {
-      console.log(data);
       onCloneUpdate({ newItem: data, originId: item.id });
     },
     onError: (error) => {
