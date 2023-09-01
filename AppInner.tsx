@@ -30,36 +30,7 @@ import { loggedInUserState } from './src/states/loggedInUserState';
 import { LoggedInUser } from './types/user';
 import SplashScreen from 'react-native-splash-screen';
 import { disableLoadingState } from './src/states/disableLoadingState';
-
-export type LoggedInTabParamList = {
-  MainTab: undefined;
-  CalendarTab: undefined;
-  PlanChartListTab: undefined;
-  SettingTab: undefined;
-};
-
-export type LoggedOutStackParamList = {
-  LoginPage: { from?: string } | undefined;
-  PasswordSettingPage: { email: string; isFindingPassword?: boolean };
-  IntroPage: undefined;
-  NicknameSettingPage: { email: string; password: string };
-  EmailVerifyIntroPage: { email: string; password: string; nickname: string };
-  EmailVerifyPage: undefined;
-  // MainPage: undefined;
-  NotReceivedMailPage: {
-    usePostVerificationEmail: UseMutationResult<
-      ApiResponse<PostVerificationEmailResponse>,
-      AxiosError<unknown, any>,
-      PostVerificationEmailParams,
-      unknown
-    >;
-    email: string;
-  };
-  SignUpSuccessPage: {
-    nickname: string;
-  };
-  FindPasswordPage: undefined;
-};
+import { LoggedInTabParamList, LoggedOutStackParamList } from './types/appInner';
 
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
@@ -91,7 +62,7 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
-  console.log(isFetching, isMutating, !disableLoading);
+  console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
