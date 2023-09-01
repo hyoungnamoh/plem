@@ -4,11 +4,10 @@ import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import { numToDayKorParser } from '../../helper/numToDayKorParser';
 import { useState } from 'react';
-import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar';
-import dayjs from 'dayjs';
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PlanChartListTabStackParamList } from '../../tabs/PlanChartListTab';
-import { LoggedInTabParamList } from '../../../AppInner';
+import AddChartButton from './AddChartButton';
+import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar/constants';
 
 const arrowDownImage = require('../../assets/images/arrow_down.png');
 const arrowUpImage = require('../../assets/images/arrow_up.png');
@@ -68,15 +67,12 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
   };
 
   const renderAccordionFooter = (content: PlanChart, index: number, isActive: boolean, sections: PlanChart[]) => {
-    return (
-      <View key={`footer${content.id}`}>
-        <Image source={lineGray} style={{ width: Dimensions.get('window').width }} />
-        {list.length - 1 === index ? (
-          <Pressable style={styles.writeButton} onPress={() => navigation.navigate('AddChartPage')}>
-            <PlemText>계획표 작성</PlemText>
-          </Pressable>
-        ) : null}
+    return list.length - 1 === index ? (
+      <View key={`footer${content.id}`} style={styles.footerWrap}>
+        <AddChartButton />
       </View>
+    ) : (
+      <></>
     );
   };
 
@@ -93,7 +89,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
       renderAsFlatList={true}
       touchableComponent={TouchableOpacity}
       containerStyle={{ marginBottom: BOTTOM_TAB_HEIGHT }}
-      keyExtractor={(item) => `chart${item.id}`}
+      // keyExtractor={(item) => `chart${item.id}`} 라이브러리에서 제공하는 renderFooter의 두번째 인자 index에 기본값은 index인데 keyExtractor로 키 만들면 index대신 key가 들어감
     />
   );
 };
@@ -160,6 +156,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: 'center',
     marginBottom: 100,
+  },
+  footerWrap: {
+    alignItems: 'center',
+    paddingBottom: 30,
   },
 });
 

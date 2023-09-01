@@ -3,18 +3,21 @@ import dayjs from 'dayjs';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { useQuery, useQueryClient } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { LoggedInTabParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
-import { loggedInState } from '../states/loggedInState';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { ApiResponse } from '../../types/axios';
-import { getPlanChart } from '../api/plans/getPlanChart';
+import { getPlanChart } from '../api/charts/getPlanChartApi';
 import { MainTabStackParamList } from '../tabs/MainTab';
 import { PlanChart } from '../../types/chart';
-import { MAIN_COLOR } from '../constants/color';
+import { MAIN_COLOR } from '../constants/colors';
+import MainSVGFrame from '../components/MainSVGFrame';
+import { loggedInUserState } from '../states/loggedInUserState';
+import { useFocusEffect } from '@react-navigation/native';
+import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -29,7 +32,8 @@ const addChartImage = require('../assets/images/plus.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const queryClient = useQueryClient();
-  const setLoggedIn = useSetRecoilState(loggedInState);
+  const setLoggedInUser = useSetRecoilState(loggedInUserState);
+  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
 
   const [checkedList, setCheckedList] = useState<number[]>([]);
 
@@ -37,11 +41,18 @@ const MainPage = ({ navigation }: MainPageProps) => {
     setAsyncStorageData();
   }, []);
 
+  useFocusEffect(() => {
+    if (bottomSafeArea === MAIN_COLOR) {
+      return;
+    }
+    setBottomSafeArea(MAIN_COLOR);
+  });
+
   const removeJwt = async () => {
     try {
+      setLoggedInUser(null);
       await EncryptedStorage.removeItem('accessToken');
       queryClient.setQueryData('loginUser', { data: {} });
-      setLoggedIn(false);
     } catch (error) {
       console.info(error);
     }
@@ -79,10 +90,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
     data: planChartData,
     isError,
   } = useQuery<ApiResponse<PlanChart>>('getPlanChart', () => getPlanChart({ id: 285 }));
-
   return (
     <View style={styles.page}>
-      <View style={{ height: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <View style={styles.mainHeader}>
         <Pressable>
           <Image source={mainTitleLogoImage} />
         </Pressable>
@@ -90,7 +100,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <Image source={addChartImage} />
         </Pressable>
       </View>
-      <View style={styles.chartWrap}>{/* <MainSVGFrame /> */}</View>
+      <View style={styles.chartWrap}>
+        <MainSVGFrame />
+      </View>
       <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} />
       <View>
         <View style={styles.doItNowHeader}>
@@ -99,7 +111,8 @@ const MainPage = ({ navigation }: MainPageProps) => {
         </View>
         <Image source={underlineImage} style={styles.doItNowUnderline} />
         <KeyboardAwareScrollView contentContainerStyle={styles.doItNowContent} contentInset={{ bottom: 80 }}>
-          {planChartData?.data.plans.map((plan) => {
+          {/* {planChartData?.data.plans.map((plan) => { */}
+          {planChartData?.data.plans?.map((plan) => {
             return (
               <View key={`plan${plan.id}`}>
                 <View style={styles.planWrap}>
@@ -131,8 +144,14 @@ const MainPage = ({ navigation }: MainPageProps) => {
 };
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: MAIN_COLOR, paddingHorizontal: 15 },
-  chartWrap: { alignItems: 'center' },
+  page: {
+    flex: 1,
+    backgroundColor: MAIN_COLOR,
+    paddingHorizontal: 15,
+  },
+  chartWrap: {
+    alignItems: 'center',
+  },
   doItNowHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -159,6 +178,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 40,
+  },
+  mainHeader: {
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 

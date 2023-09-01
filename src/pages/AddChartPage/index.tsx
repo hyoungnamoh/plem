@@ -1,13 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
 import { addPlanChartDefault, addPlanChartState } from '../../states/addPlanChartState';
-import { MainTabStackParamList } from '../../tabs/MainTab';
 import { repeatOptionList } from '../RepeatSettingPage';
 import cloneDeep from 'lodash/cloneDeep';
 import SubPlanInput from '../../components/SubPlanInput';
@@ -17,6 +15,9 @@ import { useQueryClient } from 'react-query';
 import PlemTextInput from '../../components/Atoms/PlemTextInput';
 import { useAddChart } from '../../hooks/mutaions/useAddChart';
 import { useUpdateChart } from '../../hooks/mutaions/useUpdateChart';
+import { StackActions, TabActions } from '@react-navigation/native';
+import { MainTabStackParamList } from '../../tabs/MainTab';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -31,14 +32,15 @@ type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChart
 const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const queryClient = useQueryClient();
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
-  const [checkedList, setCheckedList] = useState<number[]>([]);
+
   const isEdit = !!route.params?.chart;
 
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         queryClient.invalidateQueries('chartList');
-        navigation.navigate('PlanChartListPage');
+        navigation.dispatch(TabActions.jumpTo('PlanChartListTab'));
+        navigation.dispatch(StackActions.popToTop());
       } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
         console.info('useAddChart Error: ', responseData);
@@ -54,6 +56,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         queryClient.invalidateQueries('chartList');
+        navigation.goBack();
       } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
         console.info('verificationCode: ', responseData);

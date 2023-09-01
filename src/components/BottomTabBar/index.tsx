@@ -21,17 +21,10 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
               canPreventDefault: true,
             });
 
-            if (!isFocused && !event.defaultPrevented) {
+            if (!event.defaultPrevented) {
               // The `merge: true` option makes sure that the params inside the tab screen are preserved
               navigation.navigate({ key: route.key, name: route.name, merge: true });
             }
-          };
-
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
           };
 
           return (
@@ -41,7 +34,6 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
-              onLongPress={onLongPress}
               style={styles.tab}>
               <Image source={isFocused ? BOTTOM_TABS[index].active : BOTTOM_TABS[index].inactive} />
             </Pressable>
