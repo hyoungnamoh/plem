@@ -1,15 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import {
-  Dimensions,
-  ImageBackground,
-  Pressable,
-  View,
-  Image,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
@@ -18,10 +10,8 @@ import LabelInput from '../../components/LabelInput';
 import OptionsInputRow from '../../components/OptionsInputRow';
 import PaletteInputRow from '../../components/PaletteInputRow';
 import SwitchInputRow from '../../components/SwitchInputRow';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../../constants/colors';
-import { DAYS_OF_WEEK } from '../../constants/dates';
-import { addScheduleState } from '../../states/addScheduleState';
+import { addScheduleDefault, addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { notiOptiosList } from '../ScheduleNotiSettingPage';
 import { repeatOptionList } from '../ScheduleRepeatSettingPage';
@@ -31,7 +21,7 @@ const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
 const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
-const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
+const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
@@ -43,6 +33,11 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
+  const isEdit = !!route.params?.schedule;
+
+  useEffect(() => {
+    return () => setSchedule(addScheduleDefault);
+  }, []);
 
   const onPressDelete = () => {
     navigation.goBack();
@@ -75,9 +70,9 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       <View style={styles.page}>
         <Header
           title="일정 추가"
-          buttonName={'삭제'}
-          buttonProps={{ onPress: onPressDelete }}
-          buttonNameProps={{ style: { color: '#E40C0C' } }}
+          buttonName={isEdit ? '삭제' : ''}
+          buttonProps={isEdit ? { onPress: onPressDelete } : null}
+          buttonNameProps={isEdit ? { style: { color: '#E40C0C' } } : null}
         />
         <View style={styles.content}>
           <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />

@@ -5,7 +5,7 @@ export const addPlanChartDefault: AddPlanChart = {
   name: '',
   plans: [],
   repeats: [null],
-  // repeatDays: [],
+  repeatDays: [],
 };
 
 export const addPlanChartState = atom<AddPlanChart>({

@@ -25,7 +25,7 @@ export type Plan = {
 
 // export type PlanTime = { hour: number; minute: number };
 
-export type PlanNotification = null | 0 | 5 | 10 | 15 | 30 | 60; // 안함 | 당시 | 5분전 | 10분전 | 15분전 | 30분전 | 1시간전
+export type PlanNotification = null | '0' | '5' | '10' | '15' | '30' | '60'; // 안함 | 당시 | 5분전 | 10분전 | 15분전 | 30분전 | 1시간전
 
 export type PlanChart = {
   id: number;
@@ -45,7 +45,10 @@ export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[]; // 안함 | 일 
 // export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'id' | 'updatedAt' | 'orderNum'> & {
 //   plans: AddPlan[];
 // };
-export type AddPlanChart = Omit<PlanChart, 'UserId' | 'createdAt' | 'removedAt' | 'updatedAt' | 'plans'> & {
+export type AddPlanChart = Omit<
+  PlanChart,
+  'id' | 'UserId' | 'createdAt' | 'removedAt' | 'updatedAt' | 'plans' | 'orderNum'
+> & {
   plans: AddPlan[];
 };
 

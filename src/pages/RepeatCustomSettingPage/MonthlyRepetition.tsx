@@ -6,7 +6,7 @@ import PlemText from '../../components/Atoms/PlemText';
 import { Dropdown, DropdownItem } from '../../components/Dropdown';
 import SwitchInputRow from '../../components/SwitchInputRow';
 
-const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
+const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
 export const WEEK_LIST = [
   { label: '첫 번째', value: 1 },
@@ -82,7 +82,7 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates, setRepeatCondition
           justifyContent: 'center',
         }}>
         <ImageBackground
-          source={isSelectedDate ? currentDayStickerImage : null}
+          source={isSelectedDate ? currentDateStickerImage : null}
           resizeMode="cover"
           style={{ width: 24, height: 22, justifyContent: 'center', alignItems: 'center' }}
           imageStyle={{ display: isSelectedDate ? 'flex' : 'none' }}>

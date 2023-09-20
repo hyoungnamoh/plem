@@ -20,7 +20,7 @@ import { AddScheduleModal } from './AddScheduleModal';
 
 const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
-const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
+const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
@@ -71,6 +71,17 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
       );
     });
 
+    const getDateColor = ({ isCurrentDate, date }: { isCurrentDate: boolean; date: number }) => {
+      if (isCurrentDate) {
+        return '#fff';
+      }
+      if ((date + firstDateIndex) % 7 === 1) {
+        return '#E40C0C';
+      }
+
+      return '#000';
+    };
+
     const dateComponents = datesOfMonth.map((date) => {
       const isCurrentDate = currentDate.date() === date;
       const isSelectedDate = selectedDate === date;
@@ -84,13 +95,13 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
             height: 64,
           }}>
           <ImageBackground
-            source={isCurrentDate ? currentDayStickerImage : circleStrokeImage}
+            source={isCurrentDate ? currentDateStickerImage : circleStrokeImage}
             resizeMode="cover"
-            style={{ width: 24, height: 22, justifyContent: 'center', alignItems: 'center' }}
+            style={styles.currentDateBackground}
             imageStyle={{ display: isCurrentDate || isSelectedDate ? 'flex' : 'none' }}>
             <PlemText
               style={{
-                color: isCurrentDate ? '#fff' : (date + firstDateIndex) % 7 === 1 ? '#E40C0C' : '#000',
+                color: getDateColor({ isCurrentDate, date }),
                 fontSize: 14,
               }}>
               {date}
@@ -165,6 +176,12 @@ const styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  currentDateBackground: {
+    width: 24,
+    height: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

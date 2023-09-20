@@ -1,15 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddSchedulePage from '../pages/AddSchedulePage';
-import AddChartPage from '../pages/AddChartPage';
 import CalendarPage from '../pages/CalendarPage';
-import MainPage from '../pages/MainPage';
 import ScheduleRepeatSettingPage from '../pages/ScheduleRepeatSettingPage';
 import ScheduleNotiSettingPage from '../pages/ScheduleNotiSettingPage';
 import RepeatCustomSettingPage from '../pages/RepeatCustomSettingPage';
+import { Schedule } from '../../types/calendar';
 
 export type CalendarTabStackParamList = {
   CalendarPage: undefined;
-  AddSchedulePage: undefined;
+  AddSchedulePage?: { schedule: Schedule };
   ScheduleNotiSettingPage: undefined;
   ScheduleRepeatSettingPage: undefined;
   RepeatCustomSettingPage: undefined;

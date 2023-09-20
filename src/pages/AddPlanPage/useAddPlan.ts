@@ -27,15 +27,12 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   useEffect(() => {
     if (isModify) {
       const modifyPlan = chart.plans[route.params.planIndex];
+      setPlan(modifyPlan);
       setName(modifyPlan.name);
       setStartHour(modifyPlan.startHour);
       setStartMin(modifyPlan.startMin);
       setEndHour(modifyPlan.endHour);
       setEndMin(modifyPlan.endMin);
-      // setStartTime(modifyPlan.startTime);
-      // setEndTime(modifyPlan.endTime);
-
-      // setPlan(chart.plans[route.params.planIndex]);
     }
 
     return () => setPlan(addPlanDefault);
@@ -110,6 +107,7 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
       setChart({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
       setStorageChartData({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
     }
+
     navigation.goBack();
   };
 

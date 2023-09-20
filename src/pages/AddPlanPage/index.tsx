@@ -93,7 +93,9 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           <View style={styles.underlineButtonWrap}>
             <PlemText>알림</PlemText>
             <Pressable style={styles.underlineButton} onPress={onPressSetNotification}>
-              <PlemText>{notiOptiosList.find((e) => e.key === plan.notification)?.label}</PlemText>
+              <PlemText>
+                {notiOptiosList.find((notification) => notification.key === plan.notification)?.label}
+              </PlemText>
               <Image source={arrowRightImage} style={styles.arrowRightImage} />
             </Pressable>
           </View>

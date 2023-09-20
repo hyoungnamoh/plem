@@ -3,7 +3,6 @@ import { Dimensions, Image, ImageBackground, Pressable, View } from 'react-nativ
 import PlemText from '../../components/Atoms/PlemText';
 import SwitchInputRow from '../../components/SwitchInputRow';
 
-const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
 const checkImage = require('../../assets/images/check.png');
 
 const REPEAT_DAY_LIST = [

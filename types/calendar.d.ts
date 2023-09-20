@@ -11,7 +11,7 @@ export type Schedule = {
   notification: ScheduleNotification;
   repeat: Repeat;
   repeatDays: number[];
-  customRepeat: { unit: RepeatUnit; value: number[] } | RepeatSpecificCondition;
+  // customRepeat: { unit: RepeatUnit; value: number[] } | RepeatSpecificCondition;
 };
 
 export type RepeatSpecificCondition = { week: number; day: DaysOfWeekNum };

@@ -4,7 +4,7 @@ import PlemText from '../../components/Atoms/PlemText';
 import { Dropdown, DropdownItem } from '../../components/Dropdown';
 import SwitchInputRow from '../../components/SwitchInputRow';
 
-const currentDayStickerImage = require('../../assets/images/current_day_sticker.png');
+const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
 type YearlyRepetitionProps = {
   selectedDates: number[];
@@ -42,7 +42,7 @@ const YearlyRepetition = ({ selectedDates, setSelectedDates }: YearlyRepetitionP
                 justifyContent: 'center',
               }}>
               <ImageBackground
-                source={selectedDates.includes(month) ? currentDayStickerImage : null}
+                source={selectedDates.includes(month) ? currentDateStickerImage : null}
                 resizeMode="cover"
                 style={{ width: 32, height: 28, justifyContent: 'center', alignItems: 'center' }}
                 imageStyle={{ display: selectedDates.includes(month) ? 'flex' : 'none' }}>

@@ -32,7 +32,6 @@ type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChart
 const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const queryClient = useQueryClient();
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
-
   const isEdit = !!route.params?.chart;
 
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
@@ -85,6 +84,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     // test
     // setChart(chart);
 
+    // 수정
     if (route.params?.chart) {
       setChart(route.params.chart);
       return;
@@ -120,10 +120,11 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const onPressUpdate = () => {
-    if (updateChartLoading) {
+    if (updateChartLoading || !route.params?.chart.id) {
       return;
     }
-    updateChart(chart);
+    const newChart = { ...chart, id: route.params?.chart.id };
+    updateChart(newChart);
   };
 
   const onPressRepeatSetting = () => {

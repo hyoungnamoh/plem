@@ -12,12 +12,12 @@ import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: null, label: '없음' },
-  { key: 0, label: '이벤트 당시' },
-  { key: 5, label: '5분 전' },
-  { key: 10, label: '10분 전' },
-  { key: 15, label: '15분 전' },
-  { key: 30, label: '30분 전' },
-  { key: 60, label: '1시간 전' },
+  { key: '0', label: '이벤트 당시' },
+  { key: '5', label: '5분 전' },
+  { key: '10', label: '10분 전' },
+  { key: '15', label: '15분 전' },
+  { key: '30', label: '30분 전' },
+  { key: '60', label: '1시간 전' },
 ];
 
 type SetScheduleNotificationPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'ScheduleNotiSettingPage'>;
