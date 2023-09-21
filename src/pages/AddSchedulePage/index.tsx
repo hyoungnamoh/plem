@@ -1,20 +1,21 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, ImageSourcePropType } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
 import OptionsInputRow from '../../components/OptionsInputRow';
-import PaletteInputRow from '../../components/PaletteInputRow';
+import PaletteInputRow, { DEFAULT_CATEGORY_LIST, PaletteListItemType } from '../../components/PaletteInputRow';
 import SwitchInputRow from '../../components/SwitchInputRow';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addScheduleDefault, addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { notiOptiosList } from '../ScheduleNotiSettingPage';
 import { repeatOptionList } from '../ScheduleRepeatSettingPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
@@ -33,9 +34,11 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
+  const [categoryList, setCategoryList] = useState<PaletteListItemType[]>(DEFAULT_CATEGORY_LIST);
   const isEdit = !!route.params?.schedule;
 
   useEffect(() => {
+    getCategoryList();
     return () => setSchedule(addScheduleDefault);
   }, []);
 
@@ -53,7 +56,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   const onPressAddSchedule = () => {};
 
-  const onClickPalette = () => {
+  const onPressPalette = () => {
     setOpenPalette(!openPalette);
   };
 
@@ -65,8 +68,26 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     navigation.navigate('ScheduleRepeatSettingPage');
   };
 
+  const getCategoryList = async () => {
+    const categoriyList = await AsyncStorage.getItem('categoryList');
+    if (!categoriyList) {
+      return;
+    }
+    setCategoryList(JSON.parse(categoriyList));
+  };
+
+  const handleCatecoryClick = (category: string) => {
+    const newSchedule = { ...schedule };
+    newSchedule.category = category;
+    setSchedule(newSchedule);
+  };
+
+  const handlePaletteClose = () => {
+    setOpenPalette(false);
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
+    <TouchableWithoutFeedback onPress={handlePaletteClose}>
       <View style={styles.page}>
         <Header
           title="일정 추가"
@@ -79,10 +100,13 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           <View style={{ marginTop: 32, zIndex: 1000 }}>
             <PaletteInputRow
               label="카테고리"
-              value={'daily'}
-              onPress={onClickPalette}
+              onPress={onPressPalette}
               open={openPalette}
               palettePosition={{ x: -10, y: 8 }}
+              list={categoryList}
+              selectedItem={categoryList.find((item) => item.label === schedule.category) || categoryList[0]}
+              onSelect={handleCatecoryClick}
+              onClose={handlePaletteClose}
             />
           </View>
           <View style={{ marginTop: 32 }}>

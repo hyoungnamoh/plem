@@ -8,7 +8,7 @@ import { Schedule } from '../../types/calendar';
 
 export type CalendarTabStackParamList = {
   CalendarPage: undefined;
-  AddSchedulePage?: { schedule: Schedule };
+  AddSchedulePage?: { schedule?: Schedule };
   ScheduleNotiSettingPage: undefined;
   ScheduleRepeatSettingPage: undefined;
   RepeatCustomSettingPage: undefined;

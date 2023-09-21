@@ -8,8 +8,8 @@ export const addScheduleDefault: AddSchedule = {
   repeat: null,
   repeatDays: [],
   notification: 0,
-  startTime: dayjs('2023-01-08 00:00').toDate(),
-  endTime: dayjs('2023-01-08 00:10').toDate(), // FIXME
+  startTime: dayjs('2023-01-08 00:00'),
+  endTime: dayjs('2023-01-08 00:10'), // FIXME
   // customRepeat: { week: number; day: DaysOfWeekNum },
 };
 

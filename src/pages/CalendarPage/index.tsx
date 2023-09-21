@@ -29,7 +29,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
-  const [selectedDate, setSelectedDate] = useState<null | number>(null);
+  const [selectedDate, setSelectedDate] = useState<null | Dayjs>(null);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);
 
   const renderDaysOfWeek = () => {
@@ -45,12 +45,12 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   };
 
   const onPressDate = (date: number) => {
-    if (date === selectedDate) {
+    if (date === selectedDate?.date()) {
       setOpenScheduleModal(false);
       setSelectedDate(null);
     } else {
       setOpenScheduleModal(true);
-      setSelectedDate(date);
+      setSelectedDate(currentDate.set('date', date));
     }
   };
 
@@ -84,16 +84,9 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
     const dateComponents = datesOfMonth.map((date) => {
       const isCurrentDate = currentDate.date() === date;
-      const isSelectedDate = selectedDate === date;
+      const isSelectedDate = selectedDate?.date() === date;
       return (
-        <Pressable
-          key={date}
-          onPress={() => onPressDate(date)}
-          style={{
-            width: Math.floor(Dimensions.get('screen').width / 7),
-            alignItems: 'center',
-            height: 64,
-          }}>
+        <Pressable key={date} onPress={() => onPressDate(date)} style={styles.dateCell}>
           <ImageBackground
             source={isCurrentDate ? currentDateStickerImage : circleStrokeImage}
             resizeMode="cover"
@@ -119,7 +112,8 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
     setSelectedDate(null);
   };
 
-  const onPressAddSchedule = () => {
+  const onPressAddSchedule = (date: Dayjs) => {
+    setSchedule({ ...schedule, startTime: date, endTime: date });
     navigation.navigate('AddSchedulePage');
   };
 
@@ -129,7 +123,9 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
         <View style={styles.page}>
           <View style={styles.pageHeader}>
             <PlemText style={styles.pageHeaderDate}>{`${currentDate.year()}년 ${currentDate.month() + 1}월`}</PlemText>
-            <Image source={plusImage} />
+            <Pressable onPress={() => onPressAddSchedule(currentDate)}>
+              <Image source={plusImage} />
+            </Pressable>
           </View>
           <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek()}</View>
           <Image source={daysLineImage} style={styles.daysLineImage} />
@@ -138,10 +134,10 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
       </TouchableWithoutFeedback>
       <AddScheduleModal
         open={openScheduleModal}
-        date={selectedDate ? dayjs(currentDate.set('date', selectedDate)) : currentDate}
-        day={selectedDate}
+        date={selectedDate || currentDate}
+        day={(selectedDate || currentDate).date()}
         close={onPressScheduleModalClose}
-        onPressAddSchedule={onPressAddSchedule}
+        onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
       />
     </>
   );
@@ -182,6 +178,11 @@ const styles = StyleSheet.create({
     height: 22,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  dateCell: {
+    width: Math.floor(Dimensions.get('screen').width / 7),
+    alignItems: 'center',
+    height: 64,
   },
 });
 

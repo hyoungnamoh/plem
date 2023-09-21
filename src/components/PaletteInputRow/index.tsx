@@ -9,58 +9,64 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Category, CategoryKor } from '../../../types/calendar';
 import PlemText from '../Atoms/PlemText';
-import CategoryEditRow from './CategoryEditRow';
-import CategoryRow from './CategoryRow';
+import PaletteListItem from './PaletteListItem';
 
 const underlineImage = require('../../assets/images/underline.png');
 
-const paletteFF6550 = require('../../assets/images/palette_ff6550.png');
-const palette22DA81 = require('../../assets/images/palette_22da81.png');
-const palette4569FF = require('../../assets/images/palette_4659ff.png');
-const paletteFFC700 = require('../../assets/images/palette_ffc700.png');
+const paletteFF6550: number = require('../../assets/images/palette_ff6550.png');
+const palette22DA81: number = require('../../assets/images/palette_22da81.png');
+const palette4569FF: number = require('../../assets/images/palette_4659ff.png');
+const paletteFFC700: number = require('../../assets/images/palette_ffc700.png');
 
 const calendarPaletteBoxImage = require('../../assets/images/calendar_palette_box.png');
 
-const CATEGORY_LIST: { [key in Category]: { label: CategoryKor; value: Category; image: ImageSourcePropType } } = {
-  daily: {
+export const DEFAULT_CATEGORY_LIST = [
+  {
     label: '일상',
-    value: 'daily',
     image: paletteFF6550,
   },
-  birth: {
+  {
     label: '생일',
-    value: 'birth',
     image: paletteFFC700,
   },
-  promise: {
+  {
     label: '약속',
-    value: 'promise',
     image: palette22DA81,
   },
-  banking: {
+  {
     label: '금융',
-    value: 'banking',
     image: palette4569FF,
   },
-} as const;
+];
+
+export type PaletteListItemType = { label: string; image: ImageSourcePropType };
 
 type PaletteInputRowProps = {
   label: string;
-  value: Category;
   open: boolean;
   palettePosition?: {
     x?: number;
     y?: number;
   };
+  list: PaletteListItemType[];
+  selectedItem: PaletteListItemType;
+  onSelect: (value: string) => void;
+  onClose: () => void;
 };
 
-const PaletteInputRow = ({ label, value, open, palettePosition, onPress }: PaletteInputRowProps & PressableProps) => {
-  const category = CATEGORY_LIST[value];
-
+const PaletteInputRow = ({
+  label,
+  open,
+  palettePosition,
+  onPress,
+  list,
+  selectedItem,
+  onSelect,
+  onClose,
+}: PaletteInputRowProps & PressableProps) => {
   const [paletteBoxPosition, setPaletteBoxPosition] = useState({ x: 0, y: 0 });
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const paletteImageRef = useRef(null);
   const paletteModalRef = useRef<View>(null);
@@ -73,14 +79,19 @@ const PaletteInputRow = ({ label, value, open, palettePosition, onPress }: Palet
     onPress && onPress(e);
   };
 
+  const handleItemSelect = (value: string) => {
+    onSelect(value);
+    onClose();
+  };
+
   return (
     <TouchableWithoutFeedback>
       <View>
         <PlemText style={styles.label}>{label}</PlemText>
         <View style={styles.underlineButtonWrap}>
-          <PlemText>{category.label}</PlemText>
+          <PlemText>{selectedItem.label}</PlemText>
           <Pressable style={styles.paletteButton} onPress={onPressPalette} hitSlop={10}>
-            <Image source={category.image} style={styles.paletteImage} ref={paletteImageRef} />
+            <Image source={selectedItem.image} style={styles.paletteImage} ref={paletteImageRef} />
           </Pressable>
           {open && (
             <View
@@ -100,13 +111,20 @@ const PaletteInputRow = ({ label, value, open, palettePosition, onPress }: Palet
                     alignItems: 'center',
                   }}>
                   <PlemText style={{ color: '#888888', fontSize: 16 }}>카테고리 선택</PlemText>
-                  <Pressable onPress={() => setIsEdit(!isEdit)}>
-                    <PlemText style={{ color: '#444444', fontSize: 16 }}>편집</PlemText>
+                  <Pressable onPress={() => setIsEditing(!isEditing)}>
+                    <PlemText style={{ color: '#444444', fontSize: 16 }}>{isEditing ? '완료' : '편집'}</PlemText>
                   </Pressable>
                 </View>
-                {Object.keys(CATEGORY_LIST).map((key) => {
-                  const item = CATEGORY_LIST[key as Category];
-                  return <CategoryEditRow key={item.value} item={item} />;
+                {list.map((item, index) => {
+                  return (
+                    <PaletteListItem
+                      key={`${item.label}-${item.image}-${index}`}
+                      index={index}
+                      item={item}
+                      onSelect={handleItemSelect}
+                      isEditing={isEditing}
+                    />
+                  );
                 })}
               </View>
             </View>

@@ -31,6 +31,8 @@ import { LoggedInUser } from './types/user';
 import SplashScreen from 'react-native-splash-screen';
 import { disableLoadingState } from './src/states/disableLoadingState';
 import { LoggedInTabParamList, LoggedOutStackParamList } from './types/appInner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_CATEGORY_LIST } from './src/components/PaletteInputRow';
 
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
@@ -45,6 +47,7 @@ function AppInner({ routeName }: { routeName: string }) {
 
   useEffect(() => {
     loginCheck();
+    setScheduleCategoryList();
   }, []);
 
   const loginCheck = async () => {
@@ -59,6 +62,13 @@ function AppInner({ routeName }: { routeName: string }) {
     const user = jwt_decode<LoggedInUser>(token);
     setLoggedInUser(user);
     SplashScreen.hide();
+  };
+
+  const setScheduleCategoryList = async () => {
+    const categoryList = await AsyncStorage.getItem('categoryList');
+    if (!categoryList) {
+      await AsyncStorage.setItem('categoryList', JSON.stringify(DEFAULT_CATEGORY_LIST));
+    }
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
