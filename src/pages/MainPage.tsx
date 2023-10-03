@@ -103,7 +103,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
       <View style={styles.chartWrap}>
         <MainSVGFrame />
       </View>
-      <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} />
+      {/* <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} /> */}
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>

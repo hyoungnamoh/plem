@@ -1,5 +1,5 @@
 import React from 'react';
-// import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Path, Text } from 'react-native-svg';
 
 const Sector = ({
@@ -16,9 +16,8 @@ const Sector = ({
   href,
   transitionDuration,
   transitionTimingFunction,
-  dd,
+  coord,
 }) => {
-  console.log(dd.x1, dd.y1);
   let result;
   const content = (
     <>
@@ -41,19 +40,22 @@ const Sector = ({
       {/* <View style={{ backgroundColor: 'blue' }}>
           <Text>하이</Text>
         </View> */}
-      <Text fill={'#000'} fontSize="8" x={55} y={108} textAnchor="middle">
-        꿀같은 낮잠시간
+      {/* <View
+        style={{ width: 20, height: 20, backgroundColor: 'red', position: 'absolute', left: coord.x, top: coord.y }}
+      /> */}
+      <Text fill={'#000'} fontSize="8" x={coord.x} y={coord.y} textAnchor="middle">
+        결과
       </Text>
     </>
   );
 
-  if (href) {
-    result = <a href={href}>{content}</a>;
-  } else {
-    result = content;
-  }
-
-  return result;
+  // if (href) {
+  //   result = <a href={href}>{content}</a>;
+  // } else {
+  //   result = content;
+  // }
+  // console.log(coord);
+  return content;
 };
 
 export default Sector;

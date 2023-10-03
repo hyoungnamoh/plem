@@ -5,6 +5,7 @@ import Svg, { Circle, G, Path } from 'react-native-svg';
 import PlanChartSVG from './PlanChartSVG';
 
 type CategoryStatisticData = { percentage: number; category: string };
+
 const MainSVGFrame = () => {
   const getCoordinateForPercent = (percent: number): number[] => {
     const x = Math.cos(2 * Math.PI * percent);
@@ -70,12 +71,21 @@ const MainSVGFrame = () => {
         <View
           style={{
             justifyContent: 'center',
-            backgroundColor: 'yellow',
             width: 345,
             height: 345,
             alignItems: 'center',
           }}>
-          <PlanChartSVG style={{ backgroundColor: 'red', width: 300, height: 300 }} />
+          <PlanChartSVG style={{ width: 300, height: 300 }} strokeWidth={1} />
+          <PlanChartSVG
+            strokeWidth={100}
+            style={{
+              backgroundColor: 'transparent',
+              width: 300,
+              height: 300,
+              position: 'absolute',
+              zIndex: 100,
+            }}
+          />
         </View>
       </View>
       <PlanGrid style={{ position: 'absolute' }} />

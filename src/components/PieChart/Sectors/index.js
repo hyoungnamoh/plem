@@ -19,9 +19,9 @@ const Sectors = ({
   let angleEnd = startAngle;
   return total > 0 ? (
     <G>
-      {data.map((d, i) => {
-        const isLarge = d.value / total > 0.5;
-        const angle = (360 * d.value) / total;
+      {data.map((plan, i) => {
+        const isLarge = plan.value / total > 0.5;
+        const angle = (360 * plan.value) / total;
         const radius = center - strokeWidth / 2;
         angleStart = angleEnd;
         angleMargin = angleMargin > angle ? angle : angleMargin;
@@ -31,7 +31,10 @@ const Sectors = ({
         const y1 = center + radius * Math.sin((Math.PI * angleStart) / 180);
         const x2 = center + radius * Math.cos((Math.PI * angleEnd) / 180);
         const y2 = center + radius * Math.sin((Math.PI * angleEnd) / 180);
-        // console.log(x1, y1, x2, y2);
+        // console.log('[x1, y1]', x1, y1);
+        // console.log('[x2, y2]', x2, y2);
+        // console.log('[X]', 0.3 * ((x1 + x2) / 2) + 100);
+        // console.log('[Y]', 0.3 * ((y1 + y2) / 2) + 100);
         const path = `
           M${center},${center}
           L${x1},${y1}
@@ -46,18 +49,18 @@ const Sectors = ({
         return (
           <Sector
             key={'sector' + i}
-            fill={d.color}
+            fill={plan.color}
             path={path}
             strokeColor={strokeColor}
             strokeWidth={strokeWidth}
             total={total}
-            // onMouseEnter={(e) => onSectorHover(d, i, e)}
+            // onMouseEnter={(e) => onSectorHover(plan, i, e)}
             // onMouseLeave={(e) => onSectorHover(null, null, e)}
             // onTouchEnd={(e) => onSectorHover(null, null, e)}
-            // onTouchStart={(e) => onSectorHover(d, i, e)}
+            // onTouchStart={(e) => onSectorHover(plan, i, e)}
             {...props}
-            {...d}
-            dd={{ x1, y1 }}
+            {...plan}
+            coord={{ x: (x1 + x2 + 100) / 4, y: (y1 + y2 + 100) / 4 }}
           />
         );
       })}
