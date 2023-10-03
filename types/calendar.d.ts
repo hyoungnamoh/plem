@@ -17,7 +17,7 @@ export type Schedule = {
 
 export type RepeatSpecificCondition = { week: number; day: DaysOfWeekNum };
 
-export type ScheduleNotification = null | 0 | 5 | 10 | 15 | 30 | 60;
+export type ScheduleNotification = null | '0' | '5' | '10' | '15' | '30' | '60'; // asyncstorage에 저장하면서 number -> string으로 변경
 
 export type AddSchedule = Omit<Schedule, 'createdAt' | 'id' | 'updatedAt'>;
 

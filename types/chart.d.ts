@@ -25,7 +25,7 @@ export type Plan = {
 
 // export type PlanTime = { hour: number; minute: number };
 
-export type PlanNotification = null | '0' | '5' | '10' | '15' | '30' | '60'; // 안함 | 당시 | 5분전 | 10분전 | 15분전 | 30분전 | 1시간전
+export type PlanNotification = null | '0' | '5' | '10' | '15' | '30' | '60'; // asyncstorage에 저장하면서 number -> string으로 변경 안함 | 당시 | 5분전 | 10분전 | 15분전 | 30분전 | 1시간전
 
 export type PlanChart = {
   id: number;
