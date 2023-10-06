@@ -49,44 +49,50 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   };
 
   const isDuplicatedTime = () => {
-    const today = dayjs();
     const duplicatePlan = chart.plans.find((p, pIndex) => {
       if (isModify && pIndex === route.params?.planIndex) {
         return;
       }
-      const planStart = today.set('hour', p.startHour).set('minute', p.startMin);
-      const planEnd = today.set('hour', p.endHour).set('minute', p.endMin);
-      const checkValueStart = today.set('hour', startHour).set('minute', startMin);
-      const checkValueEnd = today.set('hour', endHour).set('minute', endMin);
-      return (
-        duplicateTimeCheck(checkValueStart, planStart, planEnd) ||
-        duplicateTimeCheck(checkValueEnd, planStart, planEnd) ||
-        duplicateTimeCheck(planStart, checkValueStart, checkValueEnd) ||
-        duplicateTimeCheck(planEnd, checkValueStart, checkValueEnd)
-      );
+      const timeRange = { startHour: p.startHour, startMin: p.startMin, endHour: p.endHour, endMin: p.endMin };
+      return duplicateTimeCheck({
+        targetTime: { startHour: startHour, startMin: startMin, endHour: endHour, endMin: endMin },
+        timeRange,
+      });
     });
 
     return duplicatePlan;
   };
 
-  const duplicateTimeCheck = (value: Dayjs, start: Dayjs, end: Dayjs) => {
-    return value.isAfter(start) && value.isBefore(end);
-    // value.isSame(start) || value.isSame(end);
+  const duplicateTimeCheck = ({
+    targetTime,
+    timeRange,
+  }: {
+    targetTime: { startHour: number; startMin: number; endHour: number; endMin: number };
+    timeRange: { startHour: number; startMin: number; endHour: number; endMin: number };
+  }) => {
+    const today = dayjs();
+    const targetStart = dayjs(today).set('hour', targetTime.startHour).set('minute', targetTime.startMin);
+    const targetEnd = dayjs(today).set('hour', targetTime.endHour).set('minute', targetTime.endMin);
+    let rangeStart = dayjs(today).set('hour', timeRange.startHour).set('minute', timeRange.startMin);
+    let rangeEnd = dayjs(today).set('hour', timeRange.endHour).set('minute', timeRange.endMin);
+
+    if (rangeStart.isAfter(rangeEnd)) {
+      rangeEnd = rangeEnd.add(1, 'day');
+    }
+
+    return (
+      (targetStart.isAfter(rangeStart) && targetStart.isBefore(rangeEnd)) ||
+      (targetEnd.isAfter(rangeStart) && targetEnd.isBefore(rangeEnd))
+    );
   };
 
   const onPressAddPlan = () => {
-    if (isInvalidTime()) {
-      return Alert.alert('종료시간이 시작시간과\n같거나 빠를 수 없습니다.');
-    }
     if (isDuplicatedTime()) {
       return Alert.alert('시간이 중복되는 계획이 있어요.');
     }
 
     const copiedChart = cloneDeep(chart);
-    // const startHour = startHour;
-    // const startMin = startMin;
-    // const endHour = endHour;
-    // const endMin = endMin;
+
     const newPlan: AddPlan = {
       ...plan,
       name,
@@ -94,8 +100,6 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
       startMin,
       endHour,
       endMin,
-      // startTime: { hour: startHour, minute: startMin },
-      // endTime: { hour: endHour, minute: endMin },
     };
 
     if (isModify) {
@@ -124,8 +128,9 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   };
 
   const onPressStartConfirm = (date: Date) => {
-    const newStart = dayjs(date);
+    const newStart = dayjs().set('hour', date.getHours()).set('minute', date.getMinutes());
     const end = dayjs().set('hour', endHour).set('minute', endMin);
+
     if (end.diff(newStart) < 600000) {
       const newEnd = newStart.add(10, 'minute');
       setEndHour(newEnd.get('hour'));
