@@ -20,8 +20,6 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   const [startMin, setStartMin] = useState(0);
   const [endHour, setEndHour] = useState(1);
   const [endMin, setEndMin] = useState(0);
-  // const [startTime, setStartTime] = useState<PlanTime>({ hour: 0, minute: 0 });
-  // const [endTime, setEndTime] = useState<PlanTime>({ hour: 1, minute: 0 });
   const [name, setName] = useState('');
 
   useEffect(() => {
@@ -63,6 +61,25 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     return duplicatePlan;
   };
 
+  const reverseTimeDuplicateCheck = ({
+    startTime1,
+    endTime1,
+    startTime2,
+    endTime2,
+  }: {
+    startTime1: Dayjs;
+    endTime1: Dayjs;
+    startTime2: Dayjs;
+    endTime2: Dayjs;
+  }) => {
+    return (
+      startTime1.isAfter(startTime2) ||
+      (startTime1.isAfter(dayjs().startOf('date')) && startTime1.isBefore(endTime2)) ||
+      endTime1.isAfter(startTime2) ||
+      (startTime1.isSame(startTime2) && endTime1.isSame(endTime2))
+    );
+  };
+
   const duplicateTimeCheck = ({
     targetTime,
     timeRange,
@@ -73,16 +90,47 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     const today = dayjs();
     const targetStart = dayjs(today).set('hour', targetTime.startHour).set('minute', targetTime.startMin);
     const targetEnd = dayjs(today).set('hour', targetTime.endHour).set('minute', targetTime.endMin);
-    let rangeStart = dayjs(today).set('hour', timeRange.startHour).set('minute', timeRange.startMin);
-    let rangeEnd = dayjs(today).set('hour', timeRange.endHour).set('minute', timeRange.endMin);
+    const rangeStart = dayjs(today).set('hour', timeRange.startHour).set('minute', timeRange.startMin);
+    const rangeEnd = dayjs(today).set('hour', timeRange.endHour).set('minute', timeRange.endMin);
 
-    if (rangeStart.isAfter(rangeEnd)) {
-      rangeEnd = rangeEnd.add(1, 'day');
+    // 저장되어 있는 계획의 시작시간이 종료 시간보다 느릴 경우 ex) 22:00-04:00
+    if (rangeStart.isAfter(rangeEnd) && targetStart.isAfter(targetEnd)) {
+      return (
+        reverseTimeDuplicateCheck({
+          startTime1: rangeStart,
+          endTime1: rangeEnd,
+          startTime2: targetStart,
+          endTime2: targetEnd,
+        }) ||
+        reverseTimeDuplicateCheck({
+          startTime1: targetStart,
+          endTime1: targetEnd,
+          startTime2: rangeStart,
+          endTime2: rangeEnd,
+        })
+      );
+    } else if (targetStart.isAfter(targetEnd)) {
+      return reverseTimeDuplicateCheck({
+        startTime1: rangeStart,
+        endTime1: rangeEnd,
+        startTime2: targetStart,
+        endTime2: targetEnd,
+      });
+    } else if (rangeStart.isAfter(rangeEnd)) {
+      return reverseTimeDuplicateCheck({
+        startTime1: targetStart,
+        endTime1: targetEnd,
+        startTime2: rangeStart,
+        endTime2: rangeEnd,
+      });
     }
 
     return (
       (targetStart.isAfter(rangeStart) && targetStart.isBefore(rangeEnd)) ||
-      (targetEnd.isAfter(rangeStart) && targetEnd.isBefore(rangeEnd))
+      (targetEnd.isAfter(rangeStart) && targetEnd.isBefore(rangeEnd)) ||
+      (rangeStart.isAfter(targetStart) && rangeStart.isBefore(targetEnd)) ||
+      (rangeEnd.isAfter(targetStart) && rangeEnd.isBefore(targetEnd)) ||
+      (targetStart.isSame(rangeStart) && targetEnd.isSame(rangeEnd))
     );
   };
 
