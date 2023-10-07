@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, ImageSourcePropType } from 'react-native';
+import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
@@ -16,26 +16,33 @@ import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { notiOptiosList } from '../ScheduleNotiSettingPage';
 import { repeatOptionList } from '../ScheduleRepeatSettingPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { timePadStart } from '../../helper/timePadStart';
 
-const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
-const plusImage = require('../../assets/images/plus.png');
-const daysLineImage = require('../../assets/images/calendar_days_line.png');
-const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
-const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
 const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
+  const isEdit = !!route.params?.schedule;
+
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
+
   const [name, setName] = useState('');
-  const [startTime, setStartTime] = useState<Dayjs>(dayjs('2023-01-08 00:00'));
-  const [endTime, setEndTime] = useState<Dayjs>(dayjs('2023-01-08 00:10'));
+  const [startDate, setStartDate] = useState<Dayjs>(route.params?.startDate ? dayjs(route.params?.startDate) : dayjs());
+  const [endDate, setEndDate] = useState<Dayjs>(route.params?.endDate ? dayjs(route.params?.endDate) : dayjs());
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
   const [categoryList, setCategoryList] = useState<PaletteListItemType[]>(DEFAULT_CATEGORY_LIST);
-  const isEdit = !!route.params?.schedule;
+  const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
+  const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
+  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+  const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
+  const [startHour, setStartHour] = useState(0);
+  const [startMin, setStartMin] = useState(0);
+  const [endHour, setEndHour] = useState(1);
+  const [endMin, setEndMin] = useState(0);
 
   useEffect(() => {
     getCategoryList();
@@ -46,15 +53,17 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     navigation.goBack();
   };
 
-  const onPressSetStart = () => {
-    // setOpenStartTimePicker(true);
+  const onPressAddSchedule = () => {
+    // if (isInvalidTime()) {
+    //   return Alert.alert('종료시간이 시작시간 보다 빠를 수 없습니다.');
+    // }
   };
 
-  const onPressSetEnd = () => {
-    // setOpenEndTimePicker(true);
+  const isInvalidTime = () => {
+    const start = dayjs().set('hour', startHour).set('minute', startMin);
+    const end = dayjs().set('hour', endHour).set('minute', endMin);
+    return start.isAfter(end);
   };
-
-  const onPressAddSchedule = () => {};
 
   const onPressPalette = () => {
     setOpenPalette(!openPalette);
@@ -86,6 +95,76 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     setOpenPalette(false);
   };
 
+  const onPressStartTimeConfirm = (date: Date) => {
+    const newStart = dayjs().set('hour', date.getHours()).set('minute', date.getMinutes());
+    const end = dayjs().set('hour', endHour).set('minute', endMin);
+
+    // if (end.diff(newStart) < 600000) {
+    //   const newEnd = newStart.add(10, 'minute');
+    //   setEndHour(newEnd.get('hour'));
+    //   setEndMin(newEnd.get('minute'));
+    // }
+    setStartHour(newStart.get('hour'));
+    setStartMin(newStart.get('minute'));
+
+    setOpenStartTimePicker(false);
+  };
+
+  const onPressStartTimeCancel = () => {
+    setOpenStartTimePicker(false);
+  };
+
+  const onPressEndTimeCancel = () => {
+    setOpenEndTimePicker(false);
+  };
+
+  const onPressSetStartTime = () => {
+    setOpenStartTimePicker(true);
+  };
+
+  const onPressSetEndTime = () => {
+    setOpenEndTimePicker(true);
+  };
+
+  const getTimePickerValue = ({ hour, min }: { hour: number; min: number }) => {
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(min);
+    return date;
+  };
+
+  const onPressEndTimeConfirm = (date: Date) => {
+    setEndHour(date.getHours());
+    setEndMin(date.getMinutes());
+    setOpenEndTimePicker(false);
+  };
+
+  const onPressStartDateConfirm = (date: Date) => {
+    setStartDate(dayjs(date));
+    setOpenStartDatePicker(false);
+  };
+
+  const onPressStartDateCancel = () => {
+    setOpenStartDatePicker(false);
+  };
+
+  const onPressEndDateConfirm = (date: Date) => {
+    setEndDate(dayjs(date));
+    setOpenEndDatePicker(false);
+  };
+
+  const onPressEndDateCancel = () => {
+    setOpenEndDatePicker(false);
+  };
+
+  const onPressSetStartDate = () => {
+    setOpenStartDatePicker(true);
+  };
+
+  const onPressSetEndDate = () => {
+    setOpenEndDatePicker(true);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={handlePaletteClose}>
       <View style={styles.page}>
@@ -113,33 +192,82 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
             <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
           </View>
           <View>
-            <PlemText style={[styles.label, { marginTop: 32 }]}>시간</PlemText>
-            <View style={styles.timeInputContainer}>
-              <View style={{ flex: 1 }}>
-                <View style={styles.timeInputWrap}>
-                  <PlemText>시작 시간</PlemText>
-                  <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
-                    <PlemText style={{ color: startTime ? '#000000' : '#AAAAAA' }}>
-                      {startTime ? startTime.format('HH:mm') : '00:00'}
-                    </PlemText>
-                    <Image source={arrowDownImage} style={styles.arrowDownImage} />
-                  </Pressable>
+            {isAllDay ? (
+              <>
+                <PlemText style={[styles.label, { marginTop: 32 }]}>날짜</PlemText>
+                <View style={styles.dateInputContainer}>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>시작</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetStartDate}>
+                        <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
+                  <View style={{ flex: 1, marginLeft: 15 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>날짜</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetEndDate}>
+                        <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
                 </View>
-                <Image source={underlineImage} style={styles.underlineImage} />
-              </View>
-              <View style={{ flex: 1, marginLeft: 15 }}>
-                <View style={styles.timeInputWrap}>
-                  <PlemText>종료 시간</PlemText>
-                  <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
-                    <PlemText style={{ color: endTime ? '#000000' : '#AAAAAA' }}>
-                      {endTime ? endTime.format('HH:mm') : '00:00'}
-                    </PlemText>
-                    <Image source={arrowDownImage} style={styles.arrowDownImage} />
-                  </Pressable>
+              </>
+            ) : (
+              <>
+                <PlemText style={[styles.label, { marginTop: 32 }]}>시작</PlemText>
+                <View style={styles.dateInputContainer}>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>날짜</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetStartDate}>
+                        <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
+                  <View style={{ flex: 1, marginLeft: 15 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>시간</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetStartTime}>
+                        <PlemText>{`${timePadStart(startHour)}:${timePadStart(startMin)}`}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
                 </View>
-                <Image source={underlineImage} style={styles.underlineImage} />
-              </View>
-            </View>
+                <PlemText style={[styles.label, { marginTop: 32 }]}>종료</PlemText>
+                <View style={styles.dateInputContainer}>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>날짜</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetEndDate}>
+                        <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
+                  <View style={{ flex: 1, marginLeft: 15 }}>
+                    <View style={styles.dateInputWrap}>
+                      <PlemText>시간</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={onPressSetEndTime}>
+                        <PlemText>{`${timePadStart(endHour)}:${timePadStart(endMin)}`}</PlemText>
+                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                      </Pressable>
+                    </View>
+                    <Image source={underlineImage} style={styles.underlineImage} />
+                  </View>
+                </View>
+              </>
+            )}
             <View style={{ marginTop: 32 }}>
               <OptionsInputRow
                 label={'알림'}
@@ -157,6 +285,40 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           </View>
         </View>
         <BottomButton title={'등록'} disabled={false} onPress={onPressAddSchedule} />
+        <DateTimePickerModal
+          isVisible={openStartTimePicker}
+          mode="time"
+          onConfirm={onPressStartTimeConfirm}
+          onCancel={onPressStartTimeCancel}
+          locale="en_GB"
+          is24Hour
+          minuteInterval={10}
+          date={getTimePickerValue({ hour: startHour, min: startMin })}
+        />
+        <DateTimePickerModal
+          isVisible={openEndTimePicker}
+          mode="time"
+          onConfirm={onPressEndTimeConfirm}
+          onCancel={onPressEndTimeCancel}
+          locale="en_GB"
+          is24Hour
+          minuteInterval={10}
+          date={getTimePickerValue({ hour: endHour, min: endMin })}
+        />
+        <DateTimePickerModal
+          isVisible={openStartDatePicker}
+          mode="date"
+          onConfirm={onPressStartDateConfirm}
+          onCancel={onPressStartDateCancel}
+          date={startDate.toDate()}
+        />
+        <DateTimePickerModal
+          isVisible={openEndDatePicker}
+          mode="date"
+          onConfirm={onPressEndDateConfirm}
+          onCancel={onPressEndDateCancel}
+          date={endDate.toDate()}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -192,16 +354,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
   },
-  timeInputContainer: {
+  dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  timeInputWrap: {
+  dateInputWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  setTimeButton: {
+  setDateButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },

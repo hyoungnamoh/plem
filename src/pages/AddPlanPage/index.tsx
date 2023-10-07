@@ -32,14 +32,13 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
     onPressSetNotification,
     plan,
     onPressAddPlan,
-    openStartPicker,
+    openStartTimePicker,
     onPressStartConfirm,
     onPressStartCancel,
     openEndPicker,
     onPressEndConfirm,
     onPressEndCancel,
-    getStartPickerValue,
-    getEndPickerValue,
+    getTimePickerValue,
   } = useAddPlan({
     route,
     navigation,
@@ -114,14 +113,14 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         onPress={onPressAddPlan}
       />
       <DateTimePickerModal
-        isVisible={openStartPicker}
+        isVisible={openStartTimePicker}
         mode="time"
         onConfirm={onPressStartConfirm}
         onCancel={onPressStartCancel}
         locale="en_GB"
         is24Hour
         minuteInterval={10}
-        date={getStartPickerValue()}
+        date={getTimePickerValue({ hour: startHour, min: startMin })}
       />
       <DateTimePickerModal
         isVisible={openEndPicker}
@@ -131,7 +130,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         locale="en_GB"
         is24Hour
         minuteInterval={10}
-        date={getEndPickerValue()}
+        date={getTimePickerValue({ hour: endHour, min: endMin })}
       />
     </View>
   );
