@@ -36,7 +36,7 @@ export type PlanChart = {
   removedAt: null;
   plans: Plan[];
   repeats: Repeats;
-  repeatDays?: number[];
+  repeatDates?: number[];
   orderNum: number;
 };
 
