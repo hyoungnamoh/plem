@@ -1,23 +1,19 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import dayjs from 'dayjs';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { LoggedInTabParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { ApiResponse } from '../../types/axios';
-import { getPlanChart } from '../api/charts/getPlanChartApi';
 import { MainTabStackParamList } from '../tabs/MainTab';
-import { PlanChart } from '../../types/chart';
 import { MAIN_COLOR } from '../constants/colors';
 import MainSVGFrame from '../components/MainSVGFrame';
 import { loggedInUserState } from '../states/loggedInUserState';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import { useGetPlanChart } from '../hooks/queries/useGetPlanChart';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -61,35 +57,32 @@ const MainPage = ({ navigation }: MainPageProps) => {
 
   const setAsyncStorageData = async () => {
     const item = await AsyncStorage.getItem('plan_checked_list');
-    const checkedList = item ? JSON.parse(item) : [];
-    setCheckedList(checkedList);
+    const planCheckList = item ? JSON.parse(item) : [];
+    setCheckedList(planCheckList);
   };
 
   const onPressSubPlanRow = async (id: number) => {
     const asyncStorageItem = await AsyncStorage.getItem('plan_checked_list');
-    const checkedList: number[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
-    const idIndex = checkedList.findIndex((e) => e === id);
-    // const isChecked = checkedList.includes(id);
+    const planCheckList: number[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
+    const idIndex = planCheckList.findIndex((e) => e === id);
+    // const isChecked = planCheckList.includes(id);
 
     if (idIndex < 0) {
-      checkedList.push(id);
+      planCheckList.push(id);
     } else {
-      checkedList.splice(idIndex, 1);
+      planCheckList.splice(idIndex, 1);
     }
 
-    setCheckedList(checkedList);
-    await AsyncStorage.setItem('plan_checked_list', JSON.stringify(checkedList));
+    setCheckedList(planCheckList);
+    await AsyncStorage.setItem('plan_checked_list', JSON.stringify(planCheckList));
   };
 
   const onPressAddChart = () => {
     navigation.navigate('AddChartPage');
   };
 
-  const {
-    isLoading,
-    data: planChartData,
-    isError,
-  } = useQuery<ApiResponse<PlanChart>>('getPlanChart', () => getPlanChart({ id: 285 }));
+  const { data: planChartData } = useGetPlanChart({ id: 203 });
+
   return (
     <View style={styles.page}>
       <View style={styles.mainHeader}>

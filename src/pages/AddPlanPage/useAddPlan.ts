@@ -68,7 +68,7 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   }) => {
     return (
       startTime1.isAfter(startTime2) ||
-      (startTime1.isAfter(dayjs().startOf('date')) && startTime1.isBefore(endTime2)) ||
+      (startTime1.isAfter(startTime1.startOf('date')) && startTime1.isBefore(endTime2)) ||
       endTime1.isAfter(startTime2) ||
       (startTime1.isSame(startTime2) && endTime1.isSame(endTime2))
     );

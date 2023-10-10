@@ -8,7 +8,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
 import OptionsInputRow from '../../components/OptionsInputRow';
-import PaletteInputRow, { DEFAULT_CATEGORY_LIST, PaletteListItemType } from '../../components/PaletteInputRow';
+import PaletteInputRow, { PaletteListItemType } from '../../components/PaletteInputRow';
 import SwitchInputRow from '../../components/SwitchInputRow';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addScheduleDefault, addScheduleState } from '../../states/addScheduleState';
@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { timePadStart } from '../../helper/timePadStart';
 import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
+import { categoryListState } from '../../states/categoryListState';
 
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
@@ -29,6 +30,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const propSchedule = route.params?.schedule;
 
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
+  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
 
   const [name, setName] = useState('');
   const [startDate, setStartDate] = useState<Dayjs>(
@@ -39,7 +41,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   );
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
-  const [categoryList, setCategoryList] = useState<PaletteListItemType[]>(DEFAULT_CATEGORY_LIST);
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);

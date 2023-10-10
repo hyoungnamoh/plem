@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -17,6 +17,8 @@ import { DAYS_OF_WEEK } from '../../constants/dates';
 import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { AddScheduleModal } from './AddScheduleModal';
+import { useGetScheduleList } from '../../hooks/queries/useGetScheduleList';
+import { categoryListState } from '../../states/categoryListState';
 
 const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
@@ -27,10 +29,13 @@ type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'Cale
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
+  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const [selectedDate, setSelectedDate] = useState<null | Dayjs>(null);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);
+
+  const { data: scheduleList } = useGetScheduleList({ date: dayjs().toISOString() });
 
   const renderDaysOfWeek = () => {
     return DAYS_OF_WEEK.map((day) => {
@@ -100,6 +105,22 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
               {date}
             </PlemText>
           </ImageBackground>
+          <View style={{ marginTop: 2 }}>
+            {scheduleList?.data[date].map((reservedSchedule) => {
+              return (
+                <View key={reservedSchedule.id} style={styles.scheduleRow}>
+                  <Image
+                    source={
+                      categoryList.find((category) => category.value === reservedSchedule.category)?.image ||
+                      categoryList[0].image
+                    }
+                    style={styles.scheduleSticker}
+                  />
+                  <PlemText style={styles.scheduleName}>{reservedSchedule.name}</PlemText>
+                </View>
+              );
+            })}
+          </View>
         </Pressable>
       );
     });
@@ -138,6 +159,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
         day={(selectedDate || currentDate).date()}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
+        schedules={scheduleList?.data[(selectedDate || currentDate).date()] || []}
       />
     </>
   );
@@ -182,7 +204,21 @@ const styles = StyleSheet.create({
   dateCell: {
     width: Math.floor(Dimensions.get('screen').width / 7),
     alignItems: 'center',
-    height: 64,
+    minHeight: 64,
+  },
+  scheduleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 2,
+  },
+  scheduleSticker: {
+    width: 6,
+    height: 6,
+  },
+  scheduleName: {
+    fontSize: 10,
+    marginLeft: 2,
   },
 });
 
