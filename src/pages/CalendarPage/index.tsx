@@ -113,7 +113,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   };
 
   const onPressAddSchedule = (date: Dayjs) => {
-    setSchedule({ ...schedule, startTime: date, endTime: date });
+    setSchedule({ ...schedule, startDate: date.toISOString(), endDate: date.toISOString() });
     navigation.navigate('AddSchedulePage');
   };
 

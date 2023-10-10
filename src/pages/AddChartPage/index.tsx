@@ -135,8 +135,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     if (chart.repeats.includes(null)) {
       return '안 함';
     }
-    if (chart.repeats.includes(7) && chart.repeatDays) {
-      return chart.repeatDays.map((date) => `${date}일`).join(', ');
+    if (chart.repeats.includes(7) && chart.repeatDates) {
+      return chart.repeatDates.map((date) => `${date}일`).join(', ');
     }
     return repeatOptionList
       .filter((option) => chart.repeats.includes(option.value))

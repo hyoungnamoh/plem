@@ -10,7 +10,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addPlanChartState } from '../../states/addPlanChartState';
-import { repeatDaysDefault, repeatDaysState } from '../../states/repeatDaysState';
+import { repeatDaysDefault, repeatDatesState } from '../../states/repeatDatesState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 type RepeatOptionKor =
@@ -51,11 +51,11 @@ const checkImage = require('../../assets/images/check.png');
 const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [repeatOptions, setRepeatOptions] = useState<Repeats>(chart.repeats);
-  // const [repeatDays, setSelectedDays] = useState<number[]>(chart.repeatDays ? [...chart.repeatDays] : []);
-  const [repeatDays, setRepeatDays] = useRecoilState(repeatDaysState);
+  // const [repeatDates, setSelectedDays] = useState<number[]>(chart.repeatDates ? [...chart.repeatDates] : []);
+  const [repeatDates, setRepeatDays] = useRecoilState(repeatDatesState);
 
   useEffect(() => {
-    setRepeatDays(chart.repeatDays ? [...chart.repeatDays] : []);
+    setRepeatDays(chart.repeatDates ? [...chart.repeatDates] : []);
     return () => setRepeatDays(repeatDaysDefault);
   }, []);
 
@@ -87,9 +87,9 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
     const copiedChart = { ...chart };
     copiedChart.repeats = repeatOptions;
     if (!repeatOptions.includes(7)) {
-      copiedChart.repeatDays = [];
+      copiedChart.repeatDates = [];
     } else {
-      copiedChart.repeatDays = repeatDays;
+      copiedChart.repeatDates = repeatDates;
     }
     setChart(copiedChart);
     setStorageChartData(copiedChart);
@@ -110,8 +110,8 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           );
         })}
         <View style={styles.infoMessageWrap}>
-          {repeatOptions.includes(7) && repeatDays && repeatDays.length > 0 && (
-            <PlemText style={styles.infoMessage}>매월 {repeatDays.join('일, ')}일 마다 반복됩니다</PlemText>
+          {repeatOptions.includes(7) && repeatDates && repeatDates.length > 0 && (
+            <PlemText style={styles.infoMessage}>매월 {repeatDates.join('일, ')}일 마다 반복됩니다</PlemText>
           )}
         </View>
       </View>

@@ -18,6 +18,7 @@ import { repeatOptionList } from '../ScheduleRepeatSettingPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { timePadStart } from '../../helper/timePadStart';
+import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
 
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
@@ -25,13 +26,17 @@ const arrowDownImage = require('../../assets/images/arrow_down.png');
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
 const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
-  const isEdit = !!route.params?.schedule;
+  const propSchedule = route.params?.schedule;
 
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
 
   const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState<Dayjs>(route.params?.startDate ? dayjs(route.params?.startDate) : dayjs());
-  const [endDate, setEndDate] = useState<Dayjs>(route.params?.endDate ? dayjs(route.params?.endDate) : dayjs());
+  const [startDate, setStartDate] = useState<Dayjs>(
+    propSchedule ? dayjs(propSchedule.startDate) : dayjs().set('second', 0)
+  );
+  const [endDate, setEndDate] = useState<Dayjs>(
+    propSchedule ? dayjs(propSchedule.startDate) : dayjs().set('second', 0)
+  );
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
   const [categoryList, setCategoryList] = useState<PaletteListItemType[]>(DEFAULT_CATEGORY_LIST);
@@ -46,23 +51,64 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   useEffect(() => {
     getCategoryList();
+
+    if (propSchedule) {
+      setSchedule({
+        name: propSchedule.name,
+        category: propSchedule.category,
+        startDate: propSchedule.startDate,
+        endDate: propSchedule.endDate,
+        notification: propSchedule.notification,
+        repeats: propSchedule.repeats,
+      });
+    }
     return () => setSchedule(addScheduleDefault);
   }, []);
+
+  const { isLoading: addScheduleLoading, mutate: addSchedule } = useAddSchedule({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        navigation.pop();
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('useAddSchedule Error: ', responseData);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+      console.info('useAddSchedule Error: ', e);
+    },
+  });
 
   const onPressDelete = () => {
     navigation.goBack();
   };
 
   const onPressAddSchedule = () => {
-    // if (isInvalidTime()) {
-    //   return Alert.alert('종료시간이 시작시간 보다 빠를 수 없습니다.');
-    // }
+    if (addScheduleLoading) {
+      return;
+    }
+
+    if (isInvalidDate()) {
+      return Alert.alert('종료시간이 시작시간 보다 빠를 수 없습니다.');
+    }
+    addSchedule({
+      ...schedule,
+      name,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    });
   };
 
-  const isInvalidTime = () => {
-    const start = dayjs().set('hour', startHour).set('minute', startMin);
-    const end = dayjs().set('hour', endHour).set('minute', endMin);
-    return start.isAfter(end);
+  const isInvalidDate = () => {
+    const start = dayjs(startDate)
+      .set('hour', startHour)
+      .set('minute', startMin)
+      .set('second', 0)
+      .set('millisecond', 0);
+    const end = dayjs(endDate).set('hour', endHour).set('minute', endMin).set('second', 0).set('millisecond', 0);
+
+    return start.isAfter(end) || start.isSame(end);
   };
 
   const onPressPalette = () => {
@@ -85,7 +131,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     setCategoryList(JSON.parse(categoriyList));
   };
 
-  const handleCatecoryClick = (category: string) => {
+  const handleCatecoryClick = (category: number) => {
     const newSchedule = { ...schedule };
     newSchedule.category = category;
     setSchedule(newSchedule);
@@ -97,13 +143,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   const onPressStartTimeConfirm = (date: Date) => {
     const newStart = dayjs().set('hour', date.getHours()).set('minute', date.getMinutes());
-    const end = dayjs().set('hour', endHour).set('minute', endMin);
-
-    // if (end.diff(newStart) < 600000) {
-    //   const newEnd = newStart.add(10, 'minute');
-    //   setEndHour(newEnd.get('hour'));
-    //   setEndMin(newEnd.get('minute'));
-    // }
     setStartHour(newStart.get('hour'));
     setStartMin(newStart.get('minute'));
 
@@ -170,9 +209,9 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       <View style={styles.page}>
         <Header
           title="일정 추가"
-          buttonName={isEdit ? '삭제' : ''}
-          buttonProps={isEdit ? { onPress: onPressDelete } : null}
-          buttonNameProps={isEdit ? { style: { color: '#E40C0C' } } : null}
+          buttonName={propSchedule ? '삭제' : ''}
+          buttonProps={propSchedule ? { onPress: onPressDelete } : null}
+          buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
         />
         <View style={styles.content}>
           <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
@@ -183,7 +222,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               open={openPalette}
               palettePosition={{ x: -10, y: 8 }}
               list={categoryList}
-              selectedItem={categoryList.find((item) => item.label === schedule.category) || categoryList[0]}
+              selectedItem={categoryList.find((item) => item.value === schedule.category) || categoryList[0]}
               onSelect={handleCatecoryClick}
               onClose={handlePaletteClose}
             />
@@ -278,7 +317,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
             <View style={{ marginTop: 32 }}>
               <OptionsInputRow
                 label={'반복'}
-                value={repeatOptionList.find((option) => option.value === schedule.repeat)?.label || '안 함'}
+                value={repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함'}
                 onPress={onPressRepeatSetting}
               />
             </View>

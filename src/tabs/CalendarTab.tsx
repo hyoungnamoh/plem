@@ -9,7 +9,7 @@ import { Dayjs } from 'dayjs';
 
 export type CalendarTabStackParamList = {
   CalendarPage: undefined;
-  AddSchedulePage?: { schedule?: Schedule; startDate: Dayjs; endDate: Dayjs };
+  AddSchedulePage?: { schedule?: Schedule };
   ScheduleNotiSettingPage: undefined;
   ScheduleRepeatSettingPage: undefined;
   RepeatCustomSettingPage: undefined;

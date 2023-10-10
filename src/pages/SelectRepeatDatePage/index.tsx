@@ -1,15 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Dimensions, Image, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Dimensions, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import { repeatDaysState } from '../../states/repeatDaysState';
+import { repeatDatesState } from '../../states/repeatDatesState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 
 const calendarStickerImage = require('../../assets/images/calendar_sticker.png');
@@ -17,9 +14,8 @@ const calendarStickerImage = require('../../assets/images/calendar_sticker.png')
 type SelectRepeatDatePageProps = NativeStackScreenProps<MainTabStackParamList, 'SelectRepeatDatePage'>;
 
 const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
-  const [chart, setChart] = useRecoilState(addPlanChartState);
-  const [repeatDays, setRepeatDays] = useRecoilState(repeatDaysState);
-  const [selectedDays, setSelectedDays] = useState(repeatDays ? [...repeatDays] : []);
+  const [repeatDates, setRepeatDays] = useRecoilState(repeatDatesState);
+  const [selectedDays, setSelectedDays] = useState(repeatDates ? [...repeatDates] : []);
 
   const renderDaysOfMonth = () => {
     const days = [];

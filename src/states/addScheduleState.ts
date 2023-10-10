@@ -4,12 +4,12 @@ import { AddSchedule } from '../../types/calendar';
 
 export const addScheduleDefault: AddSchedule = {
   name: '',
-  category: 'daily',
-  repeat: null,
-  repeatDays: [],
-  notification: 0,
-  startTime: dayjs('2023-01-08 00:00'),
-  endTime: dayjs('2023-01-08 00:10'), // FIXME
+  category: 0,
+  repeats: null,
+  notification: null,
+  startDate: dayjs().toISOString(),
+  endDate: dayjs().toISOString(),
+  // repeatDates: [],
   // customRepeat: { week: number; day: DaysOfWeekNum },
 };
 
