@@ -10,10 +10,7 @@ import NicknameSettingPage from './src/pages/NicknameSettingPage';
 import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
 import EmailVerifyPage from './src/pages/EmailVerifyPage';
 import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
-import { UseMutationResult, useIsFetching, useIsMutating } from 'react-query';
-import { ApiResponse } from './types/axios';
-import { PostVerificationEmailParams, PostVerificationEmailResponse } from './src/api/auth/postVerificationEmailApi';
-import { AxiosError } from 'axios';
+import { useIsFetching, useIsMutating } from 'react-query';
 import SignUpSuccessPage from './src/pages/SignUpSuccessPage';
 import FindPasswordPage from './src/pages/FindPasswordPage';
 import { useEffect } from 'react';
@@ -32,7 +29,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { disableLoadingState } from './src/states/disableLoadingState';
 import { LoggedInTabParamList, LoggedOutStackParamList } from './types/appInner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_CATEGORY_LIST } from './src/components/PaletteInputRow';
+import { DEFAULT_CATEGORY_LIST, categoryListState } from './src/states/categoryListState';
 
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
@@ -42,6 +39,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const isMutating = useIsMutating();
 
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
@@ -65,14 +63,16 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const setScheduleCategoryList = async () => {
-    const categoryList = await AsyncStorage.getItem('categoryList');
-    if (!categoryList) {
+    const storageCategoryList = await AsyncStorage.getItem('storageCategoryList');
+    if (storageCategoryList) {
+      setCategoryList(JSON.parse(storageCategoryList));
+    } else {
       await AsyncStorage.setItem('categoryList', JSON.stringify(DEFAULT_CATEGORY_LIST));
     }
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
-  console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
+  // console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />

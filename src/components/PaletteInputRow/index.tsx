@@ -1,8 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   GestureResponderEvent,
   Image,
-  ImageSourcePropType,
   Pressable,
   PressableProps,
   StyleSheet,
@@ -11,36 +10,13 @@ import {
 } from 'react-native';
 import PlemText from '../Atoms/PlemText';
 import PaletteListItem from './PaletteListItem';
+import { DEFAULT_CATEGORY_LIST } from '../../states/categoryListState';
 
 const underlineImage = require('../../assets/images/underline.png');
 
-const paletteFF6550: number = require('../../assets/images/palette_ff6550.png');
-const palette22DA81: number = require('../../assets/images/palette_22da81.png');
-const palette4569FF: number = require('../../assets/images/palette_4659ff.png');
-const paletteFFC700: number = require('../../assets/images/palette_ffc700.png');
-
 const calendarPaletteBoxImage = require('../../assets/images/calendar_palette_box.png');
 
-export const DEFAULT_CATEGORY_LIST = [
-  {
-    label: '일상',
-    image: paletteFF6550,
-  },
-  {
-    label: '생일',
-    image: paletteFFC700,
-  },
-  {
-    label: '약속',
-    image: palette22DA81,
-  },
-  {
-    label: '금융',
-    image: palette4569FF,
-  },
-];
-
-export type PaletteListItemType = { label: string; image: ImageSourcePropType };
+export type PaletteListItemType = typeof DEFAULT_CATEGORY_LIST[number];
 
 type PaletteInputRowProps = {
   label: string;
@@ -51,7 +27,7 @@ type PaletteInputRowProps = {
   };
   list: PaletteListItemType[];
   selectedItem: PaletteListItemType;
-  onSelect: (value: string) => void;
+  onSelect: (value: number) => void;
   onClose: () => void;
 };
 
@@ -71,6 +47,10 @@ const PaletteInputRow = ({
   const paletteImageRef = useRef(null);
   const paletteModalRef = useRef<View>(null);
 
+  useEffect(() => {
+    setIsEditing(false);
+  }, [open]);
+
   const onPressPalette = (e: GestureResponderEvent) => {
     setPaletteBoxPosition({
       x: e.nativeEvent.pageX - 252 + (palettePosition?.x || 0),
@@ -79,7 +59,7 @@ const PaletteInputRow = ({
     onPress && onPress(e);
   };
 
-  const handleItemSelect = (value: string) => {
+  const handleItemSelect = (value: number) => {
     onSelect(value);
     onClose();
   };

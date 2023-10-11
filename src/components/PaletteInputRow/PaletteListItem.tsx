@@ -11,10 +11,10 @@ const PaletteListItem = ({
 }: {
   index: number;
   item: PaletteListItemType;
-  onSelect: (value: string) => void;
+  onSelect: (value: number) => void;
   isEditing: boolean;
 }) => {
-  const [value, setValue] = useState<string>(item.label);
+  const [label, setLabel] = useState<string>(item.label);
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -24,12 +24,12 @@ const PaletteListItem = ({
   }, [isEditing]);
 
   return (
-    <Pressable onPress={() => onSelect(value)} style={styles.categoryRow}>
+    <Pressable onPress={() => onSelect(item.value)} style={styles.categoryRow}>
       <PlemTextInput
         ref={inputRef}
-        value={value}
+        value={label}
         editable={isEditing}
-        onChangeText={setValue}
+        onChangeText={setLabel}
         style={{ width: '80%' }}
         maxLength={12}
       />
