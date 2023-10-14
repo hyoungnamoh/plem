@@ -5,11 +5,10 @@ import ScheduleRepeatSettingPage from '../pages/ScheduleRepeatSettingPage';
 import ScheduleNotiSettingPage from '../pages/ScheduleNotiSettingPage';
 import RepeatCustomSettingPage from '../pages/RepeatCustomSettingPage';
 import { Schedule } from '../../types/calendar';
-import { Dayjs } from 'dayjs';
 
 export type CalendarTabStackParamList = {
   CalendarPage: undefined;
-  AddSchedulePage?: { schedule?: Schedule };
+  AddSchedulePage: { schedule?: Schedule; date: string };
   ScheduleNotiSettingPage: undefined;
   ScheduleRepeatSettingPage: undefined;
   RepeatCustomSettingPage: undefined;

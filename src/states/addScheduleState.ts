@@ -7,8 +7,8 @@ export const addScheduleDefault: AddSchedule = {
   category: 0,
   repeats: null,
   notification: null,
-  startDate: dayjs().toISOString(),
-  endDate: dayjs().toISOString(),
+  startDate: dayjs().set('hour', 0).set('minute', 0).set('millisecond', 0).toISOString(),
+  endDate: dayjs().set('hour', 1).set('minute', 0).set('millisecond', 0).toISOString(),
   // repeatDates: [],
   // customRepeat: { week: number; day: DaysOfWeekNum },
 };

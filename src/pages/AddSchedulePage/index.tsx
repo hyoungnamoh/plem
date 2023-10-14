@@ -8,7 +8,7 @@ import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
 import OptionsInputRow from '../../components/OptionsInputRow';
-import PaletteInputRow, { PaletteListItemType } from '../../components/PaletteInputRow';
+import PaletteInputRow from '../../components/PaletteInputRow';
 import SwitchInputRow from '../../components/SwitchInputRow';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addScheduleDefault, addScheduleState } from '../../states/addScheduleState';
@@ -20,6 +20,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { timePadStart } from '../../helper/timePadStart';
 import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
 import { categoryListState } from '../../states/categoryListState';
+import { useQueryClient } from 'react-query';
 
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
@@ -27,42 +28,39 @@ const arrowDownImage = require('../../assets/images/arrow_down.png');
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
 const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
-  const propSchedule = route.params?.schedule;
+  const queryClient = useQueryClient();
+  const propSchedule = route.params.schedule;
 
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
+  const startDate = dayjs(schedule.startDate);
+  const endDate = dayjs(schedule.endDate);
   const [categoryList, setCategoryList] = useRecoilState(categoryListState);
 
-  const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState<Dayjs>(
-    propSchedule ? dayjs(propSchedule.startDate) : dayjs().set('second', 0)
-  );
-  const [endDate, setEndDate] = useState<Dayjs>(
-    propSchedule ? dayjs(propSchedule.startDate) : dayjs().set('second', 0)
-  );
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-  const [startHour, setStartHour] = useState(0);
-  const [startMin, setStartMin] = useState(0);
-  const [endHour, setEndHour] = useState(1);
-  const [endMin, setEndMin] = useState(0);
 
   useEffect(() => {
+    const defaultStartDate = propSchedule ? propSchedule.startDate : route.params.date;
+    const defaultEndDate = propSchedule ? propSchedule.endDate : dayjs(route.params.date).set('hour', 1).toISOString();
     getCategoryList();
 
     if (propSchedule) {
       setSchedule({
         name: propSchedule.name,
         category: propSchedule.category,
-        startDate: propSchedule.startDate,
-        endDate: propSchedule.endDate,
+        startDate: defaultStartDate,
+        endDate: defaultEndDate,
         notification: propSchedule.notification,
         repeats: propSchedule.repeats,
       });
+    } else {
+      setSchedule({ ...schedule, startDate: defaultStartDate, endDate: defaultEndDate });
     }
+
     return () => setSchedule(addScheduleDefault);
   }, []);
 
@@ -70,6 +68,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         navigation.pop();
+        queryClient.invalidateQueries('getScheduleList');
       } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
         console.info('useAddSchedule Error: ', responseData);
@@ -81,11 +80,11 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     },
   });
 
-  const onPressDelete = () => {
+  const handleDelete = () => {
     navigation.goBack();
   };
 
-  const onPressAddSchedule = () => {
+  const handleAddSchedule = () => {
     if (addScheduleLoading) {
       return;
     }
@@ -95,33 +94,16 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     }
     addSchedule({
       ...schedule,
-      name,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
     });
   };
 
   const isInvalidDate = () => {
-    const start = dayjs(startDate)
-      .set('hour', startHour)
-      .set('minute', startMin)
-      .set('second', 0)
-      .set('millisecond', 0);
-    const end = dayjs(endDate).set('hour', endHour).set('minute', endMin).set('second', 0).set('millisecond', 0);
+    const start = dayjs(startDate).set('second', 0).set('millisecond', 0);
+    const end = dayjs(endDate).set('second', 0).set('millisecond', 0);
 
     return start.isAfter(end) || start.isSame(end);
-  };
-
-  const onPressPalette = () => {
-    setOpenPalette(!openPalette);
-  };
-
-  const onPressSetNotification = () => {
-    navigation.navigate('ScheduleNotiSettingPage');
-  };
-
-  const onPressRepeatSetting = () => {
-    navigation.navigate('ScheduleRepeatSettingPage');
   };
 
   const getCategoryList = async () => {
@@ -132,38 +114,26 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     setCategoryList(JSON.parse(categoriyList));
   };
 
-  const handleCatecoryClick = (category: number) => {
+  const handleCatecorySelect = (category: number) => {
     const newSchedule = { ...schedule };
     newSchedule.category = category;
     setSchedule(newSchedule);
   };
 
-  const handlePaletteClose = () => {
-    setOpenPalette(false);
-  };
-
-  const onPressStartTimeConfirm = (date: Date) => {
-    const newStart = dayjs().set('hour', date.getHours()).set('minute', date.getMinutes());
-    setStartHour(newStart.get('hour'));
-    setStartMin(newStart.get('minute'));
-
+  const handleStartTimeConfirm = (date: Date) => {
+    setSchedule({
+      ...schedule,
+      startDate: startDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
+    });
     setOpenStartTimePicker(false);
   };
 
-  const onPressStartTimeCancel = () => {
-    setOpenStartTimePicker(false);
-  };
-
-  const onPressEndTimeCancel = () => {
+  const handleEndTimeConfirm = (date: Date) => {
+    setSchedule({
+      ...schedule,
+      endDate: endDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
+    });
     setOpenEndTimePicker(false);
-  };
-
-  const onPressSetStartTime = () => {
-    setOpenStartTimePicker(true);
-  };
-
-  const onPressSetEndTime = () => {
-    setOpenEndTimePicker(true);
   };
 
   const getTimePickerValue = ({ hour, min }: { hour: number; min: number }) => {
@@ -173,59 +143,59 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     return date;
   };
 
-  const onPressEndTimeConfirm = (date: Date) => {
-    setEndHour(date.getHours());
-    setEndMin(date.getMinutes());
-    setOpenEndTimePicker(false);
-  };
-
-  const onPressStartDateConfirm = (date: Date) => {
-    setStartDate(dayjs(date));
+  const handleStartDateConfirm = (date: Date) => {
+    const newYear = date.getFullYear();
+    const newMonth = date.getMonth() + 1;
+    const newDate = date.getDate();
+    setSchedule({
+      ...schedule,
+      startDate: startDate.set('year', newYear).set('month', newMonth).set('date', newDate).toISOString(),
+    });
     setOpenStartDatePicker(false);
   };
 
-  const onPressStartDateCancel = () => {
-    setOpenStartDatePicker(false);
-  };
-
-  const onPressEndDateConfirm = (date: Date) => {
-    setEndDate(dayjs(date));
+  const handleEndDateConfirm = (date: Date) => {
+    const newYear = date.getFullYear();
+    const newMonth = date.getMonth() + 1;
+    const newDate = date.getDate();
+    setSchedule({
+      ...schedule,
+      endDate: endDate.set('year', newYear).set('month', newMonth).set('date', newDate).toISOString(),
+    });
     setOpenEndDatePicker(false);
   };
 
-  const onPressEndDateCancel = () => {
-    setOpenEndDatePicker(false);
-  };
-
-  const onPressSetStartDate = () => {
-    setOpenStartDatePicker(true);
-  };
-
-  const onPressSetEndDate = () => {
-    setOpenEndDatePicker(true);
+  const handleNameChange = (value: string) => {
+    setSchedule({ ...schedule, name: value });
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handlePaletteClose}>
+    <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
       <View style={styles.page}>
         <Header
           title="일정 추가"
           buttonName={propSchedule ? '삭제' : ''}
-          buttonProps={propSchedule ? { onPress: onPressDelete } : null}
+          buttonProps={propSchedule ? { onPress: handleDelete } : null}
           buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
         />
         <View style={styles.content}>
-          <LabelInput label={'일정명'} value={name} onChangeText={setName} maxLength={14} placeholder={'최대 14글자'} />
+          <LabelInput
+            label={'일정명'}
+            value={schedule.name}
+            onChangeText={handleNameChange}
+            maxLength={14}
+            placeholder={'최대 14글자'}
+          />
           <View style={{ marginTop: 32, zIndex: 1000 }}>
             <PaletteInputRow
               label="카테고리"
-              onPress={onPressPalette}
+              onPress={() => setOpenPalette(!openPalette)}
               open={openPalette}
               palettePosition={{ x: -10, y: 8 }}
               list={categoryList}
               selectedItem={categoryList.find((item) => item.value === schedule.category) || categoryList[0]}
-              onSelect={handleCatecoryClick}
-              onClose={handlePaletteClose}
+              onSelect={handleCatecorySelect}
+              onClose={() => setOpenPalette(false)}
             />
           </View>
           <View style={{ marginTop: 32 }}>
@@ -239,7 +209,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>시작</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetStartDate}>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                         <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
@@ -249,7 +219,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1, marginLeft: 15 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetEndDate}>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                         <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
@@ -265,7 +235,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetStartDate}>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                         <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
@@ -275,8 +245,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1, marginLeft: 15 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>시간</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetStartTime}>
-                        <PlemText>{`${timePadStart(startHour)}:${timePadStart(startMin)}`}</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartTimePicker(true)}>
+                        <PlemText>
+                          {`${timePadStart(startDate.get('hour'))}:${timePadStart(startDate.get('minute'))}`}
+                        </PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
@@ -288,7 +260,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetEndDate}>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                         <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
@@ -298,8 +270,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   <View style={{ flex: 1, marginLeft: 15 }}>
                     <View style={styles.dateInputWrap}>
                       <PlemText>시간</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={onPressSetEndTime}>
-                        <PlemText>{`${timePadStart(endHour)}:${timePadStart(endMin)}`}</PlemText>
+                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndTimePicker(true)}>
+                        <PlemText>
+                          {`${timePadStart(endDate.get('hour'))}:${timePadStart(endDate.get('minute'))}`}
+                        </PlemText>
                         <Image source={arrowDownImage} style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
@@ -312,51 +286,51 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               <OptionsInputRow
                 label={'알림'}
                 value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
-                onPress={onPressSetNotification}
+                onPress={() => navigation.navigate('ScheduleNotiSettingPage')}
               />
             </View>
             <View style={{ marginTop: 32 }}>
               <OptionsInputRow
                 label={'반복'}
                 value={repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함'}
-                onPress={onPressRepeatSetting}
+                onPress={() => navigation.navigate('ScheduleRepeatSettingPage')}
               />
             </View>
           </View>
         </View>
-        <BottomButton title={'등록'} disabled={false} onPress={onPressAddSchedule} />
+        <BottomButton title={propSchedule ? '편집' : '등록'} disabled={false} onPress={handleAddSchedule} />
         <DateTimePickerModal
           isVisible={openStartTimePicker}
           mode="time"
-          onConfirm={onPressStartTimeConfirm}
-          onCancel={onPressStartTimeCancel}
+          onConfirm={handleStartTimeConfirm}
+          onCancel={() => setOpenStartTimePicker(false)}
           locale="en_GB"
           is24Hour
           minuteInterval={10}
-          date={getTimePickerValue({ hour: startHour, min: startMin })}
+          date={getTimePickerValue({ hour: startDate.get('hour'), min: startDate.get('minute') })}
         />
         <DateTimePickerModal
           isVisible={openEndTimePicker}
           mode="time"
-          onConfirm={onPressEndTimeConfirm}
-          onCancel={onPressEndTimeCancel}
+          onConfirm={handleEndTimeConfirm}
+          onCancel={() => setOpenEndTimePicker(false)}
           locale="en_GB"
           is24Hour
           minuteInterval={10}
-          date={getTimePickerValue({ hour: endHour, min: endMin })}
+          date={getTimePickerValue({ hour: endDate.get('hour'), min: endDate.get('minute') })}
         />
         <DateTimePickerModal
           isVisible={openStartDatePicker}
           mode="date"
-          onConfirm={onPressStartDateConfirm}
-          onCancel={onPressStartDateCancel}
+          onConfirm={handleStartDateConfirm}
+          onCancel={() => setOpenStartDatePicker(false)}
           date={startDate.toDate()}
         />
         <DateTimePickerModal
           isVisible={openEndDatePicker}
           mode="date"
-          onConfirm={onPressEndDateConfirm}
-          onCancel={onPressEndDateCancel}
+          onConfirm={handleEndDateConfirm}
+          onCancel={() => setOpenEndDatePicker(false)}
           date={endDate.toDate()}
         />
       </View>

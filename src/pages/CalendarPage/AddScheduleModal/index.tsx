@@ -1,15 +1,19 @@
-import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/top_ic_close.svg';
-import PaletteBlue from '../../../assets/images/palette_blue.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../../../components/Atoms/PlemText';
 
-import AddScheduleModalSVG from '../../../assets/images/add_schedule_modal.svg';
+import AddScheduleModalSvg from '../../../assets/images/add_schedule_modal.svg';
 import { Dayjs } from 'dayjs';
 import { NUMBER_TO_DAY_KOR } from '../../../constants/dates';
 import { DaysOfWeekNum } from '../../../../types/date';
 import { BOTTOM_TAB_HEIGHT } from '../../../components/BottomTabBar/constants';
+import { useRecoilValue } from 'recoil';
+import { categoryListState } from '../../../states/categoryListState';
+import { Schedule } from '../../../../types/calendar';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -17,16 +21,24 @@ type AddScheduleModalProps = {
   day: number | null;
   close: () => void;
   onPressAddSchedule: () => void;
+  schedules: Schedule[];
 };
 
-export const AddScheduleModal = ({ open, date, close, onPressAddSchedule }: AddScheduleModalProps) => {
+export const AddScheduleModal = ({ open, date, close, onPressAddSchedule, schedules }: AddScheduleModalProps) => {
+  const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
+  const categoryList = useRecoilValue(categoryListState);
+
+  const handleScheduleClick = (schedule: Schedule) => {
+    navigate('AddSchedulePage', { schedule, date: date.toISOString() });
+  };
+
   if (!open) {
     return null;
   }
 
   return (
     <View style={styles.wrap}>
-      <AddScheduleModalSVG style={{ position: 'absolute' }} width={345} />
+      <AddScheduleModalSvg style={{ position: 'absolute' }} width={345} />
       <View style={styles.modalContentWrap}>
         <View style={styles.modalContent}>
           <View style={styles.header}>
@@ -40,14 +52,24 @@ export const AddScheduleModal = ({ open, date, close, onPressAddSchedule }: AddS
             </Pressable>
           </View>
           <KeyboardAwareScrollView>
-            <View style={styles.scheduleRow}>
-              <PaletteBlue />
-              <PlemText style={styles.scheduleText}>귀염둥생일</PlemText>
-            </View>
-            <View style={styles.scheduleRow}>
-              <PaletteBlue />
-              <PlemText style={styles.scheduleText}>귀염둥생일</PlemText>
-            </View>
+            {schedules.length > 0 ? (
+              schedules.map((schedule) => {
+                return (
+                  <Pressable style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
+                    <Image
+                      source={
+                        categoryList.find((item) => item.value === schedule.category)?.image || categoryList[0].image
+                      }
+                    />
+                    <PlemText style={styles.scheduleText}>{schedule.name}</PlemText>
+                  </Pressable>
+                );
+              })
+            ) : (
+              <View style={styles.scheduleRow}>
+                <PlemText>등록된 일정이 없습니다.</PlemText>
+              </View>
+            )}
             <View style={styles.addScheduleButton}>
               <UnderlineButton onPress={onPressAddSchedule}>일정 추가하기</UnderlineButton>
             </View>

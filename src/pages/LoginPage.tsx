@@ -8,7 +8,6 @@ import PlemText from '../components/Atoms/PlemText';
 import Header from '../components/Header';
 import BlackButton from '../components/BlackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LoggedOutStackParamList } from '../../AppInner';
 import UnderlineButton from '../components/UnderlineButton';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Loading from '../components/Loading';
@@ -20,6 +19,7 @@ import { MAIN_COLOR } from '../constants/colors';
 import { loggedInUserState } from '../states/loggedInUserState';
 import { LoggedInUser } from '../../types/user';
 import jwt_decode from 'jwt-decode';
+import { LoggedOutStackParamList } from '../../types/appInner';
 
 type LoginMutationParams = {
   email: string;

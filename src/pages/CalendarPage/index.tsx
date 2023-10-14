@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Dimensions,
   ImageBackground,
@@ -10,11 +10,10 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { DAYS_OF_WEEK } from '../../constants/dates';
-import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { AddScheduleModal } from './AddScheduleModal';
 import { useGetScheduleList } from '../../hooks/queries/useGetScheduleList';
@@ -28,12 +27,10 @@ const circleStrokeImage = require('../../assets/images/circle_stroke.png');
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
-  const [schedule, setSchedule] = useRecoilState(addScheduleState);
-  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
-
-  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+  const categoryList = useRecoilValue(categoryListState);
   const [selectedDate, setSelectedDate] = useState<null | Dayjs>(null);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);
+  const currentDate = dayjs().startOf('date');
 
   const { data: scheduleList } = useGetScheduleList({ date: dayjs().toISOString() });
 
@@ -134,8 +131,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   };
 
   const onPressAddSchedule = (date: Dayjs) => {
-    setSchedule({ ...schedule, startDate: date.toISOString(), endDate: date.toISOString() });
-    navigation.navigate('AddSchedulePage');
+    navigation.navigate('AddSchedulePage', { date: date.toISOString() });
   };
 
   return (
