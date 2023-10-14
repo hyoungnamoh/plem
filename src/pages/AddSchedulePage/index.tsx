@@ -21,6 +21,7 @@ import { timePadStart } from '../../helper/timePadStart';
 import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
 import { categoryListState } from '../../states/categoryListState';
 import { useQueryClient } from 'react-query';
+import { useUpdateSchedule } from '../../hooks/mutaions/useUpdateSchedule';
 
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
@@ -80,11 +81,27 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     },
   });
 
+  const { isLoading: updateScheduleLoading, mutate: updateSchedule } = useUpdateSchedule({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        navigation.pop();
+        queryClient.invalidateQueries('getScheduleList');
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('useAddSchedule Error: ', responseData);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+      console.info('useAddSchedule Error: ', e);
+    },
+  });
+
   const handleDelete = () => {
     navigation.goBack();
   };
 
-  const handleAddSchedule = () => {
+  const handleScheduleSubmit = () => {
     if (addScheduleLoading) {
       return;
     }
@@ -92,11 +109,20 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     if (isInvalidDate()) {
       return Alert.alert('종료시간이 시작시간 보다 빠를 수 없습니다.');
     }
-    addSchedule({
-      ...schedule,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-    });
+
+    addSchedule({ ...schedule });
+  };
+
+  const handleScheduleUpdate = () => {
+    if (updateScheduleLoading || !propSchedule) {
+      return;
+    }
+
+    if (isInvalidDate()) {
+      return Alert.alert('종료시간이 시작시간 보다 빠를 수 없습니다.');
+    }
+
+    updateSchedule({ ...schedule, id: propSchedule.id });
   };
 
   const isInvalidDate = () => {
@@ -145,7 +171,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   const handleStartDateConfirm = (date: Date) => {
     const newYear = date.getFullYear();
-    const newMonth = date.getMonth() + 1;
+    const newMonth = date.getMonth();
     const newDate = date.getDate();
     setSchedule({
       ...schedule,
@@ -156,7 +182,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   const handleEndDateConfirm = (date: Date) => {
     const newYear = date.getFullYear();
-    const newMonth = date.getMonth() + 1;
+    const newMonth = date.getMonth();
     const newDate = date.getDate();
     setSchedule({
       ...schedule,
@@ -298,7 +324,11 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
             </View>
           </View>
         </View>
-        <BottomButton title={propSchedule ? '편집' : '등록'} disabled={false} onPress={handleAddSchedule} />
+        <BottomButton
+          title={propSchedule ? '편집' : '등록'}
+          disabled={false}
+          onPress={propSchedule ? handleScheduleUpdate : handleScheduleSubmit}
+        />
         <DateTimePickerModal
           isVisible={openStartTimePicker}
           mode="time"
