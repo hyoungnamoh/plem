@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -22,6 +22,7 @@ import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
 import { categoryListState } from '../../states/categoryListState';
 import { useQueryClient } from 'react-query';
 import { useUpdateSchedule } from '../../hooks/mutaions/useUpdateSchedule';
+import { useDeleteSchedule } from '../../hooks/mutaions/useDeleteSchedule';
 
 const underlineImage = require('../../assets/images/underline.png');
 const arrowDownImage = require('../../assets/images/arrow_down.png');
@@ -81,6 +82,22 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     },
   });
 
+  const { isLoading: deleteScheduleLoading, mutate: deleteSchedule } = useDeleteSchedule({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        navigation.pop();
+        queryClient.invalidateQueries('getScheduleList');
+      } else {
+        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
+        console.info('useDeleteSchedule Error: ', responseData);
+      }
+    },
+    onError: (e) => {
+      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
+      console.info('useDeleteSchedule Error: ', e);
+    },
+  });
+
   const { isLoading: updateScheduleLoading, mutate: updateSchedule } = useUpdateSchedule({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
@@ -96,10 +113,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       console.info('useAddSchedule Error: ', e);
     },
   });
-
-  const handleDelete = () => {
-    navigation.goBack();
-  };
 
   const handleScheduleSubmit = () => {
     if (addScheduleLoading) {
@@ -125,6 +138,13 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     updateSchedule({ ...schedule, id: propSchedule.id });
   };
 
+  const handleScheduleDelete = () => {
+    if (deleteScheduleLoading || !propSchedule) {
+      return;
+    }
+    deleteSchedule({ id: propSchedule.id });
+  };
+
   const isInvalidDate = () => {
     const start = dayjs(startDate).set('second', 0).set('millisecond', 0);
     const end = dayjs(endDate).set('second', 0).set('millisecond', 0);
@@ -146,36 +166,15 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     setSchedule(newSchedule);
   };
 
-  const handleStartTimeConfirm = (date: Date) => {
-    setSchedule({
-      ...schedule,
-      startDate: startDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
-    });
-    setOpenStartTimePicker(false);
-  };
-
-  const handleEndTimeConfirm = (date: Date) => {
-    setSchedule({
-      ...schedule,
-      endDate: endDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
-    });
-    setOpenEndTimePicker(false);
-  };
-
-  const getTimePickerValue = ({ hour, min }: { hour: number; min: number }) => {
-    const date = new Date();
-    date.setHours(hour);
-    date.setMinutes(min);
-    return date;
-  };
-
   const handleStartDateConfirm = (date: Date) => {
     const newYear = date.getFullYear();
     const newMonth = date.getMonth();
     const newDate = date.getDate();
+
     setSchedule({
       ...schedule,
       startDate: startDate.set('year', newYear).set('month', newMonth).set('date', newDate).toISOString(),
+      endDate: dayjs(date).isAfter(schedule.endDate) ? dayjs(date).add(1, 'hour').toISOString() : schedule.endDate,
     });
     setOpenStartDatePicker(false);
   };
@@ -184,11 +183,37 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     const newYear = date.getFullYear();
     const newMonth = date.getMonth();
     const newDate = date.getDate();
+
     setSchedule({
       ...schedule,
+      startDate: dayjs(date).isBefore(schedule.startDate)
+        ? dayjs(date).subtract(1, 'hour').toISOString()
+        : schedule.endDate,
       endDate: endDate.set('year', newYear).set('month', newMonth).set('date', newDate).toISOString(),
     });
     setOpenEndDatePicker(false);
+  };
+
+  const handleStartTimeConfirm = (date: Date) => {
+    console.log('start', date);
+    setSchedule({
+      ...schedule,
+      startDate: startDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
+      endDate: dayjs(date).isAfter(schedule.endDate) ? dayjs(date).add(1, 'hour').toISOString() : schedule.endDate,
+    });
+    setOpenStartTimePicker(false);
+  };
+
+  const handleEndTimeConfirm = (date: Date) => {
+    console.log('end', date);
+    setSchedule({
+      ...schedule,
+      startDate: dayjs(date).isBefore(schedule.startDate)
+        ? dayjs(date).subtract(1, 'hour').toISOString()
+        : schedule.endDate,
+      endDate: endDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
+    });
+    setOpenEndTimePicker(false);
   };
 
   const handleNameChange = (value: string) => {
@@ -201,7 +226,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
         <Header
           title="일정 추가"
           buttonName={propSchedule ? '삭제' : ''}
-          buttonProps={propSchedule ? { onPress: handleDelete } : null}
+          buttonProps={propSchedule ? { onPress: handleScheduleDelete } : null}
           buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
         />
         <View style={styles.content}>
@@ -337,7 +362,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           locale="en_GB"
           is24Hour
           minuteInterval={10}
-          date={getTimePickerValue({ hour: startDate.get('hour'), min: startDate.get('minute') })}
+          date={startDate.toDate()}
         />
         <DateTimePickerModal
           isVisible={openEndTimePicker}
@@ -347,7 +372,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           locale="en_GB"
           is24Hour
           minuteInterval={10}
-          date={getTimePickerValue({ hour: endDate.get('hour'), min: endDate.get('minute') })}
+          date={endDate.toDate()}
         />
         <DateTimePickerModal
           isVisible={openStartDatePicker}
