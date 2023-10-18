@@ -1,14 +1,16 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menus';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loggedInUserState } from '../../states/loggedInUserState';
 import { useLogout } from '../../hooks/mutaions/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { useFocusEffect } from '@react-navigation/native';
 
 const underlineGrayImage = require('../../assets/images/underline_gray.png');
 
@@ -16,10 +18,18 @@ type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'Settin
 
 const SettingPage = ({ navigation }: SettingPageProps) => {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const onSuccessLogout = async () => {
     setLoggedInUser(null);
     await EncryptedStorage.removeItem('accessToken');
   };
+
+  useFocusEffect(() => {
+    if (bottomSafeArea === MAIN_COLOR) {
+      return;
+    }
+    setBottomSafeArea(MAIN_COLOR);
+  });
 
   const { mutate: logout } = useLogout({
     onSuccess: onSuccessLogout,

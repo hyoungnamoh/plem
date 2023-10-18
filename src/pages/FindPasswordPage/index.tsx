@@ -5,7 +5,6 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../../AppInner';
 import { ApiResponse } from '../../../types/axios';
 import {
   postVerificationEmailApi,
@@ -22,11 +21,11 @@ import { validator } from '../../helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../../states/isVerifiedEmailState';
 import { MAIN_COLOR } from '../../constants/colors';
+import { LoggedOutStackParamList } from '../../../types/appInner';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 
 const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
-  const queryClient = useQueryClient();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
 

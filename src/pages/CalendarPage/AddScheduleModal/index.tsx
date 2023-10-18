@@ -55,7 +55,7 @@ export const AddScheduleModal = ({ open, date, close, onPressAddSchedule, schedu
             {schedules.length > 0 ? (
               schedules.map((schedule) => {
                 return (
-                  <Pressable style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
+                  <Pressable key={schedule.id} style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
                     <Image
                       source={
                         categoryList.find((item) => item.value === schedule.category)?.image || categoryList[0].image

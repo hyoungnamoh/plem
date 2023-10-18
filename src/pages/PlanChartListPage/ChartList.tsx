@@ -11,7 +11,6 @@ import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar/constants';
 
 const arrowDownImage = require('../../assets/images/arrow_down.png');
 const arrowUpImage = require('../../assets/images/arrow_up.png');
-const lineGray = require('../../assets/images/line_gray.png');
 
 const ChartList = ({ list }: { list: PlanChart[] }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();

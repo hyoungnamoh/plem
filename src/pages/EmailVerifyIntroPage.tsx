@@ -3,13 +3,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import Header from '../components/Header';
 import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import { LoggedOutStackParamList } from '../../types/appInner';
 
 type EmailVerifyIntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyIntroPage'>;
 

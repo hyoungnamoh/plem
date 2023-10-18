@@ -2,12 +2,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
 import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
+import { LoggedOutStackParamList } from '../../types/appInner';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
 

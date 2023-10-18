@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { LoggedOutStackParamList } from '../../AppInner';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
@@ -10,6 +9,7 @@ import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/colors';
 import { validator } from '../helper/validator';
 import { useUpdatePassword } from '../hooks/mutaions/useUpdatePassword';
+import { LoggedOutStackParamList } from '../../types/appInner';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 

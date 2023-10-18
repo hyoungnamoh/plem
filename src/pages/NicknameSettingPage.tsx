@@ -6,7 +6,6 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../AppInner';
 import { ApiResponse } from '../../types/axios';
 import { signUpApi, SignUpParams, SignUpResponse } from '../api/auth/signUpApi';
 import PlemText from '../components/Atoms/PlemText';
@@ -18,6 +17,7 @@ import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 import { makeNickname } from '../utils/makeNickname';
+import { LoggedOutStackParamList } from '../../types/appInner';
 
 type NicknameSettingPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NicknameSettingPage'>;
 

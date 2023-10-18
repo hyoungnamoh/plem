@@ -1,20 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AxiosError } from 'axios';
 import { useEffect } from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation } from 'react-query';
+import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../../AppInner';
-import { ApiResponse } from '../../../types/axios';
 import PlemText from '../../components/Atoms/PlemText';
-import BlackButton from '../../components/BlackButton';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../../constants/colors';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import StartPlemButtonTitle from './StartPlemButtonTitle';
+import { LoggedOutStackParamList } from '../../../types/appInner';
 
 type SignUpSuccessPage = NativeStackScreenProps<LoggedOutStackParamList, 'SignUpSuccessPage'>;
 

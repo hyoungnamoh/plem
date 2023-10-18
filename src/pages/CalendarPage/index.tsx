@@ -10,7 +10,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { DAYS_OF_WEEK } from '../../constants/dates';
@@ -18,6 +18,8 @@ import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { AddScheduleModal } from './AddScheduleModal';
 import { useGetScheduleList } from '../../hooks/queries/useGetScheduleList';
 import { categoryListState } from '../../states/categoryListState';
+import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { useFocusEffect } from '@react-navigation/native';
 
 const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
@@ -28,11 +30,20 @@ type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'Cale
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
   const categoryList = useRecoilValue(categoryListState);
+  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+
   const [selectedDate, setSelectedDate] = useState<null | Dayjs>(null);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);
   const currentDate = dayjs().startOf('date');
 
   const { data: scheduleList } = useGetScheduleList({ date: dayjs().toISOString() });
+
+  useFocusEffect(() => {
+    if (bottomSafeArea === MAIN_COLOR) {
+      return;
+    }
+    setBottomSafeArea(MAIN_COLOR);
+  });
 
   const renderDaysOfWeek = () => {
     return DAYS_OF_WEEK.map((day) => {
