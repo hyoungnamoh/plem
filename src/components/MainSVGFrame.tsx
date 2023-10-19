@@ -1,84 +1,225 @@
-import { View, Text, StyleSheet, createElement } from 'react-native';
-import PlanGrid from '../assets/images/plan_grid.svg';
-import DoughnutChart from '../assets/images/doughnut_chart.svg';
-import Svg, { Circle, G, Path } from 'react-native-svg';
-import PlanChartSVG from './PlanChartSVG';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { PieChart } from 'react-native-gifted-charts';
+import { PlanChart } from '../../types/chart';
+import PlemText from './Atoms/PlemText';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { itemType } from 'react-native-gifted-charts/src/LineChart/types';
+import { useFocusEffect } from '@react-navigation/native';
+import { DAY_TO_MS, MIN_TO_MS } from '../constants/times';
 
-type CategoryStatisticData = { percentage: number; category: string };
-const MainSVGFrame = () => {
-  const getCoordinateForPercent = (percent: number): number[] => {
-    const x = Math.cos(2 * Math.PI * percent);
-    const y = Math.sin(2 * Math.PI * percent);
-    return [x, y];
-  };
+const screenWidth = Dimensions.get('screen').width;
+const screenHight = Dimensions.get('screen').height;
+const chartRadius = Dimensions.get('screen').width / 2.65;
 
-  const getCategoryDataPath = (
-    { percentage, category }: CategoryStatisticData,
-    {
-      startX,
-      startY,
-      endX,
-      endY,
-      isLargeArcFlag,
-    }: { startX: number; startY: number; endX: number; endY: number; isLargeArcFlag: number },
-    idx: number
-  ) => {
-    console.log(startX, startY, endX, endY, isLargeArcFlag);
-    const svg = <Path d={`M ${startX} ${startY} A 1 1 0 ${isLargeArcFlag} 1 ${endX} ${endY} L 0 0`} fill={'#5758BB'} />;
+const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
+  const [chartData, setChartData] = useState<itemType[]>([]);
+  const [currentTimeDegree, setCurrentTimeDegree] = useState((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
+  const initialAngle =
+    chart && chart.plans.length > 0
+      ? (dayjs()
+          .set('hour', chart.plans[0].startHour)
+          .set('minute', chart.plans[0].startMin)
+          .set('second', 0)
+          .set('millisecond', 0)
+          .diff(dayjs().startOf('date')) /
+          DAY_TO_MS) *
+        Math.PI *
+        2
+      : 0;
 
-    return svg;
-  };
-  const getChartPaths = (data: CategoryStatisticData[]) => {
-    let acc = 0;
-    const paths = data.map(({ percentage, category }, idx) => {
-      const [startX, startY] = getCoordinateForPercent(acc);
-      acc += percentage;
-      const [endX, endY] = getCoordinateForPercent(acc);
-      const isLargeArcFlag: number = percentage > 0.5 ? 1 : 0;
-      return getCategoryDataPath({ percentage, category }, { startX, startY, endX, endY, isLargeArcFlag }, idx);
+  useFocusEffect(() => {
+    const focusedTimeDegree = (dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360;
+    const degreeOfMinute = (MIN_TO_MS / DAY_TO_MS) * 360;
+    if (focusedTimeDegree - currentTimeDegree < degreeOfMinute) {
+      return;
+    }
+    setCurrentTimeDegree(focusedTimeDegree);
+  });
+
+  useEffect(() => {
+    if (!chart) {
+      return;
+    }
+    setChartData(getPieChartData());
+  }, [chart]);
+
+  const getPieChartData = () => {
+    if (!chart) {
+      return [];
+    }
+    const pieChartData = [];
+    for (let index = 0; index < chart.plans.length; index++) {
+      const element = chart.plans[index];
+
+      const endTime = dayjs()
+        .set('hour', element.endHour)
+        .set('minute', element.endMin)
+        .set('second', 0)
+        .set('millisecond', 0);
+
+      // 첫번째 계획
+      if (index === 0) {
+        // 계획이 하나만 있는 게 아니라면
+        if (chart?.plans.length !== 1) {
+          const nextPlan = chart.plans[index + 1];
+          const nextStartTime = dayjs()
+            .set('hour', nextPlan.startHour)
+            .set('minute', nextPlan.startMin)
+            .set('second', 0)
+            .set('millisecond', 0);
+
+          // 빈 시간이 없을 경우
+          if (endTime.isSame(nextStartTime)) {
+            pieChartData.push(element);
+          } else {
+            // 빈 시간이 있을 경우
+            pieChartData.push(element);
+            pieChartData.push({
+              id: Math.random(),
+              name: '',
+              startHour: element.endHour,
+              startMin: element.endMin,
+              endHour: nextPlan.startHour,
+              endMin: nextPlan.startMin,
+            });
+          }
+          // 계획이 하나뿐인 경우
+        } else {
+          pieChartData.push(element);
+          pieChartData.push({
+            id: Math.random(),
+            name: '',
+            startHour: element.endHour,
+            startMin: element.endMin,
+            endHour: element.startHour,
+            endMin: element.startMin,
+          });
+        }
+        // 마지막 계획
+      } else if (index === chart.plans.length - 1) {
+        const firstPlan = chart.plans[0];
+        const firstStartTime = dayjs()
+          .set('hour', firstPlan.startHour)
+          .set('minute', firstPlan.startMin)
+          .set('second', 0)
+          .set('millisecond', 0);
+
+        // 빈 시간이 없을 경우
+        if (endTime.isSame(firstStartTime)) {
+          pieChartData.push(element);
+        } else {
+          // 빈 시간이 있을 경우
+          pieChartData.push(element);
+          pieChartData.push({
+            id: Math.random(),
+            name: '',
+            startHour: element.endHour,
+            startMin: element.endMin,
+            endHour: firstPlan.startHour,
+            endMin: firstPlan.startMin,
+          });
+        }
+      } else {
+        const nextPlan = chart.plans[index + 1];
+        const nextStartTime = dayjs()
+          .set('hour', nextPlan.startHour)
+          .set('minute', nextPlan.startMin)
+          .set('second', 0)
+          .set('millisecond', 0);
+        if (endTime.isSame(nextStartTime)) {
+          pieChartData.push(element);
+        } else {
+          pieChartData.push(element);
+          pieChartData.push({
+            id: Math.random(),
+            name: '',
+            startHour: element.endHour,
+            startMin: element.endMin,
+            endHour: nextPlan.startHour,
+            endMin: nextPlan.startMin,
+          });
+        }
+      }
+    }
+
+    return pieChartData.map((plan) => {
+      const startTime = dayjs()
+        .set('hour', plan.startHour)
+        .set('minute', plan.startMin)
+        .set('second', 0)
+        .set('millisecond', 0);
+      const endTime = dayjs()
+        .set('hour', plan.endHour)
+        .set('minute', plan.endMin)
+        .set('second', 0)
+        .set('millisecond', 0);
+      return {
+        value: startTime.isAfter(endTime) ? endTime.diff(startTime) + DAY_TO_MS : endTime.diff(startTime),
+        text: plan.name,
+        shiftTextX: plan.name.length * -2,
+        color: 'transparent',
+        labelPosition: 'mid',
+      };
     });
-    // .join('');
-    return paths;
   };
 
-  const chartData = [
-    { per: 50, color: 'red', test: 0 },
-    { per: 20, color: 'orange', test: 50 },
-    { per: 25, color: 'yellow', test: 70 },
-    { per: 5, color: 'green', test: 95 },
-  ]; // 차트 데이터
+  if (!chart) {
+    return null;
+  }
 
   return (
     <View style={styles.wrapper}>
       <View>
         <View style={styles.container}>
           <View style={styles.labelCell}>
-            <Text>Date</Text>
+            <PlemText>Date</PlemText>
           </View>
           <View style={styles.valueCell}>
-            <Text>2022.12.18</Text>
+            <PlemText>{dayjs().format('YYYY.MM.DD')}</PlemText>
           </View>
         </View>
-        <View style={styles.container}>
+        <View style={[styles.container, { borderTopWidth: 0, borderBottomWidth: 0 }]}>
           <View style={styles.labelCell}>
-            <Text>Title</Text>
+            <PlemText>Title</PlemText>
           </View>
           <View style={styles.valueCell}>
-            <Text>Daily Plan</Text>
+            <PlemText>{chart.name}</PlemText>
           </View>
         </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            backgroundColor: 'yellow',
-            width: 345,
-            height: 345,
-            alignItems: 'center',
-          }}>
-          <PlanChartSVG style={{ backgroundColor: 'red', width: 300, height: 300 }} />
+        <View style={styles.chartBox}>
+          <View style={{ marginLeft: '8%', marginTop: '10%' }}>
+            <PlemText style={[styles.baseTimes, { top: '-8%', left: '42%' }]}>24</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '43%', left: '92%' }]}>6</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '93%', left: '42%' }]}>12</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '43%', left: '-7%' }]}>18</PlemText>
+            <PieChart
+              data={chartData}
+              initialAngle={initialAngle}
+              showText
+              textColor={'#000'}
+              labelsPosition={'outward'}
+              textSize={14}
+              font={'LeeSeoyun'}
+              strokeColor={'black'}
+              strokeWidth={2}
+              radius={chartRadius}
+            />
+          </View>
+          <View
+            style={[
+              styles.currentTimeBar,
+              {
+                transform: [
+                  { translateY: chartRadius / 2 },
+                  { rotate: `${currentTimeDegree}deg` },
+                  { translateY: -(chartRadius / 2) },
+                ],
+              },
+            ]}
+          />
         </View>
       </View>
-      <PlanGrid style={{ position: 'absolute' }} />
     </View>
   );
 };
@@ -86,30 +227,44 @@ const MainSVGFrame = () => {
 const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
-    height: 410,
-    width: 345,
   },
   container: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: 'transparent',
+    borderWidth: 2,
+    borderColor: '#000',
   },
   labelCell: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 60,
-    height: 30,
+    width: (screenWidth - 30) * 0.19,
+    height: screenHight * 0.5 * 0.077,
+    borderRightWidth: 2,
+    borderColor: '#000',
   },
   valueCell: {
     justifyContent: 'center',
     width: 285,
-    height: 30,
+    height: screenHight * 0.5 * 0.077,
     paddingHorizontal: 10,
   },
-  chartWrap: {
+  baseTimes: {
+    position: 'absolute',
+    color: '#AAAAAA',
+  },
+  currentTimeBar: {
+    backgroundColor: '#FFE600',
+    width: 2,
+    height: chartRadius * 0.75,
+    position: 'absolute',
+    marginTop: '10%',
+    top: 0,
+  },
+  chartBox: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 345,
+    width: '100%',
+    borderWidth: 2,
+    borderColor: '#000',
   },
 });
 

@@ -14,6 +14,7 @@ import { loggedInUserState } from '../states/loggedInUserState';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { useGetPlanChart } from '../hooks/queries/useGetPlanChart';
+import dayjs from 'dayjs';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -81,7 +82,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
     navigation.navigate('AddChartPage');
   };
 
-  const { data: planChartData } = useGetPlanChart({ id: 203 });
+  const { data: planChartData } = useGetPlanChart({ id: 209 });
 
   return (
     <View style={styles.page}>
@@ -93,10 +94,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <Image source={addChartImage} />
         </Pressable>
       </View>
-      <View style={styles.chartWrap}>
-        <MainSVGFrame />
-      </View>
-      <Pressable style={{ width: 200, height: 100, backgroundColor: 'aqua' }} onPress={removeJwt} />
+      <MainSVGFrame chart={planChartData?.data || null} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>
@@ -111,6 +109,10 @@ const MainPage = ({ navigation }: MainPageProps) => {
                 <View style={styles.planWrap}>
                   <View style={styles.yellowLineText}>
                     <PlemText>{plan.name}</PlemText>
+                    <PlemText>
+                      ------{dayjs().set('hour', plan.startHour).set('minute', plan.startMin).format('HH:MM')}~
+                      {dayjs().set('hour', plan.endHour).set('minute', plan.endMin).format('HH:MM')}
+                    </PlemText>
                     <Image source={yellowLineImage} style={styles.yellowLine} />
                   </View>
                   <Image source={plan.notification ? notificationOnImage : notificationOffImage} />
@@ -143,6 +145,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   chartWrap: {
+    position: 'relative',
     alignItems: 'center',
   },
   doItNowHeader: {
