@@ -14,8 +14,7 @@ import AddChartButton from './AddChartButton';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { useRecoilState } from 'recoil';
-
-const surprisedPlemImage = require('../../assets/images/surprised_plem.png');
+import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
@@ -68,7 +67,7 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
         )
       ) : (
         <View style={styles.emptyWrap}>
-          <Image source={surprisedPlemImage} />
+          <SurprisedPlemmonSvg />
           <PlemText style={styles.emptyText}>만들어진 계획표가 없어요.</PlemText>
           <AddChartButton />
         </View>

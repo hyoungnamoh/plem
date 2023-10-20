@@ -8,9 +8,8 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PlanChartListTabStackParamList } from '../../tabs/PlanChartListTab';
 import AddChartButton from './AddChartButton';
 import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar/constants';
-
-const arrowDownImage = require('../../assets/images/arrow_down.png');
-const arrowUpImage = require('../../assets/images/arrow_up.png');
+import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
+import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
 
 const ChartList = ({ list }: { list: PlanChart[] }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
@@ -29,7 +28,7 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
             </PlemText>
           </View>
         </Pressable>
-        <Image source={isActive ? arrowUpImage : arrowDownImage} style={{ alignSelf: 'center' }} />
+        {isActive ? <ArrowUpSvg style={{ alignSelf: 'center' }} /> : <ArrowDownSvg style={{ alignSelf: 'center' }} />}
       </View>
     );
   };

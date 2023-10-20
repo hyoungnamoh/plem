@@ -10,7 +10,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { DAYS_OF_WEEK } from '../../constants/dates';
@@ -20,8 +20,8 @@ import { useGetScheduleList } from '../../hooks/queries/useGetScheduleList';
 import { categoryListState } from '../../states/categoryListState';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
+import PlusSvg from '../../assets/images/plus_40x40.svg';
 
-const plusImage = require('../../assets/images/plus.png');
 const daysLineImage = require('../../assets/images/calendar_days_line.png');
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 const circleStrokeImage = require('../../assets/images/circle_stroke.png');
@@ -152,7 +152,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
           <View style={styles.pageHeader}>
             <PlemText style={styles.pageHeaderDate}>{`${currentDate.year()}년 ${currentDate.month() + 1}월`}</PlemText>
             <Pressable onPress={() => onPressAddSchedule(currentDate)}>
-              <Image source={plusImage} />
+              <PlusSvg />
             </Pressable>
           </View>
           <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek()}</View>

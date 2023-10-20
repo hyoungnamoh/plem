@@ -1,13 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
-import { CUSTOMMER_SUPPORT_PAGE_MENUES, MenuItem } from '../../constants/menus';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import MenuButton from '../../components/MenuButton';
 import PlemText from '../../components/Atoms/PlemText';
 import Accordion from 'react-native-collapsible/Accordion';
 import { useState } from 'react';
+import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
+import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
 type Section = {
@@ -15,8 +15,6 @@ type Section = {
   content: string;
 };
 
-const arrowDownImage = require('../../assets/images/arrow_down.png');
-const arroUpImage = require('../../assets/images/arrow_up.png');
 const lineGray = require('../../assets/images/line_gray.png');
 
 const NOTICE_LIST = [
@@ -42,7 +40,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
           <PlemText>{section.title}</PlemText>
           <PlemText style={styles.date}>2023.01.27</PlemText>
         </View>
-        <Image source={isActive ? arroUpImage : arrowDownImage} />
+        {isActive ? <ArrowDownSvg /> : <ArrowUpSvg />}
       </View>
     );
   };

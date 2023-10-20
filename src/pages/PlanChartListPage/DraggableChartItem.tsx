@@ -3,9 +3,7 @@ import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
 import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
-import { Dispatch, SetStateAction } from 'react';
-
-const hamburgerbarImage = require('../../assets/images/hamburgerbar.png');
+import HamburgerBarSvg from '../../assets/images/hamburgerbar_32x32.svg';
 
 const DraggableChartItem = ({
   item,
@@ -54,7 +52,7 @@ const DraggableChartItem = ({
     <View style={styles.wrap}>
       <View style={styles.contentContainer}>
         <Pressable onPressIn={drag}>
-          <Image source={hamburgerbarImage} />
+          <HamburgerBarSvg />
         </Pressable>
         {/* 차트 이미지 */}
         <View style={{ borderWidth: 1, borderColor: '#000', borderRadius: 5, height: 64, width: 64, marginLeft: 16 }} />

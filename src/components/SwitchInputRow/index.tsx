@@ -1,8 +1,8 @@
 import { Image, Pressable, PressableProps, StyleSheet, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
+import SwitchOnSvg from '../../assets/images/switch_on_52x28.svg';
+import SwitchOffSvg from '../../assets/images/switch_off_52x28.svg';
 
-const switchOffImage = require('../../assets/images/switch_off.png');
-const switchOnImage = require('../../assets/images/switch_on.png');
 const underlineImage = require('../../assets/images/underline.png');
 
 const SwitchInputRow = ({ label, value, ...pressableProps }: { label: string; value: boolean } & PressableProps) => {
@@ -11,7 +11,7 @@ const SwitchInputRow = ({ label, value, ...pressableProps }: { label: string; va
       <View style={styles.underlineButtonWrap}>
         <PlemText>{label}</PlemText>
         <Pressable style={styles.underlineButton} {...pressableProps}>
-          <Image source={value ? switchOnImage : switchOffImage} style={styles.switchOnImage} />
+          {value ? <SwitchOnSvg style={styles.switchOnImage} /> : <SwitchOffSvg style={styles.switchOnImage} />}
         </Pressable>
       </View>
       <Image source={underlineImage} style={styles.underlineImage} />

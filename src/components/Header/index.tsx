@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import { Image, Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
+import CloseSVG from '../../assets/images/header_close_40x40.svg';
+import BackSVG from '../../assets/images/header_back_40x40.svg';
 
 type HeaderProps = {
   onBack?: () => void;
@@ -11,18 +13,13 @@ type HeaderProps = {
   buttonNameProps?: TextProps | null;
 };
 
-const backImage = require('../../assets/images/top_ic_back.png');
-const closeImage = require('../../assets/images/top_ic_close.png');
-
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
   const hasButton = props.buttonName && typeof props.buttonProps?.onPress === 'function';
   return (
     <View style={styles.header}>
       <View style={styles.left}>
-        <Pressable onPress={props.onBack || navigation.goBack}>
-          <Image source={props.close ? closeImage : backImage} />
-        </Pressable>
+        <Pressable onPress={props.onBack || navigation.goBack}>{props.close ? <CloseSVG /> : <BackSVG />}</Pressable>
         <PlemText style={styles.title}>{props.title}</PlemText>
       </View>
       {hasButton && (

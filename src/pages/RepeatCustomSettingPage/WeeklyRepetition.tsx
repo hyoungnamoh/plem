@@ -1,9 +1,7 @@
-import { Dispatch, useState } from 'react';
-import { Dimensions, Image, ImageBackground, Pressable, View } from 'react-native';
+import { Dispatch } from 'react';
+import { Image, Pressable, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
-import SwitchInputRow from '../../components/SwitchInputRow';
-
-const checkImage = require('../../assets/images/check.png');
+import CheckSvg from '../../assets/images/check_32x32.svg';
 
 const REPEAT_DAY_LIST = [
   { value: 0, label: '일요일마다' },
@@ -47,7 +45,7 @@ const WeeklyRepetition = ({ selectedDates, setSelectedDates }: WeeklyRepetitionP
             }}
             onPress={() => onPressRepeatDay(item)}>
             <PlemText>{item.label}</PlemText>
-            {selectedDates.includes(item.value) && <Image source={checkImage} style={{ alignSelf: 'flex-start' }} />}
+            {selectedDates.includes(item.value) && <CheckSvg style={{ alignSelf: 'flex-start' }} />}
           </Pressable>
         );
       })}

@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addPlanState } from '../../states/addPlanState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
+import CheckSvg from '../../assets/images/check_32x32.svg';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: null, label: '없음' },
@@ -22,8 +23,6 @@ export const notiOptiosList: PlanNotiOptionItem[] = [
 ];
 
 type SetPlanNotificationPageProps = NativeStackScreenProps<MainTabStackParamList, 'PlanNotiSettingPage'>;
-
-const checkImage = require('../../assets/images/check.png');
 
 const PlanNotiSettingPage = ({ navigation }: SetPlanNotificationPageProps) => {
   const [plan, setPlan] = useRecoilState(addPlanState);
@@ -50,7 +49,7 @@ const PlanNotiSettingPage = ({ navigation }: SetPlanNotificationPageProps) => {
           return (
             <Pressable key={option.key} style={styles.listItem} onPress={() => onPressRepeatOption(option.key)}>
               <PlemText>{option.label}</PlemText>
-              {notification === option.key && <Image source={checkImage} />}
+              {notification === option.key && <CheckSvg />}
             </Pressable>
           );
         })}

@@ -1,8 +1,7 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../Atoms/PlemText';
 import { MenuItem } from '../../constants/menus';
-
-const arrowRightImage = require('../../assets/images/arrow_right.png');
+import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
 
 const MenuButton = ({ item, onPress }: { item: MenuItem; onPress: (menu: MenuItem) => void }) => {
   const { title, labelProps, label, arrow = true } = item;
@@ -13,7 +12,7 @@ const MenuButton = ({ item, onPress }: { item: MenuItem; onPress: (menu: MenuIte
         <PlemText {...item.labelProps} style={[{ marginRight: 8 }, item.labelProps?.style]}>
           {item.label}
         </PlemText>
-        {arrow ? <Image source={arrowRightImage} /> : null}
+        {arrow ? <ArrowRightSvg /> : null}
       </View>
     </Pressable>
   );

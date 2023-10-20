@@ -23,9 +23,9 @@ import { categoryListState } from '../../states/categoryListState';
 import { useQueryClient } from 'react-query';
 import { useUpdateSchedule } from '../../hooks/mutaions/useUpdateSchedule';
 import { useDeleteSchedule } from '../../hooks/mutaions/useDeleteSchedule';
+import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
 
 const underlineImage = require('../../assets/images/underline.png');
-const arrowDownImage = require('../../assets/images/arrow_down.png');
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -262,7 +262,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <PlemText>시작</PlemText>
                       <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                         <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />
@@ -272,7 +272,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <PlemText>날짜</PlemText>
                       <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                         <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />
@@ -288,7 +288,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <PlemText>날짜</PlemText>
                       <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                         <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />
@@ -300,7 +300,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                         <PlemText>
                           {`${timePadStart(startDate.get('hour'))}:${timePadStart(startDate.get('minute'))}`}
                         </PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />
@@ -313,7 +313,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <PlemText>날짜</PlemText>
                       <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                         <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />
@@ -325,7 +325,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                         <PlemText>
                           {`${timePadStart(endDate.get('hour'))}:${timePadStart(endDate.get('minute'))}`}
                         </PlemText>
-                        <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                        <ArrowDownSvg style={styles.arrowDownImage} />
                       </Pressable>
                     </View>
                     <Image source={underlineImage} style={styles.underlineImage} />

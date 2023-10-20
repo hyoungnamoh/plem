@@ -20,12 +20,12 @@ import { MainTabStackParamList } from '../../tabs/MainTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import NotificationActiveSvg from '../../assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from '../../assets/images/notification_inactive_32x32.svg';
+import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
+import UncheckedSvg from '../../assets/images/uncheckedbox_24x24.svg';
+import DeleteRedSvg from '../../assets/images/delete_red_24x24.svg';
 
-const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
-const uncheckedImage = require('../../assets/images/unchecked_black.png');
 const yellowLineImage = require('../../assets/images/yellow_line.png');
-const subPlanDeleteImage = require('../../assets/images/sub_plan_delete.png');
 
 type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChartPage'>;
 
@@ -205,7 +205,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
               <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
                 {getRepeatOptions()}
               </PlemText>
-              <Image source={arrowImage} style={styles.arrowImage} />
+              <ArrowRightSvg style={styles.arrowImage} />
             </Pressable>
           </View>
           <Image source={underlineImage} style={styles.underlineImage} />
@@ -214,7 +214,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           <View style={styles.underlineButtonWrap}>
             <PlemText>계획</PlemText>
             <Pressable style={styles.underlineButton} onPress={onPressAddPlan}>
-              <Image source={arrowImage} style={styles.arrowImage} />
+              <ArrowRightSvg style={styles.arrowImage} />
             </Pressable>
           </View>
           <Image source={underlineImage} style={styles.underlineImage} />
@@ -252,11 +252,11 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                     return (
                       <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
                         <View style={styles.subPlanNameWrap}>
-                          <Image source={uncheckedImage} />
+                          <UncheckedSvg />
                           <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
                         </View>
                         <Pressable onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
-                          <Image source={subPlanDeleteImage} style={{ marginLeft: 4 }} />
+                          <DeleteRedSvg style={{ marginLeft: 4 }} />
                         </Pressable>
                       </View>
                     );

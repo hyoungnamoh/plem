@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart, Repeats } from '../../../types/chart';
-import { DaysOfWeek, DaysOfWeekKor } from '../../../types/date';
+import { DaysOfWeekKor } from '../../../types/date';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
@@ -12,6 +12,7 @@ import { MAIN_COLOR } from '../../constants/colors';
 import { addPlanChartState } from '../../states/addPlanChartState';
 import { repeatDaysDefault, repeatDatesState } from '../../states/repeatDatesState';
 import { MainTabStackParamList } from '../../tabs/MainTab';
+import CheckSvg from '../../assets/images/check_32x32.svg';
 
 type RepeatOptionKor =
   | '안 함'
@@ -46,12 +47,9 @@ export const repeatOptionList: RepeatOptionItem[] = [
 
 type RepeatSettingPageProps = NativeStackScreenProps<MainTabStackParamList, 'RepeatSettingPage'>;
 
-const checkImage = require('../../assets/images/check.png');
-
 const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [repeatOptions, setRepeatOptions] = useState<Repeats>(chart.repeats);
-  // const [repeatDates, setSelectedDays] = useState<number[]>(chart.repeatDates ? [...chart.repeatDates] : []);
   const [repeatDates, setRepeatDays] = useRecoilState(repeatDatesState);
 
   useEffect(() => {
@@ -105,7 +103,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           return (
             <Pressable key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
               <PlemText>{repeat.label}</PlemText>
-              {repeatOptions.includes(repeat.value) && <Image source={checkImage} />}
+              {repeatOptions.includes(repeat.value) && <CheckSvg />}
             </Pressable>
           );
         })}

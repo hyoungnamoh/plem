@@ -1,5 +1,5 @@
 import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
-import CloseSVG from '../../../assets/images/top_ic_close.svg';
+import CloseSVG from '../../../assets/images/header_close_40x40.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../../../components/Atoms/PlemText';

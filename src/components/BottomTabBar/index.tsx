@@ -27,6 +27,7 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
             }
           };
 
+          const TabIconSvg = isFocused ? BOTTOM_TABS[index].active : BOTTOM_TABS[index].inactive;
           return (
             <Pressable
               key={route.key}
@@ -35,7 +36,7 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
               accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
               style={styles.tab}>
-              <Image source={isFocused ? BOTTOM_TABS[index].active : BOTTOM_TABS[index].inactive} />
+              <TabIconSvg />
             </Pressable>
           );
         })}

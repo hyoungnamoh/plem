@@ -1,11 +1,10 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
-
-const checkBoxImage = require('../../assets/images/checked_white.png');
+import CheckedBoxSvg from '../../assets/images/checkedbox_white_24x24.svg';
 
 const StartPlemButtonTitle = () => (
   <View style={styles.wrap}>
-    <Image source={checkBoxImage} />
+    <CheckedBoxSvg />
     <PlemText style={styles.text}>플렘 시작하기</PlemText>
   </View>
 );

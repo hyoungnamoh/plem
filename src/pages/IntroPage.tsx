@@ -8,6 +8,7 @@ import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import IntroLogoSvg from '../assets/images/intro_logo_202x60.svg';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
 
@@ -29,7 +30,7 @@ const IntroPage = ({ navigation }: IntroPageProps) => {
   return (
     <View style={styles.page}>
       <View>
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+        <IntroLogoSvg style={styles.logo} />
         <PlemText style={styles.descriptionText}>{'계획대로 흘러가는\n온전한 하루'}</PlemText>
       </View>
       <View style={styles.buttonContainer}>

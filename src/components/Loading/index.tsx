@@ -1,5 +1,4 @@
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
 
 const spinnerGif = require('../../assets/images/loading.gif');
 

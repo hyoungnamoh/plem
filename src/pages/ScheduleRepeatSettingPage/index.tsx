@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
+import CheckSvg from '../../assets/images/check_32x32.svg';
 
 type RepeatOptionKor = '안 함' | '매일' | '화요일마다' | '매주' | '2주마다' | '매월' | '매년' | '사용자화';
 
@@ -24,8 +25,6 @@ export const repeatOptionList: readonly { value: Repeat; label: RepeatOptionKor 
 ] as const;
 
 type RepeatSettingPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'ScheduleRepeatSettingPage'>;
-
-const checkImage = require('../../assets/images/check.png');
 
 const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
@@ -56,7 +55,7 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           return (
             <Pressable key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
               <PlemText>{repeat.label}</PlemText>
-              {repeatOption === repeat.value && <Image source={checkImage} />}
+              {repeatOption === repeat.value && <CheckSvg />}
             </Pressable>
           );
         })}

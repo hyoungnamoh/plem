@@ -10,10 +10,10 @@ import { notiOptiosList } from '../PlanNotiSettingPage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useAddPlan } from './useAddPlan';
 import { timePadStart } from '../../helper/timePadStart';
+import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
+import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
 
-const arrowRightImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
-const arrowDownImage = require('../../assets/images/arrow_down.png');
 
 export type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
 
@@ -73,7 +73,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                   <PlemText style={{ color: '#000000' }}>
                     {`${timePadStart(startHour)}:${timePadStart(startMin)}`}
                   </PlemText>
-                  <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                  <ArrowDownSvg style={styles.arrowDownImage} />
                 </Pressable>
               </View>
               <Image source={underlineImage} style={styles.underlineImage} />
@@ -83,7 +83,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                 <PlemText>종료 시간</PlemText>
                 <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
                   <PlemText style={{ color: '#000000' }}>{`${timePadStart(endHour)}:${timePadStart(endMin)}`}</PlemText>
-                  <Image source={arrowDownImage} style={styles.arrowDownImage} />
+                  <ArrowDownSvg style={styles.arrowDownImage} />
                 </Pressable>
               </View>
               <Image source={underlineImage} style={styles.underlineImage} />
@@ -95,7 +95,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               <PlemText>
                 {notiOptiosList.find((notification) => notification.key === plan.notification)?.label}
               </PlemText>
-              <Image source={arrowRightImage} style={styles.arrowRightImage} />
+              <ArrowRightSvg style={styles.arrowRightImage} />
             </Pressable>
           </View>
           <Image source={underlineImage} style={styles.underlineImage} />

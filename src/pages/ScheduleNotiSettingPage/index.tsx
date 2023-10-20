@@ -9,6 +9,7 @@ import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { addScheduleState } from '../../states/addScheduleState';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
+import CheckSvg from '../../assets/images/check_32x32.svg';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: null, label: '없음' },
@@ -21,8 +22,6 @@ export const notiOptiosList: PlanNotiOptionItem[] = [
 ];
 
 type SetScheduleNotificationPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'ScheduleNotiSettingPage'>;
-
-const checkImage = require('../../assets/images/check.png');
 
 const ScheduleNotiSettingPage = ({ navigation }: SetScheduleNotificationPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
@@ -46,7 +45,7 @@ const ScheduleNotiSettingPage = ({ navigation }: SetScheduleNotificationPageProp
           return (
             <Pressable key={option.key} style={styles.listItem} onPress={() => onPressRepeatOption(option.key)}>
               <PlemText>{option.label}</PlemText>
-              {notification === option.key && <Image source={checkImage} />}
+              {notification === option.key && <CheckSvg />}
             </Pressable>
           );
         })}
