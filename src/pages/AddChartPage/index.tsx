@@ -18,12 +18,12 @@ import { useUpdateChart } from '../../hooks/mutaions/useUpdateChart';
 import { StackActions, TabActions } from '@react-navigation/native';
 import { MainTabStackParamList } from '../../tabs/MainTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import NotificationActiveSvg from '../../assets/images/notification_active_32x32.svg';
+import NotificationInactiveSvg from '../../assets/images/notification_inactive_32x32.svg';
 
 const arrowImage = require('../../assets/images/arrow_right.png');
 const underlineImage = require('../../assets/images/underline.png');
 const uncheckedImage = require('../../assets/images/unchecked_black.png');
-const notificationOnImage = require('../../assets/images/notification_on.png');
-const notificationOffImage = require('../../assets/images/notification_off.png');
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 const subPlanDeleteImage = require('../../assets/images/sub_plan_delete.png');
 
@@ -155,7 +155,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         <PlemText style={styles.planEmptyText}>계획을 추가해 주세요.</PlemText>
         <View style={styles.planTimeContainer}>
           <PlemText style={styles.planEmptyText}>00:00 - 00:00</PlemText>
-          <Image source={notificationOffImage} style={{ marginLeft: 4 }} />
+          <NotificationInactiveSvg style={{ marginLeft: 4 }} />
         </View>
       </View>
     );
@@ -238,10 +238,11 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                       {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
                       {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
                     </PlemText>
-                    <Image
-                      source={plan.notification === null ? notificationOffImage : notificationOnImage}
-                      style={{ marginLeft: 4 }}
-                    />
+                    {plan.notification === null ? (
+                      <NotificationInactiveSvg style={{ marginLeft: 4 }} />
+                    ) : (
+                      <NotificationActiveSvg style={{ marginLeft: 4 }} />
+                    )}
                   </View>
                 </View>
                 <FlatList

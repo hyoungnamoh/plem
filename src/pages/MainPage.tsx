@@ -1,7 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import { useQueryClient } from 'react-query';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import PlemText from '../components/Atoms/PlemText';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,29 +8,28 @@ import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from '../tabs/MainTab';
 import { MAIN_COLOR } from '../constants/colors';
 import MainSVGFrame from '../components/MainSVGFrame';
-import { loggedInUserState } from '../states/loggedInUserState';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { useGetPlanChart } from '../hooks/queries/useGetPlanChart';
 import dayjs from 'dayjs';
+import NotificationActiveSvg from '../assets/images/notification_active_32x32.svg';
+import NotificationInactiveSvg from '../assets/images/notification_inactive_32x32.svg';
+import MainLogoSvg from '../assets/images/mainpage_logo_134x40.svg';
+import PlusSvg from '../assets/images/plus_40x40.svg';
+import UncheckboxSvg from '../assets/images/uncheckedbox_24x24.svg';
+import CheckboxSvg from '../assets/images/checkedbox_24x24.svg';
+import { addPlanChartState } from '../states/addPlanChartState';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
 const underlineImage = require('../assets/images/underline.png');
-const checkedImage = require('../assets/images/checked_black.png');
-const uncheckedImage = require('../assets/images/unchecked_black.png');
-const notificationOnImage = require('../assets/images/notification_on.png');
-const notificationOffImage = require('../assets/images/notification_off.png');
 const yellowLineImage = require('../assets/images/yellow_line.png');
-const mainTitleLogoImage = require('../assets/images/main_title_logo.png');
-const addChartImage = require('../assets/images/plus.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
-  const queryClient = useQueryClient();
-  const setLoggedInUser = useSetRecoilState(loggedInUserState);
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
-
+  const setChart = useSetRecoilState(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
+  const { data: planChartData } = useGetPlanChart({ id: 209 });
 
   useEffect(() => {
     setAsyncStorageData();
@@ -45,28 +42,16 @@ const MainPage = ({ navigation }: MainPageProps) => {
     setBottomSafeArea(MAIN_COLOR);
   });
 
-  const removeJwt = async () => {
-    try {
-      setLoggedInUser(null);
-      await EncryptedStorage.removeItem('accessToken');
-      queryClient.setQueryData('loginUser', { data: {} });
-    } catch (error) {
-      console.info(error);
-    }
-    Alert.alert('remove token');
-  };
-
   const setAsyncStorageData = async () => {
     const item = await AsyncStorage.getItem('plan_checked_list');
     const planCheckList = item ? JSON.parse(item) : [];
     setCheckedList(planCheckList);
   };
 
-  const onPressSubPlanRow = async (id: number) => {
+  const handleSubPlanPress = async (id: number) => {
     const asyncStorageItem = await AsyncStorage.getItem('plan_checked_list');
     const planCheckList: number[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
     const idIndex = planCheckList.findIndex((e) => e === id);
-    // const isChecked = planCheckList.includes(id);
 
     if (idIndex < 0) {
       planCheckList.push(id);
@@ -78,60 +63,111 @@ const MainPage = ({ navigation }: MainPageProps) => {
     await AsyncStorage.setItem('plan_checked_list', JSON.stringify(planCheckList));
   };
 
-  const onPressAddChart = () => {
+  const handleAddChartPress = () => {
     navigation.navigate('AddChartPage');
   };
 
-  const { data: planChartData } = useGetPlanChart({ id: 209 });
+  const getDoItNowPlan = () => {
+    if (!planChartData) {
+      return { doItNowPlan: null, doItNowPlanIndex: -1 };
+    }
+    const doItNowPlanIndex = planChartData.data.plans.findIndex((plan) => {
+      const now = dayjs();
+      const startTime = dayjs().set('hour', plan.startHour).set('minute', plan.startMin).startOf('minute');
+      const endTime = dayjs().set('hour', plan.endHour).set('minute', plan.endMin).startOf('minute');
+      return (startTime.isSame(now) || startTime.isBefore(now)) && endTime.isAfter(now);
+    });
+
+    const doItNowPlan = doItNowPlanIndex > -1 ? planChartData.data.plans[doItNowPlanIndex] : null;
+
+    return { doItNowPlan, doItNowPlanIndex };
+  };
+
+  const handleAddPlanPress = () => {
+    if (!planChartData) {
+      return;
+    }
+    navigation.navigate('AddChartPage', { chart: planChartData.data });
+    navigation.navigate('AddPlanPage');
+  };
+
+  const handleAddSubPlanPress = () => {
+    if (!planChartData) {
+      return;
+    }
+    navigation.navigate('AddChartPage', { chart: planChartData.data });
+  };
+
+  const handlePlanPress = (planIndex: number) => {
+    if (!planChartData || planIndex < 0) {
+      return;
+    }
+    setChart(planChartData.data);
+    navigation.navigate('AddChartPage', { chart: planChartData.data });
+    navigation.navigate('AddPlanPage', { planIndex });
+  };
+
+  const { doItNowPlan, doItNowPlanIndex } = getDoItNowPlan();
 
   return (
     <View style={styles.page}>
       <View style={styles.mainHeader}>
         <Pressable>
-          <Image source={mainTitleLogoImage} />
+          <MainLogoSvg />
         </Pressable>
-        <Pressable onPress={onPressAddChart}>
-          <Image source={addChartImage} />
+        <Pressable onPress={handleAddChartPress}>
+          <PlusSvg />
         </Pressable>
       </View>
       <MainSVGFrame chart={planChartData?.data || null} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>
-          <PlemText style={styles.currentTimesText}>10:00 - 12:00</PlemText>
+          <PlemText style={styles.currentTimesText}>
+            {doItNowPlan
+              ? `${dayjs()
+                  .set('hour', doItNowPlan.startHour)
+                  .set('minute', doItNowPlan.startMin)
+                  .format('HH:mm')} - ${dayjs()
+                  .set('hour', doItNowPlan.endHour)
+                  .set('minute', doItNowPlan.endMin)
+                  .format('HH:mm')}`
+              : null}
+          </PlemText>
         </View>
         <Image source={underlineImage} style={styles.doItNowUnderline} />
-        <KeyboardAwareScrollView contentContainerStyle={styles.doItNowContent} contentInset={{ bottom: 80 }}>
-          {/* {planChartData?.data.plans.map((plan) => { */}
-          {planChartData?.data.plans?.map((plan) => {
-            return (
-              <View key={`plan${plan.id}`}>
-                <View style={styles.planWrap}>
-                  <View style={styles.yellowLineText}>
-                    <PlemText>{plan.name}</PlemText>
-                    <PlemText>
-                      ------{dayjs().set('hour', plan.startHour).set('minute', plan.startMin).format('HH:MM')}~
-                      {dayjs().set('hour', plan.endHour).set('minute', plan.endMin).format('HH:MM')}
-                    </PlemText>
-                    <Image source={yellowLineImage} style={styles.yellowLine} />
-                  </View>
-                  <Image source={plan.notification ? notificationOnImage : notificationOffImage} />
-                </View>
-                {plan.subPlans.map((sub) => {
-                  const isChecked = checkedList.includes(sub.id);
-                  return (
-                    <Pressable
-                      key={`subPlan${sub.id}`}
-                      style={styles.subPlan}
-                      onPress={() => onPressSubPlanRow(sub.id)}>
-                      <Image source={isChecked ? checkedImage : uncheckedImage} />
-                      <PlemText style={{ marginLeft: 4 }}>{sub.name}</PlemText>
-                    </Pressable>
-                  );
-                })}
+        <KeyboardAwareScrollView style={{ height: '20%' }} contentContainerStyle={styles.doItNowContent}>
+          {doItNowPlan ? (
+            <View>
+              <View style={styles.planWrap}>
+                <Pressable style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowPlanIndex)}>
+                  <PlemText style={{ fontSize: 22.5 }}>{doItNowPlan.name}</PlemText>
+                  <Image source={yellowLineImage} style={styles.yellowLine} />
+                </Pressable>
+                <Pressable>
+                  {doItNowPlan.notification ? <NotificationActiveSvg /> : <NotificationInactiveSvg />}
+                </Pressable>
               </View>
-            );
-          })}
+              {doItNowPlan.subPlans.map((sub) => {
+                const isChecked = checkedList.includes(sub.id);
+                return (
+                  <Pressable key={`subPlan${sub.id}`} style={styles.subPlan} onPress={() => handleSubPlanPress(sub.id)}>
+                    {isChecked ? <CheckboxSvg /> : <UncheckboxSvg />}
+                    <PlemText style={{ marginLeft: 4 }}>{sub.name}</PlemText>
+                  </Pressable>
+                );
+              })}
+              <Pressable style={[styles.subPlan, { opacity: 0.3 }]} onPress={handleAddSubPlanPress}>
+                <UncheckboxSvg />
+                <PlemText style={{ marginLeft: 4 }}>할 일 추가하기</PlemText>
+              </Pressable>
+            </View>
+          ) : (
+            <Pressable style={styles.emptyPlanNowButton} onPress={handleAddPlanPress}>
+              <UncheckboxSvg />
+              <PlemText style={styles.emptyPlanNowText}>계획을 등록해 주세요.</PlemText>
+            </Pressable>
+          )}
         </KeyboardAwareScrollView>
       </View>
     </View>
@@ -151,6 +187,7 @@ const styles = StyleSheet.create({
   doItNowHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 20,
   },
   doItNowUnderline: { width: '100%', marginTop: 8 },
   currentTimesText: {
@@ -160,6 +197,8 @@ const styles = StyleSheet.create({
   planWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    height: 40,
+    alignItems: 'center',
   },
   yellowLineText: {
     flexDirection: 'row',
@@ -180,6 +219,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  emptyPlanNowButton: {
+    opacity: 0.3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 40,
+  },
+  emptyPlanNowText: {
+    fontSize: 16,
+    marginLeft: 4,
+  },
+  addSubPlanButton: {
+    opacity: 0.3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 40,
   },
 });
 

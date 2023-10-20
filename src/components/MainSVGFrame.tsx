@@ -157,9 +157,9 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
       return {
         value: startTime.isAfter(endTime) ? endTime.diff(startTime) + DAY_TO_MS : endTime.diff(startTime),
         text: plan.name,
-        shiftTextX: plan.name.length * -2,
+        shiftTextX: plan.name.length * -3,
         color: 'transparent',
-        labelPosition: 'mid',
+        labelPosition: 'outward',
       };
     });
   };
