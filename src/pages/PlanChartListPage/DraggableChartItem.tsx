@@ -4,20 +4,22 @@ import PlemText from '../../components/Atoms/PlemText';
 import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
 import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
 import HamburgerBarSvg from '../../assets/images/hamburgerbar_32x32.svg';
+import { PieChart } from 'react-native-gifted-charts';
+import { usePieChart } from '../../hooks/usePieChart';
 
 const DraggableChartItem = ({
   item,
   drag,
-  isActive,
   onDeleteUpdate,
   onCloneUpdate,
 }: {
   item: PlanChart;
   drag: () => void;
-  isActive: boolean;
   onDeleteUpdate: ({ id }: { id: number }) => void;
   onCloneUpdate: ({ newItem }: { newItem: PlanChart; originId: number }) => void;
 }) => {
+  const { pieChartData, initialAngle } = usePieChart({ chart: item, hideName: true });
+
   const { mutate: cloneChart } = useCloneChart({
     onSuccess: ({ data }) => {
       onCloneUpdate({ newItem: data, originId: item.id });
@@ -41,21 +43,32 @@ const DraggableChartItem = ({
     },
   });
 
-  const onPressClone = (id: number) => {
+  const handleClonePress = (id: number) => {
     cloneChart({ id });
   };
 
-  const onPressDelete = (id: number) => {
+  const handleDeletePress = (id: number) => {
     deleteChart({ id });
   };
+
   return (
     <View style={styles.wrap}>
       <View style={styles.contentContainer}>
-        <Pressable onPressIn={drag}>
+        <Pressable onPressIn={drag} style={{ marginRight: 16 }}>
           <HamburgerBarSvg />
         </Pressable>
-        {/* 차트 이미지 */}
-        <View style={{ borderWidth: 1, borderColor: '#000', borderRadius: 5, height: 64, width: 64, marginLeft: 16 }} />
+        <PieChart
+          data={pieChartData}
+          initialAngle={initialAngle}
+          showText
+          textColor={'#000'}
+          labelsPosition={'outward'}
+          textSize={14}
+          font={'LeeSeoyun'}
+          strokeColor={'black'}
+          strokeWidth={2}
+          radius={32}
+        />
         <View style={styles.chartNameWrap}>
           <PlemText style={styles.chartName} numberOfLines={2}>
             {item.name}
@@ -63,10 +76,10 @@ const DraggableChartItem = ({
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.cloneButton} hitSlop={8} onPress={() => onPressClone(item.id)}>
+        <Pressable style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
           <PlemText style={styles.cloneText}>복사</PlemText>
         </Pressable>
-        <Pressable style={styles.removeButton} hitSlop={8} onPress={() => onPressDelete(item.id)}>
+        <Pressable style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
           <PlemText style={styles.removeText}>삭제</PlemText>
         </Pressable>
       </View>

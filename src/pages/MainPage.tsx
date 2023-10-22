@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from '../tabs/MainTab';
 import { MAIN_COLOR } from '../constants/colors';
-import MainSVGFrame from '../components/MainSVGFrame';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { useGetPlanChart } from '../hooks/queries/useGetPlanChart';
@@ -19,6 +18,7 @@ import PlusSvg from '../assets/images/plus_40x40.svg';
 import UncheckboxSvg from '../assets/images/uncheckedbox_24x24.svg';
 import CheckboxSvg from '../assets/images/checkedbox_24x24.svg';
 import { addPlanChartState } from '../states/addPlanChartState';
+import MainChartTable from '../components/MainChartTable';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -119,7 +119,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <PlusSvg />
         </Pressable>
       </View>
-      <MainSVGFrame chart={planChartData?.data || null} />
+      <MainChartTable chart={planChartData?.data || null} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>

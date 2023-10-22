@@ -72,12 +72,12 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
-  // console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
+  console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
+      {(isFetching || isMutating) && !disableLoading ? <Loading /> : null}
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
-        {(isFetching || isMutating) && !disableLoading ? <Loading /> : null}
         {loggedInUser?.id ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>

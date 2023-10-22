@@ -158,11 +158,11 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   };
 
   const plansSortingByTime = (plans: AddPlan[]) => {
-    return plans.sort((a, b) => {
-      const aStartTime = `${a.startHour}:${a.startMin}`;
-      const bStartTime = `${b.startHour}:${b.startMin}`;
-      return aStartTime.localeCompare(bStartTime);
-    });
+    return plans.sort(
+      (a, b) =>
+        dayjs().set('hour', a.startHour).set('minute', a.startMin).unix() -
+        dayjs().set('hour', b.startHour).set('minute', b.startMin).unix()
+    );
   };
 
   const onPressSetNotification = () => {
@@ -214,20 +214,6 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     date.setMinutes(min);
     return date;
   };
-
-  // const getStartPickerValue = () => {
-  //   const date = new Date();
-  //   date.setHours(startHour);
-  //   date.setMinutes(startMin);
-  //   return date;
-  // };
-
-  // const getEndPickerValue = () => {
-  //   const date = new Date();
-  //   date.setHours(endHour);
-  //   date.setMinutes(endMin);
-  //   return date;
-  // };
 
   const onChangeName = (value: string) => {
     setName(value);

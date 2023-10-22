@@ -1,20 +1,23 @@
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { PieChart } from 'react-native-gifted-charts';
-import { PlanChart } from '../../types/chart';
-import PlemText from './Atoms/PlemText';
-import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { itemType } from 'react-native-gifted-charts/src/LineChart/types';
 import { useFocusEffect } from '@react-navigation/native';
 import { DAY_TO_MS, MIN_TO_MS } from '../constants/times';
+import dayjs from 'dayjs';
+import { AddPlanChart, PlanChart } from '../../types/chart';
 
-const screenWidth = Dimensions.get('screen').width;
-const screenHight = Dimensions.get('screen').height;
-const chartRadius = Dimensions.get('screen').width / 2.65;
-
-const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
-  const [chartData, setChartData] = useState<itemType[]>([]);
-  const [currentTimeDegree, setCurrentTimeDegree] = useState((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
+export const usePieChart = ({
+  chart,
+  renderCurrentTime,
+  hideName,
+}: {
+  chart: PlanChart | AddPlanChart | null;
+  renderCurrentTime?: boolean;
+  hideName?: boolean;
+}) => {
+  const [pieChartData, setChartData] = useState<itemType[]>([]);
+  const [currentTimeDegree, setCurrentTimeDegree] = useState(
+    renderCurrentTime ? (dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360 : 0
+  );
   const initialAngle =
     chart && chart.plans.length > 0
       ? (dayjs()
@@ -29,6 +32,9 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
       : 0;
 
   useFocusEffect(() => {
+    if (!renderCurrentTime) {
+      return;
+    }
     const focusedTimeDegree = (dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360;
     const degreeOfMinute = (MIN_TO_MS / DAY_TO_MS) * 360;
     if (focusedTimeDegree - currentTimeDegree < degreeOfMinute) {
@@ -48,7 +54,7 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
     if (!chart) {
       return [];
     }
-    const pieChartData = [];
+    const chartData = [];
     for (let index = 0; index < chart.plans.length; index++) {
       const element = chart.plans[index];
 
@@ -71,11 +77,11 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
 
           // 빈 시간이 없을 경우
           if (endTime.isSame(nextStartTime)) {
-            pieChartData.push(element);
+            chartData.push(element);
           } else {
             // 빈 시간이 있을 경우
-            pieChartData.push(element);
-            pieChartData.push({
+            chartData.push(element);
+            chartData.push({
               id: Math.random(),
               name: '',
               startHour: element.endHour,
@@ -86,8 +92,8 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
           }
           // 계획이 하나뿐인 경우
         } else {
-          pieChartData.push(element);
-          pieChartData.push({
+          chartData.push(element);
+          chartData.push({
             id: Math.random(),
             name: '',
             startHour: element.endHour,
@@ -107,11 +113,11 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
 
         // 빈 시간이 없을 경우
         if (endTime.isSame(firstStartTime)) {
-          pieChartData.push(element);
+          chartData.push(element);
         } else {
           // 빈 시간이 있을 경우
-          pieChartData.push(element);
-          pieChartData.push({
+          chartData.push(element);
+          chartData.push({
             id: Math.random(),
             name: '',
             startHour: element.endHour,
@@ -128,10 +134,10 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
           .set('second', 0)
           .set('millisecond', 0);
         if (endTime.isSame(nextStartTime)) {
-          pieChartData.push(element);
+          chartData.push(element);
         } else {
-          pieChartData.push(element);
-          pieChartData.push({
+          chartData.push(element);
+          chartData.push({
             id: Math.random(),
             name: '',
             startHour: element.endHour,
@@ -143,7 +149,7 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
       }
     }
 
-    return pieChartData.map((plan) => {
+    return chartData.map((plan) => {
       const startTime = dayjs()
         .set('hour', plan.startHour)
         .set('minute', plan.startMin)
@@ -156,7 +162,7 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
         .set('millisecond', 0);
       return {
         value: startTime.isAfter(endTime) ? endTime.diff(startTime) + DAY_TO_MS : endTime.diff(startTime),
-        text: plan.name,
+        text: hideName ? '' : plan.name,
         shiftTextX: plan.name.length * -3,
         color: 'transparent',
         labelPosition: 'outward',
@@ -164,108 +170,9 @@ const MainSVGFrame = ({ chart }: { chart: PlanChart | null }) => {
     });
   };
 
-  if (!chart) {
-    return null;
-  }
-
-  return (
-    <View style={styles.wrapper}>
-      <View>
-        <View style={styles.container}>
-          <View style={styles.labelCell}>
-            <PlemText>Date</PlemText>
-          </View>
-          <View style={styles.valueCell}>
-            <PlemText>{dayjs().format('YYYY.MM.DD')}</PlemText>
-          </View>
-        </View>
-        <View style={[styles.container, { borderTopWidth: 0, borderBottomWidth: 0 }]}>
-          <View style={styles.labelCell}>
-            <PlemText>Title</PlemText>
-          </View>
-          <View style={styles.valueCell}>
-            <PlemText>{chart.name}</PlemText>
-          </View>
-        </View>
-        <View style={styles.chartBox}>
-          <View style={{ marginLeft: '8%', marginTop: '10%' }}>
-            <PlemText style={[styles.baseTimes, { top: '-8%', left: '42%' }]}>24</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '92%' }]}>6</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '93%', left: '42%' }]}>12</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '-7%' }]}>18</PlemText>
-            <PieChart
-              data={chartData}
-              initialAngle={initialAngle}
-              showText
-              textColor={'#000'}
-              labelsPosition={'outward'}
-              textSize={14}
-              font={'LeeSeoyun'}
-              strokeColor={'black'}
-              strokeWidth={2}
-              radius={chartRadius}
-            />
-          </View>
-          <View
-            style={[
-              styles.currentTimeBar,
-              {
-                transform: [
-                  { translateY: chartRadius / 2 },
-                  { rotate: `${currentTimeDegree}deg` },
-                  { translateY: -(chartRadius / 2) },
-                ],
-              },
-            ]}
-          />
-        </View>
-      </View>
-    </View>
-  );
+  return {
+    pieChartData,
+    initialAngle,
+    currentTimeDegree,
+  };
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    position: 'relative',
-  },
-  container: {
-    flexDirection: 'row',
-    borderWidth: 2,
-    borderColor: '#000',
-  },
-  labelCell: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: (screenWidth - 30) * 0.19,
-    height: screenHight * 0.5 * 0.077,
-    borderRightWidth: 2,
-    borderColor: '#000',
-  },
-  valueCell: {
-    justifyContent: 'center',
-    width: 285,
-    height: screenHight * 0.5 * 0.077,
-    paddingHorizontal: 10,
-  },
-  baseTimes: {
-    position: 'absolute',
-    color: '#AAAAAA',
-  },
-  currentTimeBar: {
-    backgroundColor: '#FFE600',
-    width: 2,
-    height: chartRadius * 0.75,
-    position: 'absolute',
-    marginTop: '10%',
-    top: 0,
-  },
-  chartBox: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    borderWidth: 2,
-    borderColor: '#000',
-  },
-});
-
-export default MainSVGFrame;

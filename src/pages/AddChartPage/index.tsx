@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
@@ -12,7 +12,6 @@ import SubPlanInput from '../../components/SubPlanInput';
 import { MAIN_COLOR } from '../../constants/colors';
 import { timePadStart } from '../../helper/timePadStart';
 import { useQueryClient } from 'react-query';
-import PlemTextInput from '../../components/Atoms/PlemTextInput';
 import { useAddChart } from '../../hooks/mutaions/useAddChart';
 import { useUpdateChart } from '../../hooks/mutaions/useUpdateChart';
 import { StackActions, TabActions } from '@react-navigation/native';
@@ -23,6 +22,7 @@ import NotificationInactiveSvg from '../../assets/images/notification_inactive_3
 import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
 import UncheckedSvg from '../../assets/images/uncheckedbox_24x24.svg';
 import DeleteRedSvg from '../../assets/images/delete_red_24x24.svg';
+import AddChartTable from '../../components/AddChartTable';
 
 const underlineImage = require('../../assets/images/underline.png');
 const yellowLineImage = require('../../assets/images/yellow_line.png');
@@ -179,25 +179,15 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     navigation.navigate('AddPlanPage', { planIndex: planIndex });
   };
 
-  const onChanageName = (value: string) => {
-    const copiedChart = cloneDeep(chart);
-    copiedChart.name = value;
-    setChart(copiedChart);
-  };
-
   return (
-    <View style={styles.page}>
+    <ScrollView style={styles.page}>
       <Header
         title={isEdit ? '계획표 수정' : '계획표 추가'}
         buttonName={isEdit ? '완료' : '등록'}
         buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
       />
       <View style={{ paddingHorizontal: 15 }}>
-        <PlemTextInput
-          value={chart.name}
-          onChangeText={onChanageName}
-          style={{ borderColor: 'black', borderWidth: 1 }}
-        />
+        <AddChartTable />
         <View style={styles.optionRow}>
           <View style={styles.underlineButtonWrap}>
             <PlemText>반복</PlemText>
@@ -219,12 +209,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           </View>
           <Image source={underlineImage} style={styles.underlineImage} />
         </View>
-        <FlatList
-          style={styles.planContainer}
-          contentInset={{ bottom: 80 }}
-          data={chart.plans}
-          extraData={chart.plans}
-          renderItem={({ item: plan, index: planIndex }) => {
+        <View style={styles.planContainer}>
+          {chart.plans.map((plan, planIndex) => {
             const { startHour, startMin, endHour, endMin } = plan;
             return (
               <View key={`plan_${planIndex}}`}>
@@ -245,10 +231,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                     )}
                   </View>
                 </View>
-                <FlatList
-                  data={plan.subPlans}
-                  extraData={plan.subPlans}
-                  renderItem={({ item: subPlan, index: subPlanIndex }) => {
+                <View>
+                  {plan.subPlans.map((subPlan, subPlanIndex) => {
                     return (
                       <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
                         <View style={styles.subPlanNameWrap}>
@@ -260,16 +244,15 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                         </Pressable>
                       </View>
                     );
-                  }}
-                />
+                  })}
+                </View>
                 <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
               </View>
             );
-          }}
-          ListEmptyComponent={getPlanEmptyComponent()}
-        />
+          })}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
