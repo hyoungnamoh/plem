@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Image from 'react-native-scalable-image';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
@@ -8,47 +9,42 @@ import Accordion from 'react-native-collapsible/Accordion';
 import { useState } from 'react';
 import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
 import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
+import { useGetNoticeList } from '../../hooks/queries/useGetNoticeList';
+import { Notice } from '../../../types/notice';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
-type Section = {
-  title: string;
-  content: string;
-};
 
 const lineGray = require('../../assets/images/line_gray.png');
 
-const NOTICE_LIST = [
-  {
-    title: 'title1',
-    content:
-      '그들에게 얼마나 얼마나 같이, 뿐이다.\n청춘이 고동을 청춘을 실현에 예가 착목한는 기쁘며,\n고행을 것이다. 앞이 부패를 피에\n인간의 있을 이상 노래하며 그리하였는가?\n\n같이 날카로우나 봄바람을 옷을 인류의 뜨거운지라,\n얼마나 가는 공자는 것이다.\n이상이 현저하게 위하여,\n부패를 끓는 이것을 못하다 그리하였는가?',
-  },
-  {
-    title: 'title2',
-    content:
-      '그들에게 얼마나 얼마나 같이, 뿐이다.\n청춘이 고동을 청춘을 실현에 예가 착목한는 기쁘며,\n고행을 것이다. 앞이 부패를 피에\n인간의 있을 이상 노래하며 그리하였는가?\n\n같이 날카로우나 봄바람을 옷을 인류의 뜨거운지라,\n얼마나 가는 공자는 것이다.\n이상이 현저하게 위하여,\n부패를 끓는 이것을 못하다 그리하였는가?',
-  },
-];
-
 const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
-  const [activeSections, setAciveSections] = useState<number[]>([]);
+  const [activeNotice, setAciveNotice] = useState<number[]>([]);
+  const { data: noticeList } = useGetNoticeList();
 
-  const renderAccordionHeader = (section: Section, _: number, isActive: boolean) => {
+  const renderAccordionHeader = (notice: Notice, _: number, isActive: boolean) => {
     return (
       <View style={styles.accordionHeader}>
         <View>
-          <PlemText>{section.title}</PlemText>
+          <PlemText>{notice.title}</PlemText>
           <PlemText style={styles.date}>2023.01.27</PlemText>
         </View>
-        {isActive ? <ArrowDownSvg /> : <ArrowUpSvg />}
+        {isActive ? <ArrowUpSvg /> : <ArrowDownSvg />}
       </View>
     );
   };
 
-  const renderAccordionContent = (section: Section) => {
+  const renderAccordionContent = (notice: Notice) => {
     return (
       <View style={styles.content}>
-        <PlemText>{section.content}</PlemText>
+        {notice.contents.map((content) => {
+          console.log(`http://192.168.219.101:3030/${content}`);
+          return (
+            <Image
+              source={{ uri: `http://192.168.219.101:3030/${content}` }}
+              width={Dimensions.get('screen').width - 40}
+            />
+          );
+        })}
+        {/* <PlemText>{notice.content}</PlemText> */}
       </View>
     );
   };
@@ -58,15 +54,15 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
   };
 
   const updateSections = (sectionIndexs: number[]) => {
-    setAciveSections(sectionIndexs);
+    setAciveNotice(sectionIndexs);
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       <Header title="공지사항" />
       <Accordion
-        sections={NOTICE_LIST}
-        activeSections={activeSections}
+        sections={noticeList?.data || []}
+        activeSections={activeNotice}
         renderHeader={renderAccordionHeader}
         renderContent={renderAccordionContent}
         renderFooter={renderAccordionFooter}
