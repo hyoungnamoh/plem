@@ -195,7 +195,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   };
 
   const handleStartTimeConfirm = (date: Date) => {
-    console.log('start', date);
     setSchedule({
       ...schedule,
       startDate: startDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
@@ -205,7 +204,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   };
 
   const handleEndTimeConfirm = (date: Date) => {
-    console.log('end', date);
     setSchedule({
       ...schedule,
       startDate: dayjs(date).isBefore(schedule.startDate)
@@ -360,7 +358,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           onConfirm={handleStartTimeConfirm}
           onCancel={() => setOpenStartTimePicker(false)}
           locale="en_GB"
-          is24Hour
+          is24Hour={true}
           minuteInterval={10}
           date={startDate.toDate()}
         />
@@ -370,7 +368,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
           onConfirm={handleEndTimeConfirm}
           onCancel={() => setOpenEndTimePicker(false)}
           locale="en_GB"
-          is24Hour
+          is24Hour={true}
           minuteInterval={10}
           date={endDate.toDate()}
         />
