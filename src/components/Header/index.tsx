@@ -3,6 +3,7 @@ import { Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-na
 import PlemText from '../Atoms/PlemText';
 import CloseSVG from '../../assets/images/header_close_40x40.svg';
 import BackSVG from '../../assets/images/header_back_40x40.svg';
+import { MAIN_COLOR } from '../../constants/colors';
 
 type HeaderProps = {
   onBack?: () => void;
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: MAIN_COLOR,
   },
   left: {
     flexDirection: 'row',

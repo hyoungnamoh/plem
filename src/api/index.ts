@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 const apiRequest = axios.create({
   baseURL: 'http://192.168.219.101:3030',
-  validateStatus: (status) => status < 500,
+  validateStatus: () => true,
 });
 
 apiRequest.defaults.timeout = 10000;

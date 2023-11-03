@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddSchedule, Repeat } from '../../../types/calendar';
+import { Repeat } from '../../../types/calendar';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
@@ -21,14 +20,14 @@ export const repeatOptionList: readonly { value: Repeat; label: RepeatOptionKor 
   { value: '2weeks', label: '2주마다' },
   { value: 'month', label: '매월' },
   { value: 'year', label: '매년' },
-  { value: 'custom', label: '사용자화' },
+  // { value: 'custom', label: '사용자화' },
 ] as const;
 
 type RepeatSettingPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'ScheduleRepeatSettingPage'>;
 
 const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
-  const [repeatOption, setRepeatOption] = useState<Repeat>(schedule.repeat);
+  const [repeatOption, setRepeatOption] = useState<Repeat>(schedule.repeats);
 
   useEffect(() => {}, []);
 
@@ -41,7 +40,7 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
   const onPressBottomButton = () => {
     const copiedSchedule = { ...schedule };
-    copiedSchedule.repeat = repeatOption;
+    copiedSchedule.repeats = repeatOption;
     setSchedule(copiedSchedule);
 
     navigation.goBack();

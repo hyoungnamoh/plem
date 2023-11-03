@@ -23,6 +23,7 @@ import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
 import UncheckedSvg from '../../assets/images/uncheckedbox_24x24.svg';
 import DeleteRedSvg from '../../assets/images/delete_red_24x24.svg';
 import AddChartTable from '../../components/AddChartTable';
+import { TODAY_PLAN_CHART_QUERY_KEY } from '../../hooks/queries/useGetTodayPlanChart';
 
 const underlineImage = require('../../assets/images/underline.png');
 const yellowLineImage = require('../../assets/images/yellow_line.png');
@@ -38,6 +39,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         queryClient.invalidateQueries('chartList');
+        queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         navigation.dispatch(TabActions.jumpTo('PlanChartListTab'));
         navigation.dispatch(StackActions.popToTop());
       } else {
@@ -55,6 +57,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         queryClient.invalidateQueries('chartList');
+        queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         navigation.goBack();
       } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
@@ -180,79 +183,81 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   return (
-    <ScrollView style={styles.page}>
+    <>
       <Header
         title={isEdit ? '계획표 수정' : '계획표 추가'}
         buttonName={isEdit ? '완료' : '등록'}
         buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
       />
-      <View style={{ paddingHorizontal: 15 }}>
-        <AddChartTable />
-        <View style={styles.optionRow}>
-          <View style={styles.underlineButtonWrap}>
-            <PlemText>반복</PlemText>
-            <Pressable style={styles.underlineButton} onPress={onPressRepeatSetting}>
-              <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
-                {getRepeatOptions()}
-              </PlemText>
-              <ArrowRightSvg style={styles.arrowImage} />
-            </Pressable>
+      <ScrollView style={styles.page}>
+        <View style={{ paddingHorizontal: 15 }}>
+          <AddChartTable />
+          <View style={styles.optionRow}>
+            <View style={styles.underlineButtonWrap}>
+              <PlemText>반복</PlemText>
+              <Pressable style={styles.underlineButton} onPress={onPressRepeatSetting}>
+                <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
+                  {getRepeatOptions()}
+                </PlemText>
+                <ArrowRightSvg style={styles.arrowImage} />
+              </Pressable>
+            </View>
+            <Image source={underlineImage} style={styles.underlineImage} />
           </View>
-          <Image source={underlineImage} style={styles.underlineImage} />
-        </View>
-        <View style={styles.optionRow}>
-          <View style={styles.underlineButtonWrap}>
-            <PlemText>계획</PlemText>
-            <Pressable style={styles.underlineButton} onPress={onPressAddPlan}>
-              <ArrowRightSvg style={styles.arrowImage} />
-            </Pressable>
+          <View style={styles.optionRow}>
+            <View style={styles.underlineButtonWrap}>
+              <PlemText>계획</PlemText>
+              <Pressable style={styles.underlineButton} onPress={onPressAddPlan}>
+                <ArrowRightSvg style={styles.arrowImage} />
+              </Pressable>
+            </View>
+            <Image source={underlineImage} style={styles.underlineImage} />
           </View>
-          <Image source={underlineImage} style={styles.underlineImage} />
-        </View>
-        <View style={styles.planContainer}>
-          {chart.plans.map((plan, planIndex) => {
-            const { startHour, startMin, endHour, endMin } = plan;
-            return (
-              <View key={`plan_${planIndex}}`}>
-                <View style={styles.planWrap}>
-                  <Pressable style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
-                    <PlemText>{plan.name}</PlemText>
-                    <Image source={yellowLineImage} style={styles.yellowLine} />
-                  </Pressable>
-                  <View style={styles.notificationContainer}>
-                    <PlemText>
-                      {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
-                      {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
-                    </PlemText>
-                    {plan.notification === null ? (
-                      <NotificationInactiveSvg style={{ marginLeft: 4 }} />
-                    ) : (
-                      <NotificationActiveSvg style={{ marginLeft: 4 }} />
-                    )}
+          <View style={styles.planContainer}>
+            {chart.plans.map((plan, planIndex) => {
+              const { startHour, startMin, endHour, endMin } = plan;
+              return (
+                <View key={`plan_${planIndex}}`}>
+                  <View style={styles.planWrap}>
+                    <Pressable style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
+                      <PlemText>{plan.name}</PlemText>
+                      <Image source={yellowLineImage} style={styles.yellowLine} />
+                    </Pressable>
+                    <View style={styles.notificationContainer}>
+                      <PlemText>
+                        {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
+                        {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
+                      </PlemText>
+                      {plan.notification === null ? (
+                        <NotificationInactiveSvg style={{ marginLeft: 4 }} />
+                      ) : (
+                        <NotificationActiveSvg style={{ marginLeft: 4 }} />
+                      )}
+                    </View>
                   </View>
-                </View>
-                <View>
-                  {plan.subPlans.map((subPlan, subPlanIndex) => {
-                    return (
-                      <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
-                        <View style={styles.subPlanNameWrap}>
-                          <UncheckedSvg />
-                          <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                  <View>
+                    {plan.subPlans.map((subPlan, subPlanIndex) => {
+                      return (
+                        <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
+                          <View style={styles.subPlanNameWrap}>
+                            <UncheckedSvg />
+                            <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                          </View>
+                          <Pressable onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
+                            <DeleteRedSvg style={{ marginLeft: 4 }} />
+                          </Pressable>
                         </View>
-                        <Pressable onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
-                          <DeleteRedSvg style={{ marginLeft: 4 }} />
-                        </Pressable>
-                      </View>
-                    );
-                  })}
+                      );
+                    })}
+                  </View>
+                  <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
                 </View>
-                <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 

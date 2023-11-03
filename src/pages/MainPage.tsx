@@ -9,7 +9,6 @@ import { MainTabStackParamList } from '../tabs/MainTab';
 import { MAIN_COLOR } from '../constants/colors';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
-import { useGetPlanChart } from '../hooks/queries/useGetPlanChart';
 import dayjs from 'dayjs';
 import NotificationActiveSvg from '../assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from '../assets/images/notification_inactive_32x32.svg';
@@ -19,6 +18,8 @@ import UncheckboxSvg from '../assets/images/uncheckedbox_24x24.svg';
 import CheckboxSvg from '../assets/images/checkedbox_24x24.svg';
 import { addPlanChartState } from '../states/addPlanChartState';
 import MainChartTable from '../components/MainChartTable';
+import { useQueryClient } from 'react-query';
+import { TODAY_PLAN_CHART_QUERY_KEY, useGetTodayPlanChart } from '../hooks/queries/useGetTodayPlanChart';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -26,23 +27,29 @@ const underlineImage = require('../assets/images/underline.png');
 const yellowLineImage = require('../assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
+  const queryClient = useQueryClient();
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const setChart = useSetRecoilState(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
-  const { data: planChartData } = useGetPlanChart({ id: 209 });
+  const [currentDate, setCorrentDate] = useState(dayjs().get('date'));
+  const { data: todayPlanChart } = useGetTodayPlanChart();
 
   useEffect(() => {
-    setAsyncStorageData();
+    setCheckedListToStorageData();
   }, []);
 
   useFocusEffect(() => {
-    if (bottomSafeArea === MAIN_COLOR) {
-      return;
+    if (bottomSafeArea !== MAIN_COLOR) {
+      setBottomSafeArea(MAIN_COLOR);
     }
-    setBottomSafeArea(MAIN_COLOR);
+
+    if (currentDate !== dayjs().get('date')) {
+      queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+      setCorrentDate(dayjs().get('date'));
+    }
   });
 
-  const setAsyncStorageData = async () => {
+  const setCheckedListToStorageData = async () => {
     const item = await AsyncStorage.getItem('plan_checked_list');
     const planCheckList = item ? JSON.parse(item) : [];
     setCheckedList(planCheckList);
@@ -68,42 +75,42 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const getDoItNowPlan = () => {
-    if (!planChartData) {
+    if (!todayPlanChart?.data || !todayPlanChart.success) {
       return { doItNowPlan: null, doItNowPlanIndex: -1 };
     }
-    const doItNowPlanIndex = planChartData.data.plans.findIndex((plan) => {
+    const doItNowPlanIndex = todayPlanChart.data.plans.findIndex((plan) => {
       const now = dayjs();
       const startTime = dayjs().set('hour', plan.startHour).set('minute', plan.startMin).startOf('minute');
       const endTime = dayjs().set('hour', plan.endHour).set('minute', plan.endMin).startOf('minute');
       return (startTime.isSame(now) || startTime.isBefore(now)) && endTime.isAfter(now);
     });
 
-    const doItNowPlan = doItNowPlanIndex > -1 ? planChartData.data.plans[doItNowPlanIndex] : null;
+    const doItNowPlan = doItNowPlanIndex > -1 ? todayPlanChart.data.plans[doItNowPlanIndex] : null;
 
     return { doItNowPlan, doItNowPlanIndex };
   };
 
   const handleAddPlanPress = () => {
-    if (!planChartData) {
+    if (!todayPlanChart) {
       return;
     }
-    navigation.navigate('AddChartPage', { chart: planChartData.data });
+    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
     navigation.navigate('AddPlanPage');
   };
 
   const handleAddSubPlanPress = () => {
-    if (!planChartData) {
+    if (!todayPlanChart) {
       return;
     }
-    navigation.navigate('AddChartPage', { chart: planChartData.data });
+    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
   };
 
   const handlePlanPress = (planIndex: number) => {
-    if (!planChartData || planIndex < 0) {
+    if (!todayPlanChart || planIndex < 0) {
       return;
     }
-    setChart(planChartData.data);
-    navigation.navigate('AddChartPage', { chart: planChartData.data });
+    setChart(todayPlanChart.data);
+    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
     navigation.navigate('AddPlanPage', { planIndex });
   };
 
@@ -119,7 +126,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <PlusSvg />
         </Pressable>
       </View>
-      <MainChartTable chart={planChartData?.data || null} />
+      <MainChartTable chart={todayPlanChart?.data || null} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>
