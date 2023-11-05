@@ -133,7 +133,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
           </UnderlineButton>
         </View>
       </View>
-      {loginMutation.isLoading && <Loading />}
+      {/* {loginMutation.isLoading && <Loading />} */}
     </View>
   );
 };
