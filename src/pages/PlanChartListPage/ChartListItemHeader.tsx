@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   headerInfo: {
     marginLeft: 16,
     justifyContent: 'center',
+    width: Dimensions.get('screen').width - 164, // 차트, 화살표 이미지 제외 공간
   },
   repeats: {
     fontSize: 16,
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
     marginTop: 4,
-    width: Dimensions.get('screen').width - 164, // 차트, 화살표 이미지 제외 공간
   },
 });
 

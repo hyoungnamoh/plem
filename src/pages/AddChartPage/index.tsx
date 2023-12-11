@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { Alert, FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
@@ -183,13 +183,13 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   return (
-    <>
+    <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
       <Header
         title={isEdit ? '계획표 수정' : '계획표 추가'}
         buttonName={isEdit ? '완료' : '등록'}
         buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
       />
-      <ScrollView style={styles.page}>
+      <ScrollView style={styles.page} keyboardDismissMode={'on-drag'} contentContainerStyle={{ paddingBottom: 300 }}>
         <View style={{ paddingHorizontal: 15 }}>
           <AddChartTable />
           <View style={styles.optionRow}>
@@ -257,14 +257,14 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           </View>
         </View>
       </ScrollView>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   page: {
     backgroundColor: MAIN_COLOR,
-    flex: 1,
+    height: '100%',
   },
   underlineButtonWrap: {
     flexDirection: 'row',
@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   planContainer: {
-    height: 300,
     marginTop: 16,
   },
   planWrap: {
