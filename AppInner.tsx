@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
 import NicknameSettingPage from './src/pages/NicknameSettingPage';
 import EmailVerifyIntroPage from './src/pages/EmailVerifyIntroPage';
@@ -30,6 +30,9 @@ import { disableLoadingState } from './src/states/disableLoadingState';
 import { LoggedInTabParamList, LoggedOutStackParamList } from './types/appInner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEFAULT_CATEGORY_LIST, categoryListState } from './src/states/categoryListState';
+import GuidePage from './src/pages/GuidePage/GuidePage';
+import { lastAccessDateState } from './src/states/lastAccessDateState';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
@@ -37,16 +40,23 @@ const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 function AppInner({ routeName }: { routeName: string }) {
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
+  const navigation = useNavigation<NavigationProp<LoggedOutStackParamList>>();
 
+  const lastAccessDate = useRecoilValue(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
-  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
+  const setCategoryList = useSetRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
   useEffect(() => {
-    loginCheck();
+    preCheck();
     setScheduleCategoryList();
   }, []);
+
+  const preCheck = async () => {
+    await setLastAccessDateFromStorage();
+    await loginCheck();
+  };
 
   const loginCheck = async () => {
     // await EncryptedStorage.removeItem('accessToken');
@@ -68,6 +78,13 @@ function AppInner({ routeName }: { routeName: string }) {
       setCategoryList(JSON.parse(storageCategoryList));
     } else {
       await AsyncStorage.setItem('categoryList', JSON.stringify(DEFAULT_CATEGORY_LIST));
+    }
+  };
+
+  const setLastAccessDateFromStorage = async () => {
+    const lastAccess = await AsyncStorage.getItem('last_access');
+    if (lastAccess) {
+      navigation.reset({ index: 0, routes: [{ name: 'IntroPage' }] });
     }
   };
 
@@ -113,10 +130,11 @@ function AppInner({ routeName }: { routeName: string }) {
           </Tab.Navigator>
         ) : (
           <Stack.Navigator
-            initialRouteName="IntroPage"
+            initialRouteName={lastAccessDate ? 'IntroPage' : 'GuidePage'}
             screenOptions={{
               headerShown: false,
             }}>
+            <Stack.Screen name="GuidePage" component={GuidePage} />
             <Stack.Screen name="IntroPage" component={IntroPage} />
             <Stack.Screen name="LoginPage" component={LoginPage} />
             <Stack.Screen name="PasswordSettingPage" component={PasswordSettingPage} />
