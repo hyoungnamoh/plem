@@ -31,4 +31,5 @@ export type LoggedOutStackParamList = {
     nickname: string;
   };
   FindPasswordPage: undefined;
+  GuidePage: undefined;
 };
