@@ -14,6 +14,7 @@ import { categoryListState } from '../../../states/categoryListState';
 import { Schedule } from '../../../../types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
+import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -21,10 +22,16 @@ type AddScheduleModalProps = {
   day: number | null;
   close: () => void;
   onPressAddSchedule: () => void;
-  schedules: Schedule[];
+  calendarSchedule?: CalendarSchedule;
 };
 
-export const AddScheduleModal = ({ open, date, close, onPressAddSchedule, schedules }: AddScheduleModalProps) => {
+export const AddScheduleModal = ({
+  open,
+  date,
+  close,
+  onPressAddSchedule,
+  calendarSchedule,
+}: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
 
@@ -36,6 +43,11 @@ export const AddScheduleModal = ({ open, date, close, onPressAddSchedule, schedu
     return null;
   }
 
+  const year = date.year();
+  const month = date.month();
+  const day = date.date();
+
+  const schedules = calendarSchedule ? calendarSchedule[year][month][day] : [];
   return (
     <View style={styles.wrap}>
       <AddScheduleModalSvg style={{ position: 'absolute' }} width={345} />

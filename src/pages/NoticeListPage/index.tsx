@@ -36,7 +36,6 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
     return (
       <View style={styles.content}>
         {notice.contents.map((content) => {
-          console.log(`http://192.168.219.101:3030/${content}`);
           return (
             <Image
               source={{ uri: `http://192.168.219.101:3030/${content}` }}

@@ -517,6 +517,8 @@ PODS:
     - FirebaseCoreExtension (= 10.1.0)
     - React-Core
     - RNFBApp
+  - RNFlashList (1.6.3):
+    - React-Core
   - RNGestureHandler (2.9.0):
     - React-Core
   - RNReanimated (3.1.0):
@@ -631,6 +633,7 @@ DEPENDENCIES:
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -758,6 +761,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFlashList:
+    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -840,6 +845,7 @@ SPEC CHECKSUMS:
   RNFBAnalytics: 5f2ff7401e8f1806df60d6168f000583caf8077a
   RNFBApp: 90153cce9b119f4546a4e5fb1427bca963448dc5
   RNFBMessaging: 3582b66e01117ae968d40e84940a6929f3f57760
+  RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
