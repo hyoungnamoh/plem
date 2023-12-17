@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 import uuid from 'react-uuid';
+import { SCREEN_WIDTH } from '../../../../constants/etc';
 
 const EmptyDates = ({ firstDateIndex }: { firstDateIndex: number }) => {
   const emptyArray = useMemo(() => new Array(firstDateIndex).fill(1), [firstDateIndex]);
@@ -12,7 +13,7 @@ const EmptyDates = ({ firstDateIndex }: { firstDateIndex: number }) => {
           <View
             key={uuid()}
             style={{
-              width: Math.floor(Dimensions.get('screen').width / 7),
+              width: Math.floor(SCREEN_WIDTH / 7),
               alignItems: 'center',
               height: 64,
             }}

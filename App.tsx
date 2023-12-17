@@ -1,9 +1,10 @@
-import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
-import { Suspense, useState } from 'react';
+import { createNavigationContainerRef, NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import AppInner from './AppInner';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { MAIN_COLOR } from './src/constants/colors';
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { suspense: true } } });
 
@@ -15,6 +16,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer
+            theme={{ ...DefaultTheme, colors: { ...DefaultTheme.colors, background: MAIN_COLOR } }}
             ref={navigationRef}
             onReady={() => {
               const currentRoute = navigationRef.getCurrentRoute();

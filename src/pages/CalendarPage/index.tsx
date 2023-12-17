@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
 import { useCallback, useState } from 'react';
-import { Dimensions } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MAIN_COLOR } from '../../constants/colors';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
@@ -14,6 +13,7 @@ import Calendar from './Calendar';
 import { AddScheduleModal } from './AddScheduleModal';
 import { selectedCalendarDateState } from '../../states/selectedCalendarDateState';
 import { openScheduleModalState } from '../../states/openScheduleModalState';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
@@ -67,7 +67,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
   return (
     <>
-      <Carousel pageWidth={Dimensions.get('screen').width} pages={makeCalendar()} />
+      <Carousel pageWidth={SCREEN_WIDTH} pages={makeCalendar()} />
       <AddScheduleModal
         open={openScheduleModal}
         date={selectedDate || currentCalendar}

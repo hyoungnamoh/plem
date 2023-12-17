@@ -1,7 +1,8 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { MAIN_COLOR } from '../../constants/colors';
 import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   },
   bottomTabBarLine: {
     flex: 1,
-    width: Dimensions.get('screen').width,
+    width: SCREEN_WIDTH,
   },
   tabContainer: {
     flex: 1,

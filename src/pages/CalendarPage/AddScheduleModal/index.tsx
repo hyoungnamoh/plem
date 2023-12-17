@@ -1,4 +1,4 @@
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/header_close_40x40.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -15,6 +15,7 @@ import { Schedule } from '../../../../types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
 import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
+import { SCREEN_WIDTH } from '../../../constants/etc';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   },
   modalContentWrap: {
     paddingHorizontal: 20,
-    width: Dimensions.get('screen').width,
+    width: SCREEN_WIDTH,
     height: 210,
   },
   modalContent: {

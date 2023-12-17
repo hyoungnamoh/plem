@@ -1,8 +1,9 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
-const DEFAULT_PAGE_WIDTH = Dimensions.get('screen').width;
+const DEFAULT_PAGE_WIDTH = SCREEN_WIDTH;
 
 const Carousel = ({
   pages,

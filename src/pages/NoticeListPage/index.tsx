@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Image from 'react-native-scalable-image';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
@@ -11,6 +11,7 @@ import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
 import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
 import { useGetNoticeList } from '../../hooks/queries/useGetNoticeList';
 import { Notice } from '../../../types/notice';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
 
@@ -36,12 +37,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
     return (
       <View style={styles.content}>
         {notice.contents.map((content) => {
-          return (
-            <Image
-              source={{ uri: `http://192.168.219.101:3030/${content}` }}
-              width={Dimensions.get('screen').width - 40}
-            />
-          );
+          return <Image source={{ uri: `http://192.168.219.101:3030/${content}` }} width={SCREEN_WIDTH - 40} />;
         })}
         {/* <PlemText>{notice.content}</PlemText> */}
       </View>
@@ -49,7 +45,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
   };
 
   const renderAccordionFooter = () => {
-    return <Image source={lineGray} style={{ width: Dimensions.get('window').width }} />;
+    return <Image source={lineGray} style={{ width: SCREEN_WIDTH }} />;
   };
 
   const updateSections = (sectionIndexs: number[]) => {

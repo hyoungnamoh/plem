@@ -1,8 +1,7 @@
-import { Dispatch, useState } from 'react';
-import { Dimensions, ImageBackground, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { Dispatch } from 'react';
+import { ImageBackground, Pressable, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
-import { Dropdown, DropdownItem } from '../../components/Dropdown';
-import SwitchInputRow from '../../components/SwitchInputRow';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
@@ -36,7 +35,7 @@ const YearlyRepetition = ({ selectedDates, setSelectedDates }: YearlyRepetitionP
               onPress={() => onPressDate(month)}
               style={{
                 flexDirection: 'row',
-                width: Math.floor(Dimensions.get('screen').width - 30) / 6,
+                width: Math.floor(SCREEN_WIDTH - 30) / 6,
                 alignItems: 'center',
                 height: 52,
                 justifyContent: 'center',

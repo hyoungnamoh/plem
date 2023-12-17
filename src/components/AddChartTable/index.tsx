@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { AddPlanChart } from '../../../types/chart';
 import PlemText from './../Atoms/PlemText';
@@ -7,10 +7,11 @@ import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg
 import PlemTextInput from '../Atoms/PlemTextInput';
 import { useRecoilState } from 'recoil';
 import { addPlanChartState } from '../../states/addPlanChartState';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/etc';
 
-const screenWidth = Dimensions.get('screen').width;
-const screenHight = Dimensions.get('screen').height;
-const chartRadius = Dimensions.get('screen').width / 2.65;
+const screenWidth = SCREEN_WIDTH;
+const screenHight = SCREEN_HEIGHT;
+const chartRadius = SCREEN_WIDTH / 2.65;
 
 const AddChartTable = () => {
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);

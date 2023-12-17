@@ -1,4 +1,5 @@
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/etc';
 
 const spinnerGif = require('../../assets/images/loading.gif');
 
@@ -12,8 +13,8 @@ const Loading = () => {
 
 const styles = StyleSheet.create({
   loadingWrap: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',

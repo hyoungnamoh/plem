@@ -1,4 +1,4 @@
-import { Alert, Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { PlanChart } from '../../../types/chart';
 import PlemText from '../../components/Atoms/PlemText';
 import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
@@ -6,6 +6,7 @@ import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
 import HamburgerBarSvg from '../../assets/images/hamburgerbar_32x32.svg';
 import { PieChart } from 'react-native-gifted-charts';
 import { usePieChart } from '../../hooks/usePieChart';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 const DraggableChartItem = ({
   item,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chartName: {
-    width: Dimensions.get('screen').width - 260,
+    width: SCREEN_WIDTH - 260,
   },
   removeButton: {
     width: 40,

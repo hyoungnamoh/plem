@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menus';
@@ -11,6 +11,7 @@ import { useLogout } from '../../hooks/mutaions/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 const underlineGrayImage = require('../../assets/images/underline_gray.png');
 
@@ -73,7 +74,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
 
 const styles = StyleSheet.create({
   headerLine: {
-    width: Dimensions.get('screen').width,
+    width: SCREEN_WIDTH,
   },
   email: {
     marginTop: 5,

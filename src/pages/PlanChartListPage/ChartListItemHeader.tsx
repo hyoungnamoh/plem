@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
 import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
@@ -8,6 +8,7 @@ import { numToDayKorParser } from '../../helper/numToDayKorParser';
 import { PlanChart, Repeats } from '../../../types/chart';
 import { usePieChart } from '../../hooks/usePieChart';
 import { PieChart } from 'react-native-gifted-charts';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   headerInfo: {
     marginLeft: 16,
     justifyContent: 'center',
-    width: Dimensions.get('screen').width - 164, // 차트, 화살표 이미지 제외 공간
+    width: SCREEN_WIDTH - 164, // 차트, 화살표 이미지 제외 공간
   },
   repeats: {
     fontSize: 16,

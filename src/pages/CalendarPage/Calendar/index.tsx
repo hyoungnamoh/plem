@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { Dimensions, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from '../../../components/Atoms/PlemText';
 import uuid from 'react-uuid';
 import PlusSvg from '../../../assets/images/plus_40x40.svg';
@@ -10,6 +10,7 @@ import { StyleSheet } from 'react-native';
 import { DAYS_OF_WEEK } from '../../../constants/dates';
 import Days from '../Days';
 import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
+import { SCREEN_WIDTH } from '../../../constants/etc';
 
 const Calendar = ({
   year,
@@ -35,9 +36,7 @@ const Calendar = ({
     () =>
       DAYS_OF_WEEK.map((day) => {
         return (
-          <View
-            key={uuid()}
-            style={{ width: Dimensions.get('screen').width / 7, justifyContent: 'center', alignItems: 'center' }}>
+          <View key={uuid()} style={{ width: SCREEN_WIDTH / 7, justifyContent: 'center', alignItems: 'center' }}>
             <PlemText style={{ color: day.key === 'sun' ? '#E40C0C' : '#000' }}>{day.value}</PlemText>
           </View>
         );
@@ -55,7 +54,7 @@ const Calendar = ({
           </Pressable>
         </View>
         <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek}</View>
-        <CalendarHeaderLineSvg width={'100%'} viewBox={`0 0 ${Dimensions.get('screen').width} 4`} />
+        <CalendarHeaderLineSvg width={'100%'} viewBox={`0 0 ${SCREEN_WIDTH} 4`} />
         <View style={styles.daysWrap}>
           <Days month={month} year={year} calendarSchedule={calendarSchedule} />
         </View>
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: MAIN_COLOR,
-    width: Dimensions.get('screen').width,
+    width: SCREEN_WIDTH,
   },
   pageHeader: {
     height: 60,
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dateCell: {
-    width: Math.floor(Dimensions.get('screen').width / 7),
+    width: Math.floor(SCREEN_WIDTH / 7),
     alignItems: 'center',
     minHeight: 64,
   },

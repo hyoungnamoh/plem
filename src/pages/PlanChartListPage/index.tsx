@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
-import { useQuery, useQueryClient } from 'react-query';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { useQuery } from 'react-query';
 import { ApiResponse } from '../../../types/axios';
 import { PlanChart } from '../../../types/chart';
 import { getPlanChartList } from '../../api/charts/getPlanChartListApi';
@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { useRecoilState } from 'recoil';
 import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
   headerLine: {
-    width: Dimensions.get('screen').width,
+    width: SCREEN_WIDTH,
   },
   content: {
     paddingVertical: 12,

@@ -1,4 +1,4 @@
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../../../components/Atoms/PlemText';
 import { memo, useCallback, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { selectedCalendarDateState } from '../../../../states/selectedCalendarDateState';
 import { openScheduleModalState } from '../../../../states/openScheduleModalState';
 import Sticker from './Sticker';
+import { SCREEN_WIDTH } from '../../../../constants/etc';
 
 const Day = ({
   isToday,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dateCell: {
-    width: Math.floor(Dimensions.get('screen').width / 7),
+    width: Math.floor(SCREEN_WIDTH / 7),
     alignItems: 'center',
     minHeight: 64,
   },

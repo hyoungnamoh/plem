@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { MAIN_COLOR } from '../../constants/colors';
 import DotActive from '../../assets/images/dot_active.svg';
@@ -15,8 +15,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import { useSetRecoilState } from 'recoil';
 import { lastAccessDateState } from '../../states/lastAccessDateState';
+import { SCREEN_WIDTH } from '../../constants/etc';
 
-const screenWidth = Math.round(Dimensions.get('window').width);
+const screenWidth = Math.round(SCREEN_WIDTH);
 const PAGES = [
   {
     id: 1,
