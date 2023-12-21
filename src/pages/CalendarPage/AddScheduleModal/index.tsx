@@ -48,7 +48,11 @@ export const AddScheduleModal = ({
   const month = date.month();
   const day = date.date();
 
-  const schedules = calendarSchedule ? calendarSchedule[year][month][day] : [];
+  const schedules =
+    calendarSchedule && calendarSchedule[year] && calendarSchedule[year][month]
+      ? calendarSchedule[year][month][day]
+      : [];
+
   return (
     <View style={styles.wrap}>
       <AddScheduleModalSvg style={{ position: 'absolute' }} width={345} />

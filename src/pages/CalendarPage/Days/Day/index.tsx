@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../../../components/Atoms/PlemText';
-import { memo, useCallback, useState } from 'react';
+import { Dispatch, memo, useCallback, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { categoryListState } from '../../../../states/categoryListState';
 import { CalendarSchedule } from '../../../../api/schedules/getScheduleListApi';
@@ -17,6 +17,8 @@ const Day = ({
   date,
   year,
   month,
+  isSelected,
+  setLocalSelectedDate,
 }: {
   isToday: boolean;
   firstDateIndex: number;
@@ -24,11 +26,12 @@ const Day = ({
   date: number;
   year: number;
   month: number;
+  isSelected: boolean;
+  setLocalSelectedDate: Dispatch<React.SetStateAction<number>>;
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
   const categoryList = useRecoilValue(categoryListState);
-  const [isSelected, setIsSelected] = useState(false);
 
   const getDateColor = useCallback(() => {
     if (isToday) {
@@ -47,18 +50,23 @@ const Day = ({
     if (isSelected) {
       setOpenScheduleModal(false);
       setSelectedDate(null);
-      setIsSelected(false);
+      setLocalSelectedDate(0);
     } else {
       setOpenScheduleModal(true);
       setSelectedDate(targetDate);
-      setIsSelected(true);
+      setLocalSelectedDate(date);
     }
   };
 
+  const schedules =
+    calendarSchedule && calendarSchedule[year] && calendarSchedule[year][month]
+      ? calendarSchedule[year][month][date]
+      : [];
+
   return (
-    <Pressable key={date} onPress={() => onPressDate()} style={styles.dateCell}>
+    <Pressable key={date} onPress={onPressDate} style={styles.dateCell}>
       <View style={styles.currentDateBackground}>
-        <Sticker isToday={isToday} year={year} date={date} month={month} />
+        <Sticker isToday={isToday} year={year} date={date} month={month} isSelected={isSelected} />
         <PlemText
           style={{
             color: getDateColor(),
@@ -68,22 +76,20 @@ const Day = ({
         </PlemText>
       </View>
       <View style={{ marginTop: 2 }}>
-        {calendarSchedule
-          ? calendarSchedule[year][month][date].map((reservedSchedule) => {
-              return (
-                <View key={reservedSchedule.id} style={styles.scheduleRow}>
-                  <Image
-                    source={
-                      categoryList.find((category) => category.value === reservedSchedule.category)?.image ||
-                      categoryList[0].image
-                    }
-                    style={styles.scheduleSticker}
-                  />
-                  <PlemText style={styles.scheduleName}>{reservedSchedule.name}</PlemText>
-                </View>
-              );
-            })
-          : null}
+        {schedules.map((reservedSchedule) => {
+          return (
+            <View key={reservedSchedule.id} style={styles.scheduleRow}>
+              <Image
+                source={
+                  categoryList.find((category) => category.value === reservedSchedule.category)?.image ||
+                  categoryList[0].image
+                }
+                style={styles.scheduleSticker}
+              />
+              <PlemText style={styles.scheduleName}>{reservedSchedule.name}</PlemText>
+            </View>
+          );
+        })}
       </View>
     </Pressable>
   );

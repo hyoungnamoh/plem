@@ -1,19 +1,22 @@
 import { StyleSheet } from 'react-native';
 import CircleStrokeSvg from '../../../../assets/images/circle-stroke-black.svg';
 import CurrentDayStickerSvg from '../../../../assets/images/current-day-sticker.svg';
-import { selectedCalendarDateState } from '../../../../states/selectedCalendarDateState';
-import { useRecoilValue } from 'recoil';
 import { memo } from 'react';
 
-const Sticker = ({ isToday, year, date, month }: { isToday: boolean; year: number; month: number; date: number }) => {
-  const selectedDate = useRecoilValue(selectedCalendarDateState);
-  const isSelectedDate =
-    selectedDate?.year() === year && selectedDate?.month() === month && selectedDate?.date() === date;
-
+const Sticker = ({
+  isToday,
+  isSelected,
+}: {
+  isToday: boolean;
+  year: number;
+  month: number;
+  date: number;
+  isSelected: boolean;
+}) => {
   return isToday ? (
-    <CurrentDayStickerSvg style={[styles.svg, { display: isToday || isSelectedDate ? 'flex' : 'none' }]} />
+    <CurrentDayStickerSvg style={[styles.svg, { display: isToday || isSelected ? 'flex' : 'none' }]} />
   ) : (
-    <CircleStrokeSvg style={[styles.svg, { display: isToday || isSelectedDate ? 'flex' : 'none' }]} />
+    <CircleStrokeSvg style={[styles.svg, { display: isToday || isSelected ? 'flex' : 'none' }]} />
   );
 };
 
