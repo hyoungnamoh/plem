@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MAIN_COLOR } from '../../constants/colors';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
@@ -17,7 +17,7 @@ import { SCREEN_WIDTH } from '../../constants/etc';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
-const NUM_OF_YEAR_RANGE = 20;
+const NUM_OF_YEAR_RANGE = 100;
 const NUM_OF_MONTHS = 12;
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
@@ -31,11 +31,18 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   const { data: calendarSchedule } = useGetScheduleList({ date: dayjs().toISOString() });
 
   useFocusEffect(() => {
-    if (bottomSafeArea === MAIN_COLOR) {
-      return;
+    if (bottomSafeArea !== MAIN_COLOR) {
+      setBottomSafeArea(MAIN_COLOR);
     }
-    setBottomSafeArea(MAIN_COLOR);
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentCalendar(dayjs());
+    }, [])
+  );
+
+  useEffect(() => {}, []);
 
   const onPressScheduleModalClose = useCallback(() => {
     setOpenScheduleModal(false);
@@ -46,15 +53,17 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
     navigation.navigate('AddSchedulePage', { date: date.toISOString() });
   }, []);
 
-  const makeCalendar = useCallback(() => {
-    return Array.from({ length: NUM_OF_YEAR_RANGE }, (_, year) => year)
+  const makeCalendar = useMemo(() => {
+    // 연도
+    return Array.from({ length: NUM_OF_YEAR_RANGE }, (_, index) => index - (NUM_OF_YEAR_RANGE / 2 - 1))
       .map((year) => {
+        // 월
         return Array.from({ length: NUM_OF_MONTHS }, (_, month) => month).map((month) => {
           return (
             <Calendar
               categoryList={categoryList}
               month={month}
-              year={currentCalendar.year()}
+              year={currentCalendar.year() + year}
               calendarSchedule={calendarSchedule?.data}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
@@ -67,11 +76,10 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
   return (
     <>
-      <Carousel pageWidth={SCREEN_WIDTH} pages={makeCalendar()} />
+      <Carousel pageWidth={SCREEN_WIDTH} pages={makeCalendar} defaultPage={makeCalendar.length / 2 - 1} />
       <AddScheduleModal
         open={openScheduleModal}
         date={selectedDate || currentCalendar}
-        day={(selectedDate || currentCalendar).date()}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
         calendarSchedule={calendarSchedule?.data}

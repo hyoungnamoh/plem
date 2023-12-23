@@ -20,7 +20,6 @@ import { SCREEN_WIDTH } from '../../../constants/etc';
 type AddScheduleModalProps = {
   open: boolean;
   date: Dayjs;
-  day: number | null;
   close: () => void;
   onPressAddSchedule: () => void;
   calendarSchedule?: CalendarSchedule;
