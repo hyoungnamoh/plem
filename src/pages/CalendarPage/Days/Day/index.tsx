@@ -1,19 +1,23 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../../../components/Atoms/PlemText';
-import { Dispatch, memo, useCallback, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { categoryListState } from '../../../../states/categoryListState';
+import { Dispatch, memo, useCallback } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { CalendarSchedule } from '../../../../api/schedules/getScheduleListApi';
 import dayjs from 'dayjs';
 import { selectedCalendarDateState } from '../../../../states/selectedCalendarDateState';
 import { openScheduleModalState } from '../../../../states/openScheduleModalState';
 import Sticker from './Sticker';
 import { SCREEN_WIDTH } from '../../../../constants/etc';
+import ScheduleList from './ScheduleList';
 
 const Day = ({
   isToday,
   firstDateIndex,
-  calendarSchedule,
+  noRepeatScheduleMap,
+  monthlyRepeatScheduleList,
+  twoWeeklyRepeatScheduleList,
+  weeklyRepeatScheduleList,
+  dailyRepeatScheduleList,
   date,
   year,
   month,
@@ -22,7 +26,11 @@ const Day = ({
 }: {
   isToday: boolean;
   firstDateIndex: number;
-  calendarSchedule?: CalendarSchedule;
+  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
+  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  twoWeeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['twoWeeklyRepeatSchedules'];
+  weeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['weeklyRepeatSchedules'];
+  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
   date: number;
   year: number;
   month: number;
@@ -31,7 +39,6 @@ const Day = ({
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
-  const categoryList = useRecoilValue(categoryListState);
 
   const getDateColor = useCallback(() => {
     if (isToday) {
@@ -45,7 +52,7 @@ const Day = ({
   }, [isToday, date, firstDateIndex]);
 
   const onPressDate = () => {
-    const targetDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');
+    const selectedDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');
 
     if (isSelected) {
       setOpenScheduleModal(false);
@@ -53,15 +60,10 @@ const Day = ({
       setLocalSelectedDate(0);
     } else {
       setOpenScheduleModal(true);
-      setSelectedDate(targetDate);
+      setSelectedDate(selectedDate);
       setLocalSelectedDate(date);
     }
   };
-
-  const schedules =
-    calendarSchedule && calendarSchedule[year] && calendarSchedule[year][month]
-      ? calendarSchedule[year][month][date]
-      : [];
 
   return (
     <Pressable key={date} onPress={onPressDate} style={styles.dateCell}>
@@ -75,22 +77,16 @@ const Day = ({
           {date}
         </PlemText>
       </View>
-      <View style={{ marginTop: 2 }}>
-        {schedules.map((reservedSchedule) => {
-          return (
-            <View key={reservedSchedule.id} style={styles.scheduleRow}>
-              <Image
-                source={
-                  categoryList.find((category) => category.value === reservedSchedule.category)?.image ||
-                  categoryList[0].image
-                }
-                style={styles.scheduleSticker}
-              />
-              <PlemText style={styles.scheduleName}>{reservedSchedule.name}</PlemText>
-            </View>
-          );
-        })}
-      </View>
+      <ScheduleList
+        noRepeatScheduleMap={noRepeatScheduleMap}
+        monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+        twoWeeklyRepeatScheduleList={twoWeeklyRepeatScheduleList}
+        weeklyRepeatScheduleList={weeklyRepeatScheduleList}
+        dailyRepeatScheduleList={dailyRepeatScheduleList}
+        year={year}
+        month={month}
+        date={date}
+      />
     </Pressable>
   );
 };

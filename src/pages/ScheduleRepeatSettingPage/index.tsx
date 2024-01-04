@@ -17,7 +17,7 @@ export const repeatOptionList: readonly { value: Repeat; label: RepeatOptionKor 
   { value: null, label: '안 함' },
   { value: 'every', label: '매일' },
   { value: 'week', label: '매주' },
-  { value: '2weeks', label: '2주마다' },
+  { value: 'twoWeeks', label: '2주마다' },
   { value: 'month', label: '매월' },
   { value: 'year', label: '매년' },
   // { value: 'custom', label: '사용자화' },

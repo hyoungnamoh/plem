@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MAIN_COLOR } from '../../constants/colors';
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
@@ -14,10 +14,11 @@ import { AddScheduleModal } from './AddScheduleModal';
 import { selectedCalendarDateState } from '../../states/selectedCalendarDateState';
 import { openScheduleModalState } from '../../states/openScheduleModalState';
 import { SCREEN_WIDTH } from '../../constants/etc';
+import { Schedule } from '../../../types/calendar';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
-const NUM_OF_YEAR_RANGE = 100;
+const NUM_OF_YEAR_RANGE = 6;
 const NUM_OF_MONTHS = 12;
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
@@ -28,7 +29,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
   const [currentCalendar, setCurrentCalendar] = useState(dayjs());
 
-  const { data: calendarSchedule } = useGetScheduleList({ date: dayjs().toISOString() });
+  const { data: calendarSchedule } = useGetScheduleList();
 
   useFocusEffect(() => {
     if (bottomSafeArea !== MAIN_COLOR) {
@@ -42,8 +43,6 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
     }, [])
   );
 
-  useEffect(() => {}, []);
-
   const onPressScheduleModalClose = useCallback(() => {
     setOpenScheduleModal(false);
     setSelectedDate(null);
@@ -53,9 +52,25 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
     navigation.navigate('AddSchedulePage', { date: date.toISOString() });
   }, []);
 
+  const getTwoWeeklyRepeatScheduleList = useCallback(() => {
+    const twoWeeksRepeatScheduleList: Schedule[] = [];
+    calendarSchedule?.data.repeatSchedules?.twoWeeklyRepeatSchedules.map((schedule) => {
+      const list = [];
+      const startDate = dayjs(schedule.startDate);
+      const endDate = dayjs(schedule.endDate);
+      let repeatDate = startDate;
+      while (repeatDate.isBefore(endDate)) {
+        list.push(schedule);
+        repeatDate = repeatDate.add(14, 'day');
+      }
+      twoWeeksRepeatScheduleList.concat(list);
+    });
+    return twoWeeksRepeatScheduleList;
+  }, [calendarSchedule?.data.repeatSchedules?.twoWeeklyRepeatSchedules]);
+
   const makeCalendar = useMemo(() => {
     // 연도
-    return Array.from({ length: NUM_OF_YEAR_RANGE }, (_, index) => index - (NUM_OF_YEAR_RANGE / 2 - 1))
+    return Array.from({ length: NUM_OF_YEAR_RANGE }, (_, index) => index - NUM_OF_YEAR_RANGE / 2)
       .map((year) => {
         // 월
         return Array.from({ length: NUM_OF_MONTHS }, (_, month) => month).map((month) => {
@@ -64,9 +79,13 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
               categoryList={categoryList}
               month={month}
               year={currentCalendar.year() + year}
-              calendarSchedule={calendarSchedule?.data}
+              noRepeatScheduleMap={calendarSchedule?.data.noRepeatSchedules}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
+              monthlyRepeatScheduleList={calendarSchedule?.data.repeatSchedules?.monthlyRepeatScheduleMap}
+              twoWeeklyRepeatScheduleList={getTwoWeeklyRepeatScheduleList()}
+              weeklyRepeatScheduleList={calendarSchedule?.data.repeatSchedules?.weeklyRepeatSchedules}
+              dailyRepeatScheduleList={calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules}
             />
           );
         });
@@ -76,13 +95,17 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
   return (
     <>
-      <Carousel pageWidth={SCREEN_WIDTH} pages={makeCalendar} defaultPage={makeCalendar.length / 2 - 1} />
+      <Carousel
+        pageWidth={SCREEN_WIDTH}
+        pages={makeCalendar}
+        defaultPage={makeCalendar.length / 2 + currentCalendar.month()}
+      />
       <AddScheduleModal
         open={openScheduleModal}
-        date={selectedDate || currentCalendar}
+        targetDate={selectedDate || currentCalendar}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
-        calendarSchedule={calendarSchedule?.data}
+        scheduleList={calendarSchedule?.data}
       />
     </>
   );

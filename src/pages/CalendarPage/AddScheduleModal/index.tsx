@@ -16,42 +16,68 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
 import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from '../../../constants/etc';
+import PaletteFF6550Svg from '../../../assets/images/palette_ff6550_stroke_24x24.svg';
+import PaletteFFC700Svg from '../../../assets/images/palette_ffc700_stroke_24x24.svg';
+import Palette22DA81Svg from '../../../assets/images/palette_22da81_stroke_24x24.svg';
+import Palette4659FFSvg from '../../../assets/images/palette_4659ff_stroke_24x24.svg';
+
+const PaletteMap = {
+  palette_ff6550_8x8: <PaletteFF6550Svg />,
+  palette_ffc700_8x8: <PaletteFFC700Svg />,
+  palette_22da81_8x8: <Palette22DA81Svg />,
+  palette_4569ff_8x8: <Palette4659FFSvg />,
+} as const;
 
 type AddScheduleModalProps = {
   open: boolean;
-  date: Dayjs;
+  targetDate: Dayjs;
   close: () => void;
   onPressAddSchedule: () => void;
-  calendarSchedule?: CalendarSchedule;
+  scheduleList?: CalendarSchedule;
 };
 
 export const AddScheduleModal = ({
   open,
-  date,
+  targetDate,
   close,
   onPressAddSchedule,
-  calendarSchedule,
+  scheduleList,
 }: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
+  const year = targetDate.year();
+  const month = targetDate.month();
+  const date = targetDate.date();
 
   const handleScheduleClick = (schedule: Schedule) => {
-    navigate('AddSchedulePage', { schedule, date: date.toISOString() });
+    navigate('AddSchedulePage', { schedule, date: targetDate.toISOString() });
   };
 
   if (!open) {
     return null;
   }
 
-  const year = date.year();
-  const month = date.month();
-  const day = date.date();
+  const getAllScheduleList = () => {
+    if (!scheduleList) {
+      return [];
+    }
+    const { monthlyRepeatScheduleMap, twoWeeklyRepeatSchedules, weeklyRepeatSchedules, dailyRepeatSchedules } =
+      scheduleList.repeatSchedules;
+    const noRepeatScheduleList =
+      scheduleList.noRepeatSchedules &&
+      scheduleList.noRepeatSchedules[year] &&
+      scheduleList.noRepeatSchedules[year][month]
+        ? scheduleList.noRepeatSchedules[year][month][date]
+        : [];
+    const monthly = monthlyRepeatScheduleMap[date] || [];
+    const twoWeekly = twoWeeklyRepeatSchedules;
+    const weekly = weeklyRepeatSchedules[targetDate.day()] || [];
+    const daily = dailyRepeatSchedules;
 
-  const schedules =
-    calendarSchedule && calendarSchedule[year] && calendarSchedule[year][month]
-      ? calendarSchedule[year][month][day]
-      : [];
+    return monthly.concat(twoWeekly, weekly, daily, noRepeatScheduleList);
+  };
 
+  const allScheduleList = getAllScheduleList();
   return (
     <View style={styles.wrap}>
       <AddScheduleModalSvg style={{ position: 'absolute' }} width={345} />
@@ -59,8 +85,8 @@ export const AddScheduleModal = ({
         <View style={styles.modalContent}>
           <View style={styles.header}>
             <PlemText>
-              {`${date.year()}년 ${date.month() + 1}월 ${date.date()}일 (${
-                NUMBER_TO_DAY_KOR[date.day() as DaysOfWeekNum]
+              {`${targetDate.year()}년 ${targetDate.month() + 1}월 ${targetDate.date()}일 (${
+                NUMBER_TO_DAY_KOR[targetDate.day() as DaysOfWeekNum]
               })`}
             </PlemText>
             <Pressable onPress={close}>
@@ -68,15 +94,16 @@ export const AddScheduleModal = ({
             </Pressable>
           </View>
           <KeyboardAwareScrollView>
-            {schedules.length > 0 ? (
-              schedules.map((schedule) => {
+            {allScheduleList.length > 0 ? (
+              allScheduleList.map((schedule) => {
                 return (
                   <Pressable key={schedule.id} style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
-                    <Image
-                      source={
-                        categoryList.find((item) => item.value === schedule.category)?.image || categoryList[0].image
-                      }
-                    />
+                    {
+                      PaletteMap[
+                        categoryList.find((category) => category.value === schedule.category)?.image ||
+                          categoryList[0].image
+                      ]
+                    }
                     <PlemText style={styles.scheduleText}>{schedule.name}</PlemText>
                   </Pressable>
                 );

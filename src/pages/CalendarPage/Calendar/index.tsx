@@ -11,22 +11,28 @@ import { DAYS_OF_WEEK } from '../../../constants/dates';
 import Days from '../Days';
 import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from '../../../constants/etc';
+import { Category } from '../../../states/categoryListState';
 
 const Calendar = ({
   year,
   month,
-  calendarSchedule,
+  noRepeatScheduleMap,
+  monthlyRepeatScheduleList,
+  twoWeeklyRepeatScheduleList,
+  weeklyRepeatScheduleList,
+  dailyRepeatScheduleList,
   onPressAddSchedule,
   onPressScheduleModalClose,
 }: {
   year: number;
   month: number;
-  calendarSchedule?: CalendarSchedule;
-  categoryList: {
-    label: string;
-    image: number;
-    value: number;
-  }[];
+  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
+  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  twoWeeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['twoWeeklyRepeatSchedules'];
+  weeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['weeklyRepeatSchedules'];
+  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
+
+  categoryList: Category[];
   onPressAddSchedule: (date: Dayjs) => void;
   onPressScheduleModalClose: () => void;
 }) => {
@@ -56,7 +62,15 @@ const Calendar = ({
         <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek}</View>
         <CalendarHeaderLineSvg width={'100%'} viewBox={`0 0 ${SCREEN_WIDTH} 4`} />
         <View style={styles.daysWrap}>
-          <Days month={month} year={year} calendarSchedule={calendarSchedule} />
+          <Days
+            month={month}
+            year={year}
+            noRepeatScheduleMap={noRepeatScheduleMap}
+            monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+            twoWeeklyRepeatScheduleList={twoWeeklyRepeatScheduleList}
+            weeklyRepeatScheduleList={weeklyRepeatScheduleList}
+            dailyRepeatScheduleList={dailyRepeatScheduleList}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>

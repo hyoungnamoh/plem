@@ -22,6 +22,6 @@ export type AddSchedule = Omit<Schedule, 'createdAt' | 'id' | 'updatedAt' | 'rem
 
 export type CategoryId = number;
 
-export type Repeat = null | 'every' | 'week' | '2weeks' | 'month' | 'year' | 'custom';
+export type Repeat = null | 'every' | 'week' | 'twoWeeks' | 'month' | 'year' | 'custom';
 export type RepeatUnitKor = '일' | '주' | '개월' | '년';
 export type RepeatUnit = 'day' | 'week' | 'month' | 'year';
