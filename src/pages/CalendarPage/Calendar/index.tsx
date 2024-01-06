@@ -9,7 +9,7 @@ import { MAIN_COLOR } from '../../../constants/colors';
 import { StyleSheet } from 'react-native';
 import { DAYS_OF_WEEK } from '../../../constants/dates';
 import Days from '../Days';
-import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from '../../../constants/etc';
 import { Category } from '../../../states/categoryListState';
 
@@ -18,8 +18,8 @@ const Calendar = ({
   month,
   noRepeatScheduleMap,
   monthlyRepeatScheduleList,
-  twoWeeklyRepeatScheduleList,
-  weeklyRepeatScheduleList,
+  twoWeeklyRepeatScheduleMap,
+  weeklyRepeatScheduleMap,
   dailyRepeatScheduleList,
   onPressAddSchedule,
   onPressScheduleModalClose,
@@ -28,10 +28,9 @@ const Calendar = ({
   month: number;
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
   monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
-  twoWeeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['twoWeeklyRepeatSchedules'];
-  weeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['weeklyRepeatSchedules'];
+  twoWeeklyRepeatScheduleMap?: ScheduleMap;
+  weeklyRepeatScheduleMap?: ScheduleMap;
   dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
-
   categoryList: Category[];
   onPressAddSchedule: (date: Dayjs) => void;
   onPressScheduleModalClose: () => void;
@@ -67,8 +66,8 @@ const Calendar = ({
             year={year}
             noRepeatScheduleMap={noRepeatScheduleMap}
             monthlyRepeatScheduleList={monthlyRepeatScheduleList}
-            twoWeeklyRepeatScheduleList={twoWeeklyRepeatScheduleList}
-            weeklyRepeatScheduleList={weeklyRepeatScheduleList}
+            twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
+            weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
             dailyRepeatScheduleList={dailyRepeatScheduleList}
           />
         </View>

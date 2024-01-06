@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { categoryListState } from '../../../../states/categoryListState';
 import { useRecoilValue } from 'recoil';
-import { CalendarSchedule } from '../../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from '../../../../api/schedules/getScheduleListApi';
 import PlemText from '../../../../components/Atoms/PlemText';
 import { SCREEN_WIDTH } from '../../../../constants/etc';
 import { memo, useMemo } from 'react';
@@ -21,8 +21,8 @@ export const PaletteMap = {
 const ScheduleList = ({
   noRepeatScheduleMap,
   monthlyRepeatScheduleList,
-  twoWeeklyRepeatScheduleList,
-  weeklyRepeatScheduleList,
+  twoWeeklyRepeatScheduleMap,
+  weeklyRepeatScheduleMap,
   dailyRepeatScheduleList,
   year,
   month,
@@ -30,35 +30,44 @@ const ScheduleList = ({
 }: {
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
   monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
-  twoWeeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['twoWeeklyRepeatSchedules'];
-  weeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['weeklyRepeatSchedules'];
+  twoWeeklyRepeatScheduleMap?: ScheduleMap;
+  weeklyRepeatScheduleMap?: ScheduleMap;
   dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
   year: number;
   month: number;
   date: number;
 }) => {
   const categoryList = useRecoilValue(categoryListState);
-  const targetDate = useMemo(
-    () => dayjs().set('year', year).set('month', month).set('date', date),
-    [year, month, date]
-  );
+  // const targetDate = useMemo(
+  //   () => dayjs().set('year', year).set('month', month).set('date', date),
+  //   [year, month, date]
+  // );
 
   const getAllScheduleList = () => {
     const noRepeatScheduleList = getScheduleList();
     const monthly = monthlyRepeatScheduleList && monthlyRepeatScheduleList[date] ? monthlyRepeatScheduleList[date] : [];
-    const twoWeekly = twoWeeklyRepeatScheduleList ? twoWeeklyRepeatScheduleList : [];
-    const weekly =
-      weeklyRepeatScheduleList && weeklyRepeatScheduleList[targetDate.day()]
-        ? weeklyRepeatScheduleList[targetDate.day()]
-        : [];
+    const twoWeekly = getTwoWeeklyRepeatScheduleList();
+    const weekly = getWeeklyRepeatScheduleList();
     const daily = dailyRepeatScheduleList ? dailyRepeatScheduleList : [];
 
-    return monthly.concat(twoWeekly, weekly, daily, noRepeatScheduleList);
+    return monthly.concat(weekly, twoWeekly, daily, noRepeatScheduleList);
   };
 
   const getScheduleList = () => {
     return noRepeatScheduleMap && noRepeatScheduleMap[year] && noRepeatScheduleMap[year][month]
       ? noRepeatScheduleMap[year][month][date]
+      : [];
+  };
+
+  const getTwoWeeklyRepeatScheduleList = () => {
+    return twoWeeklyRepeatScheduleMap && twoWeeklyRepeatScheduleMap[year] && twoWeeklyRepeatScheduleMap[year][month]
+      ? twoWeeklyRepeatScheduleMap[year][month][date]
+      : [];
+  };
+
+  const getWeeklyRepeatScheduleList = () => {
+    return weeklyRepeatScheduleMap && weeklyRepeatScheduleMap[year] && weeklyRepeatScheduleMap[year][month]
+      ? weeklyRepeatScheduleMap[year][month][date]
       : [];
   };
 

@@ -5,7 +5,6 @@ import { SCREEN_WIDTH } from '../../../../constants/etc';
 
 const EmptyDates = ({ firstDateIndex }: { firstDateIndex: number }) => {
   const emptyArray = useMemo(() => new Array(firstDateIndex).fill(1), [firstDateIndex]);
-  console.log('EmptyDates');
   return (
     <>
       {emptyArray.map(() => {

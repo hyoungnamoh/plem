@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import PlemText from '../../../../components/Atoms/PlemText';
 import { Dispatch, memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { CalendarSchedule } from '../../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from '../../../../api/schedules/getScheduleListApi';
 import dayjs from 'dayjs';
 import { selectedCalendarDateState } from '../../../../states/selectedCalendarDateState';
 import { openScheduleModalState } from '../../../../states/openScheduleModalState';
@@ -15,8 +15,8 @@ const Day = ({
   firstDateIndex,
   noRepeatScheduleMap,
   monthlyRepeatScheduleList,
-  twoWeeklyRepeatScheduleList,
-  weeklyRepeatScheduleList,
+  twoWeeklyRepeatScheduleMap,
+  weeklyRepeatScheduleMap,
   dailyRepeatScheduleList,
   date,
   year,
@@ -28,8 +28,8 @@ const Day = ({
   firstDateIndex: number;
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
   monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
-  twoWeeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['twoWeeklyRepeatSchedules'];
-  weeklyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['weeklyRepeatSchedules'];
+  twoWeeklyRepeatScheduleMap?: ScheduleMap;
+  weeklyRepeatScheduleMap?: ScheduleMap;
   dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
   date: number;
   year: number;
@@ -80,8 +80,8 @@ const Day = ({
       <ScheduleList
         noRepeatScheduleMap={noRepeatScheduleMap}
         monthlyRepeatScheduleList={monthlyRepeatScheduleList}
-        twoWeeklyRepeatScheduleList={twoWeeklyRepeatScheduleList}
-        weeklyRepeatScheduleList={weeklyRepeatScheduleList}
+        twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
+        weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
         dailyRepeatScheduleList={dailyRepeatScheduleList}
         year={year}
         month={month}

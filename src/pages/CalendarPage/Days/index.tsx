@@ -3,14 +3,22 @@ import Day from './Day';
 import uuid from 'react-uuid';
 import { Fragment, memo, useMemo, useState } from 'react';
 import EmptyDates from './EmptyDates';
-import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
 
 const Days = ({
-  calendarSchedule,
+  noRepeatScheduleMap,
+  monthlyRepeatScheduleList,
+  twoWeeklyRepeatScheduleMap,
+  weeklyRepeatScheduleMap,
+  dailyRepeatScheduleList,
   year,
   month,
 }: {
-  calendarSchedule?: CalendarSchedule;
+  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
+  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  twoWeeklyRepeatScheduleMap?: ScheduleMap;
+  weeklyRepeatScheduleMap?: ScheduleMap;
+  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
   year: number;
   month: number;
 }) => {
@@ -37,7 +45,11 @@ const Days = ({
             key={uuid()}
             isToday={isToday}
             firstDateIndex={firstDateIndex}
-            calendarSchedule={calendarSchedule}
+            noRepeatScheduleMap={noRepeatScheduleMap}
+            monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+            twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
+            weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
+            dailyRepeatScheduleList={dailyRepeatScheduleList}
             date={date}
             year={year}
             month={month}

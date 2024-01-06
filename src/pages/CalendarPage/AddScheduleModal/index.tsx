@@ -14,7 +14,7 @@ import { categoryListState } from '../../../states/categoryListState';
 import { Schedule } from '../../../../types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
-import { CalendarSchedule } from '../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from '../../../constants/etc';
 import PaletteFF6550Svg from '../../../assets/images/palette_ff6550_stroke_24x24.svg';
 import PaletteFFC700Svg from '../../../assets/images/palette_ffc700_stroke_24x24.svg';
@@ -34,6 +34,8 @@ type AddScheduleModalProps = {
   close: () => void;
   onPressAddSchedule: () => void;
   scheduleList?: CalendarSchedule;
+  twoWeeklyRepeatScheduleMap: ScheduleMap;
+  weeklyRepeatScheduleMap: ScheduleMap;
 };
 
 export const AddScheduleModal = ({
@@ -42,6 +44,8 @@ export const AddScheduleModal = ({
   close,
   onPressAddSchedule,
   scheduleList,
+  twoWeeklyRepeatScheduleMap,
+  weeklyRepeatScheduleMap,
 }: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
@@ -61,8 +65,7 @@ export const AddScheduleModal = ({
     if (!scheduleList) {
       return [];
     }
-    const { monthlyRepeatScheduleMap, twoWeeklyRepeatSchedules, weeklyRepeatSchedules, dailyRepeatSchedules } =
-      scheduleList.repeatSchedules;
+    const { monthlyRepeatScheduleMap, dailyRepeatSchedules } = scheduleList.repeatSchedules;
     const noRepeatScheduleList =
       scheduleList.noRepeatSchedules &&
       scheduleList.noRepeatSchedules[year] &&
@@ -70,11 +73,23 @@ export const AddScheduleModal = ({
         ? scheduleList.noRepeatSchedules[year][month][date]
         : [];
     const monthly = monthlyRepeatScheduleMap[date] || [];
-    const twoWeekly = twoWeeklyRepeatSchedules;
-    const weekly = weeklyRepeatSchedules[targetDate.day()] || [];
+    const twoWeekly = getTwoWeeklyRepeatScheduleList();
+    const weekly = getWeeklyRepeatScheduleList();
     const daily = dailyRepeatSchedules;
 
     return monthly.concat(twoWeekly, weekly, daily, noRepeatScheduleList);
+  };
+
+  const getTwoWeeklyRepeatScheduleList = () => {
+    return twoWeeklyRepeatScheduleMap && twoWeeklyRepeatScheduleMap[year] && twoWeeklyRepeatScheduleMap[year][month]
+      ? twoWeeklyRepeatScheduleMap[year][month][date]
+      : [];
+  };
+
+  const getWeeklyRepeatScheduleList = () => {
+    return weeklyRepeatScheduleMap && weeklyRepeatScheduleMap[year] && weeklyRepeatScheduleMap[year][month]
+      ? weeklyRepeatScheduleMap[year][month][date]
+      : [];
   };
 
   const allScheduleList = getAllScheduleList();

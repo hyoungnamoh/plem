@@ -2,14 +2,16 @@ import apiRequest from '..';
 import { ApiResponse } from '../../../types/axios';
 import { Schedule } from '../../../types/calendar';
 
-export type CalendarSchedule = {
-  noRepeatSchedules: {
-    [year: number]: {
-      [month: number]: {
-        [date: number]: Schedule[];
-      };
+export type ScheduleMap = {
+  [year: number]: {
+    [month: number]: {
+      [date: number]: Schedule[];
     };
   };
+};
+
+export type CalendarSchedule = {
+  noRepeatSchedules: ScheduleMap;
   repeatSchedules: {
     monthlyRepeatScheduleMap: {
       [date: number]: Schedule[];
