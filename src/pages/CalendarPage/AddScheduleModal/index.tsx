@@ -34,8 +34,11 @@ type AddScheduleModalProps = {
   close: () => void;
   onPressAddSchedule: () => void;
   scheduleList?: CalendarSchedule;
+  yearlyRepeatScheduleMap: ScheduleMap;
+  monthlyRepeatScheduleMap: ScheduleMap;
   twoWeeklyRepeatScheduleMap: ScheduleMap;
   weeklyRepeatScheduleMap: ScheduleMap;
+  dailyRepeatScheduleMap: ScheduleMap;
 };
 
 export const AddScheduleModal = ({
@@ -44,8 +47,11 @@ export const AddScheduleModal = ({
   close,
   onPressAddSchedule,
   scheduleList,
+  monthlyRepeatScheduleMap,
   twoWeeklyRepeatScheduleMap,
   weeklyRepeatScheduleMap,
+  dailyRepeatScheduleMap,
+  yearlyRepeatScheduleMap,
 }: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
@@ -65,19 +71,31 @@ export const AddScheduleModal = ({
     if (!scheduleList) {
       return [];
     }
-    const { monthlyRepeatScheduleMap, dailyRepeatSchedules } = scheduleList.repeatSchedules;
     const noRepeatScheduleList =
       scheduleList.noRepeatSchedules &&
       scheduleList.noRepeatSchedules[year] &&
       scheduleList.noRepeatSchedules[year][month]
         ? scheduleList.noRepeatSchedules[year][month][date]
         : [];
-    const monthly = monthlyRepeatScheduleMap[date] || [];
+    const yearly = getYearlyRepeayScheduleList();
+    const monthly = getMonthlyRepeayScheduleList();
     const twoWeekly = getTwoWeeklyRepeatScheduleList();
     const weekly = getWeeklyRepeatScheduleList();
-    const daily = dailyRepeatSchedules;
+    const daily = getDailyRepeatScheduleList();
 
-    return monthly.concat(twoWeekly, weekly, daily, noRepeatScheduleList);
+    return yearly.concat(monthly, twoWeekly, weekly, daily, noRepeatScheduleList);
+  };
+
+  const getYearlyRepeayScheduleList = () => {
+    return yearlyRepeatScheduleMap && yearlyRepeatScheduleMap[year] && yearlyRepeatScheduleMap[year][month]
+      ? yearlyRepeatScheduleMap[year][month][date]
+      : [];
+  };
+
+  const getMonthlyRepeayScheduleList = () => {
+    return monthlyRepeatScheduleMap && monthlyRepeatScheduleMap[year] && monthlyRepeatScheduleMap[year][month]
+      ? monthlyRepeatScheduleMap[year][month][date]
+      : [];
   };
 
   const getTwoWeeklyRepeatScheduleList = () => {
@@ -89,6 +107,12 @@ export const AddScheduleModal = ({
   const getWeeklyRepeatScheduleList = () => {
     return weeklyRepeatScheduleMap && weeklyRepeatScheduleMap[year] && weeklyRepeatScheduleMap[year][month]
       ? weeklyRepeatScheduleMap[year][month][date]
+      : [];
+  };
+
+  const getDailyRepeatScheduleList = () => {
+    return dailyRepeatScheduleMap && dailyRepeatScheduleMap[year] && dailyRepeatScheduleMap[year][month]
+      ? dailyRepeatScheduleMap[year][month][date]
       : [];
   };
 

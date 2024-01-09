@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { Dayjs, ManipulateType } from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { MAIN_COLOR } from '../../constants/colors';
@@ -16,7 +16,6 @@ import { openScheduleModalState } from '../../states/openScheduleModalState';
 import { SCREEN_WIDTH } from '../../constants/etc';
 import { Schedule } from '../../../types/calendar';
 import { cloneDeep } from 'lodash';
-import { ScheduleMap } from '../../api/schedules/getScheduleListApi';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
@@ -42,20 +41,20 @@ const makeRepeatScheduleMap = ({
     };
   };
 }) => {
-  const newScheduleMap: {
-    [year: number]: {
-      [month: number]: {
-        [date: number]: Schedule[];
-      };
-    };
-  } = cloneDeep(scheduleMap);
+  const newScheduleMap = cloneDeep(scheduleMap);
   for (let year = firstScheduleDate.get('year'); year <= lastScheduleDate.get('year'); year++) {
-    newScheduleMap[year] = {};
+    if (!newScheduleMap[year]) {
+      newScheduleMap[year] = {};
+    }
     for (let month = 0; month <= 11; month++) {
       const yearMonth = dayjs().set('year', year).set('month', month);
-      newScheduleMap[year][month] = {};
+      if (!newScheduleMap[year][month]) {
+        newScheduleMap[year][month] = {};
+      }
       for (let date = 1; date <= yearMonth.daysInMonth(); date++) {
-        newScheduleMap[year][month][date] = [];
+        if (!newScheduleMap[year][month][date]) {
+          newScheduleMap[year][month][date] = [];
+        }
       }
     }
   }
@@ -67,26 +66,27 @@ const makeRepeatScheduleMap = ({
   return newScheduleMap;
 };
 
-const getWeeklyRepeatScheduleMap = ({
-  weeklyRepeatSchedules,
+const getRepeatScheduleMap = ({
+  repeatSchedules,
   repeat,
-  scheduleMap = {},
+  repeatUnit,
 }: {
-  weeklyRepeatSchedules: Schedule[];
+  repeatSchedules: Schedule[];
   repeat: number;
-  scheduleMap?: ScheduleMap;
+  repeatUnit: ManipulateType;
 }) => {
-  let newScheduleMap = cloneDeep(scheduleMap);
+  const start = dayjs().unix();
+  let newScheduleMap = {};
 
-  weeklyRepeatSchedules.map((schedule) => {
+  repeatSchedules.map((schedule) => {
     const repeatDateList: Dayjs[] = [];
     const startDate = dayjs(schedule.startDate);
     const endDate = dayjs(schedule.endDate);
     let repeatDate = startDate;
 
-    while (repeatDate.isBefore(endDate)) {
+    while (!repeatDate.isAfter(endDate)) {
       repeatDateList.push(repeatDate);
-      repeatDate = repeatDate.add(repeat, 'day');
+      repeatDate = repeatDate.add(repeat, repeatUnit);
     }
     newScheduleMap = makeRepeatScheduleMap({
       firstScheduleDate: startDate,
@@ -108,21 +108,51 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
 
   const [currentCalendar, setCurrentCalendar] = useState(dayjs());
   const { data: calendarSchedule } = useGetScheduleList();
+  const yearlyRepeatScheduleMap = useMemo(
+    () =>
+      getRepeatScheduleMap({
+        repeatSchedules: calendarSchedule?.data.repeatSchedules?.yearlyRepeatSchedules || [],
+        repeat: 1,
+        repeatUnit: 'year',
+      }),
+    [calendarSchedule?.data.repeatSchedules?.yearlyRepeatSchedules]
+  );
+  const monthlyRepeatScheduleMap = useMemo(
+    () =>
+      getRepeatScheduleMap({
+        repeatSchedules: calendarSchedule?.data.repeatSchedules?.monthlyRepeatSchedules || [],
+        repeat: 1,
+        repeatUnit: 'month',
+      }),
+    [calendarSchedule?.data.repeatSchedules?.monthlyRepeatSchedules]
+  );
   const twoWeeklyRepeatScheduleMap = useMemo(
     () =>
-      getWeeklyRepeatScheduleMap({
-        weeklyRepeatSchedules: calendarSchedule?.data.repeatSchedules?.twoWeeklyRepeatSchedules || [],
+      getRepeatScheduleMap({
+        repeatSchedules: calendarSchedule?.data.repeatSchedules?.twoWeeklyRepeatSchedules || [],
         repeat: 14,
+        repeatUnit: 'day',
       }),
     [calendarSchedule?.data.repeatSchedules?.twoWeeklyRepeatSchedules]
   );
   const weeklyRepeatScheduleMap = useMemo(
     () =>
-      getWeeklyRepeatScheduleMap({
-        weeklyRepeatSchedules: calendarSchedule?.data.repeatSchedules?.weeklyRepeatSchedules || [],
+      getRepeatScheduleMap({
+        repeatSchedules: calendarSchedule?.data.repeatSchedules?.weeklyRepeatSchedules || [],
         repeat: 7,
+        repeatUnit: 'day',
       }),
     [calendarSchedule?.data.repeatSchedules?.weeklyRepeatSchedules]
+  );
+
+  const dailyRepeatScheduleMap = useMemo(
+    () =>
+      getRepeatScheduleMap({
+        repeatSchedules: calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules || [],
+        repeat: 1,
+        repeatUnit: 'day',
+      }),
+    [calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules]
   );
 
   useFocusEffect(() => {
@@ -160,10 +190,11 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
               noRepeatScheduleMap={calendarSchedule?.data.noRepeatSchedules}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
-              monthlyRepeatScheduleList={calendarSchedule?.data.repeatSchedules?.monthlyRepeatScheduleMap}
+              monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
               twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
               weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-              dailyRepeatScheduleList={calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules}
+              dailyRepeatScheduleMap={dailyRepeatScheduleMap}
+              yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
             />
           );
         });
@@ -184,8 +215,11 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
         scheduleList={calendarSchedule?.data}
+        monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
         twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
         weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
+        dailyRepeatScheduleMap={dailyRepeatScheduleMap}
+        yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
       />
     </>
   );

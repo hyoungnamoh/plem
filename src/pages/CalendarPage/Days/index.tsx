@@ -7,18 +7,20 @@ import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getSchedul
 
 const Days = ({
   noRepeatScheduleMap,
-  monthlyRepeatScheduleList,
+  yearlyRepeatScheduleMap,
+  monthlyRepeatScheduleMap,
   twoWeeklyRepeatScheduleMap,
   weeklyRepeatScheduleMap,
-  dailyRepeatScheduleList,
+  dailyRepeatScheduleMap,
   year,
   month,
 }: {
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  yearlyRepeatScheduleMap?: ScheduleMap;
+  monthlyRepeatScheduleMap?: ScheduleMap;
   twoWeeklyRepeatScheduleMap?: ScheduleMap;
   weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
+  dailyRepeatScheduleMap?: ScheduleMap;
   year: number;
   month: number;
 }) => {
@@ -46,10 +48,11 @@ const Days = ({
             isToday={isToday}
             firstDateIndex={firstDateIndex}
             noRepeatScheduleMap={noRepeatScheduleMap}
-            monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+            yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
+            monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
             twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
             weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-            dailyRepeatScheduleList={dailyRepeatScheduleList}
+            dailyRepeatScheduleMap={dailyRepeatScheduleMap}
             date={date}
             year={year}
             month={month}

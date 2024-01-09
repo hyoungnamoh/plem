@@ -17,20 +17,22 @@ const Calendar = ({
   year,
   month,
   noRepeatScheduleMap,
-  monthlyRepeatScheduleList,
+  yearlyRepeatScheduleMap,
+  monthlyRepeatScheduleMap,
   twoWeeklyRepeatScheduleMap,
   weeklyRepeatScheduleMap,
-  dailyRepeatScheduleList,
+  dailyRepeatScheduleMap,
   onPressAddSchedule,
   onPressScheduleModalClose,
 }: {
   year: number;
   month: number;
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  yearlyRepeatScheduleMap?: ScheduleMap;
+  monthlyRepeatScheduleMap?: ScheduleMap;
   twoWeeklyRepeatScheduleMap?: ScheduleMap;
   weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
+  dailyRepeatScheduleMap?: ScheduleMap;
   categoryList: Category[];
   onPressAddSchedule: (date: Dayjs) => void;
   onPressScheduleModalClose: () => void;
@@ -65,10 +67,11 @@ const Calendar = ({
             month={month}
             year={year}
             noRepeatScheduleMap={noRepeatScheduleMap}
-            monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+            yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
+            monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
             twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
             weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-            dailyRepeatScheduleList={dailyRepeatScheduleList}
+            dailyRepeatScheduleMap={dailyRepeatScheduleMap}
           />
         </View>
       </View>

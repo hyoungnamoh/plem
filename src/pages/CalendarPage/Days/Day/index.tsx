@@ -14,10 +14,11 @@ const Day = ({
   isToday,
   firstDateIndex,
   noRepeatScheduleMap,
-  monthlyRepeatScheduleList,
+  yearlyRepeatScheduleMap,
+  monthlyRepeatScheduleMap,
   twoWeeklyRepeatScheduleMap,
   weeklyRepeatScheduleMap,
-  dailyRepeatScheduleList,
+  dailyRepeatScheduleMap,
   date,
   year,
   month,
@@ -27,10 +28,11 @@ const Day = ({
   isToday: boolean;
   firstDateIndex: number;
   noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  monthlyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['monthlyRepeatScheduleMap'];
+  yearlyRepeatScheduleMap?: ScheduleMap;
+  monthlyRepeatScheduleMap?: ScheduleMap;
   twoWeeklyRepeatScheduleMap?: ScheduleMap;
   weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleList?: CalendarSchedule['repeatSchedules']['dailyRepeatSchedules'];
+  dailyRepeatScheduleMap?: ScheduleMap;
   date: number;
   year: number;
   month: number;
@@ -79,10 +81,11 @@ const Day = ({
       </View>
       <ScheduleList
         noRepeatScheduleMap={noRepeatScheduleMap}
-        monthlyRepeatScheduleList={monthlyRepeatScheduleList}
+        yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
+        monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
         twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
         weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-        dailyRepeatScheduleList={dailyRepeatScheduleList}
+        dailyRepeatScheduleMap={dailyRepeatScheduleMap}
         year={year}
         month={month}
         date={date}
