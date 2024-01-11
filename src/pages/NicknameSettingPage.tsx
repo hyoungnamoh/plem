@@ -3,7 +3,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ApiResponse } from '../../types/axios';
@@ -18,6 +17,7 @@ import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 import { makeNickname } from '../utils/makeNickname';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
 type NicknameSettingPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NicknameSettingPage'>;
 
@@ -79,7 +79,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Header />
       <View style={styles.content}>
         <View style={styles.titleWrap}>
@@ -105,7 +105,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
         </View>
       </View>
       <BottomButton title="가입 완료하기" onPress={onPressNextButton} disabled={!canSignUp} />
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

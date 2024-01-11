@@ -1,7 +1,6 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/header_close_40x40.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../../../components/Atoms/PlemText';
 
 import AddScheduleModalSvg from '../../../assets/images/add_schedule_modal.svg';
@@ -20,6 +19,7 @@ import PaletteFF6550Svg from '../../../assets/images/palette_ff6550_stroke_24x24
 import PaletteFFC700Svg from '../../../assets/images/palette_ffc700_stroke_24x24.svg';
 import Palette22DA81Svg from '../../../assets/images/palette_22da81_stroke_24x24.svg';
 import Palette4659FFSvg from '../../../assets/images/palette_4659ff_stroke_24x24.svg';
+import CustomScrollView from '../../../components/CustomScrollView/CustomScrollView';
 
 const PaletteMap = {
   palette_ff6550_8x8: <PaletteFF6550Svg />,
@@ -132,7 +132,7 @@ export const AddScheduleModal = ({
               <CloseSVG />
             </Pressable>
           </View>
-          <KeyboardAwareScrollView>
+          <CustomScrollView>
             {allScheduleList.length > 0 ? (
               allScheduleList.map((schedule) => {
                 return (
@@ -155,7 +155,7 @@ export const AddScheduleModal = ({
             <View style={styles.addScheduleButton}>
               <UnderlineButton onPress={onPressAddSchedule}>일정 추가하기</UnderlineButton>
             </View>
-          </KeyboardAwareScrollView>
+          </CustomScrollView>
         </View>
       </View>
     </View>

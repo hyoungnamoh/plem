@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import PlemText from '../components/Atoms/PlemText';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from '../tabs/MainTab';
@@ -20,6 +19,7 @@ import { addPlanChartState } from '../states/addPlanChartState';
 import MainChartTable from '../components/MainChartTable';
 import { useQueryClient } from 'react-query';
 import { TODAY_PLAN_CHART_QUERY_KEY, useGetTodayPlanChart } from '../hooks/queries/useGetTodayPlanChart';
+import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -143,7 +143,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
           </PlemText>
         </View>
         <Image source={underlineImage} style={styles.doItNowUnderline} />
-        <KeyboardAwareScrollView style={{ height: '20%' }} contentContainerStyle={styles.doItNowContent}>
+        <CustomScrollView style={{ height: '20%' }} contentContainerStyle={styles.doItNowContent}>
           {doItNowPlan ? (
             <View>
               <View style={styles.planWrap}>
@@ -175,7 +175,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
               <PlemText style={styles.emptyPlanNowText}>계획을 등록해 주세요.</PlemText>
             </Pressable>
           )}
-        </KeyboardAwareScrollView>
+        </CustomScrollView>
       </View>
     </View>
   );

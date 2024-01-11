@@ -1,7 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSetRecoilState } from 'recoil';
 import PlemText from '../components/Atoms/PlemText';
 import BlackButton from '../components/BlackButton';
@@ -10,6 +9,7 @@ import UnderlineButton from '../components/UnderlineButton';
 import { MAIN_COLOR } from '../constants/colors';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
 type EmailVerifyIntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyIntroPage'>;
 
@@ -30,7 +30,7 @@ const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) 
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Header />
       <View style={styles.content}>
         <View>
@@ -53,7 +53,7 @@ const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) 
           </UnderlineButton>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

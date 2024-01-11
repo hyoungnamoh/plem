@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert, Keyboard } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
@@ -24,6 +24,7 @@ import { useQueryClient } from 'react-query';
 import { useUpdateSchedule } from '../../hooks/mutaions/useUpdateSchedule';
 import { useDeleteSchedule } from '../../hooks/mutaions/useDeleteSchedule';
 import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
+import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
 
 const underlineImage = require('../../assets/images/underline.png');
 
@@ -176,7 +177,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       ...schedule,
       startDate: dayjs(date).isBefore(schedule.startDate)
         ? dayjs(date).subtract(1, 'hour').toISOString()
-        : schedule.endDate,
+        : schedule.startDate,
       endDate: endDate.set('year', newYear).set('month', newMonth).set('date', newDate).toISOString(),
     });
     setOpenEndDatePicker(false);
@@ -196,7 +197,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       ...schedule,
       startDate: dayjs(date).isBefore(schedule.startDate)
         ? dayjs(date).subtract(1, 'hour').toISOString()
-        : schedule.endDate,
+        : schedule.startDate,
       endDate: endDate.set('hour', date.getHours()).set('minute', date.getMinutes()).toISOString(),
     });
     setOpenEndTimePicker(false);
@@ -207,175 +208,179 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
-      <View style={styles.page}>
-        <Header
-          title="일정 추가"
-          buttonName={propSchedule ? '삭제' : ''}
-          buttonProps={propSchedule ? { onPress: handleScheduleDelete } : null}
-          buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
-        />
-        <View style={styles.content}>
-          <LabelInput
-            label={'일정명'}
-            value={schedule.name}
-            onChangeText={handleNameChange}
-            maxLength={14}
-            placeholder={'최대 14글자'}
-          />
-          <View style={{ marginTop: 32, zIndex: 1000 }}>
-            <PaletteInputRow
-              label="카테고리"
-              onPress={() => setOpenPalette(!openPalette)}
-              open={openPalette}
-              palettePosition={{ x: -10, y: 8 }}
-              list={categoryList}
-              selectedItem={categoryList.find((item) => item.value === schedule.category) || categoryList[0]}
-              onSelect={handleCatecorySelect}
-              onClose={() => setOpenPalette(false)}
+    <>
+      <CustomScrollView>
+        <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
+          <View style={styles.page}>
+            <Header
+              title="일정 추가"
+              buttonName={propSchedule ? '삭제' : ''}
+              buttonProps={propSchedule ? { onPress: handleScheduleDelete } : null}
+              buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
+            />
+            <View style={styles.content}>
+              <LabelInput
+                label={'일정명'}
+                value={schedule.name}
+                onChangeText={handleNameChange}
+                maxLength={14}
+                placeholder={'최대 14글자'}
+              />
+              <View style={{ marginTop: 32, zIndex: 1000 }}>
+                <PaletteInputRow
+                  label="카테고리"
+                  onPress={() => setOpenPalette(!openPalette)}
+                  open={openPalette}
+                  palettePosition={{ x: -10, y: 8 }}
+                  list={categoryList}
+                  selectedItem={categoryList.find((item) => item.value === schedule.category) || categoryList[0]}
+                  onSelect={handleCatecorySelect}
+                  onClose={() => setOpenPalette(false)}
+                />
+              </View>
+              <View style={{ marginTop: 32 }}>
+                <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
+              </View>
+              <View>
+                {isAllDay ? (
+                  <>
+                    <PlemText style={[styles.label, { marginTop: 32 }]}>날짜</PlemText>
+                    <View style={styles.dateInputContainer}>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>시작</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
+                            <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                      <View style={{ flex: 1, marginLeft: 15 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>날짜</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
+                            <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <PlemText style={[styles.label, { marginTop: 32 }]}>시작</PlemText>
+                    <View style={styles.dateInputContainer}>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>날짜</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
+                            <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                      <View style={{ flex: 1, marginLeft: 15 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>시간</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartTimePicker(true)}>
+                            <PlemText>
+                              {`${timePadStart(startDate.get('hour'))}:${timePadStart(startDate.get('minute'))}`}
+                            </PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                    </View>
+                    <PlemText style={[styles.label, { marginTop: 32 }]}>종료</PlemText>
+                    <View style={styles.dateInputContainer}>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>날짜</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
+                            <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                      <View style={{ flex: 1, marginLeft: 15 }}>
+                        <View style={styles.dateInputWrap}>
+                          <PlemText>시간</PlemText>
+                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndTimePicker(true)}>
+                            <PlemText>
+                              {`${timePadStart(endDate.get('hour'))}:${timePadStart(endDate.get('minute'))}`}
+                            </PlemText>
+                            <ArrowDownSvg style={styles.arrowDownImage} />
+                          </Pressable>
+                        </View>
+                        <Image source={underlineImage} style={styles.underlineImage} />
+                      </View>
+                    </View>
+                  </>
+                )}
+                <View style={{ marginTop: 32 }}>
+                  <OptionsInputRow
+                    label={'알림'}
+                    value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
+                    onPress={() => navigation.navigate('ScheduleNotiSettingPage')}
+                  />
+                </View>
+                <View style={{ marginTop: 32 }}>
+                  <OptionsInputRow
+                    label={'반복'}
+                    value={repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함'}
+                    onPress={() => navigation.navigate('ScheduleRepeatSettingPage')}
+                  />
+                </View>
+              </View>
+            </View>
+            <DateTimePickerModal
+              isVisible={openStartTimePicker}
+              mode="time"
+              onConfirm={handleStartTimeConfirm}
+              onCancel={() => setOpenStartTimePicker(false)}
+              locale="en_GB"
+              is24Hour={true}
+              minuteInterval={10}
+              date={startDate.toDate()}
+            />
+            <DateTimePickerModal
+              isVisible={openEndTimePicker}
+              mode="time"
+              onConfirm={handleEndTimeConfirm}
+              onCancel={() => setOpenEndTimePicker(false)}
+              locale="en_GB"
+              is24Hour={true}
+              minuteInterval={10}
+              date={endDate.toDate()}
+            />
+            <DateTimePickerModal
+              isVisible={openStartDatePicker}
+              mode="date"
+              onConfirm={handleStartDateConfirm}
+              onCancel={() => setOpenStartDatePicker(false)}
+              date={startDate.toDate()}
+            />
+            <DateTimePickerModal
+              isVisible={openEndDatePicker}
+              mode="date"
+              onConfirm={handleEndDateConfirm}
+              onCancel={() => setOpenEndDatePicker(false)}
+              date={endDate.toDate()}
             />
           </View>
-          <View style={{ marginTop: 32 }}>
-            <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
-          </View>
-          <View>
-            {isAllDay ? (
-              <>
-                <PlemText style={[styles.label, { marginTop: 32 }]}>날짜</PlemText>
-                <View style={styles.dateInputContainer}>
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>시작</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
-                        <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                  <View style={{ flex: 1, marginLeft: 15 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
-                        <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                </View>
-              </>
-            ) : (
-              <>
-                <PlemText style={[styles.label, { marginTop: 32 }]}>시작</PlemText>
-                <View style={styles.dateInputContainer}>
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
-                        <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                  <View style={{ flex: 1, marginLeft: 15 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>시간</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenStartTimePicker(true)}>
-                        <PlemText>
-                          {`${timePadStart(startDate.get('hour'))}:${timePadStart(startDate.get('minute'))}`}
-                        </PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                </View>
-                <PlemText style={[styles.label, { marginTop: 32 }]}>종료</PlemText>
-                <View style={styles.dateInputContainer}>
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>날짜</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
-                        <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                  <View style={{ flex: 1, marginLeft: 15 }}>
-                    <View style={styles.dateInputWrap}>
-                      <PlemText>시간</PlemText>
-                      <Pressable style={styles.setDateButton} onPress={() => setOpenEndTimePicker(true)}>
-                        <PlemText>
-                          {`${timePadStart(endDate.get('hour'))}:${timePadStart(endDate.get('minute'))}`}
-                        </PlemText>
-                        <ArrowDownSvg style={styles.arrowDownImage} />
-                      </Pressable>
-                    </View>
-                    <Image source={underlineImage} style={styles.underlineImage} />
-                  </View>
-                </View>
-              </>
-            )}
-            <View style={{ marginTop: 32 }}>
-              <OptionsInputRow
-                label={'알림'}
-                value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
-                onPress={() => navigation.navigate('ScheduleNotiSettingPage')}
-              />
-            </View>
-            <View style={{ marginTop: 32 }}>
-              <OptionsInputRow
-                label={'반복'}
-                value={repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함'}
-                onPress={() => navigation.navigate('ScheduleRepeatSettingPage')}
-              />
-            </View>
-          </View>
-        </View>
-        <BottomButton
-          title={propSchedule ? '편집' : '등록'}
-          disabled={false}
-          onPress={propSchedule ? handleScheduleUpdate : handleScheduleSubmit}
-        />
-        <DateTimePickerModal
-          isVisible={openStartTimePicker}
-          mode="time"
-          onConfirm={handleStartTimeConfirm}
-          onCancel={() => setOpenStartTimePicker(false)}
-          locale="en_GB"
-          is24Hour={true}
-          minuteInterval={10}
-          date={startDate.toDate()}
-        />
-        <DateTimePickerModal
-          isVisible={openEndTimePicker}
-          mode="time"
-          onConfirm={handleEndTimeConfirm}
-          onCancel={() => setOpenEndTimePicker(false)}
-          locale="en_GB"
-          is24Hour={true}
-          minuteInterval={10}
-          date={endDate.toDate()}
-        />
-        <DateTimePickerModal
-          isVisible={openStartDatePicker}
-          mode="date"
-          onConfirm={handleStartDateConfirm}
-          onCancel={() => setOpenStartDatePicker(false)}
-          date={startDate.toDate()}
-        />
-        <DateTimePickerModal
-          isVisible={openEndDatePicker}
-          mode="date"
-          onConfirm={handleEndDateConfirm}
-          onCancel={() => setOpenEndDatePicker(false)}
-          date={endDate.toDate()}
-        />
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </CustomScrollView>
+      <BottomButton
+        title={propSchedule ? '편집' : '등록'}
+        disabled={false}
+        onPress={propSchedule ? handleScheduleUpdate : handleScheduleSubmit}
+      />
+    </>
   );
 };
 
@@ -383,7 +388,6 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: MAIN_COLOR,
     flex: 1,
-    position: 'relative',
   },
   underlineButtonWrap: {
     flexDirection: 'row',

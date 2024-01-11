@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useRecoilState } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import Header from '../../components/Header';
@@ -14,9 +13,8 @@ import { useUpdateNickname } from '../../hooks/mutaions/useUpdateNickname';
 import jwt_decode from 'jwt-decode';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { LoggedInUser } from '../../../types/user';
-import { ADJECTIVES } from '../../constants/adjectives';
-import { NOUNS } from '../../constants/nouns';
 import { makeNickname } from '../../utils/makeNickname';
+import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
 
 type ModifyNickNamePageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyNickNamePage'>;
 
@@ -54,7 +52,7 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
     return null;
   }
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Header title="닉네임" buttonName="완료" buttonProps={{ onPress: () => onPressComplete() }} />
       <View style={styles.content}>
         <View style={styles.nicknameWrap}>
@@ -75,7 +73,7 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
           </View>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

@@ -2,8 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ApiResponse } from '../../../types/axios';
 import {
@@ -22,6 +21,7 @@ import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from '../../states/isVerifiedEmailState';
 import { MAIN_COLOR } from '../../constants/colors';
 import { LoggedOutStackParamList } from '../../../types/appInner';
+import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 
@@ -116,7 +116,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Toast
         ref={toastRef}
         style={styles.toast}
@@ -174,7 +174,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
       ) : (
         <BottomButton title={'재설정 메일 발송'} onPress={onPressSend} disabled={isInvalidEmail || !email} />
       )}
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

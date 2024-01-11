@@ -2,8 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ApiResponse } from '../../types/axios';
 import {
@@ -22,6 +21,7 @@ import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/colors';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
@@ -117,7 +117,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Toast
         ref={toastRef}
         style={styles.toast}
@@ -179,7 +179,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
       ) : (
         <BottomButton title={'인증 메일 받기'} onPress={onPressSend} disabled={isInvalidEmail || !email} />
       )}
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

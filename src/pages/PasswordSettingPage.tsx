@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlemText from '../components/Atoms/PlemText';
 import BottomButton from '../components/BottomButton';
 import Header from '../components/Header';
@@ -10,6 +9,7 @@ import { MAIN_COLOR } from '../constants/colors';
 import { validator } from '../helper/validator';
 import { useUpdatePassword } from '../hooks/mutaions/useUpdatePassword';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 
@@ -90,7 +90,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Header />
       <View style={styles.content}>
         <View style={styles.titleWrap}>
@@ -131,7 +131,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
         onPress={isFindingPassword ? onPressCompleteButton : onPressNextButton}
         disabled={isInvalidAccount()}
       />
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 

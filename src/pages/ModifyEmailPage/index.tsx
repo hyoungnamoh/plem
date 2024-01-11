@@ -4,7 +4,6 @@ import { Alert, StyleSheet, View } from 'react-native';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import PlemText from '../../components/Atoms/PlemText';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
@@ -22,6 +21,7 @@ import {
 } from '../../api/auth/postVerificationEmailApi';
 import { AxiosError } from 'axios';
 import { validator } from '../../helper/validator';
+import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
@@ -118,7 +118,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.page}>
+    <CustomScrollView contentContainerStyle={styles.page}>
       <Toast
         ref={toastRef}
         style={styles.toast}
@@ -180,7 +180,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
       ) : (
         <BottomButton title={'인증 메일 받기'} onPress={onPressSend} disabled={isInvalidEmail || !email} />
       )}
-    </KeyboardAwareScrollView>
+    </CustomScrollView>
   );
 };
 
