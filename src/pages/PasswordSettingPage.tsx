@@ -15,11 +15,7 @@ type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'Pass
 
 const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   const { email, isFindingPassword } = route.params;
-  const {
-    isLoading: updateLoading,
-    mutate: updatePassword,
-    data,
-  } = useUpdatePassword({
+  const { mutate: updatePassword } = useUpdatePassword({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         Alert.alert('비밀번호 재설정이 완료되었습니다.');
@@ -27,8 +23,6 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
         navigation.push('LoginPage');
       } else if (responseData.data) {
         Alert.alert(responseData.data);
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
       }
     },
   });

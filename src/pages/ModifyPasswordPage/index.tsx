@@ -4,15 +4,18 @@ import { Alert, StyleSheet, View } from 'react-native';
 import Header from '../../components/Header';
 import LabelInput from '../../components/LabelInput';
 import { MAIN_COLOR } from '../../constants/colors';
-import { MenuItem } from '../../constants/menus';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import BottomButton from '../../components/BottomButton';
 import { validator } from '../../helper/validator';
 import PlemText from '../../components/Atoms/PlemText';
+import { useUpdatePassword } from '../../hooks/mutaions/useUpdatePassword';
+import { useRecoilValue } from 'recoil';
+import { loggedInUserState } from '../../states/loggedInUserState';
 
 type ModifyPasswordPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyPasswordPage'>;
 
 const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
+  const loggedInUser = useRecoilValue(loggedInUserState);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -22,11 +25,25 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
 
   const hasEmptyValue = !currentPassword || !newPassword || !newPasswordConfirm;
 
+  const { mutate: updatePassword } = useUpdatePassword({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        Alert.alert('비밀번호 재설정이 완료되었습니다.');
+        navigation.goBack();
+      } else if (responseData.data) {
+        Alert.alert(responseData.data);
+      }
+    },
+  });
+
   const isInvalidAccount = () => {
     return isInvalidCurrentPassword || isInvalidPassword || isInvalidPasswordConfirm || hasEmptyValue;
   };
 
-  const onPressNextButton = () => {
+  const handleNextButton = () => {
+    if (!loggedInUser) {
+      return;
+    }
     if (
       !validator({ value: newPassword, type: 'password' }) ||
       !validator({ value: currentPassword, type: 'password' })
@@ -38,7 +55,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
       Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
       return;
     }
-    navigation.goBack();
+    updatePassword({ email: loggedInUser.email, password: newPassword });
   };
 
   const onChangeCurrentPassword = (value: string) => {
@@ -108,7 +125,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
         </View>
         {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
       </View>
-      <BottomButton title="다음" onPress={onPressNextButton} disabled={isInvalidAccount()} />
+      <BottomButton title="다음" onPress={handleNextButton} disabled={isInvalidAccount()} />
     </View>
   );
 };

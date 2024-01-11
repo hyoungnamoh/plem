@@ -11,6 +11,8 @@ import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
 import { LoggedOutStackParamList } from '../../types/appInner';
 import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
 
+// 안쓰는 페이지??
+
 type EmailVerifyIntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyIntroPage'>;
 
 const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) => {

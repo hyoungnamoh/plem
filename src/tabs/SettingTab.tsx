@@ -9,6 +9,11 @@ import ModifyPasswordPage from '../pages/ModifyPasswordPage';
 import NoticeListPage from '../pages/NoticeListPage';
 import NotificationSettingPage from '../pages/NotificationSettingPage';
 import SettingPage from '../pages/SettingPage';
+import { UseMutationResult } from 'react-query';
+import { PostVerificationEmailParams, PostVerificationEmailResponse } from '../api/auth/postVerificationEmailApi';
+import { ApiResponse } from '../../types/axios';
+import { AxiosError } from 'axios';
+import NotReceivedMailPage from '../pages/NotReceivedMailPage';
 
 export type SettingTabStackParamList = {
   SettingPage: undefined;
@@ -24,6 +29,15 @@ export type SettingTabStackParamList = {
   TutorialReplayPage: undefined;
   UsingServiceTermPage: undefined;
   PrivateInfoTermPage: undefined;
+  NotReceivedMailPage: {
+    usePostVerificationEmail: UseMutationResult<
+      ApiResponse<PostVerificationEmailResponse>,
+      AxiosError<unknown, any>,
+      PostVerificationEmailParams,
+      unknown
+    >;
+    email: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<SettingTabStackParamList>();
@@ -44,6 +58,7 @@ const SettingTab = () => {
       <Stack.Screen name="ModifyEmailPage" component={ModifyEmailPage} />
       <Stack.Screen name="ModifyPasswordPage" component={ModifyPasswordPage} />
       <Stack.Screen name="DirectInquiryPage" component={DirectInquiryPage} />
+      <Stack.Screen name="NotReceivedMailPage" component={NotReceivedMailPage} />
     </Stack.Navigator>
   );
 };
