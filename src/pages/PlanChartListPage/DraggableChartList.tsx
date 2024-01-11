@@ -40,7 +40,6 @@ const DraggableChartList = ({
     });
 
     setCharts(newList);
-    setList(newList);
 
     // DB 업데이트
     const newChartOrders = updatedCharts.map((chart, index) => {
@@ -54,33 +53,25 @@ const DraggableChartList = ({
   };
 
   const onDeleteUpdate = ({ id }: { id: number }) => {
-    const newList = [...list].filter((item) => item.id !== id);
-    setList(newList);
+    const newList = [...charts].filter((item) => item.id !== id);
     setCharts(newList);
     queryClient.invalidateQueries('chartList');
   };
 
   const onCloneUpdate = ({ newItem, originId }: { newItem: PlanChart; originId: number }) => {
-    const newList = [...list];
-    const foundIndex = newList.findIndex((item) => item.id === originId);
-    const splicedList = newList.splice(foundIndex + 1, newList.length);
-    newList.push(newItem);
-    newList.concat(splicedList);
-    setList(newList.concat(splicedList));
-    setCharts(newList.concat(splicedList));
+    const newCharts = [...charts];
+    const foundIndex = newCharts.findIndex((item) => item.id === originId);
+    const splicedList = newCharts.splice(foundIndex + 1, newCharts.length);
+    newCharts.push(newItem);
+    newCharts.concat(splicedList);
+    setCharts(newCharts.concat(splicedList));
   };
 
   return (
     <DraggableFlatList
-      data={list}
-      renderItem={({ item, drag, isActive }) => (
-        <DraggableChartItem
-          item={item}
-          drag={drag}
-          isActive={isActive}
-          onDeleteUpdate={onDeleteUpdate}
-          onCloneUpdate={onCloneUpdate}
-        />
+      data={charts}
+      renderItem={({ item, drag }) => (
+        <DraggableChartItem item={item} drag={drag} onDeleteUpdate={onDeleteUpdate} onCloneUpdate={onCloneUpdate} />
       )}
       ListFooterComponent={<View style={{ marginBottom: 20 }} />}
       keyExtractor={(item) => `draggableChart${item.id}`}
