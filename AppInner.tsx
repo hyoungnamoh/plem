@@ -74,10 +74,11 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const setScheduleCategoryList = async () => {
     const storageCategoryList = await AsyncStorage.getItem('storageCategoryList');
+    // await AsyncStorage.removeItem('storageCategoryList');
     if (storageCategoryList) {
       setCategoryList(JSON.parse(storageCategoryList));
     } else {
-      await AsyncStorage.setItem('categoryList', JSON.stringify(DEFAULT_CATEGORY_LIST));
+      await AsyncStorage.setItem('storageCategoryList', JSON.stringify(DEFAULT_CATEGORY_LIST));
     }
   };
 

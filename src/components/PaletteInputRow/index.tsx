@@ -10,13 +10,15 @@ import {
 } from 'react-native';
 import PlemText from '../Atoms/PlemText';
 import PaletteListItem from './PaletteListItem';
-import { DEFAULT_CATEGORY_LIST } from '../../states/categoryListState';
+import { Category, categoryListState } from '../../states/categoryListState';
+import PaletteSvg from '../PaletteSvg/PaletteSvg';
+import { useSetRecoilState } from 'recoil';
+import { cloneDeep } from 'lodash';
 
 const underlineImage = require('../../assets/images/underline.png');
-
 const calendarPaletteBoxImage = require('../../assets/images/calendar_palette_box.png');
 
-export type PaletteListItemType = typeof DEFAULT_CATEGORY_LIST[number];
+export type PaletteListItemType = Category;
 
 type PaletteInputRowProps = {
   label: string;
@@ -41,10 +43,10 @@ const PaletteInputRow = ({
   onSelect,
   onClose,
 }: PaletteInputRowProps & PressableProps) => {
+  const setCategoryList = useSetRecoilState(categoryListState);
   const [paletteBoxPosition, setPaletteBoxPosition] = useState({ x: 0, y: 0 });
   const [isEditing, setIsEditing] = useState(false);
-
-  const paletteImageRef = useRef(null);
+  const [paletteList, setPaletteList] = useState<PaletteListItemType[]>(cloneDeep(list));
   const paletteModalRef = useRef<View>(null);
 
   useEffect(() => {
@@ -64,6 +66,11 @@ const PaletteInputRow = ({
     onClose();
   };
 
+  const handleEditComplite = () => {
+    setIsEditing(!isEditing);
+    // setCategoryList(paletteList);
+  };
+
   return (
     <TouchableWithoutFeedback>
       <View>
@@ -71,7 +78,7 @@ const PaletteInputRow = ({
         <View style={styles.underlineButtonWrap}>
           <PlemText>{selectedItem.label}</PlemText>
           <Pressable style={styles.paletteButton} onPress={onPressPalette} hitSlop={10}>
-            <Image source={selectedItem.image} style={styles.paletteImage} ref={paletteImageRef} />
+            <PaletteSvg size="medium" color={selectedItem.color} />
           </Pressable>
           {open && (
             <View
@@ -91,18 +98,20 @@ const PaletteInputRow = ({
                     alignItems: 'center',
                   }}>
                   <PlemText style={{ color: '#888888', fontSize: 16 }}>카테고리 선택</PlemText>
-                  <Pressable onPress={() => setIsEditing(!isEditing)}>
+                  {/* <Pressable onPress={handleEditComplite}>
                     <PlemText style={{ color: '#444444', fontSize: 16 }}>{isEditing ? '완료' : '편집'}</PlemText>
-                  </Pressable>
+                  </Pressable> */}
                 </View>
-                {list.map((item, index) => {
+                {paletteList.map((item, index) => {
                   return (
                     <PaletteListItem
-                      key={`${item.label}-${item.image}-${index}`}
+                      key={`${item.label}-${item.color}-${index}`}
                       index={index}
                       item={item}
                       onSelect={handleItemSelect}
                       isEditing={isEditing}
+                      paletteList={paletteList}
+                      setPaletteList={setPaletteList}
                     />
                   );
                 })}

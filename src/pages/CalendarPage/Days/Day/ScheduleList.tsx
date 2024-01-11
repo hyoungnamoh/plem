@@ -4,19 +4,8 @@ import { useRecoilValue } from 'recoil';
 import { CalendarSchedule, ScheduleMap } from '../../../../api/schedules/getScheduleListApi';
 import PlemText from '../../../../components/Atoms/PlemText';
 import { SCREEN_WIDTH } from '../../../../constants/etc';
-import { memo, useMemo } from 'react';
-import dayjs from 'dayjs';
-import PaletteFF6550Svg from '../../../../assets/images/palette_ff6550_8x8.svg';
-import PaletteFFC700Svg from '../../../../assets/images/palette_ffc700_8x8.svg';
-import Palette22DA81Svg from '../../../../assets/images/palette_22da81_8x8.svg';
-import Palette4659FFSvg from '../../../../assets/images/palette_4659ff_8x8.svg';
-
-export const PaletteMap = {
-  palette_ff6550_8x8: <PaletteFF6550Svg />,
-  palette_ffc700_8x8: <PaletteFFC700Svg />,
-  palette_22da81_8x8: <Palette22DA81Svg />,
-  palette_4569ff_8x8: <Palette4659FFSvg />,
-} as const;
+import { memo } from 'react';
+import PaletteSvg from '../../../../components/PaletteSvg/PaletteSvg';
 
 const ScheduleList = ({
   noRepeatScheduleMap,
@@ -99,11 +88,12 @@ const ScheduleList = ({
       {allScheduleList.map((schedule) => {
         return (
           <View key={schedule.id} style={styles.scheduleRow}>
-            {
-              PaletteMap[
-                categoryList.find((category) => category.value === schedule.category)?.image || categoryList[0].image
-              ]
-            }
+            <PaletteSvg
+              size="small"
+              color={
+                categoryList.find((category) => category.value === schedule.category)?.color || categoryList[0].color
+              }
+            />
             <PlemText style={styles.scheduleName}>{schedule.name}</PlemText>
           </View>
         );

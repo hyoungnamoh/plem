@@ -2,7 +2,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import CloseSVG from '../../../assets/images/header_close_40x40.svg';
 import UnderlineButton from '../../../components/UnderlineButton';
 import PlemText from '../../../components/Atoms/PlemText';
-
 import AddScheduleModalSvg from '../../../assets/images/add_schedule_modal.svg';
 import { Dayjs } from 'dayjs';
 import { NUMBER_TO_DAY_KOR } from '../../../constants/dates';
@@ -15,18 +14,8 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
 import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from '../../../constants/etc';
-import PaletteFF6550Svg from '../../../assets/images/palette_ff6550_stroke_24x24.svg';
-import PaletteFFC700Svg from '../../../assets/images/palette_ffc700_stroke_24x24.svg';
-import Palette22DA81Svg from '../../../assets/images/palette_22da81_stroke_24x24.svg';
-import Palette4659FFSvg from '../../../assets/images/palette_4659ff_stroke_24x24.svg';
 import CustomScrollView from '../../../components/CustomScrollView/CustomScrollView';
-
-const PaletteMap = {
-  palette_ff6550_8x8: <PaletteFF6550Svg />,
-  palette_ffc700_8x8: <PaletteFFC700Svg />,
-  palette_22da81_8x8: <Palette22DA81Svg />,
-  palette_4569ff_8x8: <Palette4659FFSvg />,
-} as const;
+import PaletteSvg from '../../../components/PaletteSvg/PaletteSvg';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -137,12 +126,13 @@ export const AddScheduleModal = ({
               allScheduleList.map((schedule) => {
                 return (
                   <Pressable key={schedule.id} style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
-                    {
-                      PaletteMap[
-                        categoryList.find((category) => category.value === schedule.category)?.image ||
-                          categoryList[0].image
-                      ]
-                    }
+                    <PaletteSvg
+                      size="medium"
+                      color={
+                        categoryList.find((category) => category.value === schedule.category)?.color ||
+                        categoryList[0].color
+                      }
+                    />
                     <PlemText style={styles.scheduleText}>{schedule.name}</PlemText>
                   </Pressable>
                 );

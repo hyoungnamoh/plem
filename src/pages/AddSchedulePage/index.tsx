@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert, Keyboard } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import PlemText from '../../components/Atoms/PlemText';
 import BottomButton from '../../components/BottomButton';
 import Header from '../../components/Header';
@@ -15,7 +15,6 @@ import { addScheduleDefault, addScheduleState } from '../../states/addScheduleSt
 import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
 import { notiOptiosList } from '../ScheduleNotiSettingPage';
 import { repeatOptionList } from '../ScheduleRepeatSettingPage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { timePadStart } from '../../helper/timePadStart';
 import { useAddSchedule } from '../../hooks/mutaions/useAddSchedule';
@@ -34,10 +33,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const queryClient = useQueryClient();
   const propSchedule = route.params.schedule;
 
+  const categoryList = useRecoilValue(categoryListState);
   const [schedule, setSchedule] = useRecoilState(addScheduleState);
   const startDate = dayjs(schedule.startDate);
   const endDate = dayjs(schedule.endDate);
-  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
 
   const [openPalette, setOpenPalette] = useState(false);
   const [isAllDay, setIsAllDay] = useState(false);
@@ -49,7 +48,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   useEffect(() => {
     const defaultStartDate = propSchedule ? propSchedule.startDate : route.params.date;
     const defaultEndDate = propSchedule ? propSchedule.endDate : dayjs(route.params.date).set('hour', 1).toISOString();
-    getCategoryList();
+    // getCategoryList();
 
     if (propSchedule) {
       setSchedule({
@@ -139,14 +138,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     const end = dayjs(endDate).set('second', 0).set('millisecond', 0);
 
     return start.isAfter(end) || start.isSame(end);
-  };
-
-  const getCategoryList = async () => {
-    const categoriyList = await AsyncStorage.getItem('categoryList');
-    if (!categoriyList) {
-      return;
-    }
-    setCategoryList(JSON.parse(categoriyList));
   };
 
   const handleCatecorySelect = (category: number) => {
