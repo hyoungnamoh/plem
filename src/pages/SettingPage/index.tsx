@@ -34,10 +34,6 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
 
   const { mutate: logout } = useLogout({
     onSuccess: onSuccessLogout,
-    onError: (e) => {
-      console.info('useLogout Error: ', e);
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-    },
   });
 
   const onPressMenu = (menu: MenuItem) => {

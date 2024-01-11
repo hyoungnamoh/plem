@@ -47,7 +47,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     ApiResponse<PostVerificationEmailResponse>,
     AxiosError,
     PostVerificationEmailParams
-  >('verificationCode', ({ email }) => postVerificationEmailApi({ email }), {
+  >('verificationCode', (body) => postVerificationEmailApi(body), {
     onSuccess: async (responseData, variables, context) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
@@ -61,12 +61,8 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
         Alert.alert(responseData.data);
       } else {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('verificationCode: ', responseData);
+        console.info('usePostVerificationEmail: ', responseData);
       }
-    },
-    onError: (error, variable, context) => {
-      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-      console.info(error.name + ': ', error.message);
     },
   });
 

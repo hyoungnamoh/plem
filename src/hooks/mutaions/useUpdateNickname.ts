@@ -3,16 +3,12 @@ import { ApiResponse } from '../../../types/axios';
 import { AxiosError } from 'axios';
 import { UpdateNicknameBody, UpdateNicknameResponse, updateNicknameApi } from '../../api/charts/updateNicknameApi';
 
-export const useUpdateNickname = ({
-  onSuccess,
-  onError,
-}: UseMutationOptions<ApiResponse<UpdateNicknameResponse>, AxiosError, UpdateNicknameBody>) => {
+export const useUpdateNickname = (
+  options: UseMutationOptions<ApiResponse<UpdateNicknameResponse>, AxiosError, UpdateNicknameBody>
+) => {
   return useMutation<ApiResponse<UpdateNicknameResponse>, AxiosError, UpdateNicknameBody>(
     'updateNickname',
     (body) => updateNicknameApi(body),
-    {
-      onSuccess,
-      onError,
-    }
+    options
   );
 };

@@ -76,10 +76,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
         console.info('useAddSchedule Error: ', responseData);
       }
     },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-      console.info('useAddSchedule Error: ', e);
-    },
   });
 
   const { isLoading: deleteScheduleLoading, mutate: deleteSchedule } = useDeleteSchedule({
@@ -92,10 +88,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
         console.info('useDeleteSchedule Error: ', responseData);
       }
     },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-      console.info('useDeleteSchedule Error: ', e);
-    },
   });
 
   const { isLoading: updateScheduleLoading, mutate: updateSchedule } = useUpdateSchedule({
@@ -107,10 +99,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
         console.info('useAddSchedule Error: ', responseData);
       }
-    },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-      console.info('useAddSchedule Error: ', e);
     },
   });
 

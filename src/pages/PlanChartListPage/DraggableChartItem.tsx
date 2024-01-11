@@ -25,10 +25,6 @@ const DraggableChartItem = ({
     onSuccess: ({ data }) => {
       onCloneUpdate({ newItem: data, originId: item.id });
     },
-    onError: (error) => {
-      console.info('useCloneChart onError Error: ', error);
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-    },
   });
 
   const { mutate: deleteChart } = useDeleteChart({
@@ -38,9 +34,6 @@ const DraggableChartItem = ({
         return;
       }
       onDeleteUpdate({ id });
-    },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
     },
   });
 

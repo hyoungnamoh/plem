@@ -63,10 +63,6 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
         console.info('verificationCode: ', responseData);
       }
     },
-    onError: (error, variable, context) => {
-      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-      console.info(error.name + ': ', error.message);
-    },
   });
 
   const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;

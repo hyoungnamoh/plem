@@ -36,9 +36,6 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
       setLoggedInUser(user);
       navigation.goBack();
     },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-    },
   });
 
   const onPressComplete = () => {

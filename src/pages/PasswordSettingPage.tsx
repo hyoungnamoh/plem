@@ -31,10 +31,6 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
         Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
       }
     },
-    onError: (error, variable, context) => {
-      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-      console.info(error.name + ': ', error.message);
-    },
   });
 
   const [password, setPassword] = useState('');

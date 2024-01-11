@@ -25,11 +25,6 @@ const DraggableChartList = ({
         Alert.alert(data);
       }
     },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-      console.info(e);
-      setDisableLoading(false);
-    },
     onMutate: () => {
       setDisableLoading(true);
     },

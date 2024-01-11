@@ -47,10 +47,6 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         console.info('useAddChart Error: ', responseData);
       }
     },
-    onError: (e) => {
-      Alert.alert('알 수 없는 에러가 발생햇습니다 ;ㅂ;');
-      console.info('useAddChart Error: ', e);
-    },
   });
 
   const { isLoading: updateChartLoading, mutate: updateChart } = useUpdateChart({
@@ -59,14 +55,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         queryClient.invalidateQueries('chartList');
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         navigation.goBack();
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('verificationCode: ', responseData);
       }
-    },
-    onError: (error) => {
-      Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-      console.info(error.name + ': ', error.message);
     },
   });
 

@@ -55,29 +55,21 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
     loginMutation.mutate({ email, password });
   };
 
-  const loginMutation = useMutation<ApiResponse<LoginResponse>, AxiosError, LoginMutationParams>(
-    'loginApi',
-    ({ email, password }) => loginApi({ email, password }),
-    {
-      onSuccess: async (responseData, variables, context) => {
-        if (responseData.status === 200) {
-          queryClient.invalidateQueries('loginUser');
-          const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
-          await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
-          await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
-          setLoggedInUser(user);
-        } else if (responseData.data) {
-          Alert.alert(responseData.data);
-        } else {
-          Alert.alert('이메일과 비밀번호를 입력해주세요.');
-        }
-      },
-      onError: (error, variable, context) => {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info(error.name + ': ', error.message);
-      },
-    }
-  );
+  const loginMutation = useMutation<ApiResponse<LoginResponse>, AxiosError, LoginMutationParams>('loginApi', loginApi, {
+    onSuccess: async (responseData, variables, context) => {
+      if (responseData.status === 200) {
+        queryClient.invalidateQueries('loginUser');
+        const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
+        await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+        await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
+        setLoggedInUser(user);
+      } else if (responseData.data) {
+        Alert.alert(responseData.data);
+      } else {
+        Alert.alert('이메일과 비밀번호를 입력해주세요.');
+      }
+    },
+  });
 
   const onPressFindAccount = () => {
     navigation.navigate('FindPasswordPage');

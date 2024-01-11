@@ -37,7 +37,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
     return (
       <View style={styles.content}>
         {notice.contents.map((content) => {
-          return <Image source={{ uri: `http://192.168.219.101:3030/${content}` }} width={SCREEN_WIDTH - 40} />;
+          return <Image source={{ uri: `http://192.168.219.106:3030/${content}` }} width={SCREEN_WIDTH - 40} />;
         })}
         {/* <PlemText>{notice.content}</PlemText> */}
       </View>

@@ -3,12 +3,6 @@ import { UpdateScheduleBody, updateScheduleApi } from '../../api/schedules/updat
 import { ApiResponse } from '../../../types/axios';
 import { AxiosError } from 'axios';
 
-export const useUpdateSchedule = ({
-  onSuccess,
-  onError,
-}: UseMutationOptions<ApiResponse, AxiosError, UpdateScheduleBody>) => {
-  return useMutation<ApiResponse, AxiosError, UpdateScheduleBody>((body) => updateScheduleApi(body), {
-    onSuccess,
-    onError,
-  });
+export const useUpdateSchedule = (options: UseMutationOptions<ApiResponse, AxiosError, UpdateScheduleBody>) => {
+  return useMutation<ApiResponse, AxiosError, UpdateScheduleBody>((body) => updateScheduleApi(body), options);
 };

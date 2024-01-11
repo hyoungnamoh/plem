@@ -48,7 +48,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
 
   const useSignUp = useMutation<ApiResponse<SignUpResponse>, AxiosError, SignUpParams>(
     'useSignUp',
-    ({ email }) => signUpApi({ email, password, nickname }),
+    (body) => signUpApi(body),
     {
       onSuccess: async (responseData, variables, context) => {
         if (responseData.status === 200) {
@@ -60,10 +60,6 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
           Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
           console.info('useSignUp: ', responseData);
         }
-      },
-      onError: (error, variable, context) => {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info(error.name + ': ', error.message);
       },
     }
   );
