@@ -9,9 +9,8 @@ import PlemText from '../../components/Atoms/PlemText';
 import UnderlineTextInput from '../../components/UnderlineTextInput';
 import UnderlineButton from '../../components/UnderlineButton';
 import BottomButton from '../../components/BottomButton';
-import { useMutation, useQueryClient } from 'react-query';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { isVerifiedEmailState } from '../../states/isVerifiedEmailState';
+import { useMutation } from 'react-query';
+import { useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { ApiResponse } from '../../../types/axios';
 import {
@@ -22,13 +21,12 @@ import {
 import { AxiosError } from 'axios';
 import { validator } from '../../helper/validator';
 import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
+import { useUpdateEmail } from '../../hooks/mutaions/useUpdateEmail';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
 const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
-  const queryClient = useQueryClient();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
-  const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
 
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -40,29 +38,34 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
 
   useEffect(() => {
     setBottomSafeArea(MAIN_COLOR);
-
-    return () => setIsVerifiedEmail(false);
   }, []);
 
   const usePostVerificationEmail = useMutation<
     ApiResponse<PostVerificationEmailResponse>,
     AxiosError,
     PostVerificationEmailParams
-  >('verificationCode', ({ email }) => postVerificationEmailApi({ email }), {
-    onSuccess: async (responseData, variables, context) => {
+  >('verificationCode', (body) => postVerificationEmailApi(body), {
+    onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
         toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
-        setIsVerifiedEmail(false);
         setVerificationCode(''); // 재발송 시 사용
         // test
         console.log(`${responseData.data.verificationCode}`);
       } else if (responseData.data) {
         Alert.alert(responseData.data);
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('verificationCode: ', responseData);
+      }
+    },
+  });
+
+  const { mutate: updateEmail } = useUpdateEmail({
+    onSuccess: async (responseData) => {
+      if (responseData.status === 200) {
+        Alert.alert('이메일 변경이 완료되었습니다.');
+        navigation.goBack();
+      } else if (responseData.data) {
+        Alert.alert(responseData.data);
       }
     },
   });
@@ -76,30 +79,11 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
     sendEmail({ email });
   };
 
-  const onPressNotReceived = () => {
-    // navigation.navigate('NotReceivedMailPage', { usePostVerificationEmail, email });
+  const handleNotReceivedPress = () => {
+    navigation.navigate('NotReceivedMailPage', { usePostVerificationEmail, email });
   };
 
   const onChangeEmail = (value: string) => {
-    // if (isVerifiedEmail) {
-    //   Alert.alert('메일을 수정하면 인증 다시 받아야하는데 수정하시겠어요?', '', [
-    //     {
-    //       text: '아니요',
-    //       onPress: () => {},
-    //       style: 'cancel',
-    //     },
-    //     {
-    //       text: '네',
-    //       onPress: () => {
-    //         setIsVerifiedEmail(false);
-    //         setIsSent(false);
-    //         setVerificationCode('');
-    //       },
-    //     },
-    //   ]);
-    //   return;
-    // }
-
     setEmail(value);
     if (!value) {
       setIsInvalidEmail(false);
@@ -110,8 +94,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
 
   const onPressVerify = () => {
     if (verificationCode === receivedCode) {
-      setIsVerifiedEmail(true);
-      // navigation.navigate('PasswordSettingPage', { email });
+      updateEmail({ newEmail: email });
       return;
     }
     Alert.alert('인증번호가 일치하지 않습니다.');
@@ -164,11 +147,10 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
                 placeholder={'인증번호 여섯자리를 입력해 주세요.'}
                 keyboardType={'number-pad'}
                 maxLength={6}
-                editable={!isVerifiedEmail}
               />
             </View>
             <View style={styles.notReceivedButtonWrap}>
-              <UnderlineButton style={{ color: '#444444' }} onPress={onPressNotReceived}>
+              <UnderlineButton style={{ color: '#444444' }} onPress={handleNotReceivedPress}>
                 인증 메일을 받지 못하셨나요?
               </UnderlineButton>
             </View>
@@ -176,7 +158,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
         )}
       </View>
       {isSent ? (
-        <BottomButton title={'메일 인증 완료'} onPress={onPressVerify} disabled={verificationCode.length !== 6} />
+        <BottomButton title={'메일 변경 완료'} onPress={onPressVerify} disabled={verificationCode.length !== 6} />
       ) : (
         <BottomButton title={'인증 메일 받기'} onPress={onPressSend} disabled={isInvalidEmail || !email} />
       )}
