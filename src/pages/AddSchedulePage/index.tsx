@@ -200,7 +200,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   return (
     <>
-      <CustomScrollView>
+      <CustomScrollView contentContainerStyle={styles.scroll}>
         <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
           <View style={styles.page}>
             <Header
@@ -376,6 +376,9 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 };
 
 const styles = StyleSheet.create({
+  scroll: {
+    paddingBottom: 100,
+  },
   page: {
     backgroundColor: MAIN_COLOR,
     flex: 1,

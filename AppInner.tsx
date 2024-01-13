@@ -42,7 +42,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const isMutating = useIsMutating();
   const navigation = useNavigation<NavigationProp<LoggedOutStackParamList>>();
 
-  const lastAccessDate = useRecoilValue(lastAccessDateState);
+  const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const setCategoryList = useSetRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
@@ -85,8 +85,10 @@ function AppInner({ routeName }: { routeName: string }) {
   const setLastAccessDateFromStorage = async () => {
     const lastAccess = await AsyncStorage.getItem('last_access');
     if (lastAccess) {
+      setLastAccessDate(lastAccess);
       navigation.reset({ index: 0, routes: [{ name: 'IntroPage' }] });
     }
+    // await AsyncStorage.removeItem('last_access');
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];

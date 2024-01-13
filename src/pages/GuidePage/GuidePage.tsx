@@ -21,17 +21,17 @@ const screenWidth = Math.round(SCREEN_WIDTH);
 const PAGES = [
   {
     id: 1,
-    svg: <Guide1Svg style={{ marginTop: 100 }} />,
+    svg: <Guide1Svg style={{ marginTop: 50 }} />,
     text: '동그란 원 안에\n나의 하루 계획을 채워요.',
   },
   {
     id: 2,
-    svg: <Guide2Svg style={{ marginTop: 100 }} />,
+    svg: <Guide2Svg style={{ marginTop: 50 }} />,
     text: '간편하게 반복을 설정하고,\n계획을 관리해요.',
   },
   {
     id: 3,
-    svg: <Guide3Svg style={{ marginTop: 100 }} />,
+    svg: <Guide3Svg style={{ marginTop: 50 }} />,
     text: '특별한 이벤트는\n따로 캘린더에 기록해요.',
   },
 ];
