@@ -10,7 +10,7 @@ import UnderlineTextInput from '../../components/UnderlineTextInput';
 import UnderlineButton from '../../components/UnderlineButton';
 import BottomButton from '../../components/BottomButton';
 import { useMutation } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { ApiResponse } from '../../../types/axios';
 import {
@@ -22,11 +22,16 @@ import { AxiosError } from 'axios';
 import { validator } from '../../helper/validator';
 import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
 import { useUpdateEmail } from '../../hooks/mutaions/useUpdateEmail';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import { LoggedInUser } from '../../../types/user';
+import { loggedInUserState } from '../../states/loggedInUserState';
+import jwt_decode from 'jwt-decode';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
 const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
 
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -62,6 +67,10 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   const { mutate: updateEmail } = useUpdateEmail({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
+        await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
+        await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+        const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
+        setLoggedInUser(user);
         Alert.alert('이메일 변경이 완료되었습니다.');
         navigation.goBack();
       } else if (responseData.data) {
@@ -93,6 +102,10 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   };
 
   const onPressVerify = () => {
+    if (loggedInUser?.email === email) {
+      Alert.alert('기존 이메일과 동일합니다.');
+      return;
+    }
     if (verificationCode === receivedCode) {
       updateEmail({ newEmail: email });
       return;

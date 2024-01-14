@@ -9,8 +9,7 @@ import Header from '../components/Header';
 import BlackButton from '../components/BlackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import UnderlineButton from '../components/UnderlineButton';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import Loading from '../components/Loading';
+import { useSetRecoilState } from 'recoil';
 import { AxiosError } from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
@@ -20,6 +19,9 @@ import { loggedInUserState } from '../states/loggedInUserState';
 import { LoggedInUser } from '../../types/user';
 import jwt_decode from 'jwt-decode';
 import { LoggedOutStackParamList } from '../../types/appInner';
+import messaging from '@react-native-firebase/messaging';
+import { phoneTokenState } from '../states/phoneTokenState';
+import { useRegisterPhoneToken } from '../hooks/mutaions/useRegisterPhoneToken';
 
 type LoginMutationParams = {
   email: string;
@@ -31,7 +33,10 @@ type LoginPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'LoginPage
 const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const queryClient = useQueryClient();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
-  const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const setLoggedInUser = useSetRecoilState(loggedInUserState);
+  const setPhoneToken = useSetRecoilState(phoneTokenState);
+
+  const { mutate: registerPhoneToken } = useRegisterPhoneToken({});
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -62,6 +67,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
         const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
         await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
         await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
+        await getPhoneToken();
         setLoggedInUser(user);
       } else if (responseData.data) {
         Alert.alert(responseData.data);
@@ -70,6 +76,21 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
       }
     },
   });
+
+  const getPhoneToken = async () => {
+    try {
+      if (!messaging().isDeviceRegisteredForRemoteMessages) {
+        await messaging().registerDeviceForRemoteMessages();
+      }
+      const phoneToken = await messaging().getToken();
+      console.log('getPhoneToken', phoneToken);
+
+      setPhoneToken(phoneToken);
+      registerPhoneToken({ phoneToken });
+    } catch (error) {
+      Alert.alert('토큰 등록에 실패했습니다. 지속될 경우 앱 재설치 또는 플렘에 문의해주세요.');
+    }
+  };
 
   const onPressFindAccount = () => {
     navigation.navigate('FindPasswordPage');

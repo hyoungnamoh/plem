@@ -61,6 +61,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
   RCTAppSetupPrepareApp(application);
 
 #if RCT_NEW_ARCH_ENABLED
@@ -70,11 +71,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
 #endif
-
-  // firebase fcm
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   NSDictionary *initProps = [self prepareInitialProps];

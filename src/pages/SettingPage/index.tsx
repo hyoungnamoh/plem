@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from '../../components/Atoms/PlemText';
 import { MAIN_COLOR } from '../../constants/colors';
 import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menus';
@@ -12,6 +12,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
 import { SCREEN_WIDTH } from '../../constants/etc';
+import { phoneTokenState } from '../../states/phoneTokenState';
 
 const underlineGrayImage = require('../../assets/images/underline_gray.png');
 
@@ -20,8 +21,11 @@ type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'Settin
 const SettingPage = ({ navigation }: SettingPageProps) => {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
+  const [phoneToken, setPhoneToken] = useRecoilState(phoneTokenState);
+
   const onSuccessLogout = async () => {
     setLoggedInUser(null);
+    setPhoneToken('');
     await EncryptedStorage.removeItem('accessToken');
   };
 
@@ -44,7 +48,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
   };
 
   const onPressLogout = () => {
-    logout();
+    logout({ phoneToken });
   };
 
   if (!loggedInUser) {

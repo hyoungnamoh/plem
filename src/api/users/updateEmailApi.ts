@@ -6,6 +6,8 @@ export type UpdateEmailBody = {
 };
 
 export type UpdateEmailResponse = {
+  refreshToken: string; // 이메일 변경으로 인한 accesstoken 재설정을 위함
+  accessToken: string;
   id: number;
 };
 

@@ -33,6 +33,9 @@ import { DEFAULT_CATEGORY_LIST, categoryListState } from './src/states/categoryL
 import GuidePage from './src/pages/GuidePage/GuidePage';
 import { lastAccessDateState } from './src/states/lastAccessDateState';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { configureNotification } from './src/utils/configureNotification';
+
+configureNotification();
 
 const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
@@ -45,6 +48,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const setCategoryList = useSetRecoilState(categoryListState);
+
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
@@ -61,6 +65,8 @@ function AppInner({ routeName }: { routeName: string }) {
   const loginCheck = async () => {
     // await EncryptedStorage.removeItem('accessToken');
     const token = await EncryptedStorage.getItem('accessToken');
+    console.info('jwt', token);
+
     if (!token) {
       SplashScreen.hide();
       setLoggedInUser(null);

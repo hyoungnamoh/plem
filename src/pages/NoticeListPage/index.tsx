@@ -1,6 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import Image from 'react-native-scalable-image';
 import Header from '../../components/Header';
 import { MAIN_COLOR } from '../../constants/colors';
 import { SettingTabStackParamList } from '../../tabs/SettingTab';
@@ -12,6 +11,7 @@ import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
 import { useGetNoticeList } from '../../hooks/queries/useGetNoticeList';
 import { Notice } from '../../../types/notice';
 import { SCREEN_WIDTH } from '../../constants/etc';
+import Image from '@hyoungnamoh/react-native-scalable-image';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
 

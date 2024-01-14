@@ -5,15 +5,8 @@ import { RecoilRoot } from 'recoil';
 import AppInner from './AppInner';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MAIN_COLOR } from './src/constants/colors';
-import { Alert } from 'react-native';
+import { errorHandler } from './src/utils/errorHandler';
 
-const errorHandler = (error: any) => {
-  if (error.response?.data?.data) {
-    Alert.alert(error.response.data.data);
-  } else {
-    Alert.alert('알 수 없는 에러가 발생했습니다.');
-  }
-};
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { suspense: true, onError: errorHandler },
