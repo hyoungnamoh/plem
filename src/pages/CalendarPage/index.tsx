@@ -19,7 +19,7 @@ import { cloneDeep } from 'lodash';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
-const NUM_OF_YEAR_RANGE = 6;
+const NUM_OF_YEAR_RANGE = 100;
 const NUM_OF_MONTHS = 12;
 
 const makeRepeatScheduleMap = ({
