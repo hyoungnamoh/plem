@@ -1,11 +1,13 @@
 import { createNavigationContainerRef, NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import AppInner from './AppInner';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MAIN_COLOR } from './src/constants/colors';
 import { errorHandler } from './src/utils/errorHandler';
+import CodePush from 'react-native-code-push';
+import { codePushOptions } from './src/utils/configCodepush';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,6 +19,13 @@ const queryClient = new QueryClient({
 const App = () => {
   const navigationRef = createNavigationContainerRef();
   const [routeName, setRouteName] = useState('');
+
+  useEffect(() => {
+    CodePush.sync(codePushOptions, (status) => {
+      console.log(status);
+    });
+  }, []);
+
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
@@ -45,4 +54,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default CodePush(codePushOptions)(App);
