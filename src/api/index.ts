@@ -1,12 +1,13 @@
 import axios from 'axios';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
+const baseUrl = 'http://192.168.219.106:3030';
 const apiRequest = axios.create({
-  baseURL: 'http://192.168.219.106:3030',
-  validateStatus: (status) => status < 400,
+  baseURL: baseUrl,
+  validateStatus: (status) => status < 500,
 });
 
-apiRequest.defaults.timeout = 10000;
+apiRequest.defaults.timeout = 20000;
 
 apiRequest.interceptors.request.use(
   async (config) => {
@@ -18,7 +19,7 @@ apiRequest.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.info(error);
+    console.info('apiRequest.interceptors.request', error.toJSON());
     return Promise.reject(error);
   }
 );
@@ -34,7 +35,7 @@ apiRequest.interceptors.response.use(
         return response;
       }
       try {
-        const accessTokenResponse = await axios.get('http://192.168.219.106:3030/users/access-token', {
+        const accessTokenResponse = await axios.get(`${baseUrl}/users/access-token`, {
           headers: { Authorization: `Bearer ${refreshToken}` },
         });
         if (accessTokenResponse.status === 200 && accessTokenResponse.data?.data) {
@@ -61,7 +62,7 @@ apiRequest.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.info(error);
+    console.info('apiRequest.interceptors.response', error.toJSON());
     return Promise.reject(error);
   }
 );
