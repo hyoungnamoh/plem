@@ -75,7 +75,6 @@ const getRepeatScheduleMap = ({
   repeat: number;
   repeatUnit: ManipulateType;
 }) => {
-  const start = dayjs().unix();
   let newScheduleMap = {};
 
   repeatSchedules.map((schedule) => {
@@ -200,7 +199,14 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
         });
       })
       .flatMap((item) => item);
-  }, [categoryList, currentCalendar.year(), calendarSchedule?.data, onPressAddSchedule, onPressScheduleModalClose]);
+  }, [
+    categoryList,
+    currentCalendar.year(),
+    currentCalendar.date(),
+    calendarSchedule?.data,
+    onPressAddSchedule,
+    onPressScheduleModalClose,
+  ]);
 
   return (
     <>

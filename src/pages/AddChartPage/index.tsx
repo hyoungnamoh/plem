@@ -141,18 +141,6 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     navigation.navigate('AddPlanPage');
   };
 
-  const getPlanEmptyComponent = () => {
-    return (
-      <View style={styles.planEmptyComponent}>
-        <PlemText style={styles.planEmptyText}>계획을 추가해 주세요.</PlemText>
-        <View style={styles.planTimeContainer}>
-          <PlemText style={styles.planEmptyText}>00:00 - 00:00</PlemText>
-          <NotificationInactiveSvg style={{ marginLeft: 4 }} />
-        </View>
-      </View>
-    );
-  };
-
   const deleteSubPlan = ({ planIndex, subPlanIndex }: { planIndex: number; subPlanIndex: number }) => {
     const copiedChart = cloneDeep(chart);
     copiedChart.plans[planIndex].subPlans.splice(subPlanIndex, 1);

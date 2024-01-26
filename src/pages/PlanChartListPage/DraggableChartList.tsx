@@ -16,7 +16,6 @@ const DraggableChartList = ({
   setCharts: Dispatch<SetStateAction<PlanChart[]>>;
 }) => {
   const queryClient = useQueryClient();
-  const [list, setList] = useState<PlanChart[]>(charts);
   const setDisableLoading = useSetRecoilState(disableLoadingState);
   const { mutate: updateChartsOrder } = useUpdateChartsOrder({
     onSuccess: ({ success, data }) => {
@@ -76,7 +75,7 @@ const DraggableChartList = ({
       ListFooterComponent={<View style={{ marginBottom: 20 }} />}
       keyExtractor={(item) => `draggableChart${item.id}`}
       onDragEnd={({ data }) => onDragEnd(data)}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      contentContainerStyle={{ paddingBottom: 100, height: '100%' }}
     />
   );
 };

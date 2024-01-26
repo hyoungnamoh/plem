@@ -117,69 +117,71 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   };
 
   return (
-    <CustomScrollView contentContainerStyle={styles.page}>
-      <Toast
-        ref={toastRef}
-        style={styles.toast}
-        position="bottom"
-        positionValue={200}
-        fadeInDuration={300}
-        fadeOutDuration={300}
-        textStyle={styles.toastText}
-      />
-      <Header />
-      <View style={styles.content}>
-        <View style={styles.titleWrap}>
-          <PlemText style={styles.title}>플렘 이용을 위해</PlemText>
-          <PlemText style={styles.title}>이메일 인증을 진행해 주세요.</PlemText>
+    <>
+      <CustomScrollView contentContainerStyle={styles.page}>
+        <Toast
+          ref={toastRef}
+          style={styles.toast}
+          position="bottom"
+          positionValue={200}
+          fadeInDuration={300}
+          fadeOutDuration={300}
+          textStyle={styles.toastText}
+        />
+        <Header />
+        <View style={styles.content}>
+          <View style={styles.titleWrap}>
+            <PlemText style={styles.title}>플렘 이용을 위해</PlemText>
+            <PlemText style={styles.title}>이메일 인증을 진행해 주세요.</PlemText>
+          </View>
+          <View style={styles.descriptionWrap}>
+            <PlemText style={styles.description}>이메일 정보는 계정 찾기에만 사용되며,</PlemText>
+            <PlemText style={styles.description}>다른 용도로 사용되지 않습니다.</PlemText>
+          </View>
+          <View style={styles.emailWrap}>
+            <PlemText style={[styles.label, { color: isInvalidEmail ? '#E40C0C' : '#000' }]}>이메일</PlemText>
+            <UnderlineTextInput
+              style={styles.input}
+              value={email}
+              onChangeText={onChangeEmail}
+              placeholder="이메일을 입력해 주세요."
+              wrapperProps={{ style: styles.inputWrap }}
+              isInvalidValue={isInvalidEmail}
+              editable={!isSent}
+              selectTextOnFocus={isSent}
+            />
+            {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
+          </View>
+          {isSent && (
+            <>
+              <View style={styles.verificationCodeWrap}>
+                <PlemText>인증번호</PlemText>
+                <UnderlineTextInput
+                  style={styles.input}
+                  value={verificationCode}
+                  onChangeText={setVerificationCode}
+                  wrapperProps={{ style: styles.inputWrap }}
+                  placeholder={'인증번호 여섯자리를 입력해 주세요.'}
+                  keyboardType={'number-pad'}
+                  maxLength={6}
+                  editable={!isVerifiedEmail}
+                />
+              </View>
+              <View style={styles.notReceivedButtonWrap}>
+                <UnderlineButton style={{ color: '#444444' }} onPress={onPressNotReceived}>
+                  인증 메일을 받지 못하셨나요?
+                </UnderlineButton>
+              </View>
+            </>
+          )}
         </View>
-        <View style={styles.descriptionWrap}>
-          <PlemText style={styles.description}>이메일 정보는 계정 찾기에만 사용되며,</PlemText>
-          <PlemText style={styles.description}>다른 용도로 사용되지 않습니다.</PlemText>
-        </View>
-        <View style={styles.emailWrap}>
-          <PlemText style={[styles.label, { color: isInvalidEmail ? '#E40C0C' : '#000' }]}>이메일</PlemText>
-          <UnderlineTextInput
-            style={styles.input}
-            value={email}
-            onChangeText={onChangeEmail}
-            placeholder="이메일을 입력해 주세요."
-            wrapperProps={{ style: styles.inputWrap }}
-            isInvalidValue={isInvalidEmail}
-            editable={!isSent}
-            selectTextOnFocus={isSent}
-          />
-          {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
-        </View>
-        {isSent && (
-          <>
-            <View style={styles.verificationCodeWrap}>
-              <PlemText>인증번호</PlemText>
-              <UnderlineTextInput
-                style={styles.input}
-                value={verificationCode}
-                onChangeText={setVerificationCode}
-                wrapperProps={{ style: styles.inputWrap }}
-                placeholder={'인증번호 여섯자리를 입력해 주세요.'}
-                keyboardType={'number-pad'}
-                maxLength={6}
-                editable={!isVerifiedEmail}
-              />
-            </View>
-            <View style={styles.notReceivedButtonWrap}>
-              <UnderlineButton style={{ color: '#444444' }} onPress={onPressNotReceived}>
-                인증 메일을 받지 못하셨나요?
-              </UnderlineButton>
-            </View>
-          </>
-        )}
-      </View>
+      </CustomScrollView>
       {isSent ? (
         <BottomButton title={'메일 인증 완료'} onPress={onPressVerify} disabled={verificationCode.length !== 6} />
       ) : (
         <BottomButton title={'인증 메일 받기'} onPress={onPressSend} disabled={isInvalidEmail || !email} />
       )}
-    </CustomScrollView>
+    </>
   );
 };
 

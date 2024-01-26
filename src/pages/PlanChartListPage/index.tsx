@@ -63,10 +63,10 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
       {charts.length > 0 ? (
         // ChartList header부분(usePieChart) useEffect 부분 성능 문제로 컴포넌트가 언마운트 되지 않도록 임시 조치
         <>
-          <View style={{ height: isEditing ? undefined : 0 }}>
+          <View style={{ height: isEditing ? '100%' : 0 }}>
             <DraggableChartList charts={charts} setCharts={setCharts} />
           </View>
-          <View style={{ height: isEditing ? 0 : undefined }}>
+          <View style={{ height: isEditing ? 0 : '100%' }}>
             <ChartList list={charts} />
           </View>
         </>
