@@ -7,15 +7,15 @@ import Header from '../components/Header';
 import UnderlineTextInput from '../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../constants/colors';
 import { validator } from '../helper/validator';
-import { useUpdatePassword } from '../hooks/mutaions/useUpdatePassword';
 import { LoggedOutStackParamList } from '../../types/appInner';
 import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
+import { useInitPassword } from '../hooks/mutaions/useInitPassword';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 
 const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   const { email, isFindingPassword } = route.params;
-  const { mutate: updatePassword } = useUpdatePassword({
+  const { mutate: updatePassword } = useInitPassword({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         Alert.alert('비밀번호 재설정이 완료되었습니다.');

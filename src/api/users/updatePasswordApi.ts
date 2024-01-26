@@ -3,7 +3,8 @@ import { ApiResponse } from '../../../types/axios';
 
 export type UpdatePasswordBody = {
   email: string;
-  password: string;
+  currentPassword: string;
+  newPassword: string;
 };
 
 export type UpdatePasswordResponse = {

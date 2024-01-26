@@ -55,7 +55,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
       Alert.alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
       return;
     }
-    updatePassword({ email: loggedInUser.email, password: newPassword });
+    updatePassword({ email: loggedInUser.email, newPassword, currentPassword });
   };
 
   const onChangeCurrentPassword = (value: string) => {
