@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 $FirebaseSDKVersion = '10.19.0'
 
 
-platform :ios, '12.4'
+platform :ios, '15.1'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'Plem' do
