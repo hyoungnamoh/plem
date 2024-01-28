@@ -27,6 +27,6 @@ export const CUSTOMMER_SUPPORT_PAGE_MENUES: MenuItem[] = [
   { title: '버전정보', value: 'VersionInfoPage' },
   { title: '1:1 문의', value: 'DirectInquiryPage' },
   { title: '튜토리얼 다시 보기', value: 'TutorialReplayPage' },
-  { title: '서비스 이용약관', value: 'UsingServiceTermPage' },
-  { title: '개인 정보 처리 방침', value: 'PrivateInfoTermPage' },
+  { title: '서비스 이용약관', value: 'TermsOfServicePage' },
+  { title: '개인 정보 처리 방침', value: 'PrivacyPolicyPage' },
 ];

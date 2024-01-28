@@ -1,6 +1,6 @@
 import { createNavigationContainerRef, NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import AppInner from './AppInner';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -10,11 +10,20 @@ import CodePush from 'react-native-code-push';
 import { codePushOptions } from './src/utils/configCodepush';
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: errorHandler,
+  }),
   defaultOptions: {
-    queries: { suspense: true, onError: errorHandler },
     mutations: { onError: errorHandler },
   },
 });
+
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: { suspense: true, onError: errorHandler },
+//     mutations: { onError: errorHandler },
+//   },
+// });
 
 const App = () => {
   const navigationRef = createNavigationContainerRef();

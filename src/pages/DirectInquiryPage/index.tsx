@@ -35,7 +35,15 @@ const DirectInquiryPage = ({}: DirectInquiryPageProps) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
-      <Header title="공지사항" buttonName="SNS 문의" />
+      <Header
+        title="공지사항"
+        buttonName="SNS 문의"
+        buttonProps={{
+          onPress: () => {
+            console.log('hi');
+          },
+        }}
+      />
       <View style={styles.content}>
         <DropdownWithLabel
           label="문의 유형"
