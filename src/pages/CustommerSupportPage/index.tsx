@@ -6,43 +6,29 @@ import { CUSTOMMER_SUPPORT_PAGE_MENUES, MenuItem } from 'constants/menus';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
 import MenuButton from 'components/MenuButton';
 import VersionCheck from 'react-native-version-check';
+import { useEffect, useState } from 'react';
 
 type CustommerSupportPageProps = NativeStackScreenProps<SettingTabStackParamList, 'CustommerSupportPage'>;
 
-const AppVersionCheck = async () => {
-  console.log('첫진입 시작');
-  //기기에 설치되 있는 버전
-  let CurrentVersion = VersionCheck.getCurrentVersion();
-  //앱의 최신버전
-  let LatestVersion = await VersionCheck.getLatestVersion();
-
-  //기기에 설치되있는 버전과 앱에 올려져있는 최신버전을 비교
-  VersionCheck.needUpdate({
-    currentVersion: CurrentVersion,
-    latestVersion: LatestVersion,
-  }).then((res: any) => {
-    if (res.isNeeded) {
-    }
-  });
-};
-
 const CustommerSupportPage = ({ navigation }: CustommerSupportPageProps) => {
-  AppVersionCheck();
-  // VersionCheck.getCountry().then((country) => console.log(country)); // KR
-  // console.log(VersionCheck.getCurrentBuildNumber()); // 10
-  // console.log(VersionCheck.getCurrentVersion()); // 0.1.1
+  const [version, setVersion] = useState<{ current: string; latest: string | undefined } | null>(null);
+  useEffect(() => {
+    getVersion();
+  }, []);
 
-  // VersionCheck.getLatestVersion().then((latestVersion) => {
-  //   console.log(latestVersion); // 0.1.2
-  // });
-
-  // VersionCheck.getLatestVersion({
-  //   provider: 'appStore', // for iOS
-  // }).then((latestVersion) => {
-  //   console.log(latestVersion); // 0.1.2
-  // });
+  const getVersion = async () => {
+    const currentVersion = VersionCheck.getCurrentVersion();
+    const latestVersion = await VersionCheck.getLatestVersion();
+    setVersion({
+      current: currentVersion,
+      latest: latestVersion,
+    });
+  };
 
   const onPressMenu = (menu: MenuItem) => {
+    if (menu.value === 'VersionInfoPage') {
+      return;
+    }
     navigation.navigate(menu.value);
   };
 
@@ -53,7 +39,7 @@ const CustommerSupportPage = ({ navigation }: CustommerSupportPageProps) => {
         <ScrollView contentContainerStyle={{ height: '100%' }}>
           {CUSTOMMER_SUPPORT_PAGE_MENUES.map((menu) => {
             if (menu.value === 'VersionInfoPage') {
-              menu.label = '현재 1.1.8 / 최신 1.2.1';
+              menu.label = `현재 ${version?.current} / 최신 ${version?.latest || version?.current}`;
               menu.labelProps = { style: { color: '#888888', fontSize: 14 } };
               menu.arrow = false;
             }
