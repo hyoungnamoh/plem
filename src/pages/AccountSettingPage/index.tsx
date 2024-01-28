@@ -7,13 +7,20 @@ import { SettingTabStackParamList } from '../../tabs/SettingTab';
 import MenuButton from '../../components/MenuButton';
 import LabelText from '../../components/LabelText';
 import PlemText from '../../components/Atoms/PlemText';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserState } from '../../states/loggedInUserState';
+import { useFocusEffect } from '@react-navigation/native';
+import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
 
 type AccountSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'AccountSettingPage'>;
 
 const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
+  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const loggedInUser = useRecoilValue(loggedInUserState);
+
+  useFocusEffect(() => {
+    setBottomSafeArea(MAIN_COLOR);
+  });
 
   const onPressMenu = (menu: MenuItem) => {
     if (!menu.value) {
@@ -22,7 +29,9 @@ const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
     navigation.navigate(menu.value);
   };
 
-  const onPressWithdrawal = () => {};
+  const onPressWithdrawal = () => {
+    navigation.navigate('WithdrawalPage');
+  };
 
   if (!loggedInUser) {
     return null;
@@ -40,7 +49,7 @@ const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
             return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
           })}
           <Pressable key={'withDrawal'} style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
-            <PlemText style={styles.withDrawalMenuTitle}>탈퇴하기</PlemText>
+            <PlemText style={styles.withDrawalMenuTitle}>계정 삭제하기</PlemText>
           </Pressable>
         </ScrollView>
       </View>
