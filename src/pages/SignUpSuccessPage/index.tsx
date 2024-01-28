@@ -2,13 +2,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import StartPlemButtonTitle from './StartPlemButtonTitle';
-import { LoggedOutStackParamList } from '../../../types/appInner';
+import { LoggedOutStackParamList } from 'types/appInner';
 
 type SignUpSuccessPage = NativeStackScreenProps<LoggedOutStackParamList, 'SignUpSuccessPage'>;
 

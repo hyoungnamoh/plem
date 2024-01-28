@@ -1,12 +1,12 @@
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import { PlanChart } from '../../../types/chart';
-import PlemText from '../../components/Atoms/PlemText';
-import { useCloneChart } from '../../hooks/mutaions/useCloneChart';
-import { useDeleteChart } from '../../hooks/mutaions/useDeleteChart';
-import HamburgerBarSvg from '../../assets/images/hamburgerbar_32x32.svg';
+import { PlanChart } from 'types/chart';
+import PlemText from 'components/Atoms/PlemText';
+import { useCloneChart } from 'hooks/mutations/useCloneChart';
+import { useDeleteChart } from 'hooks/mutations/useDeleteChart';
+import HamburgerBarSvg from 'assets/images/hamburgerbar_32x32.svg';
 import { PieChart } from 'react-native-gifted-charts';
-import { usePieChart } from '../../hooks/usePieChart';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { usePieChart } from 'hooks/usePieChart';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const DraggableChartItem = ({
   item,

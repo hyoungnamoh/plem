@@ -1,13 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, StyleSheet, View } from 'react-native';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
 import { useState } from 'react';
-import { DropdownWithLabel } from '../../components/DropdownWithLabel';
-import LabelInput from '../../components/LabelInput';
-import PlemText from '../../components/Atoms/PlemText';
-import BlackButton from '../../components/BlackButton';
+import { DropdownWithLabel } from 'components/DropdownWithLabel';
+import LabelInput from 'components/LabelInput';
+import PlemText from 'components/Atoms/PlemText';
+import BlackButton from 'components/BlackButton';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 

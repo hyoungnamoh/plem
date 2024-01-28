@@ -1,7 +1,7 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import { MenuItem } from '../../constants/menus';
-import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
+import { Pressable, StyleSheet, View } from 'react-native';
+import PlemText from 'components/Atoms/PlemText';
+import { MenuItem } from 'constants/menus';
+import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
 
 const MenuButton = ({ item, onPress }: { item: MenuItem; onPress: (menu: MenuItem) => void }) => {
   const { title, labelProps, label, arrow = true } = item;

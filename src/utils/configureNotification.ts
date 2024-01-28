@@ -68,6 +68,17 @@ export const configureNotification = () => {
       importance: 4, // (optional) default: 4. Int value of the Android notification importance
       vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
     },
-    (created: boolean) => console.log(`createChannel riders returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    (created: boolean) => console.log(`createChannel schedule returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+  PushNotification.createChannel(
+    {
+      channelId: 'plan', // (required)
+      channelName: '계획', // (required)
+      channelDescription: '계획 알림 채널', // (optional) default: undefined.
+      soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+      importance: 4, // (optional) default: 4. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+    },
+    (created: boolean) => console.log(`createChannel plan returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
   );
 };

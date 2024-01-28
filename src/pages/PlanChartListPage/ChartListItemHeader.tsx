@@ -1,14 +1,14 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
-import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
+import PlemText from 'components/Atoms/PlemText';
+import ArrowUpSvg from 'assets/images/arrow_up_32x32.svg';
+import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { PlanChartListTabStackParamList } from '../../tabs/PlanChartListTab';
-import { numToDayKorParser } from '../../helper/numToDayKorParser';
-import { PlanChart, Repeats } from '../../../types/chart';
-import { usePieChart } from '../../hooks/usePieChart';
+import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
+import { numToDayKorParser } from 'helper/numToDayKorParser';
+import { PlanChart, Repeats } from 'types/chart';
+import { usePieChart } from 'hooks/usePieChart';
 import { PieChart } from 'react-native-gifted-charts';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();

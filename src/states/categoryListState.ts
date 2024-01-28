@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { PaletteMap } from '../components/PaletteSvg/PaletteSvg';
+import { PaletteMap } from 'components/PaletteSvg/PaletteSvg';
 
 export type Category = { label: string; color: keyof PaletteMap; value: number };
 

@@ -1,18 +1,18 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import { MAIN_COLOR } from '../../constants/colors';
-import { MenuItem, SETTING_PAGE_MENUS } from '../../constants/menus';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import MenuButton from '../../components/MenuButton';
+import PlemText from 'components/Atoms/PlemText';
+import { MAIN_COLOR } from 'constants/colors';
+import { MenuItem, SETTING_PAGE_MENUS } from 'constants/menus';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
+import MenuButton from 'components/MenuButton';
 import { useRecoilState } from 'recoil';
-import { loggedInUserState } from '../../states/loggedInUserState';
-import { useLogout } from '../../hooks/mutaions/useLogout';
+import { loggedInUserState } from 'states/loggedInUserState';
+import { useLogout } from 'hooks/mutations/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
-import { SCREEN_WIDTH } from '../../constants/etc';
-import { phoneTokenState } from '../../states/phoneTokenState';
+import { SCREEN_WIDTH } from 'constants/etc';
+import { phoneTokenState } from 'states/phoneTokenState';
 
 const underlineGrayImage = require('../../assets/images/underline_gray.png');
 

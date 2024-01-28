@@ -1,6 +1,5 @@
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TextProps } from 'react-native';
-import { SettingTabStackParamList } from '../tabs/SettingTab';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
 
 export type MenuItem = {
   title: string;

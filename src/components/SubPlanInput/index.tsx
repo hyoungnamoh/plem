@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import PlemTextInput from '../Atoms/PlemTextInput';
-import UncheckedSvg from '../../assets/images/unchecked_black_24x24.svg';
+import { addPlanChartState } from 'states/addPlanChartState';
+import PlemTextInput from 'components/Atoms/PlemTextInput';
+import UncheckedSvg from 'assets/images/unchecked_black_24x24.svg';
 
 const SubPlanInput = ({
   planIndex,

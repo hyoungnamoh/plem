@@ -1,7 +1,7 @@
 import { UseMutationOptions, useMutation } from 'react-query';
-import { ApiResponse } from '../../../types/axios';
+import { ApiResponse } from 'types/axios';
 import { AxiosError } from 'axios';
-import { InitPasswordBody, InitPasswordResponse, initPasswordApi } from '../../api/users/initPasswordApi';
+import { InitPasswordBody, InitPasswordResponse, initPasswordApi } from 'api/users/initPasswordApi';
 
 export const useInitPassword = (
   options: UseMutationOptions<ApiResponse<InitPasswordResponse>, AxiosError, InitPasswordBody>

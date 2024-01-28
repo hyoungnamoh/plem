@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { itemType } from 'react-native-gifted-charts/src/LineChart/types';
 import { useFocusEffect } from '@react-navigation/native';
-import { DAY_TO_MS, MIN_TO_MS } from '../constants/times';
+import { DAY_TO_MS, MIN_TO_MS } from 'constants/times';
 import dayjs from 'dayjs';
-import { AddPlanChart, PlanChart } from '../../types/chart';
+import { AddPlanChart, PlanChart } from 'types/chart';
 
 export const usePieChart = ({
   chart,

@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
-import { Image, Pressable, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import CheckSvg from '../../assets/images/check_32x32.svg';
+import { Pressable, View } from 'react-native';
+import PlemText from 'components/Atoms/PlemText';
+import CheckSvg from 'assets/images/check_32x32.svg';
 
 const REPEAT_DAY_LIST = [
   { value: 0, label: '일요일마다' },

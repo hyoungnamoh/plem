@@ -4,24 +4,24 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { ApiResponse } from '../../types/axios';
+import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
   PostVerificationEmailParams,
   PostVerificationEmailResponse,
-} from '../api/auth/postVerificationEmailApi';
-import PlemText from '../components/Atoms/PlemText';
-import BottomButton from '../components/BottomButton';
-import Header from '../components/Header';
-import UnderlineButton from '../components/UnderlineButton';
-import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
-import { validator } from '../helper/validator';
+} from 'api/auth/postVerificationEmailApi';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import UnderlineButton from 'components/UnderlineButton';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import { validator } from 'helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
-import { isVerifiedEmailState } from '../states/isVerifiedEmailState';
-import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants/colors';
-import { LoggedOutStackParamList } from '../../types/appInner';
-import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
+import { isVerifiedEmailState } from 'states/isVerifiedEmailState';
+import UnderlineTextInput from 'components/UnderlineTextInput';
+import { MAIN_COLOR } from 'constants/colors';
+import { LoggedOutStackParamList } from 'types/appInner';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 

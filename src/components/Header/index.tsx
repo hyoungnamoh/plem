@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import CloseSVG from '../../assets/images/header_close_40x40.svg';
-import BackSVG from '../../assets/images/header_back_40x40.svg';
-import { MAIN_COLOR } from '../../constants/colors';
+import PlemText from 'components/Atoms/PlemText';
+import CloseSVG from 'assets/images/header_close_40x40.svg';
+import BackSVG from 'assets/images/header_back_40x40.svg';
+import { MAIN_COLOR } from 'constants/colors';
 
 type HeaderProps = {
   onBack?: () => void;

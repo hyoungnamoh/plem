@@ -1,16 +1,16 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import Header from '../../components/Header';
-import LabelInput from '../../components/LabelInput';
-import { MAIN_COLOR } from '../../constants/colors';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import BottomButton from '../../components/BottomButton';
-import { validator } from '../../helper/validator';
-import PlemText from '../../components/Atoms/PlemText';
-import { useUpdatePassword } from '../../hooks/mutaions/useUpdatePassword';
+import Header from 'components/Header';
+import LabelInput from 'components/LabelInput';
+import { MAIN_COLOR } from 'constants/colors';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
+import BottomButton from 'components/BottomButton';
+import { validator } from 'helper/validator';
+import PlemText from 'components/Atoms/PlemText';
+import { useUpdatePassword } from 'hooks/mutations/useUpdatePassword';
 import { useRecoilValue } from 'recoil';
-import { loggedInUserState } from '../../states/loggedInUserState';
+import { loggedInUserState } from 'states/loggedInUserState';
 
 type ModifyPasswordPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyPasswordPage'>;
 

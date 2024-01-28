@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import { Dropdown, DropdownProps } from '../Dropdown';
+import PlemText from 'components/Atoms/PlemText';
+import { Dropdown, DropdownProps } from 'components/Dropdown';
 
 export const DropdownWithLabel = ({ label, ...dropdownProps }: { label: string } & DropdownProps) => {
   return (

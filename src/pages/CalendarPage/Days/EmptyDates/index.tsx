@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import uuid from 'react-uuid';
-import { SCREEN_WIDTH } from '../../../../constants/etc';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const EmptyDates = ({ firstDateIndex }: { firstDateIndex: number }) => {
   const emptyArray = useMemo(() => new Array(firstDateIndex).fill(1), [firstDateIndex]);

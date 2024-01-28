@@ -1,9 +1,9 @@
-import { Dispatch, useEffect, useRef, useState } from 'react';
+import { Dispatch, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, TextInput } from 'react-native';
-import PlemTextInput from '../Atoms/PlemTextInput';
-import { PaletteListItemType } from '.';
-import PaletteSvg from '../PaletteSvg/PaletteSvg';
-import { Category } from '../../states/categoryListState';
+import PlemTextInput from 'components/Atoms/PlemTextInput';
+import { PaletteListItemType } from 'components/PaletteInputRow';
+import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
+import { Category } from 'states/categoryListState';
 
 const PaletteListItem = ({
   index,

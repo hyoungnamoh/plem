@@ -1,7 +1,7 @@
 import { TERMS_OF_SERVICE } from './constants/TermsOfService';
-import Header from '../../components/Header';
-import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
-import PlemText from '../../components/Atoms/PlemText';
+import Header from 'components/Header';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import PlemText from 'components/Atoms/PlemText';
 
 const TermsOfServicePage = () => {
   return (

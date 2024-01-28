@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/etc';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 
 const spinnerGif = require('../../assets/images/loading.gif');
 

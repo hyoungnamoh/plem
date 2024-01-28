@@ -1,5 +1,5 @@
-import apiRequest from '..';
-import { ApiResponse } from '../../../types/axios';
+import apiRequest from 'api';
+import { ApiResponse } from 'types/axios';
 
 export type UpdateNicknameBody = {
   nickname: string;

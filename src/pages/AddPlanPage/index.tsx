@@ -1,17 +1,17 @@
 import { Image, Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import Header from '../../components/Header';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
+import PlemText from 'components/Atoms/PlemText';
+import Header from 'components/Header';
+import UnderlineTextInput from 'components/UnderlineTextInput';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainTabStackParamList } from '../../tabs/MainTab';
-import BottomButton from '../../components/BottomButton';
-import { MAIN_COLOR } from '../../constants/colors';
-import { notiOptiosList } from '../PlanNotiSettingPage';
+import { MainTabStackParamList } from 'tabs/MainTab';
+import BottomButton from 'components/BottomButton';
+import { MAIN_COLOR } from 'constants/colors';
+import { notiOptiosList } from 'pages/PlanNotiSettingPage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useAddPlan } from './useAddPlan';
-import { timePadStart } from '../../helper/timePadStart';
-import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
-import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
+import { timePadStart } from 'helper/timePadStart';
+import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
+import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 
 const underlineImage = require('../../assets/images/underline.png');
 

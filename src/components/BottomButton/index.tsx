@@ -1,9 +1,9 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Pressable, PressableProps, StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
-import PlemText from '../Atoms/PlemText';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import PlemText from 'components/Atoms/PlemText';
 
 type BottomButtonProps = { title: string | JSX.Element };
 const BottomButton = (props: PressableProps & BottomButtonProps) => {

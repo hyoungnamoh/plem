@@ -1,4 +1,4 @@
-import { Image, Pressable, PressableProps, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Image, Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
 const BlackButton = (props: PressableProps) => {
   return (

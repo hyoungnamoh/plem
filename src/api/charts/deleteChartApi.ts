@@ -1,5 +1,5 @@
-import apiRequest from '..';
-import { ApiResponse } from '../../../types/axios';
+import { ApiResponse } from 'types/axios';
+import apiRequest from 'api';
 
 export type DeleteChartBody = { id: number };
 

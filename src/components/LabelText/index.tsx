@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import UnderlineText, { UnderlineTextProps } from '../UnderlineText';
+import PlemText from 'components/Atoms/PlemText';
+import UnderlineText, { UnderlineTextProps } from 'components/UnderlineText';
 
 type LabelTextProps = {
   label: string;

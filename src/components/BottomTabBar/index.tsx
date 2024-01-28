@@ -1,8 +1,8 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { MAIN_COLOR } from '../../constants/colors';
+import { MAIN_COLOR } from 'constants/colors';
 import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (

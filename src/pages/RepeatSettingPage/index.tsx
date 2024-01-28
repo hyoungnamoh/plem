@@ -1,18 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, Repeats } from '../../../types/chart';
-import { DaysOfWeekKor } from '../../../types/date';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import { repeatDaysDefault, repeatDatesState } from '../../states/repeatDatesState';
-import { MainTabStackParamList } from '../../tabs/MainTab';
-import CheckSvg from '../../assets/images/check_32x32.svg';
+import { AddPlanChart, Repeats } from 'types/chart';
+import { DaysOfWeekKor } from 'types/date';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { addPlanChartState } from 'states/addPlanChartState';
+import { repeatDaysDefault, repeatDatesState } from 'states/repeatDatesState';
+import { MainTabStackParamList } from 'tabs/MainTab';
+import CheckSvg from 'assets/images/check_32x32.svg';
 
 type RepeatOptionKor =
   | '안 함'

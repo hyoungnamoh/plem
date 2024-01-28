@@ -1,16 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, PlanChart, PlanNotification, PlanNotiOptionItem } from '../../../types/chart';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { addPlanState } from '../../states/addPlanState';
-import { MainTabStackParamList } from '../../tabs/MainTab';
-import CheckSvg from '../../assets/images/check_32x32.svg';
+import { AddPlanChart, PlanNotification, PlanNotiOptionItem } from 'types/chart';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { addPlanState } from 'states/addPlanState';
+import { MainTabStackParamList } from 'tabs/MainTab';
+import CheckSvg from 'assets/images/check_32x32.svg';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: null, label: '없음' },

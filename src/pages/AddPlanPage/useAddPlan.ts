@@ -4,10 +4,10 @@ import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanPageProps } from '.';
-import { AddPlan, AddPlanChart } from '../../../types/chart';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import { addPlanDefault, addPlanState } from '../../states/addPlanState';
+import { AddPlanPageProps } from 'pages/AddPlanPage';
+import { AddPlan, AddPlanChart } from 'types/chart';
+import { addPlanChartState } from 'states/addPlanChartState';
+import { addPlanDefault, addPlanState } from 'states/addPlanState';
 
 export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   const isModify = route.params?.planIndex !== undefined;

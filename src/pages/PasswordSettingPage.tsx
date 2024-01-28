@@ -1,15 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import PlemText from '../components/Atoms/PlemText';
-import BottomButton from '../components/BottomButton';
-import Header from '../components/Header';
-import UnderlineTextInput from '../components/UnderlineTextInput';
-import { MAIN_COLOR } from '../constants/colors';
-import { validator } from '../helper/validator';
-import { LoggedOutStackParamList } from '../../types/appInner';
-import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
-import { useInitPassword } from '../hooks/mutaions/useInitPassword';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import UnderlineTextInput from 'components/UnderlineTextInput';
+import { MAIN_COLOR } from 'constants/colors';
+import { validator } from 'helper/validator';
+import { LoggedOutStackParamList } from 'types/appInner';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import { useInitPassword } from 'hooks/mutations/useInitPassword';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 

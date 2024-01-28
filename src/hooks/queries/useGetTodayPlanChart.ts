@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getTodayPlanChartApi } from '../../api/charts/getTodayPlanChartApi';
+import { getTodayPlanChartApi } from 'api/charts/getTodayPlanChartApi';
 
 export const TODAY_PLAN_CHART_QUERY_KEY = 'getTodayPlanChart';
 export const useGetTodayPlanChart = () => {

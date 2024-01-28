@@ -1,5 +1,5 @@
-import apiRequest from '..';
-import { ErrorResponse, SuccessResponse } from '../../../types/axios';
+import apiRequest from 'api';
+import { ErrorResponse, SuccessResponse } from 'types/axios';
 
 export type PostVerificationEmailResponse = {
   verificationCode: string;

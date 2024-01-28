@@ -2,14 +2,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { Repeat } from '../../../types/calendar';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { addScheduleState } from '../../states/addScheduleState';
-import { CalendarTabStackParamList } from '../../tabs/CalendarTab';
-import CheckSvg from '../../assets/images/check_32x32.svg';
+import { Repeat } from 'types/calendar';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { addScheduleState } from 'states/addScheduleState';
+import { CalendarTabStackParamList } from 'tabs/CalendarTab';
+import CheckSvg from 'assets/images/check_32x32.svg';
 
 type RepeatOptionKor = '안 함' | '매일' | '화요일마다' | '매주' | '2주마다' | '매월' | '매년' | '사용자화';
 

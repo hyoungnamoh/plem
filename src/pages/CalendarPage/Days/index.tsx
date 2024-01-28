@@ -3,7 +3,7 @@ import Day from './Day';
 import uuid from 'react-uuid';
 import { Fragment, memo, useMemo, useState } from 'react';
 import EmptyDates from './EmptyDates';
-import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 
 const Days = ({
   noRepeatScheduleMap,

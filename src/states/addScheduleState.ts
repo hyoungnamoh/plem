@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { atom } from 'recoil';
-import { AddSchedule } from '../../types/calendar';
+import { AddSchedule } from 'types/calendar';
 
 export const addScheduleDefault: AddSchedule = {
   name: '',

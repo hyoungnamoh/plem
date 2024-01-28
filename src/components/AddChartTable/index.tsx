@@ -1,13 +1,13 @@
 import { View, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
-import { AddPlanChart } from '../../../types/chart';
+import { AddPlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
-import { usePieChart } from '../../hooks/usePieChart';
-import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg';
-import PlemTextInput from '../Atoms/PlemTextInput';
+import { usePieChart } from 'hooks/usePieChart';
+import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
+import PlemTextInput from 'components/Atoms/PlemTextInput';
 import { useRecoilState } from 'recoil';
-import { addPlanChartState } from '../../states/addPlanChartState';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/etc';
+import { addPlanChartState } from 'states/addPlanChartState';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import { PlanChartListTabStackParamList } from '../../tabs/PlanChartListTab';
+import PlemText from 'components/Atoms/PlemText';
+import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const AddChartButton = () => {

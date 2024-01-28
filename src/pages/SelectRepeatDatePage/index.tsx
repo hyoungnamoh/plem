@@ -2,13 +2,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { repeatDatesState } from '../../states/repeatDatesState';
-import { MainTabStackParamList } from '../../tabs/MainTab';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { repeatDatesState } from 'states/repeatDatesState';
+import { MainTabStackParamList } from 'tabs/MainTab';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const calendarStickerImage = require('../../assets/images/calendar_sticker.png');
 

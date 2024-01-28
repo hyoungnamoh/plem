@@ -1,6 +1,6 @@
-import apiRequest from '..';
-import { ApiResponse } from '../../../types/axios';
-import { AddPlanChart } from '../../../types/chart';
+import { ApiResponse } from 'types/axios';
+import apiRequest from 'api';
+import { AddPlanChart } from 'types/chart';
 
 export type UpdateChartBody = AddPlanChart & { id: number };
 

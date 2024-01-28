@@ -1,12 +1,12 @@
 import { View, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
-import { PlanChart } from '../../../types/chart';
+import { PlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
 import dayjs from 'dayjs';
-import { usePieChart } from '../../hooks/usePieChart';
-import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg';
+import { usePieChart } from 'hooks/usePieChart';
+import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
 import { SAMPLE_EMPTY_CHART } from './constants';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/etc';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;

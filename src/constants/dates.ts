@@ -1,4 +1,4 @@
-import { DaysOfWeek, DaysOfWeekKor, DaysOfWeekKorFull, DaysOfWeekNum } from '../../types/date';
+import { DaysOfWeek, DaysOfWeekKor, DaysOfWeekKorFull, DaysOfWeekNum } from 'types/date';
 
 export const DAYS_OF_WEEK: { key: DaysOfWeek; value: DaysOfWeekKor }[] = [
   { key: 'sun', value: '일' },

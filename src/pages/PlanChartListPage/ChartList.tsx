@@ -1,9 +1,9 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
-import { PlanChart } from '../../../types/chart';
+import { PlanChart } from 'types/chart';
 import { useState } from 'react';
 import AddChartButton from './AddChartButton';
-import { BOTTOM_TAB_HEIGHT } from '../../components/BottomTabBar/constants';
+import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
 import ChartListHeader from './ChartListItemHeader';
 import ChartListItemContent from './ChartListItemContent';
 

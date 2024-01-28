@@ -1,19 +1,19 @@
 import { Alert, Dimensions, Pressable, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import Header from '../../components/Header';
-import { DropdownWithLabel } from '../../components/DropdownWithLabel';
+import PlemText from 'components/Atoms/PlemText';
+import Header from 'components/Header';
+import { DropdownWithLabel } from 'components/DropdownWithLabel';
 import { useState } from 'react';
-import { DropdownItem } from '../../components/Dropdown';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
+import { DropdownItem } from 'components/Dropdown';
+import UnderlineTextInput from 'components/UnderlineTextInput';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import TestSvg from '../../assets/images/buttonbutton.svg';
+import WithDrawalButton from 'assets/images/with_drawal_button.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { phoneTokenState } from '../../states/phoneTokenState';
-import { loggedInUserState } from '../../states/loggedInUserState';
+import { phoneTokenState } from 'states/phoneTokenState';
+import { loggedInUserState } from 'states/loggedInUserState';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { useDeleteUser } from '../../../src/hooks/mutaions/useDeleteUser';
+import { useDeleteUser } from 'hooks/mutations/useDeleteUser';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'WithdrawalPage'>;
 
@@ -63,7 +63,6 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
         onPress: async () => {
           deleteUser({ password: '123123qq' });
           return;
-          await clearAllUserData();
           // navigation.navigate('MainTab', { screen: 'HomeTab' });
         },
       },
@@ -119,7 +118,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
         </View>
         <View style={{ alignItems: 'center', position: 'absolute', bottom: 90, left: 16 }}>
           <Pressable onPress={handleWithdrwalButton}>
-            <TestSvg preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
+            <WithDrawalButton preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
           </Pressable>
           <Pressable>
             <PlemText style={{ marginTop: 32 }}>머무를게요</PlemText>

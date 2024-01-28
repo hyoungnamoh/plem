@@ -1,13 +1,13 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import PlemText from '../../../../components/Atoms/PlemText';
+import PlemText from 'components/Atoms/PlemText';
 import { Dispatch, memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { CalendarSchedule, ScheduleMap } from '../../../../api/schedules/getScheduleListApi';
+import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import dayjs from 'dayjs';
-import { selectedCalendarDateState } from '../../../../states/selectedCalendarDateState';
-import { openScheduleModalState } from '../../../../states/openScheduleModalState';
+import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
+import { openScheduleModalState } from 'states/openScheduleModalState';
 import Sticker from './Sticker';
-import { SCREEN_WIDTH } from '../../../../constants/etc';
+import { SCREEN_WIDTH } from 'constants/etc';
 import ScheduleList from './ScheduleList';
 
 const Day = ({

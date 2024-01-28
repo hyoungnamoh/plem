@@ -8,10 +8,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import PlemText from '../Atoms/PlemText';
+import PlemText from 'components/Atoms/PlemText';
 import PaletteListItem from './PaletteListItem';
-import { Category, categoryListState } from '../../states/categoryListState';
-import PaletteSvg from '../PaletteSvg/PaletteSvg';
+import { Category, categoryListState } from 'states/categoryListState';
+import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import { useSetRecoilState } from 'recoil';
 import { cloneDeep } from 'lodash';
 

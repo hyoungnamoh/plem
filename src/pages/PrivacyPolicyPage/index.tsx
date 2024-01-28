@@ -1,6 +1,6 @@
-import Header from '../../components/Header';
-import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
-import PlemText from '../../components/Atoms/PlemText';
+import Header from 'components/Header';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import PlemText from 'components/Atoms/PlemText';
 import { PRIVACY_POLICY } from './constants/PrivacyPolicy';
 
 const PrivacyPolicyPage = () => {

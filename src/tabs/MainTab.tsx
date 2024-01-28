@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { PlanChart } from '../../types/chart';
-import AddChartPage from '../pages/AddChartPage';
-import AddPlanPage from '../pages/AddPlanPage';
-import MainPage from '../pages/MainPage';
-import RepeatSettingPage from '../pages/RepeatSettingPage';
-import SelectRepeatDatePage from '../pages/SelectRepeatDatePage';
-import PlanNotiSettingPage from '../pages/PlanNotiSettingPage';
+import { PlanChart } from 'types/chart';
+import AddChartPage from 'pages/AddChartPage';
+import AddPlanPage from 'pages/AddPlanPage';
+import MainPage from 'pages/MainPage';
+import RepeatSettingPage from 'pages/RepeatSettingPage';
+import SelectRepeatDatePage from 'pages/SelectRepeatDatePage';
+import PlanNotiSettingPage from 'pages/PlanNotiSettingPage';
 
 export type MainTabStackParamList = {
   MainPage: undefined;

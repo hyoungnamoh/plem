@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getNoticeListApi } from '../../api/notices/getNoticeListApi';
+import { getNoticeListApi } from 'api/notices/getNoticeListApi';
 
 export const NOTICE_LIST_QUERY_KEY = 'getNoticeList';
 

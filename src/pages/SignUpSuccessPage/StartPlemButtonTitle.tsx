@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import CheckedBoxSvg from '../../assets/images/checkedbox_white_24x24.svg';
+import PlemText from 'components/Atoms/PlemText';
+import CheckedBoxSvg from 'assets/images/checkedbox_white_24x24.svg';
 
 const StartPlemButtonTitle = () => (
   <View style={styles.wrap}>

@@ -1,6 +1,6 @@
-import apiRequest from '..';
-import { ApiResponse } from '../../../types/axios';
-import { Schedule } from '../../../types/calendar';
+import apiRequest from 'api';
+import { ApiResponse } from 'types/axios';
+import { Schedule } from 'types/calendar';
 
 export type UpdateScheduleBody = Omit<Schedule, 'createdAt' | 'updatedAt' | 'removedAt'>;
 

@@ -1,30 +1,30 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
-import PlemText from '../../components/Atoms/PlemText';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
-import UnderlineButton from '../../components/UnderlineButton';
-import BottomButton from '../../components/BottomButton';
+import PlemText from 'components/Atoms/PlemText';
+import UnderlineTextInput from 'components/UnderlineTextInput';
+import UnderlineButton from 'components/UnderlineButton';
+import BottomButton from 'components/BottomButton';
 import { useMutation } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
-import { ApiResponse } from '../../../types/axios';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
   PostVerificationEmailParams,
   PostVerificationEmailResponse,
-} from '../../api/auth/postVerificationEmailApi';
+} from 'api/auth/postVerificationEmailApi';
 import { AxiosError } from 'axios';
-import { validator } from '../../helper/validator';
-import CustomScrollView from '../../components/CustomScrollView/CustomScrollView';
-import { useUpdateEmail } from '../../hooks/mutaions/useUpdateEmail';
+import { validator } from 'helper/validator';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import { useUpdateEmail } from 'hooks/mutations/useUpdateEmail';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { LoggedInUser } from '../../../types/user';
-import { loggedInUserState } from '../../states/loggedInUserState';
+import { LoggedInUser } from 'types/user';
+import { loggedInUserState } from 'states/loggedInUserState';
 import jwt_decode from 'jwt-decode';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;

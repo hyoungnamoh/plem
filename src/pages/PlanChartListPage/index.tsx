@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useQuery } from 'react-query';
-import { ApiResponse } from '../../../types/axios';
-import { PlanChart } from '../../../types/chart';
-import { getPlanChartList } from '../../api/charts/getPlanChartListApi';
-import PlemText from '../../components/Atoms/PlemText';
-import { MAIN_COLOR } from '../../constants/colors';
+import { ApiResponse } from 'types/axios';
+import { PlanChart } from 'types/chart';
+import { getPlanChartList } from 'api/charts/getPlanChartListApi';
+import PlemText from 'components/Atoms/PlemText';
+import { MAIN_COLOR } from 'constants/colors';
 import ChartList from './ChartList';
 import DraggableChartList from './DraggableChartList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { PlanChartListTabStackParamList } from '../../tabs/PlanChartListTab';
+import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import AddChartButton from './AddChartButton';
 import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { useRecoilState } from 'recoil';
-import SurprisedPlemmonSvg from '../../assets/images/surprised_plemmon_39x44.svg';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 

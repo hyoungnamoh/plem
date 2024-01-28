@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import CircleStrokeSvg from '../../../../assets/images/circle-stroke-black.svg';
-import CurrentDayStickerSvg from '../../../../assets/images/current-day-sticker.svg';
+import CircleStrokeSvg from 'assets/images/circle-stroke-black.svg';
+import CurrentDayStickerSvg from 'assets/images/current-day-sticker.svg';
 import { memo } from 'react';
 
 const Sticker = ({

@@ -1,5 +1,4 @@
 import { Omit } from 'react-native';
-import { DaysOfWeek } from './date';
 
 export type SubPlan = {
   id: number;

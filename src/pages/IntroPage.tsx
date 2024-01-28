@@ -1,14 +1,14 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import PlemText from '../components/Atoms/PlemText';
-import BlackButton from '../components/BlackButton';
-import UnderlineButton from '../components/UnderlineButton';
-import { MAIN_COLOR } from '../constants/colors';
-import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
-import { LoggedOutStackParamList } from '../../types/appInner';
-import IntroLogoSvg from '../assets/images/intro_logo_202x60.svg';
+import PlemText from 'components/Atoms/PlemText';
+import BlackButton from 'components/BlackButton';
+import UnderlineButton from 'components/UnderlineButton';
+import { MAIN_COLOR } from 'constants/colors';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import { LoggedOutStackParamList } from 'types/appInner';
+import IntroLogoSvg from 'assets/images/intro_logo_202x60.svg';
 
 type IntroPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'IntroPage'>;
 

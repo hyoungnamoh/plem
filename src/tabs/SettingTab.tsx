@@ -1,19 +1,21 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AccountSettingPage from '../pages/AccountSettingPage';
-import AddChartPage from '../pages/AddChartPage';
-import CustommerSupportPage from '../pages/CustommerSupportPage';
-import DirectInquiryPage from '../pages/DirectInquiryPage';
-import ModifyEmailPage from '../pages/ModifyEmailPage';
-import ModifyNickNamePage from '../pages/ModifyNickNamePage';
-import ModifyPasswordPage from '../pages/ModifyPasswordPage';
-import NoticeListPage from '../pages/NoticeListPage';
-import NotificationSettingPage from '../pages/NotificationSettingPage';
-import SettingPage from '../pages/SettingPage';
+import AccountSettingPage from 'pages/AccountSettingPage';
+import CustommerSupportPage from 'pages/CustommerSupportPage';
+import DirectInquiryPage from 'pages/DirectInquiryPage';
+import ModifyEmailPage from 'pages/ModifyEmailPage';
+import ModifyNickNamePage from 'pages/ModifyNickNamePage';
+import ModifyPasswordPage from 'pages/ModifyPasswordPage';
+import NoticeListPage from 'pages/NoticeListPage';
+import NotificationSettingPage from 'pages/NotificationSettingPage';
+import SettingPage from 'pages/SettingPage';
 import { UseMutationResult } from 'react-query';
-import { PostVerificationEmailParams, PostVerificationEmailResponse } from '../api/auth/postVerificationEmailApi';
-import { ApiResponse } from '../../types/axios';
+import { PostVerificationEmailParams, PostVerificationEmailResponse } from 'api/auth/postVerificationEmailApi';
+import { ApiResponse } from 'types/axios';
 import { AxiosError } from 'axios';
-import NotReceivedMailPage from '../pages/NotReceivedMailPage';
+import NotReceivedMailPage from 'pages/NotReceivedMailPage';
+import WithdrawalPage from 'pages/WithdrawalPage';
+import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
+import TermsOfServicePage from 'pages/TermsOfServicePage';
 
 export type SettingTabStackParamList = {
   SettingPage: undefined;
@@ -27,8 +29,8 @@ export type SettingTabStackParamList = {
   VersionInfoPage: undefined;
   DirectInquiryPage: undefined;
   TutorialReplayPage: undefined;
-  UsingServiceTermPage: undefined;
-  PrivateInfoTermPage: undefined;
+  TermsOfServicePage: undefined;
+  PrivacyPolicyPage: undefined;
   NotReceivedMailPage: {
     usePostVerificationEmail: UseMutationResult<
       ApiResponse<PostVerificationEmailResponse>,
@@ -38,6 +40,7 @@ export type SettingTabStackParamList = {
     >;
     email: string;
   };
+  WithdrawalPage: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingTabStackParamList>();
@@ -59,6 +62,9 @@ const SettingTab = () => {
       <Stack.Screen name="ModifyPasswordPage" component={ModifyPasswordPage} />
       <Stack.Screen name="DirectInquiryPage" component={DirectInquiryPage} />
       <Stack.Screen name="NotReceivedMailPage" component={NotReceivedMailPage} />
+      <Stack.Screen name="WithdrawalPage" component={WithdrawalPage} />
+      <Stack.Screen name="TermsOfServicePage" component={TermsOfServicePage} />
+      <Stack.Screen name="PrivacyPolicyPage" component={PrivacyPolicyPage} />
     </Stack.Navigator>
   );
 };

@@ -1,6 +1,6 @@
-import apiRequest from '..';
-import { ApiResponse } from '../../../types/axios';
-import { PlanChart } from '../../../types/chart';
+import { ApiResponse } from 'types/axios';
+import apiRequest from 'api';
+import { PlanChart } from 'types/chart';
 
 export type CloneChartBody = { id: number };
 

@@ -1,21 +1,21 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import CloseSVG from '../../../assets/images/header_close_40x40.svg';
-import UnderlineButton from '../../../components/UnderlineButton';
-import PlemText from '../../../components/Atoms/PlemText';
-import AddScheduleModalSvg from '../../../assets/images/add_schedule_modal.svg';
+import CloseSVG from 'assets/images/header_close_40x40.svg';
+import UnderlineButton from 'components/UnderlineButton';
+import PlemText from 'components/Atoms/PlemText';
+import AddScheduleModalSvg from 'assets/images/add_schedule_modal.svg';
 import { Dayjs } from 'dayjs';
-import { NUMBER_TO_DAY_KOR } from '../../../constants/dates';
-import { DaysOfWeekNum } from '../../../../types/date';
-import { BOTTOM_TAB_HEIGHT } from '../../../components/BottomTabBar/constants';
+import { NUMBER_TO_DAY_KOR } from 'constants/dates';
+import { DaysOfWeekNum } from 'types/date';
+import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
 import { useRecoilValue } from 'recoil';
-import { categoryListState } from '../../../states/categoryListState';
-import { Schedule } from '../../../../types/calendar';
+import { categoryListState } from 'states/categoryListState';
+import { Schedule } from 'types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { CalendarTabStackParamList } from '../../../tabs/CalendarTab';
-import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
-import { SCREEN_WIDTH } from '../../../constants/etc';
-import CustomScrollView from '../../../components/CustomScrollView/CustomScrollView';
-import PaletteSvg from '../../../components/PaletteSvg/PaletteSvg';
+import { CalendarTabStackParamList } from 'tabs/CalendarTab';
+import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
+import { SCREEN_WIDTH } from 'constants/etc';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 
 type AddScheduleModalProps = {
   open: boolean;

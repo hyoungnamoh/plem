@@ -1,5 +1,5 @@
 import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native';
-import PlemText from '../Atoms/PlemText';
+import PlemText from 'components/Atoms/PlemText';
 
 const UnderlineButton = (props: TextProps & Pick<PressableProps, 'onPress'>) => {
   return (

@@ -1,16 +1,16 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { ACCOUNT_SETTING_PAGE_MENUES, MenuItem } from '../../constants/menus';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import MenuButton from '../../components/MenuButton';
-import LabelText from '../../components/LabelText';
-import PlemText from '../../components/Atoms/PlemText';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { ACCOUNT_SETTING_PAGE_MENUES, MenuItem } from 'constants/menus';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
+import MenuButton from 'components/MenuButton';
+import LabelText from 'components/LabelText';
+import PlemText from 'components/Atoms/PlemText';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { loggedInUserState } from '../../states/loggedInUserState';
+import { loggedInUserState } from 'states/loggedInUserState';
 import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 
 type AccountSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'AccountSettingPage'>;
 

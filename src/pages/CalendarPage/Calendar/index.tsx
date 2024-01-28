@@ -1,17 +1,17 @@
 import { memo, useMemo } from 'react';
 import { Pressable, TouchableWithoutFeedback, View } from 'react-native';
-import PlemText from '../../../components/Atoms/PlemText';
+import PlemText from 'components/Atoms/PlemText';
 import uuid from 'react-uuid';
-import PlusSvg from '../../../assets/images/plus_40x40.svg';
-import CalendarHeaderLineSvg from '../../../assets/images/calendar-header-line-gray.svg';
+import PlusSvg from 'assets/images/plus_40x40.svg';
+import CalendarHeaderLineSvg from 'assets/images/calendar-header-line-gray.svg';
 import dayjs, { Dayjs } from 'dayjs';
-import { MAIN_COLOR } from '../../../constants/colors';
+import { MAIN_COLOR } from 'constants/colors';
 import { StyleSheet } from 'react-native';
-import { DAYS_OF_WEEK } from '../../../constants/dates';
-import Days from '../Days';
-import { CalendarSchedule, ScheduleMap } from '../../../api/schedules/getScheduleListApi';
-import { SCREEN_WIDTH } from '../../../constants/etc';
-import { Category } from '../../../states/categoryListState';
+import { DAYS_OF_WEEK } from 'constants/dates';
+import Days from 'pages/CalendarPage/Days';
+import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
+import { SCREEN_WIDTH } from 'constants/etc';
+import { Category } from 'states/categoryListState';
 
 const Calendar = ({
   year,

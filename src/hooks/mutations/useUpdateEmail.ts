@@ -1,7 +1,7 @@
 import { UseMutationOptions, useMutation } from 'react-query';
-import { ApiResponse } from '../../../types/axios';
+import { ApiResponse } from 'types/axios';
 import { AxiosError } from 'axios';
-import { UpdateEmailBody, UpdateEmailResponse, updateEmailApi } from '../../api/users/updateEmailApi';
+import { UpdateEmailBody, UpdateEmailResponse, updateEmailApi } from 'api/users/updateEmailApi';
 
 export const useUpdateEmail = (
   options: UseMutationOptions<ApiResponse<UpdateEmailResponse>, AxiosError, UpdateEmailBody>

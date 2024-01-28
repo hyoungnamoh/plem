@@ -2,14 +2,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import PlemText from '../components/Atoms/PlemText';
-import BlackButton from '../components/BlackButton';
-import Header from '../components/Header';
-import UnderlineButton from '../components/UnderlineButton';
-import { MAIN_COLOR } from '../constants/colors';
-import { bottomSafeAreaState } from '../states/bottomSafeAreaState';
-import { LoggedOutStackParamList } from '../../types/appInner';
-import CustomScrollView from '../components/CustomScrollView/CustomScrollView';
+import PlemText from 'components/Atoms/PlemText';
+import BlackButton from 'components/BlackButton';
+import Header from 'components/Header';
+import UnderlineButton from 'components/UnderlineButton';
+import { MAIN_COLOR } from 'constants/colors';
+import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import { LoggedOutStackParamList } from 'types/appInner';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 
 // 안쓰는 페이지??
 

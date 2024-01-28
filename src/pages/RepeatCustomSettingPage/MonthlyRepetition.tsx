@@ -1,11 +1,11 @@
 import { Dispatch, useEffect, useState } from 'react';
 import { ImageBackground, Pressable, View } from 'react-native';
-import { RepeatSpecificCondition } from '../../../types/calendar';
-import { DaysOfWeekNum } from '../../../types/date';
-import PlemText from '../../components/Atoms/PlemText';
-import { Dropdown, DropdownItem } from '../../components/Dropdown';
-import SwitchInputRow from '../../components/SwitchInputRow';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { RepeatSpecificCondition } from 'types/calendar';
+import { DaysOfWeekNum } from 'types/date';
+import PlemText from 'components/Atoms/PlemText';
+import { Dropdown, DropdownItem } from 'components/Dropdown';
+import SwitchInputRow from 'components/SwitchInputRow';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
@@ -61,7 +61,7 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates, setRepeatCondition
     let newArray = [...selectedDates];
 
     if (selectedDates.includes(item)) {
-      newArray = selectedDates.filter((day) => day !== item);
+      newArray = selectedDates.filter((selectedDate) => selectedDate !== item);
     } else {
       newArray.push(item);
     }

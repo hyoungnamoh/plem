@@ -1,4 +1,4 @@
-import { NUMBER_TO_DAY_KOR } from '../constants/dates';
+import { NUMBER_TO_DAY_KOR } from 'constants/dates';
 
 export const numToDayKorParser = (weekIndexes: (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | null)[]) => {
   if (weekIndexes.includes(null)) {

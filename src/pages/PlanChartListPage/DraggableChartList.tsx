@@ -1,11 +1,11 @@
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import DraggableChartItem from './DraggableChartItem';
-import { PlanChart } from '../../../types/chart';
+import { PlanChart } from 'types/chart';
 import { Alert, View } from 'react-native';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useUpdateChartsOrder } from '../../hooks/mutaions/useUpdateList';
+import { Dispatch, SetStateAction } from 'react';
+import { useUpdateChartsOrder } from 'hooks/mutations/useUpdateList';
 import { useSetRecoilState } from 'recoil';
-import { disableLoadingState } from '../../states/disableLoadingState';
+import { disableLoadingState } from 'states/disableLoadingState';
 import { useQueryClient } from 'react-query';
 
 const DraggableChartList = ({

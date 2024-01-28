@@ -1,21 +1,21 @@
 import { StyleSheet, View } from 'react-native';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
-import { MAIN_COLOR } from '../../constants/colors';
-import DotActive from '../../assets/images/dot_active.svg';
-import DotInactive from '../../assets/images/dot_inactive.svg';
-import Guide1Svg from '../../assets/images/guide1.svg';
-import Guide2Svg from '../../assets/images/guide2.svg';
-import Guide3Svg from '../../assets/images/guide3.svg';
-import PlemText from '../../components/Atoms/PlemText';
-import BottomButton from '../../components/BottomButton';
+import { MAIN_COLOR } from 'constants/colors';
+import DotActive from 'assets/images/dot_active.svg';
+import DotInactive from 'assets/images/dot_inactive.svg';
+import Guide1Svg from 'assets/images/guide1.svg';
+import Guide2Svg from 'assets/images/guide2.svg';
+import Guide3Svg from 'assets/images/guide3.svg';
+import PlemText from 'components/Atoms/PlemText';
+import BottomButton from 'components/BottomButton';
 import { useRef, useState } from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { LoggedOutStackParamList } from '../../../types/appInner';
+import { LoggedOutStackParamList } from 'types/appInner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import { useSetRecoilState } from 'recoil';
-import { lastAccessDateState } from '../../states/lastAccessDateState';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { lastAccessDateState } from 'states/lastAccessDateState';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const screenWidth = Math.round(SCREEN_WIDTH);
 const PAGES = [

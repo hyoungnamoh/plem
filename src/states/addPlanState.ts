@@ -1,6 +1,5 @@
-import dayjs from 'dayjs';
 import { atom } from 'recoil';
-import { AddPlan } from '../../types/chart';
+import { AddPlan } from 'types/chart';
 
 export const addPlanDefault: AddPlan = {
   name: '',

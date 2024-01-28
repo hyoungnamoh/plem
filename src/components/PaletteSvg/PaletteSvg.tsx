@@ -1,11 +1,11 @@
-import PaletteFF6550MediumSvg from '../../assets/images/palette_ff6550_stroke_24x24.svg';
-import PaletteFFC700MediumSvg from '../../assets/images/palette_ffc700_stroke_24x24.svg';
-import Palette22DA81MediumSvg from '../../assets/images/palette_22da81_stroke_24x24.svg';
-import Palette4659FFMediumSvg from '../../assets/images/palette_4659ff_stroke_24x24.svg';
-import PaletteFF6550SmallSvg from '../../assets/images/palette_ff6550_8x8.svg';
-import PaletteFFC700SmallSvg from '../../assets/images/palette_ffc700_8x8.svg';
-import Palette22DA81SmallSvg from '../../assets/images/palette_22da81_8x8.svg';
-import Palette4659FFSmallSvg from '../../assets/images/palette_4659ff_8x8.svg';
+import PaletteFF6550MediumSvg from 'assets/images/palette_ff6550_stroke_24x24.svg';
+import PaletteFFC700MediumSvg from 'assets/images/palette_ffc700_stroke_24x24.svg';
+import Palette22DA81MediumSvg from 'assets/images/palette_22da81_stroke_24x24.svg';
+import Palette4659FFMediumSvg from 'assets/images/palette_4659ff_stroke_24x24.svg';
+import PaletteFF6550SmallSvg from 'assets/images/palette_ff6550_8x8.svg';
+import PaletteFFC700SmallSvg from 'assets/images/palette_ffc700_8x8.svg';
+import Palette22DA81SmallSvg from 'assets/images/palette_22da81_8x8.svg';
+import Palette4659FFSmallSvg from 'assets/images/palette_4659ff_8x8.svg';
 import { FC } from 'react';
 import { SvgProps } from 'react-native-svg';
 

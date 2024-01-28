@@ -1,7 +1,7 @@
 import { Image, Pressable, PressableProps, StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import SwitchOnSvg from '../../assets/images/switch_on_52x28.svg';
-import SwitchOffSvg from '../../assets/images/switch_off_52x28.svg';
+import PlemText from 'components/Atoms/PlemText';
+import SwitchOnSvg from 'assets/images/switch_on_52x28.svg';
+import SwitchOffSvg from 'assets/images/switch_off_52x28.svg';
 
 const underlineImage = require('../../assets/images/underline.png');
 

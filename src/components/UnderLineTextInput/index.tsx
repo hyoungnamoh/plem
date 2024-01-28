@@ -1,5 +1,5 @@
 import { Image, StyleSheet, TextInputProps, View, ViewProps } from 'react-native';
-import PlemTextInput from '../Atoms/PlemTextInput';
+import PlemTextInput from 'components/Atoms/PlemTextInput';
 
 export type UnderlineTextInputProps = TextInputProps & { wrapperProps?: ViewProps; isInvalidValue?: boolean };
 

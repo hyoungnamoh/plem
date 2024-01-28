@@ -1,3 +1,7 @@
 {
-  "java.compile.nullAnalysis.mode": "disabled"
+  "java.compile.nullAnalysis.mode": "disabled",
+  "svg.preview.background": "transparent",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+}
 }

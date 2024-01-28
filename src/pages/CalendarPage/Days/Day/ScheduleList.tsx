@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native';
-import { categoryListState } from '../../../../states/categoryListState';
+import { categoryListState } from 'states/categoryListState';
 import { useRecoilValue } from 'recoil';
-import { CalendarSchedule, ScheduleMap } from '../../../../api/schedules/getScheduleListApi';
-import PlemText from '../../../../components/Atoms/PlemText';
-import { SCREEN_WIDTH } from '../../../../constants/etc';
+import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
+import PlemText from 'components/Atoms/PlemText';
+import { SCREEN_WIDTH } from 'constants/etc';
 import { memo } from 'react';
-import PaletteSvg from '../../../../components/PaletteSvg/PaletteSvg';
+import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 
 const ScheduleList = ({
   noRepeatScheduleMap,

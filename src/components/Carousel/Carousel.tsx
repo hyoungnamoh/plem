@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useRef, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const DEFAULT_PAGE_WIDTH = SCREEN_WIDTH;
 

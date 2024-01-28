@@ -1,6 +1,6 @@
 import { Image, Pressable, PressableProps, StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import ArrowRightSvg from '../../assets/images/arrow_right_32x32.svg';
+import PlemText from 'components/Atoms/PlemText';
+import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
 
 const underlineImage = require('../../assets/images/underline.png');
 

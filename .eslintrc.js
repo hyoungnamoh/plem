@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   extends: '@react-native-community',
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'preferred-import', 'unused-imports'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -15,6 +15,13 @@ module.exports = {
         'react-native/no-inline-styles': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
         'react-hooks/exhaustive-deps': 'off',
+        'preferred-import/ts-imports': 'error',
+        'no-unused-vars': 'off',
+        'unused-imports/no-unused-imports': 'error',
+      },
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: ['./tsconfig.json'],
       },
     },
   ],

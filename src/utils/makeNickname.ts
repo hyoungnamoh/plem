@@ -1,5 +1,5 @@
-import { ADJECTIVES } from '../constants/adjectives';
-import { NOUNS } from '../constants/nouns';
+import { ADJECTIVES } from 'constants/adjectives';
+import { NOUNS } from 'constants/nouns';
 
 export const makeNickname = () => {
   const adjectiveIndex = Math.floor(Math.random() * ADJECTIVES.length);

@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { AddPlanChart } from '../../types/chart';
+import { AddPlanChart } from 'types/chart';
 
 export const addPlanChartDefault: AddPlanChart = {
   name: '',

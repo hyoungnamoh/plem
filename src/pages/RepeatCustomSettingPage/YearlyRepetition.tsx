@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { ImageBackground, Pressable, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import PlemText from 'components/Atoms/PlemText';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 

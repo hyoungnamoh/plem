@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import PlemText from '../../components/Atoms/PlemText';
-import { PlanChart } from '../../../types/chart';
+import PlemText from 'components/Atoms/PlemText';
+import { PlanChart } from 'types/chart';
 
 const ChartListItemContent = ({ chart }: { chart: PlanChart }) => {
   return (

@@ -1,4 +1,4 @@
-import { PlanChart } from '../../../types/chart';
+import { PlanChart } from 'types/chart';
 
 export const SAMPLE_EMPTY_CHART: PlanChart = {
   UserId: 0,

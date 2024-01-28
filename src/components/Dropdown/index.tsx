@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { FlatList, Image, Pressable, ScrollViewProps, StyleSheet, View } from 'react-native';
-import PlemText from '../Atoms/PlemText';
-import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
+import PlemText from 'components/Atoms/PlemText';
+import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 
 const underlineImage = require('../../assets/images/underline.png');
 
