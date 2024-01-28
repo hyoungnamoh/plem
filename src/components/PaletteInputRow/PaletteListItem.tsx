@@ -37,7 +37,7 @@ const PaletteListItem = ({
       if (target > -1) {
         newPaletteList[target].label = value;
       }
-      console.log(newPaletteList);
+
       return newPaletteList;
     });
   };

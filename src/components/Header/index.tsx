@@ -17,6 +17,7 @@ type HeaderProps = {
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
   const hasButton = props.buttonName && typeof props.buttonProps?.onPress === 'function';
+
   return (
     <View style={styles.header}>
       <View style={styles.left}>

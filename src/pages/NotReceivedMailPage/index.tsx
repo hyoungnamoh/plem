@@ -1,29 +1,24 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AxiosError } from 'axios';
 import { useEffect } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation } from 'react-query';
+import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import { LoggedOutStackParamList } from '../../../AppInner';
-import { ApiResponse } from '../../../types/axios';
 import PlemText from '../../components/Atoms/PlemText';
 import BlackButton from '../../components/BlackButton';
 import Header from '../../components/Header';
-import UnderlineTextInput from '../../components/UnderlineTextInput';
 import { MAIN_COLOR } from '../../constants/colors';
 import { bottomSafeAreaState } from '../../states/bottomSafeAreaState';
+import { LoggedOutStackParamList } from '../../../types/appInner';
 
-type NotReceivedMailPage = NativeStackScreenProps<LoggedOutStackParamList, 'NotReceivedMailPage'>;
+type NotReceivedMailPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NotReceivedMailPage'>;
 
-const NotReceivedMailPage = ({ route, navigation }: NotReceivedMailPage) => {
+const NotReceivedMailPage = ({ route, navigation }: NotReceivedMailPageProps) => {
   const { usePostVerificationEmail, email } = route.params;
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;
 
   useEffect(() => {
     setBottomSafeArea(MAIN_COLOR);
   }, []);
-  const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;
 
   const onPressSend = () => {
     if (sendEmailLoading) {
