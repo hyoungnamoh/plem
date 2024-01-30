@@ -133,7 +133,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
               wrapperProps={{ style: { marginTop: 12 } }}
               value={password}
               onChangeText={onChangePassword}
-              placeholder={'영문, 숫자, 특수문자 포함 8-20자'}
+              placeholder={'영문, 숫자 포함 8-20자리'}
               secureTextEntry
             />
           </View>
