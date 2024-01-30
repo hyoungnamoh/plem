@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    lineHeight: 36,
+    lineHeight: 1.28,
   },
   confirmListContainer: {
     marginTop: 16,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   confirmText: {
-    lineHeight: 24,
+    lineHeight: 1.33,
   },
   buttonWrap: {
     paddingHorizontal: 15,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   inquiryText: {
     color: '#444444',
-    lineHeight: 22,
+    lineHeight: 1.22,
   },
   checkText: {
     marginTop: 16,

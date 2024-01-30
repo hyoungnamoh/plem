@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    lineHeight: 36,
+    lineHeight: 1.28,
   },
   descriptionWrap: {
     marginTop: 40,
   },
   description1: {
-    lineHeight: 24,
+    lineHeight: 1.33,
   },
   description2: {
     marginTop: 16,

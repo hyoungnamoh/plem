@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   notice: {
-    lineHeight: 22,
+    lineHeight: 1.22,
     marginLeft: 20,
     marginTop: 12,
     color: '#444444',
