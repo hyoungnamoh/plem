@@ -22,6 +22,7 @@ import UnderlineTextInput from 'components/UnderlineTextInput';
 import { MAIN_COLOR } from 'constants/colors';
 import { LoggedOutStackParamList } from 'types/appInner';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import { removeWhitespace } from 'helper/removeWhitespace';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
@@ -99,7 +100,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     //   return;
     // }
 
-    setEmail(value);
+    setEmail(removeWhitespace(value));
     if (!value) {
       setIsInvalidEmail(false);
       return;

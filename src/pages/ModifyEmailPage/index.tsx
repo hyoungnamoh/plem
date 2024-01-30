@@ -26,6 +26,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { LoggedInUser } from 'types/user';
 import { loggedInUserState } from 'states/loggedInUserState';
 import jwt_decode from 'jwt-decode';
+import { removeWhitespace } from 'helper/removeWhitespace';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
@@ -93,7 +94,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   };
 
   const onChangeEmail = (value: string) => {
-    setEmail(value);
+    setEmail(removeWhitespace(value));
     if (!value) {
       setIsInvalidEmail(false);
       return;

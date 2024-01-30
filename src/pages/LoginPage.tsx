@@ -22,6 +22,7 @@ import { LoggedOutStackParamList } from 'types/appInner';
 import messaging from '@react-native-firebase/messaging';
 import { phoneTokenState } from 'states/phoneTokenState';
 import { useRegisterPhoneToken } from 'hooks/mutations/useRegisterPhoneToken';
+import { removeWhitespace } from 'helper/removeWhitespace';
 
 type LoginMutationParams = {
   email: string;
@@ -46,7 +47,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   });
 
   const onChangeEmail = (value: string) => {
-    setEmail(value);
+    setEmail(removeWhitespace(value));
   };
 
   const onChangePassword = (value: string) => {

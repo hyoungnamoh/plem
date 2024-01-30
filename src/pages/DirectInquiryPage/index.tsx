@@ -8,6 +8,7 @@ import { DropdownWithLabel } from 'components/DropdownWithLabel';
 import LabelInput from 'components/LabelInput';
 import PlemText from 'components/Atoms/PlemText';
 import BlackButton from 'components/BlackButton';
+import { removeWhitespace } from 'helper/removeWhitespace';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -66,7 +67,7 @@ const DirectInquiryPage = ({}: DirectInquiryPageProps) => {
           <LabelInput
             label="답변받을 이메일 주소"
             value={title}
-            onChangeText={setEmail}
+            onChangeText={(value) => setEmail(removeWhitespace(value))}
             placeholder={'제목을 입력해 주세요. (20자 이내)'}
           />
         </View>

@@ -22,6 +22,7 @@ import { isVerifiedEmailState } from 'states/isVerifiedEmailState';
 import { MAIN_COLOR } from 'constants/colors';
 import { LoggedOutStackParamList } from 'types/appInner';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import { removeWhitespace } from 'helper/removeWhitespace';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 
@@ -47,7 +48,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
     ApiResponse<PostVerificationEmailResponse>,
     AxiosError,
     PostVerificationEmailParams
-  >('verificationCode', ({ email, isReset }) => postVerificationEmailApi({ email, isReset }), {
+  >('verificationCode', (body) => postVerificationEmailApi(body), {
     onSuccess: async (responseData, variables, context) => {
       if (responseData.status === 200) {
         toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
@@ -98,7 +99,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
     //   ]);
     //   return;
     // }
-    setEmail(value);
+    setEmail(removeWhitespace(value));
     if (!value) {
       setIsInvalidEmail(false);
       return;
