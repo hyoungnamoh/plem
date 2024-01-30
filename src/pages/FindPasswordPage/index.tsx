@@ -99,12 +99,13 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
     //   ]);
     //   return;
     // }
-    setEmail(removeWhitespace(value));
-    if (!value) {
+    const newEmail = removeWhitespace(value);
+    setEmail(newEmail);
+    if (!newEmail) {
       setIsInvalidEmail(false);
       return;
     }
-    setIsInvalidEmail(!validator({ value, type: 'email' }));
+    setIsInvalidEmail(!validator({ value: newEmail, type: 'email' }));
   };
 
   const onPressVerify = () => {

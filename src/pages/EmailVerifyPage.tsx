@@ -99,13 +99,13 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
     //   ]);
     //   return;
     // }
-
-    setEmail(removeWhitespace(value));
+    const newEmail = removeWhitespace(value);
+    setEmail(newEmail);
     if (!value) {
       setIsInvalidEmail(false);
       return;
     }
-    setIsInvalidEmail(!validator({ value, type: 'email' }));
+    setIsInvalidEmail(!validator({ value: newEmail, type: 'email' }));
   };
 
   const onPressVerify = () => {
