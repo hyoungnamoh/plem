@@ -36,7 +36,6 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const setLoggedInUser = useSetRecoilState(loggedInUserState);
   const setPhoneToken = useSetRecoilState(phoneTokenState);
-
   const { mutate: registerPhoneToken } = useRegisterPhoneToken({});
 
   const [email, setEmail] = useState('');
