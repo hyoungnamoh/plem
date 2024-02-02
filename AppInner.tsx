@@ -25,7 +25,6 @@ import Loading from './src/components/Loading';
 import jwt_decode from 'jwt-decode';
 import { loggedInUserState } from './src/states/loggedInUserState';
 import { LoggedInUser } from './src/types/user';
-import SplashScreen from 'react-native-splash-screen';
 import { disableLoadingState } from './src/states/disableLoadingState';
 import { LoggedInTabParamList, LoggedOutStackParamList } from './src/types/appInner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -34,6 +33,9 @@ import GuidePage from './src/pages/GuidePage/GuidePage';
 import { lastAccessDateState } from './src/states/lastAccessDateState';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { configureNotification } from './src/utils/configureNotification';
+import { appInfoState } from 'states/appInfoState';
+import { getAppVersion } from 'helper/getAppVersion';
+import SplashScreen from 'react-native-splash-screen';
 
 configureNotification();
 
@@ -47,19 +49,24 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const setAppInfo = useSetRecoilState(appInfoState);
   const setCategoryList = useSetRecoilState(categoryListState);
 
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
   useEffect(() => {
-    preCheck();
-    setScheduleCategoryList();
+    splashScreenHandler([setLastAccessDateFromStorage(), loginCheck(), setScheduleCategoryList(), getAppInfo()]);
   }, []);
 
-  const preCheck = async () => {
-    await setLastAccessDateFromStorage();
-    await loginCheck();
+  const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
+    await Promise.all(preCheckList);
+    SplashScreen.hide();
+  };
+
+  const getAppInfo = async () => {
+    const appVersion = await getAppVersion();
+    setAppInfo({ ...appVersion });
   };
 
   const loginCheck = async () => {
@@ -68,14 +75,12 @@ function AppInner({ routeName }: { routeName: string }) {
     console.info('jwt', token);
 
     if (!token) {
-      SplashScreen.hide();
       setLoggedInUser(null);
       return;
     }
 
     const user = jwt_decode<LoggedInUser>(token);
     setLoggedInUser(user);
-    SplashScreen.hide();
   };
 
   const setScheduleCategoryList = async () => {
@@ -90,6 +95,7 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const setLastAccessDateFromStorage = async () => {
     const lastAccess = await AsyncStorage.getItem('last_access');
+
     if (lastAccess) {
       setLastAccessDate(lastAccess);
       navigation.reset({ index: 0, routes: [{ name: 'IntroPage' }] });
