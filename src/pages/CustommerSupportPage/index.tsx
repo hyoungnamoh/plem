@@ -5,25 +5,13 @@ import { MAIN_COLOR } from 'constants/colors';
 import { CUSTOMMER_SUPPORT_PAGE_MENUES, MenuItem } from 'constants/menus';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
 import MenuButton from 'components/MenuButton';
-import VersionCheck from 'react-native-version-check';
-import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { appInfoState } from 'states/appInfoState';
 
 type CustommerSupportPageProps = NativeStackScreenProps<SettingTabStackParamList, 'CustommerSupportPage'>;
 
 const CustommerSupportPage = ({ navigation }: CustommerSupportPageProps) => {
-  const [version, setVersion] = useState<{ current: string; latest: string | undefined } | null>(null);
-  useEffect(() => {
-    getVersion();
-  }, []);
-
-  const getVersion = async () => {
-    const currentVersion = VersionCheck.getCurrentVersion();
-    const latestVersion = await VersionCheck.getLatestVersion();
-    setVersion({
-      current: currentVersion,
-      latest: latestVersion,
-    });
-  };
+  const appInfo = useRecoilValue(appInfoState);
 
   const onPressMenu = (menu: MenuItem) => {
     if (menu.value === 'VersionInfoPage') {
@@ -39,7 +27,7 @@ const CustommerSupportPage = ({ navigation }: CustommerSupportPageProps) => {
         <ScrollView contentContainerStyle={{ height: '100%' }}>
           {CUSTOMMER_SUPPORT_PAGE_MENUES.map((menu) => {
             if (menu.value === 'VersionInfoPage') {
-              menu.label = `현재 ${version?.current} / 최신 ${version?.latest || version?.current}`;
+              menu.label = `현재 ${appInfo.currentVersion} / 최신 ${appInfo.latestVersion || appInfo.currentVersion}`;
               menu.labelProps = { style: { color: '#888888', fontSize: 14 } };
               menu.arrow = false;
             }
