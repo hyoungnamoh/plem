@@ -60,8 +60,18 @@ function AppInner({ routeName }: { routeName: string }) {
   }, []);
 
   const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
+    const startTime = Date.now();
     await Promise.all(preCheckList);
-    SplashScreen.hide();
+    const endTime = Date.now();
+    const delayTime = 2500 - (endTime - startTime);
+
+    if (delayTime > 0) {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, delayTime);
+    } else {
+      SplashScreen.hide();
+    }
   };
 
   const getAppInfo = async () => {
