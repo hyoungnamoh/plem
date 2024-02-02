@@ -69,6 +69,7 @@ const DirectInquiryPage = ({}: DirectInquiryPageProps) => {
             value={title}
             onChangeText={(value) => setEmail(removeWhitespace(value))}
             placeholder={'제목을 입력해 주세요. (20자 이내)'}
+            keyboardType="email-address"
           />
         </View>
         <PlemText style={{ color: '#888888', marginTop: 12 }}>

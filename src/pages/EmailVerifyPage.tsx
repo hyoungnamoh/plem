@@ -150,6 +150,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
               isInvalidValue={isInvalidEmail}
               editable={!isSent}
               selectTextOnFocus={isSent}
+              keyboardType="email-address"
             />
             {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
           </View>

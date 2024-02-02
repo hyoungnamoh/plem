@@ -120,8 +120,8 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
           <Pressable onPress={handleWithdrwalButton}>
             <WithDrawalButton preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
           </Pressable>
-          <Pressable>
-            <PlemText style={{ marginTop: 32 }}>머무를게요</PlemText>
+          <Pressable onPress={navigation.goBack}>
+            <PlemText style={{ marginTop: 32, textDecorationLine: 'underline' }}>머무를게요!</PlemText>
           </Pressable>
         </View>
       </View>

@@ -125,6 +125,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
             value={email}
             onChangeText={onChangeEmail}
             placeholder={'이메일을 입력해 주세요.'}
+            keyboardType="email-address"
           />
           <View style={{ marginTop: 32 }}>
             <PlemText>비밀번호</PlemText>
