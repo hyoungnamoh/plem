@@ -33,17 +33,21 @@ const AddChartTable = () => {
             <PlemText>Title</PlemText>
           </View>
           <View style={styles.valueCell}>
-            <PlemTextInput onChangeText={handleNameChange} maxLength={14}>
+            <PlemTextInput
+              onChangeText={handleNameChange}
+              maxLength={14}
+              placeholder="계획표 이름을 등록해 주세요."
+              style={{ fontSize: 16 }}>
               {chart.name}
             </PlemTextInput>
           </View>
         </View>
         <View style={styles.chartBox}>
-          <View style={{ marginLeft: '8%', marginTop: '10%', height: chartRadius * 2 + 30 }}>
-            <PlemText style={[styles.baseTimes, { top: '-8%', left: '42%' }]}>24</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '92%' }]}>6</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '93%', left: '42%' }]}>12</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '-7%' }]}>18</PlemText>
+          <View style={{ marginLeft: '9%', marginTop: '10%', height: chartRadius * 2 + 30 }}>
+            <PlemText style={[styles.baseTimes, { top: '-8%', left: '43%', fontSize: 14 }]}>24</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '43%', left: '93%', fontSize: 14 }]}>6</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '93%', left: '43%', fontSize: 14 }]}>12</PlemText>
+            <PlemText style={[styles.baseTimes, { top: '43%', left: '-6%', fontSize: 14 }]}>18</PlemText>
             {chart.plans.length > 0 ? (
               <PieChart
                 data={pieChartData}

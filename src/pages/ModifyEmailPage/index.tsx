@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
   },
   toastText: {
     color: '#fff',
-    fontFamily: 'LeeSeoyun',
     fontSize: 16,
   },
   notReceivedButtonWrap: {

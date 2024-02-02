@@ -5,7 +5,7 @@ const PlemTextInput = forwardRef<TextInput, TextInputProps>((props, ref) => {
   return (
     <TextInput
       {...props}
-      style={[props.style, { fontFamily: 'LeeSeoyun', fontSize: 18 }]}
+      style={[{ fontFamily: 'LeeSeoyun', fontSize: 18 }, props.style]}
       ref={ref}
       placeholderTextColor="#AAAAAA">
       {props.children}
