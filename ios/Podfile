@@ -7,6 +7,28 @@ $FirebaseSDKVersion = '10.19.0'
 
 platform :ios, '15.1'
 install! 'cocoapods', :deterministic_uuids => false
+setup_permissions([
+  'AppTrackingTransparency',
+  'Bluetooth',
+  'Calendars',
+  'CalendarsWriteOnly',
+  'Camera',
+  'Contacts',
+  'FaceID',
+  'LocationAccuracy',
+  'LocationAlways',
+  'LocationWhenInUse',
+  'MediaLibrary',
+  'Microphone',
+  'Motion',
+  'Notifications',
+  'PhotoLibrary',
+  'PhotoLibraryAddOnly',
+  'Reminders',
+  'Siri',
+  'SpeechRecognition',
+  'StoreKit',
+])
 
 target 'Plem' do
   config = use_native_modules!
