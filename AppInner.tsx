@@ -36,6 +36,8 @@ import { configureNotification } from './src/utils/configureNotification';
 import { appInfoState } from 'states/appInfoState';
 import { getAppVersion } from 'helper/getAppVersion';
 import SplashScreen from 'react-native-splash-screen';
+import { checkNotifications } from 'react-native-permissions';
+import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
 
 configureNotification();
 
@@ -49,6 +51,7 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const setNotificationInfoState = useSetRecoilState(notificationInfoState);
   const setAppInfo = useSetRecoilState(appInfoState);
   const setCategoryList = useSetRecoilState(categoryListState);
 
@@ -56,7 +59,13 @@ function AppInner({ routeName }: { routeName: string }) {
   const disableLoading = useRecoilValue(disableLoadingState);
 
   useEffect(() => {
-    splashScreenHandler([setLastAccessDateFromStorage(), loginCheck(), setScheduleCategoryList(), getAppInfo()]);
+    splashScreenHandler([
+      setLastAccessDateFromStorage(),
+      loginCheck(),
+      setScheduleCategoryList(),
+      getAppInfo(),
+      getNotificationInfo(),
+    ]);
   }, []);
 
   const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
@@ -72,6 +81,27 @@ function AppInner({ routeName }: { routeName: string }) {
     } else {
       SplashScreen.hide();
     }
+  };
+
+  const getNotificationInfo = async () => {
+    const { status, settings } = await checkNotifications();
+    console.log(settings);
+
+    const storageNotifiactionInfo = await getStorageNotificationInfo();
+    if (status === 'granted') {
+      if (storageNotifiactionInfo) {
+        setNotificationInfoState({ notice: storageNotifiactionInfo.notice, plan: storageNotifiactionInfo.plan });
+      } else {
+        setNotificationInfoState({ notice: true, plan: true });
+      }
+    } else {
+      setNotificationInfoState({ notice: false, plan: false });
+    }
+  };
+
+  const getStorageNotificationInfo = async () => {
+    const asyncStorageItem = await AsyncStorage.getItem('notification_info');
+    return asyncStorageItem ? (JSON.parse(asyncStorageItem) as NotificationInfo) : null;
   };
 
   const getAppInfo = async () => {
