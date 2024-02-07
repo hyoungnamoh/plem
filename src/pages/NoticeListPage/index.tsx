@@ -1,17 +1,18 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import Header from '../../components/Header';
-import { MAIN_COLOR } from '../../constants/colors';
-import { SettingTabStackParamList } from '../../tabs/SettingTab';
-import PlemText from '../../components/Atoms/PlemText';
+import Header from 'components/Header';
+import { MAIN_COLOR } from 'constants/colors';
+import { SettingTabStackParamList } from 'tabs/SettingTab';
+import PlemText from 'components/Atoms/PlemText';
 import Accordion from 'react-native-collapsible/Accordion';
 import { useState } from 'react';
-import ArrowDownSvg from '../../assets/images/arrow_down_32x32.svg';
-import ArrowUpSvg from '../../assets/images/arrow_up_32x32.svg';
-import { useGetNoticeList } from '../../hooks/queries/useGetNoticeList';
-import { Notice } from '../../../types/notice';
-import { SCREEN_WIDTH } from '../../constants/etc';
+import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
+import ArrowUpSvg from 'assets/images/arrow_up_32x32.svg';
+import { useGetNoticeList } from 'hooks/queries/useGetNoticeList';
+import { Notice } from 'types/notice';
+import { SCREEN_WIDTH } from 'constants/etc';
 import Image from '@hyoungnamoh/react-native-scalable-image';
+import { baseUrl } from 'api';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
 
@@ -37,7 +38,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
     return (
       <View style={styles.content}>
         {notice.contents.map((content) => {
-          return <Image source={{ uri: `http://192.168.219.106:3030/${content}` }} width={SCREEN_WIDTH - 40} />;
+          return <Image source={{ uri: `${baseUrl}/${content}` }} width={SCREEN_WIDTH - 40} />;
         })}
         {/* <PlemText>{notice.content}</PlemText> */}
       </View>

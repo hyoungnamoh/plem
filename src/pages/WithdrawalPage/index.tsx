@@ -25,11 +25,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
   const [reason, setReason] = useState('');
   const [password, setPassword] = useState('');
 
-  const { mutate: deleteUser } = useDeleteUser({
-    onError: () => {
-      console.log('??');
-    },
-  });
+  const { mutate: deleteUser } = useDeleteUser({});
 
   const handleReasonChange = (selectedItem: DropdownItem) => {
     setSelectedReason(selectedItem);

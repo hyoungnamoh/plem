@@ -85,7 +85,6 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const getNotificationInfo = async () => {
     const { status, settings } = await checkNotifications();
-    console.log(settings);
 
     const storageNotifiactionInfo = await getStorageNotificationInfo();
     if (status === 'granted') {

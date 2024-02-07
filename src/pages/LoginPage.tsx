@@ -83,7 +83,6 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
         await messaging().registerDeviceForRemoteMessages();
       }
       const phoneToken = await messaging().getToken();
-      console.log('getPhoneToken', phoneToken);
 
       setPhoneToken(phoneToken);
       registerPhoneToken({ phoneToken });
