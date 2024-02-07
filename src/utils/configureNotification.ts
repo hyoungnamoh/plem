@@ -6,6 +6,19 @@ export const configureNotification = () => {
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log('Message handled in the background!', remoteMessage);
   });
+
+  messaging().onMessage(async (remoteMessage) => {
+    if (!remoteMessage.notification) {
+      return;
+    }
+    PushNotification.localNotification({
+      message: remoteMessage.notification.body || '',
+      title: remoteMessage.notification.title || '',
+      category: remoteMessage.category,
+      soundName: 'default',
+    });
+  });
+
   PushNotification.configure({
     // (optional) 토큰이 생성될 때 실행됨(토큰을 서버에 등록할 때 쓸 수 있음)
     onRegister: function (token: any) {
