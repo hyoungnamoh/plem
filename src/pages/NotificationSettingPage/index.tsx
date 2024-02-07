@@ -50,18 +50,18 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
     }
   };
 
-  const handleNoticeNotification = async (topic: keyof NotificationInfo, value: boolean) => {
+  const handleNoticeNotification = async (value: boolean) => {
     if (!deviceNotification) {
       Linking.openURL('app-settings:');
       return;
     }
     const originNoficiationInfo = { ...notificationInfo };
-    const newNotificationInfo = { ...notificationInfo, [topic]: value };
+    const newNotificationInfo = { ...notificationInfo, notice: value };
     setNotificationInfo(newNotificationInfo);
-    console.log(value);
+
     if (value) {
       messaging()
-        .subscribeToTopic(topic)
+        .subscribeToTopic('notice')
         .then(() => {
           setStorageNotificationInfo(newNotificationInfo);
         })
@@ -73,7 +73,7 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
         });
     } else {
       messaging()
-        .unsubscribeFromTopic(topic)
+        .unsubscribeFromTopic('notice')
         .then(() => {
           setStorageNotificationInfo(newNotificationInfo);
         })
@@ -106,7 +106,7 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
           <SwitchInputRow
             label={'공지사항 알림'}
             value={notificationInfo.notice}
-            onPress={() => handleNoticeNotification('notice', !notificationInfo.notice)}
+            onPress={() => handleNoticeNotification(!notificationInfo.notice)}
           />
         </View>
       </View>
