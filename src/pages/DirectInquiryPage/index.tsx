@@ -1,5 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, Pressable, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
@@ -59,7 +68,11 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        setOpenDropdown(false);
+        Keyboard.dismiss();
+      }}>
       <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
         <Header
           title="1:1 문의"
