@@ -7,13 +7,13 @@ const underlineImage = require('../../assets/images/underline.png');
 
 const ITEM_HEIGHT = 40;
 
-export type DropdownItem = { label: string; value: string | number };
+export type DropdownItem<T = string | number> = { label: string; value: T };
 export type DropdownProps = {
   open: boolean;
   list: DropdownItem[];
   scrollViewProps?: ScrollViewProps;
   onPressRow: () => void;
-  onChange: (item: DropdownItem) => void;
+  onChange: (item: DropdownItem<any>) => void;
   value: DropdownItem;
 };
 
