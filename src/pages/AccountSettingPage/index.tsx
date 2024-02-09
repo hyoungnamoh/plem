@@ -7,20 +7,13 @@ import { SettingTabStackParamList } from 'tabs/SettingTab';
 import MenuButton from 'components/MenuButton';
 import LabelText from 'components/LabelText';
 import PlemText from 'components/Atoms/PlemText';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
-import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 
 type AccountSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'AccountSettingPage'>;
 
 const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
-  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const loggedInUser = useRecoilValue(loggedInUserState);
-
-  useFocusEffect(() => {
-    setBottomSafeArea(MAIN_COLOR);
-  });
 
   const onPressMenu = (menu: MenuItem) => {
     if (!menu.value) {

@@ -2,11 +2,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs, ManipulateType } from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { MAIN_COLOR } from 'constants/colors';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import { useGetScheduleList } from 'hooks/queries/useGetScheduleList';
 import { categoryListState } from 'states/categoryListState';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from 'components/Carousel/Carousel';
 import Calendar from './Calendar';
@@ -101,7 +99,6 @@ const getRepeatScheduleMap = ({
 
 const CalendarPage = ({ navigation }: CalendarPageProps) => {
   const categoryList = useRecoilValue(categoryListState);
-  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedCalendarDateState);
   const [openScheduleModal, setOpenScheduleModal] = useRecoilState(openScheduleModalState);
 
@@ -153,12 +150,6 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
       }),
     [calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules]
   );
-
-  useFocusEffect(() => {
-    if (bottomSafeArea !== MAIN_COLOR) {
-      setBottomSafeArea(MAIN_COLOR);
-    }
-  });
 
   useFocusEffect(
     useCallback(() => {

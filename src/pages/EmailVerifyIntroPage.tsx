@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
@@ -18,10 +17,6 @@ type EmailVerifyIntroPageProps = NativeStackScreenProps<LoggedOutStackParamList,
 const EmailVerifyIntroPage = ({ navigation, route }: EmailVerifyIntroPageProps) => {
   const { email, password, nickname } = route.params;
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
-
-  useFocusEffect(() => {
-    setBottomSafeArea(MAIN_COLOR);
-  });
 
   const onPressVerify = () => {
     // navigation.navigate('EmailVerifyPage', { email, password, nickname });

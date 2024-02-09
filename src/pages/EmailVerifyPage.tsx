@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation } from 'react-query';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
@@ -14,7 +14,6 @@ import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
 import Header from 'components/Header';
 import UnderlineButton from 'components/UnderlineButton';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { validator } from 'helper/validator';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import { isVerifiedEmailState } from 'states/isVerifiedEmailState';
@@ -27,7 +26,6 @@ import { removeWhitespace } from 'helper/removeWhitespace';
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
 const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
-  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
 
   const [email, setEmail] = useState('');
@@ -39,8 +37,6 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   const toastRef = useRef<Toast>(null);
 
   useEffect(() => {
-    setBottomSafeArea(MAIN_COLOR);
-
     return () => setIsVerifiedEmail(false);
   }, []);
 

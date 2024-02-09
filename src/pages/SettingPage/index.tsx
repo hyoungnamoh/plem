@@ -9,8 +9,6 @@ import { useRecoilState } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
 import { useLogout } from 'hooks/mutations/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
-import { useFocusEffect } from '@react-navigation/native';
 import { phoneTokenState } from 'states/phoneTokenState';
 import UnderlineSvg from 'assets/images/underline.svg';
 
@@ -18,7 +16,6 @@ type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'Settin
 
 const SettingPage = ({ navigation }: SettingPageProps) => {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
-  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const [phoneToken, setPhoneToken] = useRecoilState(phoneTokenState);
 
   const onSuccessLogout = async () => {
@@ -26,13 +23,6 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
     setPhoneToken('');
     await EncryptedStorage.removeItem('accessToken');
   };
-
-  useFocusEffect(() => {
-    if (bottomSafeArea === MAIN_COLOR) {
-      return;
-    }
-    setBottomSafeArea(MAIN_COLOR);
-  });
 
   const { mutate: logout } = useLogout({
     onSuccess: onSuccessLogout,

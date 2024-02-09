@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
@@ -10,8 +10,7 @@ import UnderlineTextInput from 'components/UnderlineTextInput';
 import UnderlineButton from 'components/UnderlineButton';
 import BottomButton from 'components/BottomButton';
 import { useMutation } from 'react-query';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
+import { useRecoilState } from 'recoil';
 import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
@@ -31,7 +30,6 @@ import { removeWhitespace } from 'helper/removeWhitespace';
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
 const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
-  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
 
   const [email, setEmail] = useState('');
@@ -41,10 +39,6 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   const [isSent, setIsSent] = useState(false);
 
   const toastRef = useRef<Toast>(null);
-
-  useEffect(() => {
-    setBottomSafeArea(MAIN_COLOR);
-  }, []);
 
   const usePostVerificationEmail = useMutation<
     ApiResponse<PostVerificationEmailResponse>,

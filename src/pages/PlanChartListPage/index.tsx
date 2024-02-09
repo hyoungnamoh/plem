@@ -11,16 +11,12 @@ import DraggableChartList from './DraggableChartList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import AddChartButton from './AddChartButton';
-import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
-import { useRecoilState } from 'recoil';
 import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
 import { SCREEN_WIDTH } from 'constants/etc';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
 const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
-  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const { data, status } = useQuery<ApiResponse<PlanChart[]>>({
     queryKey: ['chartList'],
     queryFn: getPlanChartList,
@@ -34,13 +30,6 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
       setCharts(data.data);
     }
   }, [status, data]);
-
-  useFocusEffect(() => {
-    if (bottomSafeArea === MAIN_COLOR) {
-      return;
-    }
-    setBottomSafeArea(MAIN_COLOR);
-  });
 
   const onPressEditComplete = () => {
     setIsEditing(false);

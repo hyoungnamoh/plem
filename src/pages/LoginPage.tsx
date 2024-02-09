@@ -11,8 +11,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import UnderlineButton from 'components/UnderlineButton';
 import { useSetRecoilState } from 'recoil';
 import { AxiosError } from 'axios';
-import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import UnderlineTextInput from 'components/UnderlineTextInput';
 import { MAIN_COLOR } from 'constants/colors';
 import { loggedInUserState } from 'states/loggedInUserState';
@@ -33,17 +31,12 @@ type LoginPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'LoginPage
 
 const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const queryClient = useQueryClient();
-  const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
   const setLoggedInUser = useSetRecoilState(loggedInUserState);
   const setPhoneToken = useSetRecoilState(phoneTokenState);
   const { mutate: registerPhoneToken } = useRegisterPhoneToken({});
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  useFocusEffect(() => {
-    setBottomSafeArea(MAIN_COLOR);
-  });
 
   const onChangeEmail = (value: string) => {
     setEmail(removeWhitespace(value));

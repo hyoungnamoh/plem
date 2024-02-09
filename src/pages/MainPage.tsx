@@ -1,13 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import { MAIN_COLOR } from 'constants/colors';
 import { useFocusEffect } from '@react-navigation/native';
-import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import dayjs from 'dayjs';
 import NotificationActiveSvg from 'assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from 'assets/images/notification_inactive_32x32.svg';
@@ -28,7 +27,6 @@ const yellowLineImage = require('../assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const queryClient = useQueryClient();
-  const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
   const setChart = useSetRecoilState(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
   const [currentDate, setCorrentDate] = useState(dayjs().get('date'));
@@ -39,10 +37,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
   }, []);
 
   useFocusEffect(() => {
-    if (bottomSafeArea !== MAIN_COLOR) {
-      setBottomSafeArea(MAIN_COLOR);
-    }
-
     if (currentDate !== dayjs().get('date')) {
       queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
       setCorrentDate(dayjs().get('date'));
