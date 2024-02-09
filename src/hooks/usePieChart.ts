@@ -4,7 +4,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { DAY_TO_MS, MIN_TO_MS } from 'constants/times';
 import dayjs from 'dayjs';
 import { AddPlanChart, PlanChart } from 'types/chart';
-import { MAIN_COLOR } from 'constants/colors';
 
 export const usePieChart = ({
   chart,
@@ -167,7 +166,6 @@ export const usePieChart = ({
         shiftTextX: plan.name.length * -3,
         color: 'transparent',
         labelPosition: 'outward',
-        textBackgroundColor: MAIN_COLOR,
       };
     });
   };
