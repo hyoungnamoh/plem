@@ -172,7 +172,7 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
   }, []);
 
   const onPressAddSchedule = useCallback((date: Dayjs) => {
-    navigation.navigate('AddSchedulePage', { date: date.toISOString() });
+    navigation.navigate('AddSchedulePage', { date: date.startOf('date').toISOString() });
   }, []);
 
   const makeCalendar = useMemo(() => {

@@ -49,7 +49,7 @@ export const AddScheduleModal = ({
   const date = targetDate.date();
 
   const handleScheduleClick = (schedule: Schedule) => {
-    navigate('AddSchedulePage', { schedule, date: targetDate.toISOString() });
+    navigate('AddSchedulePage', { schedule, date: targetDate.startOf('date').toISOString() });
   };
 
   if (!open) {
