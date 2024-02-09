@@ -1,4 +1,4 @@
-import { Image, Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
 import UnderlineTextInput from 'components/UnderlineTextInput';
@@ -12,8 +12,7 @@ import { useAddPlan } from './useAddPlan';
 import { timePadStart } from 'helper/timePadStart';
 import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
-
-const underlineImage = require('../../assets/images/underline.png');
+import UnderlineSvg from 'assets/images/underline.svg';
 
 export type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
 
@@ -77,7 +76,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                     <ArrowDownSvg style={styles.arrowDownImage} />
                   </Pressable>
                 </View>
-                <Image source={underlineImage} style={styles.underlineImage} />
+                <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
               </View>
               <View style={{ flex: 1, marginLeft: 15 }}>
                 <View style={styles.timeInputWrap}>
@@ -89,7 +88,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                     <ArrowDownSvg style={styles.arrowDownImage} />
                   </Pressable>
                 </View>
-                <Image source={underlineImage} style={styles.underlineImage} />
+                <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
               </View>
             </View>
             <View style={styles.underlineButtonWrap}>
@@ -101,7 +100,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                 <ArrowRightSvg style={styles.arrowRightImage} />
               </Pressable>
             </View>
-            <Image source={underlineImage} style={styles.underlineImage} />
+            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
         </View>
         <BottomButton
@@ -155,8 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 4,
   },
   arrowRightImage: {

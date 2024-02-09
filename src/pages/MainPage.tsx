@@ -20,10 +20,10 @@ import MainChartTable from 'components/MainChartTable';
 import { useQueryClient } from 'react-query';
 import { TODAY_PLAN_CHART_QUERY_KEY, useGetTodayPlanChart } from 'hooks/queries/useGetTodayPlanChart';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import UnderlineSvg from 'assets/images/underline.svg';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
-const underlineImage = require('../assets/images/underline.png');
 const yellowLineImage = require('../assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
@@ -142,7 +142,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
               : null}
           </PlemText>
         </View>
-        <Image source={underlineImage} style={styles.doItNowUnderline} />
+        <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.doItNowUnderline} />
         <CustomScrollView style={{ height: '20%' }} contentContainerStyle={styles.doItNowContent}>
           {doItNowPlan ? (
             <View>
@@ -160,7 +160,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
                 return (
                   <Pressable key={`subPlan${sub.id}`} style={styles.subPlan} onPress={() => handleSubPlanPress(sub.id)}>
                     {isChecked ? <CheckboxSvg /> : <UncheckboxSvg />}
-                    <PlemText style={{ marginLeft: 4 }}>{sub.name}</PlemText>
+                    <PlemText style={{ marginLeft: 4, textDecorationLine: isChecked ? 'line-through' : 'none' }}>
+                      {sub.name}
+                    </PlemText>
                   </Pressable>
                 );
               })}
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 20,
   },
-  doItNowUnderline: { width: '100%', marginTop: 8 },
+  doItNowUnderline: { marginTop: 8 },
   currentTimesText: {
     fontSize: 16,
   },

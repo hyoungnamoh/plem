@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Pressable, View, Image, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Pressable, View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
@@ -24,8 +24,7 @@ import { useUpdateSchedule } from 'hooks/mutations/useUpdateSchedule';
 import { useDeleteSchedule } from 'hooks/mutations/useDeleteSchedule';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
-
-const underlineImage = require('../../assets/images/underline.png');
+import UnderlineSvg from 'assets/images/underline.svg';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -245,7 +244,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
@@ -255,7 +259,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                     </View>
                   </>
@@ -271,7 +280,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
@@ -283,7 +297,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                     </View>
                     <PlemText style={[styles.label, { marginTop: 32 }]}>종료</PlemText>
@@ -296,7 +315,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
@@ -308,7 +332,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                             <ArrowDownSvg style={styles.arrowDownImage} />
                           </Pressable>
                         </View>
-                        <Image source={underlineImage} style={styles.underlineImage} />
+                        <UnderlineSvg
+                          preserveAspectRatio="none"
+                          width={'100%'}
+                          stroke={'#000'}
+                          style={styles.underline}
+                        />
                       </View>
                     </View>
                   </>
@@ -393,8 +422,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 4,
   },
   arrowRightImage: {

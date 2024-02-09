@@ -1,8 +1,7 @@
-import { Image, Pressable, PressableProps, StyleSheet, View } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
-
-const underlineImage = require('../../assets/images/underline.png');
+import UnderlineSvg from 'assets/images/underline.svg';
 
 const OptionsInputRow = ({ label, value, ...pressableProps }: { label: string; value?: string } & PressableProps) => {
   return (
@@ -14,7 +13,7 @@ const OptionsInputRow = ({ label, value, ...pressableProps }: { label: string; v
           <ArrowRightSvg style={styles.arrowRightImage} />
         </Pressable>
       </View>
-      <Image source={underlineImage} style={styles.underlineImage} />
+      <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
     </View>
   );
 };
@@ -29,8 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 4,
   },
   arrowRightImage: {

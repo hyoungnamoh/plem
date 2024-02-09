@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   PressableProps,
   StyleSheet,
@@ -10,13 +9,11 @@ import {
 } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import PaletteListItem from './PaletteListItem';
-import { Category, categoryListState } from 'states/categoryListState';
+import { Category } from 'states/categoryListState';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
-import { useSetRecoilState } from 'recoil';
 import { cloneDeep } from 'lodash';
-
-const underlineImage = require('../../assets/images/underline.png');
-const calendarPaletteBoxImage = require('../../assets/images/calendar_palette_box.png');
+import UnderlineSvg from 'assets/images/underline.svg';
+import CalendarPaletteBoxSvg from 'assets/images/calendar_palette_box.svg';
 
 export type PaletteListItemType = Category;
 
@@ -43,7 +40,6 @@ const PaletteInputRow = ({
   onSelect,
   onClose,
 }: PaletteInputRowProps & PressableProps) => {
-  const setCategoryList = useSetRecoilState(categoryListState);
   const [paletteBoxPosition, setPaletteBoxPosition] = useState({ x: 0, y: 0 });
   const [isEditing, setIsEditing] = useState(false);
   const [paletteList, setPaletteList] = useState<PaletteListItemType[]>(cloneDeep(list));
@@ -66,6 +62,7 @@ const PaletteInputRow = ({
     onClose();
   };
 
+  // TODO:
   const handleEditComplite = () => {
     setIsEditing(!isEditing);
     // setCategoryList(paletteList);
@@ -88,7 +85,8 @@ const PaletteInputRow = ({
                 left: paletteBoxPosition.x,
                 top: paletteBoxPosition.y,
               }}>
-              <Image source={calendarPaletteBoxImage} />
+              <CalendarPaletteBoxSvg />
+              {/* <Image source={calendarPaletteBoxImage} /> */}
               <View style={{ position: 'absolute', flex: 1, padding: 16, width: 252, height: 216 }}>
                 <View
                   style={{
@@ -119,7 +117,7 @@ const PaletteInputRow = ({
             </View>
           )}
         </View>
-        <Image source={underlineImage} style={styles.underlineImage} />
+        <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -139,8 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 12,
   },
   paletteImage: {

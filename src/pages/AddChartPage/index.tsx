@@ -24,8 +24,8 @@ import AddChartTable from 'components/AddChartTable';
 import { useAddChart } from 'hooks/mutations/useAddChart';
 import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
 import { useUpdateChart } from 'hooks/mutations/useUpdateChart';
+import UnderlineSvg from 'assets/images/underline.svg';
 
-const underlineImage = require('../../assets/images/underline.png');
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
 type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChartPage'>;
@@ -179,7 +179,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                 <ArrowRightSvg style={styles.arrowImage} />
               </Pressable>
             </View>
-            <Image source={underlineImage} style={styles.underlineImage} />
+            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
           <View style={styles.optionRow}>
             <View style={styles.underlineButtonWrap}>
@@ -188,7 +188,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                 <ArrowRightSvg style={styles.arrowImage} />
               </Pressable>
             </View>
-            <Image source={underlineImage} style={styles.underlineImage} />
+            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
           <View style={styles.planContainer}>
             {chart.plans.map((plan, planIndex) => {
@@ -255,8 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 4,
   },
   arrowImage: {

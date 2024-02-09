@@ -7,10 +7,10 @@ type LabelInputProps = {
 } & UnderlineTextInputProps;
 
 const LabelInput = (props: LabelInputProps) => {
-  const { label } = props;
+  const { label, isInvalidValue } = props;
   return (
     <View>
-      <PlemText style={styles.label}>{label}</PlemText>
+      <PlemText style={[styles.label, isInvalidValue && styles.invalidColor]}>{label}</PlemText>
       <UnderlineTextInput {...props} style={[styles.underlineInput, props.style]} />
     </View>
   );
@@ -19,6 +19,9 @@ const LabelInput = (props: LabelInputProps) => {
 const styles = StyleSheet.create({
   label: {
     fontSize: 14,
+  },
+  invalidColor: {
+    color: '#E40C0C',
   },
   underlineInput: { marginTop: 12 },
 });

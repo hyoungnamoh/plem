@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
-import { FlatList, Image, Pressable, ScrollViewProps, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, ScrollViewProps, StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
-
-const underlineImage = require('../../assets/images/underline.png');
+import UnderlineSvg from 'assets/images/underline.svg';
 
 const ITEM_HEIGHT = 40;
 
@@ -52,7 +51,7 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
           <ArrowDownSvg />
         </View>
       </Pressable>
-      <Image source={underlineImage} style={styles.underlineImage} />
+      <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
       {open && (
         <View>
           <FlatList
@@ -93,8 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  underlineImage: {
-    width: '100%',
+  underline: {
     marginTop: 4,
   },
 });

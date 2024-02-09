@@ -14,6 +14,7 @@ import WhiteBoard from 'assets/images/white_board.svg';
 import PlemTextInput from 'components/Atoms/PlemTextInput';
 import { useAddInquiry } from 'hooks/mutations/useAddInquiry';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import { validator } from 'helper/validator';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -33,6 +34,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [content, setContent] = useState('');
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const contentRef = useRef<TextInput>(null);
   const { mutate: addInquiry } = useAddInquiry({
     onSuccess: () => {
@@ -51,12 +53,39 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
   };
 
   const handleInquiry = async () => {
+    if (!title) {
+      Alert.alert('제목을 입력해 주세요.');
+      return;
+    }
+    if (!content) {
+      Alert.alert('문의 내용을 입력해 주세요.');
+      return;
+    }
+    if (!email) {
+      Alert.alert('이메일을 입력해 주세요.');
+      return;
+    }
+    if (isInvalidEmail) {
+      Alert.alert('이메일 형식을 확인해 주세요.');
+      return;
+    }
+
     addInquiry({
       type: inquiryType.value,
       title,
       content,
       email,
     });
+  };
+
+  const handleEmailChange = (value: string) => {
+    const newEmail = removeWhitespace(value);
+    setEmail(newEmail);
+    if (!value) {
+      setIsInvalidEmail(false);
+      return;
+    }
+    setIsInvalidEmail(!validator({ value: newEmail, type: 'email' }));
   };
 
   return (
@@ -90,14 +119,11 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                 value={title}
                 onChangeText={setTitle}
                 placeholder={'제목을 입력해 주세요. (20자 이내)'}
+                maxLength={20}
               />
             </View>
             <Pressable onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
-              <WhiteBoard
-                preserveAspectRatio="none"
-                width={Dimensions.get('window').width - 32}
-                // style={{ position: 'absolute' }}
-              />
+              <WhiteBoard preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
               <View style={{ position: 'absolute', padding: 12 }}>
                 <PlemTextInput
                   ref={contentRef}
@@ -112,10 +138,12 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
               <LabelInput
                 label="답변받을 이메일 주소"
                 value={email}
-                onChangeText={(value) => setEmail(removeWhitespace(value))}
+                onChangeText={handleEmailChange}
                 placeholder={'제목을 입력해 주세요. (20자 이내)'}
                 keyboardType="email-address"
+                isInvalidValue={isInvalidEmail}
               />
+              {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
             </View>
             <PlemText style={{ color: '#888888', marginTop: 12 }}>
               {'* plemsupport@gmail.com으로 부터\n메일을 수신 가능한 상태로 설정해 주세요.'}
@@ -138,6 +166,11 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 15,
     marginTop: 20,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#E40C0C',
+    marginTop: 5,
   },
 });
 

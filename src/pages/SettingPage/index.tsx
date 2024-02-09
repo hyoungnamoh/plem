@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { MAIN_COLOR } from 'constants/colors';
 import { MenuItem, SETTING_PAGE_MENUS } from 'constants/menus';
@@ -11,10 +11,8 @@ import { useLogout } from 'hooks/mutations/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { useFocusEffect } from '@react-navigation/native';
-import { SCREEN_WIDTH } from 'constants/etc';
 import { phoneTokenState } from 'states/phoneTokenState';
-
-const underlineGrayImage = require('../../assets/images/underline_gray.png');
+import UnderlineSvg from 'assets/images/underline.svg';
 
 type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'SettingPage'>;
 
@@ -61,7 +59,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
         <PlemText style={styles.title}>안녕하세요! {loggedInUser.nickname}</PlemText>
         <PlemText style={styles.email}>{loggedInUser.email}</PlemText>
       </View>
-      <Image source={underlineGrayImage} style={styles.headerLine} />
+      <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} style={styles.headerLine} />
       <ScrollView contentContainerStyle={styles.buttonList}>
         {SETTING_PAGE_MENUS.map((menu) => {
           return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
@@ -73,9 +71,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
 };
 
 const styles = StyleSheet.create({
-  headerLine: {
-    width: SCREEN_WIDTH,
-  },
+  headerLine: {},
   email: {
     marginTop: 5,
     fontSize: 14,

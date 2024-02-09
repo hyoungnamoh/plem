@@ -57,6 +57,7 @@ const MainChartTable = ({ chart }: { chart: PlanChart | null }) => {
                 strokeColor={'black'}
                 strokeWidth={2}
                 radius={chartRadius}
+                showTextBackground
               />
             </View>
             {hasTodayChart && (
