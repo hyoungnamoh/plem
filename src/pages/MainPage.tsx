@@ -120,7 +120,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <PlusSvg />
         </Pressable>
       </View>
-      <MainChartTable chart={todayPlanChart?.data || null} />
+      <MainChartTable chart={todayPlanChart?.data || null} navigation={navigation} />
       <View>
         <View style={styles.doItNowHeader}>
           <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>

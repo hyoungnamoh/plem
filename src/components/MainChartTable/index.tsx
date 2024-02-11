@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { PlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
@@ -7,12 +7,20 @@ import { usePieChart } from 'hooks/usePieChart';
 import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
 import { SAMPLE_EMPTY_CHART } from './constants';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainTabStackParamList } from 'tabs/MainTab';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
 const chartRadius = SCREEN_WIDTH / 2.65;
 
-const MainChartTable = ({ chart }: { chart: PlanChart | null }) => {
+const MainChartTable = ({
+  chart,
+  navigation,
+}: {
+  chart: PlanChart | null;
+  navigation: NativeStackNavigationProp<MainTabStackParamList, 'MainPage', undefined>;
+}) => {
   const hasTodayChart = !!chart;
   const chartData = chart || SAMPLE_EMPTY_CHART;
   const { pieChartData, initialAngle, currentTimeDegree } = usePieChart({
@@ -20,8 +28,16 @@ const MainChartTable = ({ chart }: { chart: PlanChart | null }) => {
     renderCurrentTime: !!chart,
   });
 
+  const handleChartPress = () => {
+    if (chart) {
+      navigation.navigate('AddChartPage', { chart });
+    } else {
+      navigation.navigate('AddChartPage');
+    }
+  };
+
   return (
-    <View>
+    <Pressable onPress={handleChartPress}>
       <View style={[styles.wrapper, { opacity: hasTodayChart ? 1 : 0.3 }]}>
         <View>
           <View style={styles.container}>
@@ -57,6 +73,7 @@ const MainChartTable = ({ chart }: { chart: PlanChart | null }) => {
                 strokeColor={'black'}
                 strokeWidth={2}
                 radius={chartRadius}
+                onPress={handleChartPress}
               />
             </View>
             {hasTodayChart && (
@@ -82,7 +99,7 @@ const MainChartTable = ({ chart }: { chart: PlanChart | null }) => {
           <PlemText style={styles.todayPlanEmptyText}>계획표를 등록해 주세요.</PlemText>
         </View>
       )}
-    </View>
+    </Pressable>
   );
 };
 
