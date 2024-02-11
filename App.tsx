@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     CodePush.sync(codePushOptions, (status) => {
-      console.log(status);
+      console.log('CodePush', status);
     });
   }, []);
 
