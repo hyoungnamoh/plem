@@ -108,6 +108,14 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     if (addChartLoading) {
       return;
     }
+    if (chart.name) {
+      Alert.alert('계획표명을 입력해주세요.');
+      return;
+    }
+    if (chart.plans.length === 0) {
+      Alert.alert('계획을 추가해주세요.');
+      return;
+    }
     addChart(chart);
   };
 
