@@ -19,9 +19,8 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
   const [phoneToken, setPhoneToken] = useRecoilState(phoneTokenState);
 
   const onSuccessLogout = async () => {
-    setLoggedInUser(null);
-    setPhoneToken('');
     await EncryptedStorage.removeItem('accessToken');
+    await EncryptedStorage.removeItem('refreshToken');
   };
 
   const { mutate: logout } = useLogout({
@@ -35,8 +34,10 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
     navigation.navigate(menu.value);
   };
 
-  const onPressLogout = () => {
+  const onPressLogout = async () => {
     logout({ phoneToken });
+    setLoggedInUser(null);
+    setPhoneToken('');
   };
 
   if (!loggedInUser) {
