@@ -2,6 +2,7 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "svg.preview.background": "transparent",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
-}
+    "source.fixAll": "explicit"
+  },
+"java.configuration.updateBuildConfiguration": "interactive"
 }
