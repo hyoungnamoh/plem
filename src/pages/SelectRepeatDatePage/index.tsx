@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
@@ -9,6 +9,7 @@ import { MAIN_COLOR } from 'constants/colors';
 import { repeatDatesState } from 'states/repeatDatesState';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const calendarStickerImage = require('../../assets/images/calendar_sticker.png');
 
@@ -24,7 +25,7 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
     for (let i = 1; i < 32; i++) {
       const isSelected = selectedDays.includes(i);
       days.push(
-        <Pressable key={`day_${i}`} style={styles.dayButton} onPress={() => onPressDay(i)}>
+        <PlemButton key={`day_${i}`} style={styles.dayButton} onPress={() => onPressDay(i)}>
           {isSelected ? (
             <ImageBackground source={calendarStickerImage} style={styles.dayBackgroundImage}>
               <PlemText style={styles.selectedDayText}>{i}</PlemText>
@@ -32,7 +33,7 @@ const SelectRepeatDatePage = ({ navigation }: SelectRepeatDatePageProps) => {
           ) : (
             <PlemText>{i}</PlemText>
           )}
-        </Pressable>
+        </PlemButton>
       );
     }
 
