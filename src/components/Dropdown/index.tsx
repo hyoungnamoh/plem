@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
-import { FlatList, Pressable, ScrollViewProps, StyleSheet, View } from 'react-native';
+import { FlatList, ScrollViewProps, StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import UnderlineSvg from 'assets/images/underline.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const ITEM_HEIGHT = 40;
 
@@ -24,9 +25,9 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
   const renderItem = useCallback(
     ({ item }: { item: DropdownItem }) => {
       return (
-        <Pressable style={{ height: ITEM_HEIGHT, justifyContent: 'center' }} onPress={() => onChangeItem(item)}>
+        <PlemButton style={{ height: ITEM_HEIGHT, justifyContent: 'center' }} onPress={() => onChangeItem(item)}>
           <PlemText>{item.label}</PlemText>
-        </Pressable>
+        </PlemButton>
       );
     },
     [list]
@@ -45,12 +46,12 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
 
   return (
     <View>
-      <Pressable style={styles.underlineButtonWrap} onPress={onPressRow}>
+      <PlemButton style={styles.underlineButtonWrap} onPress={onPressRow}>
         <PlemText>{value.label}</PlemText>
         <View style={styles.paletteButton}>
           <ArrowDownSvg />
         </View>
-      </Pressable>
+      </PlemButton>
       <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
       {open && (
         <View>

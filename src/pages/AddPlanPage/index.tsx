@@ -1,4 +1,4 @@
-import { Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
 import UnderlineTextInput from 'components/UnderlineTextInput';
@@ -13,6 +13,7 @@ import { timePadStart } from 'helper/timePadStart';
 import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import UnderlineSvg from 'assets/images/underline.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 export type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddPlanPage'>;
 
@@ -69,36 +70,36 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               <View style={{ flex: 1 }}>
                 <View style={styles.timeInputWrap}>
                   <PlemText>시작 시간</PlemText>
-                  <Pressable style={styles.setTimeButton} onPress={onPressSetStart}>
+                  <PlemButton style={styles.setTimeButton} onPress={onPressSetStart}>
                     <PlemText style={{ color: '#000000' }}>
                       {`${timePadStart(startHour)}:${timePadStart(startMin)}`}
                     </PlemText>
                     <ArrowDownSvg style={styles.arrowDownImage} />
-                  </Pressable>
+                  </PlemButton>
                 </View>
                 <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
               </View>
               <View style={{ flex: 1, marginLeft: 15 }}>
                 <View style={styles.timeInputWrap}>
                   <PlemText>종료 시간</PlemText>
-                  <Pressable style={styles.setTimeButton} onPress={onPressSetEnd}>
+                  <PlemButton style={styles.setTimeButton} onPress={onPressSetEnd}>
                     <PlemText style={{ color: '#000000' }}>{`${timePadStart(endHour)}:${timePadStart(
                       endMin
                     )}`}</PlemText>
                     <ArrowDownSvg style={styles.arrowDownImage} />
-                  </Pressable>
+                  </PlemButton>
                 </View>
                 <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
               </View>
             </View>
             <View style={styles.underlineButtonWrap}>
               <PlemText>알림</PlemText>
-              <Pressable style={styles.underlineButton} onPress={onPressSetNotification}>
+              <PlemButton style={styles.underlineButton} onPress={onPressSetNotification}>
                 <PlemText>
                   {notiOptiosList.find((notification) => notification.key === plan.notification)?.label}
                 </PlemText>
                 <ArrowRightSvg style={styles.arrowRightImage} />
-              </Pressable>
+              </PlemButton>
             </View>
             <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>

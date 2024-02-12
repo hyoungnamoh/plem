@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Pressable, View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
@@ -25,6 +25,7 @@ import { useDeleteSchedule } from 'hooks/mutations/useDeleteSchedule';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import UnderlineSvg from 'assets/images/underline.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -239,10 +240,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>시작</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                             <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"
@@ -254,10 +255,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>날짜</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                             <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"
@@ -275,10 +276,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>날짜</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenStartDatePicker(true)}>
                             <PlemText>{startDate.format('YY.MM.DD')}</PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"
@@ -290,12 +291,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>시간</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenStartTimePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenStartTimePicker(true)}>
                             <PlemText>
                               {`${timePadStart(startDate.get('hour'))}:${timePadStart(startDate.get('minute'))}`}
                             </PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"
@@ -310,10 +311,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>날짜</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenEndDatePicker(true)}>
                             <PlemText>{endDate.format('YY.MM.DD')}</PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"
@@ -325,12 +326,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                       <View style={{ flex: 1, marginLeft: 15 }}>
                         <View style={styles.dateInputWrap}>
                           <PlemText>시간</PlemText>
-                          <Pressable style={styles.setDateButton} onPress={() => setOpenEndTimePicker(true)}>
+                          <PlemButton style={styles.setDateButton} onPress={() => setOpenEndTimePicker(true)}>
                             <PlemText>
                               {`${timePadStart(endDate.get('hour'))}:${timePadStart(endDate.get('minute'))}`}
                             </PlemText>
                             <ArrowDownSvg style={styles.arrowDownImage} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                         <UnderlineSvg
                           preserveAspectRatio="none"

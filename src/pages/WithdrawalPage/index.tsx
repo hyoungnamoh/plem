@@ -1,4 +1,4 @@
-import { Alert, Dimensions, Pressable, View } from 'react-native';
+import { Alert, Dimensions, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
 import { DropdownWithLabel } from 'components/DropdownWithLabel';
@@ -14,6 +14,7 @@ import { phoneTokenState } from 'states/phoneTokenState';
 import { loggedInUserState } from 'states/loggedInUserState';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { useDeleteUser } from 'hooks/mutations/useDeleteUser';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'WithdrawalPage'>;
 
@@ -100,7 +101,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
           />
           <View style={{ marginTop: 32 }}>
             <PlemText style={{ color: '#444444', lineHeight: 1.44 }}>{'잠깐! 플렘은 소통에 진심입니다.'}</PlemText>
-            <Pressable onPress={handleInquiryButton} style={{ alignSelf: 'flex-start' }}>
+            <PlemButton onPress={handleInquiryButton} style={{ alignSelf: 'flex-start' }}>
               <PlemText
                 style={{
                   color: '#444444',
@@ -109,16 +110,16 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
                 }}>
                 1:1 문의하기
               </PlemText>
-            </Pressable>
+            </PlemButton>
           </View>
         </View>
         <View style={{ alignItems: 'center', position: 'absolute', bottom: 90, left: 16 }}>
-          <Pressable onPress={handleWithdrwalButton}>
+          <PlemButton onPress={handleWithdrwalButton}>
             <WithDrawalButton preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
-          </Pressable>
-          <Pressable onPress={navigation.goBack}>
+          </PlemButton>
+          <PlemButton onPress={navigation.goBack}>
             <PlemText style={{ marginTop: 32, textDecorationLine: 'underline' }}>머무를게요!</PlemText>
-          </Pressable>
+          </PlemButton>
         </View>
       </View>
     </View>

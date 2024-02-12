@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { addPlanChartState } from 'states/addPlanChartState';
 import PlemTextInput from 'components/Atoms/PlemTextInput';
 import UncheckedSvg from 'assets/images/unchecked_black_24x24.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const SubPlanInput = ({
   planIndex,
@@ -22,7 +23,7 @@ const SubPlanInput = ({
   };
 
   return (
-    <Pressable style={styles.subPlan}>
+    <PlemButton style={styles.subPlan}>
       <UncheckedSvg />
       <PlemTextInput
         value={subPlan}
@@ -32,7 +33,7 @@ const SubPlanInput = ({
         returnKeyType={'done'}
         onSubmitEditing={() => onEndEditingSubPlan({ targetPlanIndex: planIndex, subPlanName: subPlan })}
       />
-    </Pressable>
+    </PlemButton>
   );
 };
 

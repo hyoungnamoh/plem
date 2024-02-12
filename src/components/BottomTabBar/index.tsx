@@ -1,8 +1,9 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { MAIN_COLOR } from 'constants/colors';
 import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
@@ -30,7 +31,7 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
 
           const TabIconSvg = isFocused ? BOTTOM_TABS[index].active : BOTTOM_TABS[index].inactive;
           return (
-            <Pressable
+            <PlemButton
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
@@ -38,7 +39,7 @@ const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => 
               onPress={onPress}
               style={styles.tab}>
               <TabIconSvg />
-            </Pressable>
+            </PlemButton>
           );
         })}
       </View>

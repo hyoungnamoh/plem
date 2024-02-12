@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { PlanChart } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
 import { useCloneChart } from 'hooks/mutations/useCloneChart';
@@ -7,6 +7,7 @@ import HamburgerBarSvg from 'assets/images/hamburgerbar_32x32.svg';
 import { PieChart } from 'react-native-gifted-charts';
 import { usePieChart } from 'hooks/usePieChart';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const DraggableChartItem = ({
   item,
@@ -48,9 +49,9 @@ const DraggableChartItem = ({
   return (
     <View style={styles.wrap}>
       <View style={styles.contentContainer}>
-        <Pressable onPressIn={drag} style={{ marginRight: 16 }}>
+        <PlemButton onPressIn={drag} style={{ marginRight: 16 }}>
           <HamburgerBarSvg />
-        </Pressable>
+        </PlemButton>
         <PieChart
           data={pieChartData}
           initialAngle={initialAngle}
@@ -70,12 +71,12 @@ const DraggableChartItem = ({
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
+        <PlemButton style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
           <PlemText style={styles.cloneText}>복사</PlemText>
-        </Pressable>
-        <Pressable style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
+        </PlemButton>
+        <PlemButton style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
           <PlemText style={styles.removeText}>삭제</PlemText>
-        </Pressable>
+        </PlemButton>
       </View>
     </View>
   );

@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Linking, StyleSheet, View } from 'react-native';
 import Header from 'components/Header';
 import SwitchInputRow from 'components/SwitchInputRow';
 import { MAIN_COLOR } from 'constants/colors';
@@ -92,7 +92,6 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
 
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
-      <Pressable />
       <Header title="알림" />
       <View style={styles.content}>
         <View style={{ marginTop: 20 }}>

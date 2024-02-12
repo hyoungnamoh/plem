@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart, Repeats } from 'types/chart';
 import { DaysOfWeekKor } from 'types/date';
@@ -13,6 +13,7 @@ import { addPlanChartState } from 'states/addPlanChartState';
 import { repeatDaysDefault, repeatDatesState } from 'states/repeatDatesState';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import CheckSvg from 'assets/images/check_32x32.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type RepeatOptionKor =
   | '안 함'
@@ -101,10 +102,10 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       <View style={styles.listWrap}>
         {repeatOptionList.map((repeat) => {
           return (
-            <Pressable key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
+            <PlemButton key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
               <PlemText>{repeat.label}</PlemText>
               {repeatOptions.includes(repeat.value) && <CheckSvg />}
-            </Pressable>
+            </PlemButton>
           );
         })}
         <View style={styles.infoMessageWrap}>

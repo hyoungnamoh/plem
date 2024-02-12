@@ -1,7 +1,8 @@
 import { Dispatch } from 'react';
-import { ImageBackground, Pressable, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
@@ -30,7 +31,7 @@ const YearlyRepetition = ({ selectedDates, setSelectedDates }: YearlyRepetitionP
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {months.map((month) => {
           return (
-            <Pressable
+            <PlemButton
               key={String(month)}
               onPress={() => onPressDate(month)}
               style={{
@@ -52,7 +53,7 @@ const YearlyRepetition = ({ selectedDates, setSelectedDates }: YearlyRepetitionP
                   {`${month}월`}
                 </PlemText>
               </ImageBackground>
-            </Pressable>
+            </PlemButton>
           );
         })}
       </View>

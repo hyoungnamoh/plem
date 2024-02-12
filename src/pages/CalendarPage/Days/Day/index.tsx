@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { Dispatch, memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -9,6 +9,7 @@ import { openScheduleModalState } from 'states/openScheduleModalState';
 import Sticker from './Sticker';
 import { SCREEN_WIDTH } from 'constants/etc';
 import ScheduleList from './ScheduleList';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const Day = ({
   isToday,
@@ -68,7 +69,7 @@ const Day = ({
   };
 
   return (
-    <Pressable key={date} onPress={onPressDate} style={styles.dateCell}>
+    <PlemButton key={date} onPress={onPressDate} style={styles.dateCell}>
       <View style={styles.currentDateBackground}>
         <Sticker isToday={isToday} year={year} date={date} month={month} isSelected={isSelected} />
         <PlemText
@@ -90,7 +91,7 @@ const Day = ({
         month={month}
         date={date}
       />
-    </Pressable>
+    </PlemButton>
   );
 };
 

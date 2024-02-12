@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { PlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
@@ -9,6 +9,7 @@ import { SAMPLE_EMPTY_CHART } from './constants';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from 'tabs/MainTab';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
@@ -37,7 +38,7 @@ const MainChartTable = ({
   };
 
   return (
-    <Pressable onPress={handleChartPress}>
+    <PlemButton onPress={handleChartPress}>
       <View style={[styles.wrapper, { opacity: hasTodayChart ? 1 : 0.3 }]}>
         <View>
           <View style={styles.container}>
@@ -99,7 +100,7 @@ const MainChartTable = ({
           <PlemText style={styles.todayPlanEmptyText}>계획표를 등록해 주세요.</PlemText>
         </View>
       )}
-    </Pressable>
+    </PlemButton>
   );
 };
 

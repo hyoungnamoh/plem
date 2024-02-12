@@ -1,16 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, PressableProps, StyleSheet, TextProps, View } from 'react-native';
+import { StyleSheet, TextProps, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import CloseSVG from 'assets/images/header_close_40x40.svg';
 import BackSVG from 'assets/images/header_back_40x40.svg';
 import { MAIN_COLOR } from 'constants/colors';
+import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
 
 type HeaderProps = {
   onBack?: () => void;
   close?: boolean;
   title?: string;
   buttonName?: string;
-  buttonProps?: PressableProps | null;
+  buttonProps?: PlemButtonProps | null;
   buttonNameProps?: TextProps | null;
 };
 
@@ -21,15 +22,15 @@ const Header = (props: HeaderProps) => {
   return (
     <View style={styles.header}>
       <View style={styles.left}>
-        <Pressable onPress={props.onBack || navigation.goBack}>{props.close ? <CloseSVG /> : <BackSVG />}</Pressable>
+        <PlemButton onPress={props.onBack || navigation.goBack}>{props.close ? <CloseSVG /> : <BackSVG />}</PlemButton>
         <PlemText style={styles.title}>{props.title}</PlemText>
       </View>
       {hasButton && (
-        <Pressable hitSlop={5} {...props.buttonProps}>
+        <PlemButton hitSlop={5} {...props.buttonProps}>
           <PlemText style={{ color: props.buttonProps?.disabled ? '#AAAAAA' : '#000000' }} {...props.buttonNameProps}>
             {props.buttonName}
           </PlemText>
-        </Pressable>
+        </PlemButton>
       )}
     </View>
   );

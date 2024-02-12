@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { Repeat } from 'types/calendar';
 import PlemText from 'components/Atoms/PlemText';
@@ -10,6 +10,7 @@ import { MAIN_COLOR } from 'constants/colors';
 import { addScheduleState } from 'states/addScheduleState';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import CheckSvg from 'assets/images/check_32x32.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type RepeatOptionKor = '안 함' | '매일' | '화요일마다' | '매주' | '2주마다' | '매월' | '매년' | '사용자화';
 
@@ -52,10 +53,10 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       <View style={styles.listWrap}>
         {repeatOptionList.map((repeat) => {
           return (
-            <Pressable key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
+            <PlemButton key={repeat.value} style={styles.listItem} onPress={() => onPressRepeatOption(repeat.value)}>
               <PlemText>{repeat.label}</PlemText>
               {repeatOption === repeat.value && <CheckSvg />}
-            </Pressable>
+            </PlemButton>
           );
         })}
       </View>

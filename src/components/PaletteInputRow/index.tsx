@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  GestureResponderEvent,
-  Pressable,
-  PressableProps,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { GestureResponderEvent, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import PaletteListItem from './PaletteListItem';
 import { Category } from 'states/categoryListState';
@@ -14,6 +7,7 @@ import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import { cloneDeep } from 'lodash';
 import UnderlineSvg from 'assets/images/underline.svg';
 import CalendarPaletteBoxSvg from 'assets/images/calendar_palette_box.svg';
+import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
 
 export type PaletteListItemType = Category;
 
@@ -39,7 +33,7 @@ const PaletteInputRow = ({
   selectedItem,
   onSelect,
   onClose,
-}: PaletteInputRowProps & PressableProps) => {
+}: PaletteInputRowProps & PlemButtonProps) => {
   const [paletteBoxPosition, setPaletteBoxPosition] = useState({ x: 0, y: 0 });
   const [isEditing, setIsEditing] = useState(false);
   const [paletteList, setPaletteList] = useState<PaletteListItemType[]>(cloneDeep(list));
@@ -74,9 +68,9 @@ const PaletteInputRow = ({
         <PlemText style={styles.label}>{label}</PlemText>
         <View style={styles.underlineButtonWrap}>
           <PlemText>{selectedItem.label}</PlemText>
-          <Pressable style={styles.paletteButton} onPress={onPressPalette} hitSlop={10}>
+          <PlemButton style={styles.paletteButton} onPress={onPressPalette} hitSlop={10}>
             <PaletteSvg size="medium" color={selectedItem.color} />
-          </Pressable>
+          </PlemButton>
           {open && (
             <View
               ref={paletteModalRef}
@@ -96,9 +90,9 @@ const PaletteInputRow = ({
                     alignItems: 'center',
                   }}>
                   <PlemText style={{ color: '#888888', fontSize: 16 }}>카테고리 선택</PlemText>
-                  {/* <Pressable onPress={handleEditComplite}>
+                  {/* <PlemButton onPress={handleEditComplite}>
                     <PlemText style={{ color: '#444444', fontSize: 16 }}>{isEditing ? '완료' : '편집'}</PlemText>
-                  </Pressable> */}
+                  </PlemButton> */}
                 </View>
                 {paletteList.map((item, index) => {
                   return (

@@ -1,13 +1,14 @@
-import { Image, Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
+import { Image, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
-const BlackButton = (props: PressableProps) => {
+const BlackButton = (props: PlemButtonProps) => {
   return (
-    <Pressable {...props} style={[styles.button, props.style as StyleProp<ViewStyle>]}>
+    <PlemButton {...props} style={[styles.button, props.style as StyleProp<ViewStyle>]}>
       <>
         <Image source={require('../../assets/images/black_box.png')} style={styles.blackBox} />
         {props.children}
       </>
-    </Pressable>
+    </PlemButton>
   );
 };
 

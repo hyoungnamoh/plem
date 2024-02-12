@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, Pressable, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Dimensions, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
@@ -15,6 +15,7 @@ import PlemTextInput from 'components/Atoms/PlemTextInput';
 import { useAddInquiry } from 'hooks/mutations/useAddInquiry';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import { validator } from 'helper/validator';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -122,7 +123,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                 maxLength={20}
               />
             </View>
-            <Pressable onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
+            <PlemButton onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
               <WhiteBoard preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
               <View style={{ position: 'absolute', padding: 12 }}>
                 <PlemTextInput
@@ -133,7 +134,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                   multiline={true}
                 />
               </View>
-            </Pressable>
+            </PlemButton>
             <View style={{ marginTop: 32 }}>
               <LabelInput
                 label="답변받을 이메일 주소"

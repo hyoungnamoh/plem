@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const AddChartButton = () => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
@@ -10,9 +11,9 @@ const AddChartButton = () => {
   };
 
   return (
-    <Pressable style={styles.addChartButton} onPress={onPressAddChart}>
+    <PlemButton style={styles.addChartButton} onPress={onPressAddChart}>
       <PlemText>계획표 작성</PlemText>
-    </Pressable>
+    </PlemButton>
   );
 };
 

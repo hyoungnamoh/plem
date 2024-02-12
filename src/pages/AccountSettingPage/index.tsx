@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
 import { ACCOUNT_SETTING_PAGE_MENUES, MenuItem } from 'constants/menus';
@@ -9,6 +9,7 @@ import LabelText from 'components/LabelText';
 import PlemText from 'components/Atoms/PlemText';
 import { useRecoilValue } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type AccountSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'AccountSettingPage'>;
 
@@ -41,9 +42,9 @@ const AccountSettingPage = ({ navigation }: AccountSettingPageProps) => {
             }
             return <MenuButton key={menu.value} item={menu} onPress={onPressMenu} />;
           })}
-          <Pressable key={'withDrawal'} style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
+          <PlemButton key={'withDrawal'} style={styles.withDrawalMenu} onPress={onPressWithdrawal}>
             <PlemText style={styles.withDrawalMenuTitle}>계정 삭제하기</PlemText>
-          </Pressable>
+          </PlemButton>
         </ScrollView>
       </View>
     </View>

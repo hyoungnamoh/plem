@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useQuery } from 'react-query';
 import { ApiResponse } from 'types/axios';
 import { PlanChart } from 'types/chart';
@@ -13,6 +13,7 @@ import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import AddChartButton from './AddChartButton';
 import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
@@ -43,11 +44,11 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       <View style={styles.header}>
         <PlemText style={{ fontSize: 24 }}>나의 계획표</PlemText>
-        <Pressable disabled={isEmpty} onPress={isEditing ? onPressEditComplete : onPressEdit}>
+        <PlemButton disabled={isEmpty} onPress={isEditing ? onPressEditComplete : onPressEdit}>
           <PlemText style={{ fontSize: 20, color: isEmpty ? '#AAAAAA' : '#000' }}>
             {isEditing ? '완료' : '편집'}
           </PlemText>
-        </Pressable>
+        </PlemButton>
       </View>
       {charts.length > 0 ? (
         // ChartList header부분(usePieChart) useEffect 부분 성능 문제로 컴포넌트가 언마운트 되지 않도록 임시 조치

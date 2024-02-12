@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import CloseSVG from 'assets/images/header_close_40x40.svg';
 import UnderlineButton from 'components/UnderlineButton';
 import PlemText from 'components/Atoms/PlemText';
@@ -16,6 +16,7 @@ import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi'
 import { SCREEN_WIDTH } from 'constants/etc';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -117,15 +118,18 @@ export const AddScheduleModal = ({
                 NUMBER_TO_DAY_KOR[targetDate.day() as DaysOfWeekNum]
               })`}
             </PlemText>
-            <Pressable onPress={close}>
+            <PlemButton onPress={close}>
               <CloseSVG />
-            </Pressable>
+            </PlemButton>
           </View>
           <CustomScrollView>
             {allScheduleList.length > 0 ? (
               allScheduleList.map((schedule) => {
                 return (
-                  <Pressable key={schedule.id} style={styles.scheduleRow} onPress={() => handleScheduleClick(schedule)}>
+                  <PlemButton
+                    key={schedule.id}
+                    style={styles.scheduleRow}
+                    onPress={() => handleScheduleClick(schedule)}>
                     <PaletteSvg
                       size="medium"
                       color={
@@ -134,7 +138,7 @@ export const AddScheduleModal = ({
                       }
                     />
                     <PlemText style={styles.scheduleText}>{schedule.name}</PlemText>
-                  </Pressable>
+                  </PlemButton>
                 );
               })
             ) : (

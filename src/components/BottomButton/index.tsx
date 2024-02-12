@@ -1,12 +1,13 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import PlemText from 'components/Atoms/PlemText';
+import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
 
 type BottomButtonProps = { title: string | JSX.Element };
-const BottomButton = (props: PressableProps & BottomButtonProps) => {
+const BottomButton = (props: PlemButtonProps & BottomButtonProps) => {
   const { title, ...propsWithoutTitle } = props;
   const [bottomSafeArea, setBottomSafeArea] = useRecoilState(bottomSafeAreaState);
 
@@ -19,9 +20,9 @@ const BottomButton = (props: PressableProps & BottomButtonProps) => {
   }, [props.disabled]);
 
   return (
-    <Pressable style={[styles.button, { backgroundColor: bottomSafeArea }]} {...propsWithoutTitle}>
+    <PlemButton style={[styles.button, { backgroundColor: bottomSafeArea }]} {...propsWithoutTitle}>
       {typeof title === 'string' ? <PlemText style={styles.buttonTitle}>{props.title}</PlemText> : title}
-    </Pressable>
+    </PlemButton>
   );
 };
 

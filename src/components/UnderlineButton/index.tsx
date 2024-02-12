@@ -1,13 +1,14 @@
-import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native';
+import { StyleSheet, TextProps } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
+import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
 
-const UnderlineButton = (props: TextProps & Pick<PressableProps, 'onPress'>) => {
+const UnderlineButton = (props: TextProps & Pick<PlemButtonProps, 'onPress'>) => {
   return (
-    <Pressable onPress={props.onPress}>
+    <PlemButton onPress={props.onPress}>
       <PlemText {...props} style={[styles.underlineText, props.style]}>
         {props.children}
       </PlemText>
-    </Pressable>
+    </PlemButton>
   );
 };
 

@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +20,7 @@ import { useQueryClient } from 'react-query';
 import { TODAY_PLAN_CHART_QUERY_KEY, useGetTodayPlanChart } from 'hooks/queries/useGetTodayPlanChart';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import UnderlineSvg from 'assets/images/underline.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -113,12 +114,12 @@ const MainPage = ({ navigation }: MainPageProps) => {
   return (
     <View style={styles.page}>
       <View style={styles.mainHeader}>
-        <Pressable>
+        <PlemButton>
           <MainLogoSvg />
-        </Pressable>
-        <Pressable onPress={handleAddChartPress}>
+        </PlemButton>
+        <PlemButton onPress={handleAddChartPress}>
           <PlusSvg />
-        </Pressable>
+        </PlemButton>
       </View>
       <MainChartTable chart={todayPlanChart?.data || null} navigation={navigation} />
       <View>
@@ -141,35 +142,38 @@ const MainPage = ({ navigation }: MainPageProps) => {
           {doItNowPlan ? (
             <View>
               <View style={styles.planWrap}>
-                <Pressable style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowPlanIndex)}>
+                <PlemButton style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowPlanIndex)}>
                   <PlemText style={{ fontSize: 22.5 }}>{doItNowPlan.name}</PlemText>
                   <Image source={yellowLineImage} style={styles.yellowLine} />
-                </Pressable>
-                <Pressable>
+                </PlemButton>
+                <PlemButton>
                   {doItNowPlan.notification ? <NotificationActiveSvg /> : <NotificationInactiveSvg />}
-                </Pressable>
+                </PlemButton>
               </View>
               {doItNowPlan.subPlans.map((sub) => {
                 const isChecked = checkedList.includes(sub.id);
                 return (
-                  <Pressable key={`subPlan${sub.id}`} style={styles.subPlan} onPress={() => handleSubPlanPress(sub.id)}>
+                  <PlemButton
+                    key={`subPlan${sub.id}`}
+                    style={styles.subPlan}
+                    onPress={() => handleSubPlanPress(sub.id)}>
                     {isChecked ? <CheckboxSvg /> : <UncheckboxSvg />}
                     <PlemText style={{ marginLeft: 4, textDecorationLine: isChecked ? 'line-through' : 'none' }}>
                       {sub.name}
                     </PlemText>
-                  </Pressable>
+                  </PlemButton>
                 );
               })}
-              <Pressable style={[styles.subPlan, { opacity: 0.3 }]} onPress={handleAddSubPlanPress}>
+              <PlemButton style={[styles.subPlan, { opacity: 0.3 }]} onPress={handleAddSubPlanPress}>
                 <UncheckboxSvg />
                 <PlemText style={{ marginLeft: 4 }}>할 일 추가하기</PlemText>
-              </Pressable>
+              </PlemButton>
             </View>
           ) : (
-            <Pressable style={styles.emptyPlanNowButton} onPress={handleAddPlanPress}>
+            <PlemButton style={styles.emptyPlanNowButton} onPress={handleAddPlanPress}>
               <UncheckboxSvg />
               <PlemText style={styles.emptyPlanNowText}>계획을 등록해 주세요.</PlemText>
-            </Pressable>
+            </PlemButton>
           )}
         </CustomScrollView>
       </View>

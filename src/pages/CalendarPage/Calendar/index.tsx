@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import uuid from 'react-uuid';
 import PlusSvg from 'assets/images/plus_40x40.svg';
@@ -12,6 +12,7 @@ import Days from 'pages/CalendarPage/Days';
 import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from 'constants/etc';
 import { Category } from 'states/categoryListState';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const Calendar = ({
   year,
@@ -56,9 +57,9 @@ const Calendar = ({
       <View key={uuid()} style={styles.page}>
         <View style={styles.pageHeader}>
           <PlemText style={styles.pageHeaderDate}>{`${year}년 ${month + 1}월`}</PlemText>
-          <Pressable onPress={() => onPressAddSchedule(currentCalendar)}>
+          <PlemButton onPress={() => onPressAddSchedule(currentCalendar)}>
             <PlusSvg />
-          </Pressable>
+          </PlemButton>
         </View>
         <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek}</View>
         <CalendarHeaderLineSvg width={'100%'} viewBox={`0 0 ${SCREEN_WIDTH} 4`} />

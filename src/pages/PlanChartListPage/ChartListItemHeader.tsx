@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import ArrowUpSvg from 'assets/images/arrow_up_32x32.svg';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
@@ -9,6 +9,7 @@ import { PlanChart, Repeats } from 'types/chart';
 import { usePieChart } from 'hooks/usePieChart';
 import { PieChart } from 'react-native-gifted-charts';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
@@ -21,7 +22,7 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
 
   return (
     <View key={`header${chart.id}`} style={styles.header}>
-      <Pressable style={styles.headerContent} onPress={() => navigation.navigate('AddChartPage', { chart: chart })}>
+      <PlemButton style={styles.headerContent} onPress={() => navigation.navigate('AddChartPage', { chart: chart })}>
         <PieChart
           data={pieChartData}
           initialAngle={initialAngle}
@@ -41,7 +42,7 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
             {chart.plans.map((plan) => plan.name).join(' / ')}
           </PlemText>
         </View>
-      </Pressable>
+      </PlemButton>
       {isActive ? <ArrowUpSvg style={{ alignSelf: 'center' }} /> : <ArrowDownSvg style={{ alignSelf: 'center' }} />}
     </View>
   );

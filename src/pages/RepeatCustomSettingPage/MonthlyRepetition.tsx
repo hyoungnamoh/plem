@@ -1,11 +1,12 @@
 import { Dispatch, useEffect, useState } from 'react';
-import { ImageBackground, Pressable, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { RepeatSpecificCondition } from 'types/calendar';
 import { DaysOfWeekNum } from 'types/date';
 import PlemText from 'components/Atoms/PlemText';
 import { Dropdown, DropdownItem } from 'components/Dropdown';
 import SwitchInputRow from 'components/SwitchInputRow';
 import { SCREEN_WIDTH } from 'constants/etc';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const currentDateStickerImage = require('../../assets/images/current_day_sticker.png');
 
@@ -73,7 +74,7 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates, setRepeatCondition
   const dateComponents = datesOfMonth.map((date) => {
     const isSelectedDate = selectedDates.includes(date);
     return (
-      <Pressable
+      <PlemButton
         key={date}
         onPress={() => onPressDate(date)}
         style={{
@@ -94,7 +95,7 @@ const MonthlyRepetition = ({ selectedDates, setSelectedDates, setRepeatCondition
             {date}
           </PlemText>
         </ImageBackground>
-      </Pressable>
+      </PlemButton>
     );
   });
 

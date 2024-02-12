@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { PlanNotification, PlanNotiOptionItem } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
@@ -10,6 +10,7 @@ import { MAIN_COLOR } from 'constants/colors';
 import { addScheduleState } from 'states/addScheduleState';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import CheckSvg from 'assets/images/check_32x32.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 export const notiOptiosList: PlanNotiOptionItem[] = [
   { key: null, label: '없음' },
@@ -43,10 +44,10 @@ const ScheduleNotiSettingPage = ({ navigation }: SetScheduleNotificationPageProp
       <View style={styles.listWrap}>
         {notiOptiosList.map((option) => {
           return (
-            <Pressable key={option.key} style={styles.listItem} onPress={() => onPressRepeatOption(option.key)}>
+            <PlemButton key={option.key} style={styles.listItem} onPress={() => onPressRepeatOption(option.key)}>
               <PlemText>{option.label}</PlemText>
               {notification === option.key && <CheckSvg />}
-            </Pressable>
+            </PlemButton>
           );
         })}
       </View>

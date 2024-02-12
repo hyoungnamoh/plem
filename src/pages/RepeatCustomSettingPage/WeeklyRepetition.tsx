@@ -1,7 +1,8 @@
 import { Dispatch } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import CheckSvg from 'assets/images/check_32x32.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const REPEAT_DAY_LIST = [
   { value: 0, label: '일요일마다' },
@@ -35,7 +36,7 @@ const WeeklyRepetition = ({ selectedDates, setSelectedDates }: WeeklyRepetitionP
     <View style={{ marginTop: 32 }}>
       {REPEAT_DAY_LIST.map((item) => {
         return (
-          <Pressable
+          <PlemButton
             style={{
               height: 44,
               flexDirection: 'row',
@@ -46,7 +47,7 @@ const WeeklyRepetition = ({ selectedDates, setSelectedDates }: WeeklyRepetitionP
             onPress={() => onPressRepeatDay(item)}>
             <PlemText>{item.label}</PlemText>
             {selectedDates.includes(item.value) && <CheckSvg style={{ alignSelf: 'flex-start' }} />}
-          </Pressable>
+          </PlemButton>
         );
       })}
     </View>

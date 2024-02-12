@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { AddPlanChart } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
@@ -25,6 +25,7 @@ import { useAddChart } from 'hooks/mutations/useAddChart';
 import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
 import { useUpdateChart } from 'hooks/mutations/useUpdateChart';
 import UnderlineSvg from 'assets/images/underline.svg';
+import PlemButton from 'components/Atoms/PlemButton';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -180,21 +181,21 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           <View style={styles.optionRow}>
             <View style={styles.underlineButtonWrap}>
               <PlemText>반복</PlemText>
-              <Pressable style={styles.underlineButton} onPress={onPressRepeatSetting}>
+              <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
                 <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
                   {getRepeatOptions()}
                 </PlemText>
                 <ArrowRightSvg style={styles.arrowImage} />
-              </Pressable>
+              </PlemButton>
             </View>
             <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
           <View style={styles.optionRow}>
             <View style={styles.underlineButtonWrap}>
               <PlemText>계획</PlemText>
-              <Pressable style={styles.underlineButton} onPress={onPressAddPlan}>
+              <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
                 <ArrowRightSvg style={styles.arrowImage} />
-              </Pressable>
+              </PlemButton>
             </View>
             <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
@@ -204,10 +205,10 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
               return (
                 <View key={`plan_${planIndex}}`}>
                   <View style={styles.planWrap}>
-                    <Pressable style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
+                    <PlemButton style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
                       <PlemText>{plan.name}</PlemText>
                       <Image source={yellowLineImage} style={styles.yellowLine} />
-                    </Pressable>
+                    </PlemButton>
                     <View style={styles.notificationContainer}>
                       <PlemText>
                         {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
@@ -228,9 +229,9 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                             <UncheckedSvg />
                             <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
                           </View>
-                          <Pressable onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
+                          <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
                             <DeleteRedSvg style={{ marginLeft: 4 }} />
-                          </Pressable>
+                          </PlemButton>
                         </View>
                       );
                     })}
