@@ -67,3 +67,9 @@ buck-out/
 /vendor/bundle/
 
 .nvmrc
+
+/ios/bin
+/ios/cache
+/ios/extensions
+/ios/gems
+/ios/specifications
