@@ -3,6 +3,7 @@ import { atom } from 'recoil';
 type AppInfo = {
   currentVersion: string;
   latestVersion: string;
+  storeUrl: string;
 };
 
 export const appInfoState = atom<AppInfo>({
@@ -10,5 +11,6 @@ export const appInfoState = atom<AppInfo>({
   default: {
     currentVersion: '1.0.0',
     latestVersion: '1.0.0',
+    storeUrl: '',
   },
 });

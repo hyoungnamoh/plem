@@ -2,7 +2,7 @@ import LoginPage from './src/pages/LoginPage';
 import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, Linking, SafeAreaView } from 'react-native';
+import { Alert, AppState, AppStateStatus, Linking, SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
@@ -13,7 +13,7 @@ import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
 import { useIsFetching, useIsMutating } from 'react-query';
 import SignUpSuccessPage from './src/pages/SignUpSuccessPage';
 import FindPasswordPage from './src/pages/FindPasswordPage';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import BottomTabBar from './src/components/BottomTabBar';
 import MainTab from './src/tabs/MainTab';
@@ -38,7 +38,6 @@ import { getAppVersion } from 'helper/getAppVersion';
 import SplashScreen from 'react-native-splash-screen';
 import { checkNotifications } from 'react-native-permissions';
 import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
-import { checkNeedUpdate } from 'helper/checkNeedUpdate';
 
 configureNotification();
 
@@ -53,40 +52,79 @@ function AppInner({ routeName }: { routeName: string }) {
   const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const setNotificationInfoState = useSetRecoilState(notificationInfoState);
-  const setAppInfo = useSetRecoilState(appInfoState);
+  const [appInfo, setAppInfo] = useRecoilState(appInfoState);
   const setCategoryList = useSetRecoilState(categoryListState);
-
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
+
+  const [needUpdate, setNeedUpdate] = useState(false);
+
+  const appState = useRef(AppState.currentState);
 
   useEffect(() => {
     splashScreenHandler([
       setLastAccessDateFromStorage(),
       loginCheck(),
       setScheduleCategoryList(),
-      getAppInfo(),
       getNotificationInfo(),
     ]);
   }, []);
 
-  const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
-    const startTime = Date.now();
-    const { isNeeded, storeUrl } = await checkNeedUpdate();
-    if (true) {
-      Alert.alert('업데이트 알림', '새로운 버전이 있습니다. 업데이트를 진행해주세요.');
-      // 스토어 업데이트 필요한 경우, UpdateAlert 를 띄우고 스토어로 연결 시켜준다.
-      Linking.openURL(storeUrl);
-    }
-    await Promise.all(preCheckList);
-    const endTime = Date.now();
-    const delayTime = 2500 - (endTime - startTime);
+  useEffect(() => {
+    const appStateChange = AppState.addEventListener('change', handleAppStateChange);
 
-    if (delayTime > 0) {
-      setTimeout(() => {
-        SplashScreen.hide();
-      }, delayTime);
-    } else {
+    return () => {
+      appStateChange.remove();
+    };
+  }, [needUpdate, appInfo.storeUrl]);
+
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    // 포어그라운드 진입
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+    }
+    // 백그라운드로 이동
+    if (needUpdate && appInfo.storeUrl && appState.current.match(/inactive|active/) && nextAppState === 'background') {
+      showUpdateAlert(appInfo.storeUrl);
+    }
+    appState.current = nextAppState;
+  };
+
+  const showUpdateAlert = (storeUrl: string) => {
+    if (!storeUrl) {
+      return;
+    }
+    Alert.alert('업데이트 알림', '새로운 버전이 있습니다. 업데이트를 진행해주세요.', [
+      {
+        text: '업데이트',
+        onPress: () => {
+          Linking.openURL(storeUrl);
+        },
+      },
+    ]);
+  };
+
+  const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
+    const info = await getAppInfo();
+    const updateInfo = { isNeeded: false };
+    // const updateInfo = await checkNeedUpdate(info);
+    if (updateInfo.isNeeded) {
       SplashScreen.hide();
+      setNeedUpdate(true);
+      showUpdateAlert(info.storeUrl);
+    } else {
+      const startTime = Date.now();
+      setNeedUpdate(true);
+      await Promise.all(preCheckList);
+      const endTime = Date.now();
+      const delayTime = 2500 - (endTime - startTime);
+
+      if (delayTime > 0) {
+        setTimeout(() => {
+          SplashScreen.hide();
+        }, delayTime);
+      } else {
+        SplashScreen.hide();
+      }
     }
   };
 
@@ -112,7 +150,12 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const getAppInfo = async () => {
     const appVersion = await getAppVersion();
-    setAppInfo({ ...appVersion });
+    const storeUrl = 'https://apps.apple.com/kr/app/netflix/id363590051';
+    // const storeUrl = await VersionCheck.getStoreUrl();
+    const info = { ...appVersion, storeUrl };
+    setAppInfo(info);
+
+    return info;
   };
 
   const loginCheck = async () => {
