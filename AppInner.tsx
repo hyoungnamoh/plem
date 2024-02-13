@@ -2,7 +2,7 @@ import LoginPage from './src/pages/LoginPage';
 import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native';
+import { Alert, Linking, SafeAreaView } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
@@ -38,6 +38,7 @@ import { getAppVersion } from 'helper/getAppVersion';
 import SplashScreen from 'react-native-splash-screen';
 import { checkNotifications } from 'react-native-permissions';
 import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
+import { checkNeedUpdate } from 'helper/checkNeedUpdate';
 
 configureNotification();
 
@@ -70,6 +71,12 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
     const startTime = Date.now();
+    const { isNeeded, storeUrl } = await checkNeedUpdate();
+    if (true) {
+      Alert.alert('업데이트 알림', '새로운 버전이 있습니다. 업데이트를 진행해주세요.');
+      // 스토어 업데이트 필요한 경우, UpdateAlert 를 띄우고 스토어로 연결 시켜준다.
+      Linking.openURL(storeUrl);
+    }
     await Promise.all(preCheckList);
     const endTime = Date.now();
     const delayTime = 2500 - (endTime - startTime);
