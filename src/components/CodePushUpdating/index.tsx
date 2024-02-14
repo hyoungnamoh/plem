@@ -4,11 +4,10 @@ import { StyleSheet } from 'react-native';
 import { DownloadProgress } from 'react-native-code-push';
 
 const CodePushUpdating = ({ progress }: { progress: DownloadProgress }) => {
+  const percentage = Math.floor((progress.receivedBytes / progress.totalBytes) * 100);
   return (
     <BackgroundLayer>
-      <PlemText style={{ color: '#fff' }}>
-        앱 업데이트 중... {Math.floor((progress.receivedBytes / progress.totalBytes) * 100)} / 100%
-      </PlemText>
+      <PlemText style={{ color: '#fff' }}>앱 업데이트 중... {isNaN(percentage) ? 0 : percentage} / 100%</PlemText>
     </BackgroundLayer>
   );
 };
