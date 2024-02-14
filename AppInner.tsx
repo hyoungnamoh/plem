@@ -13,7 +13,7 @@ import NotReceivedMailPage from './src/pages/NotReceivedMailPage';
 import { useIsFetching, useIsMutating } from 'react-query';
 import SignUpSuccessPage from './src/pages/SignUpSuccessPage';
 import FindPasswordPage from './src/pages/FindPasswordPage';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import BottomTabBar from './src/components/BottomTabBar';
 import MainTab from './src/tabs/MainTab';
@@ -38,6 +38,8 @@ import { getAppVersion } from 'helper/getAppVersion';
 import SplashScreen from 'react-native-splash-screen';
 import { checkNotifications } from 'react-native-permissions';
 import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
+import { useCodePush } from 'hooks/useCodePush';
+import CodePushUpdating from 'components/CodePushUpdating';
 
 configureNotification();
 
@@ -45,6 +47,8 @@ const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
 function AppInner({ routeName }: { routeName: string }) {
+  const { checkCodePush, needAppVersionUpdate, setNeedAppVersionUpdate, isCodePushUpdating, syncDownloadProgress } =
+    useCodePush();
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
   const navigation = useNavigation<NavigationProp<LoggedOutStackParamList>>();
@@ -56,8 +60,6 @@ function AppInner({ routeName }: { routeName: string }) {
   const setCategoryList = useSetRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
-
-  const [needUpdate, setNeedUpdate] = useState(false);
 
   const appState = useRef(AppState.currentState);
 
@@ -76,14 +78,19 @@ function AppInner({ routeName }: { routeName: string }) {
     return () => {
       appStateChange.remove();
     };
-  }, [needUpdate, appInfo.storeUrl]);
+  }, [needAppVersionUpdate, appInfo.storeUrl]);
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     // 포어그라운드 진입
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
     }
     // 백그라운드로 이동
-    if (needUpdate && appInfo.storeUrl && appState.current.match(/inactive|active/) && nextAppState === 'background') {
+    if (
+      needAppVersionUpdate &&
+      appInfo.storeUrl &&
+      appState.current.match(/inactive|active/) &&
+      nextAppState === 'background'
+    ) {
       showUpdateAlert(appInfo.storeUrl);
     }
     appState.current = nextAppState;
@@ -104,27 +111,28 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const splashScreenHandler = async (preCheckList: Promise<void>[]) => {
+    const startTime = Date.now();
+    await Promise.all(preCheckList);
     const info = await getAppInfo();
-    const updateInfo = { isNeeded: false };
-    // const updateInfo = await checkNeedUpdate(info);
-    if (updateInfo.isNeeded) {
+    const endTime = Date.now();
+    const delayTime = 2500 - (endTime - startTime);
+
+    if (delayTime > 0) {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, delayTime);
+    } else {
       SplashScreen.hide();
-      setNeedUpdate(true);
+    }
+
+    const updateInfo = { isNeeded: false };
+    // const updateInfo = await checkNeedUpdate(info); // TODO:
+    if (updateInfo.isNeeded) {
+      setNeedAppVersionUpdate(true);
       showUpdateAlert(info.storeUrl);
     } else {
-      const startTime = Date.now();
-      setNeedUpdate(true);
-      await Promise.all(preCheckList);
-      const endTime = Date.now();
-      const delayTime = 2500 - (endTime - startTime);
-
-      if (delayTime > 0) {
-        setTimeout(() => {
-          SplashScreen.hide();
-        }, delayTime);
-      } else {
-        SplashScreen.hide();
-      }
+      setNeedAppVersionUpdate(false);
+      checkCodePush();
     }
   };
 
@@ -196,7 +204,8 @@ function AppInner({ routeName }: { routeName: string }) {
   console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
-      {(isFetching || isMutating) && !disableLoading ? <Loading /> : null}
+      {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} />}
+      {(isFetching || isMutating) && !disableLoading && !isCodePushUpdating ? <Loading /> : null}
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {loggedInUser?.id ? (

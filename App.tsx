@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import AppInner from './AppInner';
@@ -19,12 +19,6 @@ const queryClient = new QueryClient({
 
 const App = () => {
   const [routeName, setRouteName] = useState('');
-
-  useEffect(() => {
-    CodePush.sync(codePushOptions, (status) => {
-      console.log('CodePush', status);
-    });
-  }, []);
 
   return (
     <RecoilRoot>
