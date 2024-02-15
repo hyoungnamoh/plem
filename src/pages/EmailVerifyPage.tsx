@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { useMutation } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
@@ -22,11 +22,13 @@ import { MAIN_COLOR } from 'constants/colors';
 import { LoggedOutStackParamList } from 'types/appInner';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import { removeWhitespace } from 'helper/removeWhitespace';
+import { globalToastState } from 'states/globalToastState';
 
 type EmailVerifyPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'EmailVerifyPage'>;
 
 const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
   const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
+  const setGlobalToast = useSetRecoilState(globalToastState);
 
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -49,7 +51,7 @@ const EmailVerifyPage = ({ navigation }: EmailVerifyPageProps) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
-        toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
+        setGlobalToast({ text: '인증 메일이 전송되었습니다.', duration: 2000 });
         setIsVerifiedEmail(false);
         setVerificationCode(''); // 재발송 시 사용
         // test

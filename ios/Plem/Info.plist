@@ -109,5 +109,7 @@
   <string>YOUR TEXT</string>
   <key>NSCalendarsUsageDescription</key>
   <string>YOUR TEXT</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<No>
 </dict>
 </plist>

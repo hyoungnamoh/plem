@@ -10,7 +10,7 @@ import UnderlineTextInput from 'components/UnderlineTextInput';
 import UnderlineButton from 'components/UnderlineButton';
 import BottomButton from 'components/BottomButton';
 import { useMutation } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ApiResponse } from 'types/axios';
 import {
   postVerificationEmailApi,
@@ -26,11 +26,13 @@ import { LoggedInUser } from 'types/user';
 import { loggedInUserState } from 'states/loggedInUserState';
 import jwt_decode from 'jwt-decode';
 import { removeWhitespace } from 'helper/removeWhitespace';
+import { globalToastState } from 'states/globalToastState';
 
 type ModifyEmailPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyEmailPage'>;
 
 const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const setGlobalToast = useSetRecoilState(globalToastState);
 
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -49,7 +51,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
       if (responseData.status === 200) {
         setReceivedCode(`${responseData.data.verificationCode}`);
         setIsSent(true);
-        toastRef.current?.show('인증 메일이 전송되었습니다.', 2000);
+        setGlobalToast({ text: '인증 메일이 전송되었습니다.', duration: 2000 });
         setVerificationCode(''); // 재발송 시 사용
         // test
         console.log(`${responseData.data.verificationCode}`);

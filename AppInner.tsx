@@ -40,6 +40,9 @@ import { checkNotifications } from 'react-native-permissions';
 import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
 import { useCodePush } from 'hooks/useCodePush';
 import CodePushUpdating from 'components/CodePushUpdating';
+import Toast from '@hyoungnamoh/react-native-easy-toast';
+import PlemToast from 'components/PlemToast';
+import { globalToastState } from 'states/globalToastState';
 
 configureNotification();
 
@@ -57,11 +60,13 @@ function AppInner({ routeName }: { routeName: string }) {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const setNotificationInfoState = useSetRecoilState(notificationInfoState);
   const [appInfo, setAppInfo] = useRecoilState(appInfoState);
+  const [globalToast, setGlobalToast] = useRecoilState(globalToastState);
   const setCategoryList = useSetRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
   const appState = useRef(AppState.currentState);
+  const globalToastRef = useRef<Toast>(null);
 
   useEffect(() => {
     splashScreenHandler([
@@ -71,6 +76,12 @@ function AppInner({ routeName }: { routeName: string }) {
       getNotificationInfo(),
     ]);
   }, []);
+
+  useEffect(() => {
+    if (globalToast) {
+      globalToastRef.current?.show(globalToast.text, globalToast.duration, globalToast.callback);
+    }
+  }, [globalToast]);
 
   useEffect(() => {
     const appStateChange = AppState.addEventListener('change', handleAppStateChange);
@@ -206,6 +217,7 @@ function AppInner({ routeName }: { routeName: string }) {
     <>
       {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} />}
       {(isFetching || isMutating) && !disableLoading && !isCodePushUpdating ? <Loading /> : null}
+      <PlemToast ref={globalToastRef} />
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
         {loggedInUser?.id ? (

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlanChart } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
@@ -26,6 +26,7 @@ import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
 import { useUpdateChart } from 'hooks/mutations/useUpdateChart';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
+import { globalToastState } from 'states/globalToastState';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -34,6 +35,7 @@ type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChart
 const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const queryClient = useQueryClient();
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
+  const setGlobalToast = useSetRecoilState(globalToastState);
   const isEdit = !!route.params?.chart;
 
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
@@ -60,11 +62,31 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     },
   });
 
+  const showDraftsToast = async () => {
+    const hasDraft = await checkDrafts();
+    if (hasDraft) {
+      setGlobalToast({ text: '작성하던 계획표가 임시저장 됐어요.', duration: 2000 });
+    }
+  };
+
   useEffect(() => {
     initChartData();
 
-    return () => setChart(addPlanChartDefault);
+    return () => {
+      setChart(addPlanChartDefault);
+    };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      showDraftsToast();
+    };
+  }, []);
+
+  const checkDrafts = async () => {
+    const hasDraft = await AsyncStorage.getItem('chart_data');
+    return !!hasDraft;
+  };
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
     await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));

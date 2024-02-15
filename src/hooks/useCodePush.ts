@@ -27,15 +27,13 @@ export const useCodePush = () => {
           forcedCodepushUpdate(update);
           break;
         case 'OPTIONAL':
-          console.log('optional update');
           optionalCodepushUpdate(update);
           break;
         default:
           break;
       }
     } catch (error) {
-      Alert.alert('업데이트 확인중 에러가 발생했습니다.');
-      console.info(error);
+      console.info('checkCodePush Error', error);
     }
   };
 
@@ -74,11 +72,13 @@ export const useCodePush = () => {
           });
         })
         .catch((error: any) => {
-          console.log('error', error);
+          console.info('update.download Error', error);
           setIsCodePushUpdating(false);
         });
     } catch (error) {
       Alert.alert('업데이트 중 에러가 발생했습니다.');
+      console.info('forcedCodepushUpdate Error', error);
+      setIsCodePushUpdating(false);
     }
   };
 
@@ -92,6 +92,8 @@ export const useCodePush = () => {
       });
     } catch (error) {
       Alert.alert('업데이트 중 에러가 발생했습니다.');
+      setIsCodePushUpdating(false);
+      console.info('optionalCodepushUpdate Error', error);
     }
   };
 
