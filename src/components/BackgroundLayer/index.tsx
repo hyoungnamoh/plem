@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    zIndex: 100000,
+    zIndex: 9000,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
