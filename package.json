@@ -1,6 +1,6 @@
 {
   "name": "plem",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -9,12 +9,12 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "codepush:android": "appcenter codepush release-react -a zzzsh789-naver.com/plem-ios -d Staging --sourcemap-output --output-dir ./build -m -t 1.0",
-    "codepush:ios": "yarn bump-patch && appcenter codepush release-react -a zzzsh789-naver.com/plem-ios -d Staging --sourcemap-output --output-dir ./build -m -t 1.0",
+    "codepush:ios": "appcenter codepush release-react -a zzzsh789-naver.com/plem-ios -d Staging --sourcemap-output --output-dir ./build -m -t 1.0",
     "bundle:android": "react-native bundle --assets-dest build/CodePush --bundle-output build/CodePush/index.android.bundle --dev false --entry-file index.js --platform android --sourcemap-output build/CodePush/index.android.bundle.map",
     "bundle:ios": "react-native bundle --assets-dest build/CodePush --bundle-output build/CodePush/main.jsbundle --dev false --entry-file index.js --platform ios --sourcemap-output build/CodePush/main.jsbundle.map",
-    "bump-patch": "npm version patch --no-git-tag-version && cd ios && bundle exec fastlane bump",
-    "bump-minor": "npm version minor --no-git-tag-version && cd ios && bundle exec fastlane bump",
-    "bump-major": "npm version major --no-git-tag-version && cd ios && bundle exec fastlane bump"
+    "update:patch": "npm version patch --no-git-tag-version && cd ios && bundle exec fastlane bump",
+    "update:minor": "npm version minor --no-git-tag-version && cd ios && bundle exec fastlane bump",
+    "update:major": "npm version major --no-git-tag-version && cd ios && bundle exec fastlane bump"
   },
   "dependencies": {
     "@hyoungnamoh/react-native-easy-toast": "^0.0.5",
