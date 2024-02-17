@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
-import { Dispatch, memo, useCallback } from 'react';
+import { Dispatch, SetStateAction, memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ const Day = ({
   year: number;
   month: number;
   isSelected: boolean;
-  setLocalSelectedDate: Dispatch<React.SetStateAction<number>>;
+  setLocalSelectedDate: Dispatch<SetStateAction<number>>;
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);

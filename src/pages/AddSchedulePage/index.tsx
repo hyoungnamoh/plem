@@ -134,10 +134,10 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   };
 
   const isInvalidDate = () => {
-    const start = dayjs(startDate).set('second', 0).set('millisecond', 0);
-    const end = dayjs(endDate).set('second', 0).set('millisecond', 0);
+    const start = dayjs(startDate).startOf('minute');
+    const end = dayjs(endDate).startOf('minute');
 
-    return start.isAfter(end) || start.isSame(end);
+    return start.isAfter(end);
   };
 
   const handleCatecorySelect = (category: number) => {
@@ -366,7 +366,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               onCancel={() => setOpenStartTimePicker(false)}
               locale="en_GB"
               is24Hour={true}
-              minuteInterval={10}
+              minuteInterval={5}
               date={startDate.toDate()}
             />
             <DateTimePickerModal
@@ -376,7 +376,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               onCancel={() => setOpenEndTimePicker(false)}
               locale="en_GB"
               is24Hour={true}
-              minuteInterval={10}
+              minuteInterval={5}
               date={endDate.toDate()}
             />
             <DateTimePickerModal

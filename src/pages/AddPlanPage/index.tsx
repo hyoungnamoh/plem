@@ -122,7 +122,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           onCancel={onPressStartCancel}
           locale="en_GB"
           is24Hour
-          minuteInterval={10}
+          minuteInterval={5}
           date={getTimePickerValue({ hour: startHour, min: startMin })}
         />
         <DateTimePickerModal
@@ -132,7 +132,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
           onCancel={onPressEndCancel}
           locale="en_GB"
           is24Hour
-          minuteInterval={10}
+          minuteInterval={5}
           date={getTimePickerValue({ hour: endHour, min: endMin })}
         />
       </View>
