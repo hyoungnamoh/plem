@@ -1,5 +1,5 @@
 import { useThrottle } from 'hooks/useThottle';
-import { GestureResponderEvent, Pressable, PressableProps } from 'react-native';
+import { GestureResponderEvent, Keyboard, Pressable, PressableProps } from 'react-native';
 
 export type PlemButtonProps = {} & PressableProps;
 
@@ -9,6 +9,7 @@ const PlemButton = (props: PlemButtonProps) => {
 
   const handlePress = (e: GestureResponderEvent) => {
     if (onPress) {
+      Keyboard.dismiss();
       onPress(e);
     }
   };
