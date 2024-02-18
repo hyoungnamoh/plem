@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlanChart } from 'types/chart';
@@ -27,6 +27,8 @@ import { useUpdateChart } from 'hooks/mutations/useUpdateChart';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
 import { globalToastState } from 'states/globalToastState';
+import { DAY_TO_MIN, HOUR_TO_MIN } from 'constants/times';
+import { EmptyPlanAlert } from './components/EmptyPlanAlert/EmptyPlanAlert';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -37,6 +39,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const setGlobalToast = useSetRecoilState(globalToastState);
   const isEdit = !!route.params?.chart;
+  const [openEmptyPlanAlert, setOpenEmptyPlanAlert] = useState(false);
 
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
     onSuccess: async (responseData) => {
@@ -66,7 +69,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const showDraftsToast = async () => {
     const hasDraft = await checkDrafts();
     if (hasDraft) {
-      setGlobalToast({ text: '작성하던 계획표가 임시저장 됐어요.', duration: 2000 });
+      setGlobalToast({ text: '작성 중인 계획표가 임시 저장되었어요.', duration: 2000 });
     }
   };
 
@@ -140,11 +143,19 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       Alert.alert('계획을 추가해주세요.');
       return;
     }
+    if (!checkEmptyPlan()) {
+      showEmptyPlanAlert();
+      return;
+    }
     addChart(chart);
   };
 
   const onPressUpdate = () => {
     if (updateChartLoading || !route.params?.chart.id) {
+      return;
+    }
+    if (!checkEmptyPlan()) {
+      showEmptyPlanAlert();
       return;
     }
     const newChart = { ...chart, id: route.params?.chart.id };
@@ -169,6 +180,19 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       .join(', ');
   };
 
+  const checkEmptyPlan = () => {
+    let totalPlanMin = 0;
+    chart.plans.map((plan) => {
+      totalPlanMin += plan.endHour * HOUR_TO_MIN + plan.endMin - (plan.startHour * HOUR_TO_MIN + plan.startMin);
+    });
+
+    return totalPlanMin === DAY_TO_MIN;
+  };
+
+  const showEmptyPlanAlert = () => {
+    setOpenEmptyPlanAlert(true);
+  };
+
   const onPressAddPlan = () => {
     navigation.navigate('AddPlanPage');
   };
@@ -189,6 +213,15 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const onPressModifyPlan = ({ planIndex }: { planIndex: number }) => {
     navigation.navigate('AddPlanPage', { planIndex: planIndex });
+  };
+
+  const handleEmptyPlanAlertCancel = () => {
+    setOpenEmptyPlanAlert(false);
+  };
+
+  const handleEmptyPlanAlertConfirm = () => {
+    setOpenEmptyPlanAlert(false);
+    addChart(chart);
   };
 
   return (
@@ -266,6 +299,12 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           </View>
         </View>
       </ScrollView>
+      <EmptyPlanAlert
+        open={openEmptyPlanAlert}
+        size="small"
+        onCancel={handleEmptyPlanAlertCancel}
+        onConfirm={handleEmptyPlanAlertConfirm}
+      />
     </KeyboardAvoidingView>
   );
 };

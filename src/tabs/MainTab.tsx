@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PlanChart } from 'types/chart';
-import AddChartPage from 'pages/AddChartPage';
+import AddChartPage from 'pages/AddChartPage/AddChartPage';
 import AddPlanPage from 'pages/AddPlanPage';
 import MainPage from 'pages/MainPage';
 import RepeatSettingPage from 'pages/RepeatSettingPage';
