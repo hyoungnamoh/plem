@@ -312,6 +312,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         size="small"
         onCancel={handleEmptyPlanAlertCancel}
         onConfirm={handleEmptyPlanAlertConfirm}
+        cancelText="계속 작성할게요"
       />
     </KeyboardAvoidingView>
   );
