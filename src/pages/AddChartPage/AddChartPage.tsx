@@ -221,7 +221,15 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const handleEmptyPlanAlertConfirm = () => {
     setOpenEmptyPlanAlert(false);
-    addChart(chart);
+
+    if (isEdit) {
+      if (!route.params?.chart.id) {
+        const newChart = { ...chart, id: route.params?.chart.id };
+        updateChart(newChart);
+      }
+    } else {
+      addChart(chart);
+    }
   };
 
   return (
