@@ -41,6 +41,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
+        await AsyncStorage.removeItem('chart_data');
         queryClient.invalidateQueries('chartList');
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         navigation.dispatch(TabActions.jumpTo('PlanChartListTab'));
@@ -131,7 +132,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     if (addChartLoading) {
       return;
     }
-    if (chart.name) {
+    if (!chart.name) {
       Alert.alert('계획표명을 입력해주세요.');
       return;
     }
