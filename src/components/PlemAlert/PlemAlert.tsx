@@ -49,7 +49,7 @@ const PlemAlert = ({ size, children, cancelText, confirmText, onCancel, onConfir
   };
 
   return (
-    <Modal backdropOpacity={0.5} isVisible={open}>
+    <Modal backdropOpacity={0.5} isVisible={open} animationInTiming={0.1} animationOutTiming={0.1}>
       <View style={styles.innerWrapper}>
         {getModalBySize()}
         <View style={styles.contentWrap}>

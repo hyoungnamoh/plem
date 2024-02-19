@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlanChart } from 'types/chart';
@@ -29,6 +29,13 @@ import PlemButton from 'components/Atoms/PlemButton';
 import { globalToastState } from 'states/globalToastState';
 import { DAY_TO_MIN, HOUR_TO_MIN } from 'constants/times';
 import { EmptyPlanAlert } from './components/EmptyPlanAlert/EmptyPlanAlert';
+import {
+  HandlerStateChangeEvent,
+  PanGestureHandler,
+  PanGestureHandlerEventPayload,
+  State,
+} from 'react-native-gesture-handler';
+import { PopInEditingAlert } from './components/PopInEditingAlert.tsx/PopInEditingAlert';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -40,10 +47,14 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const setGlobalToast = useSetRecoilState(globalToastState);
   const isEdit = !!route.params?.chart;
   const [openEmptyPlanAlert, setOpenEmptyPlanAlert] = useState(false);
+  const [openPopInEditingAlert, setPopInEditingAlert] = useState(false);
+  const swipeStartX = useRef<number | null>();
+  const unsubscribe = useRef<() => void>();
 
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
+        unsubscribe.current && unsubscribe.current();
         await AsyncStorage.removeItem('chart_data');
         queryClient.invalidateQueries('chartList');
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
@@ -59,6 +70,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const { isLoading: updateChartLoading, mutate: updateChart } = useUpdateChart({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
+        unsubscribe.current && unsubscribe.current();
         queryClient.invalidateQueries('chartList');
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         navigation.goBack();
@@ -82,18 +94,30 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   }, []);
 
   useEffect(() => {
+    unsubscribe.current = navigation.addListener('beforeRemove', (e) => {
+      if (isEdit && checkChangesEdit()) {
+        e.preventDefault();
+        setPopInEditingAlert(true);
+      }
+      if (!isEdit && checkChangesAdd()) {
+        setStorageChartData();
+        showDraftsToast();
+      }
+    });
     return () => {
-      showDraftsToast();
+      if (unsubscribe.current) {
+        unsubscribe.current();
+      }
     };
-  }, []);
+  }, [navigation, chart, route.params?.chart, isEdit]);
 
   const checkDrafts = async () => {
     const hasDraft = await AsyncStorage.getItem('chart_data');
     return !!hasDraft;
   };
 
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
+  const setStorageChartData = async () => {
+    await AsyncStorage.setItem('chart_data', JSON.stringify(chart));
   };
 
   const initChartData = async () => {
@@ -201,14 +225,12 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     const copiedChart = cloneDeep(chart);
     copiedChart.plans[planIndex].subPlans.splice(subPlanIndex, 1);
     setChart(copiedChart);
-    setStorageChartData(copiedChart);
   };
 
   const saveSubPlan = ({ planIndex, subPlanName }: { planIndex: number; subPlanName: string }) => {
     const copiedChart = cloneDeep(chart);
     copiedChart.plans[planIndex].subPlans = [...copiedChart.plans[planIndex].subPlans, { name: subPlanName }];
     setChart(copiedChart);
-    setStorageChartData(copiedChart);
   };
 
   const onPressModifyPlan = ({ planIndex }: { planIndex: number }) => {
@@ -223,8 +245,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     setOpenEmptyPlanAlert(false);
 
     if (isEdit) {
-      if (!route.params?.chart.id) {
-        const newChart = { ...chart, id: route.params?.chart.id };
+      if (route.params?.chart.id) {
+        const newChart = { ...chart, id: route.params.chart.id };
         updateChart(newChart);
       }
     } else {
@@ -232,89 +254,137 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     }
   };
 
+  const handleGesture = (event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      if (event.nativeEvent.x > 80 || swipeStartX.current) {
+        return;
+      }
+      swipeStartX.current = event.nativeEvent.x;
+    } else if (event.nativeEvent.state === State.END) {
+      // 스와이프 완료 시 동작 처리
+      if (!swipeStartX.current) {
+        return;
+      }
+      if (event.nativeEvent.x - swipeStartX.current > 50 && isEdit && checkChangesEdit()) {
+        setPopInEditingAlert(true);
+      } else {
+        navigation.goBack();
+      }
+      swipeStartX.current = null;
+    }
+  };
+
+  const checkChangesEdit = () => {
+    return JSON.stringify(route.params?.chart) !== JSON.stringify(chart);
+  };
+
+  const checkChangesAdd = () => {
+    return JSON.stringify(addPlanChartDefault) !== JSON.stringify(chart);
+  };
+
+  const handlePopInEditingAlertCancel = () => {
+    unsubscribe.current && unsubscribe.current();
+    setPopInEditingAlert(false);
+    navigation.goBack();
+  };
+
+  const handlePopInEditingAlertConfirm = () => {
+    setPopInEditingAlert(false);
+  };
+
   return (
-    <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
-      <Header
-        title={isEdit ? '계획표 수정' : '계획표 추가'}
-        buttonName={isEdit ? '완료' : '등록'}
-        buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
-      />
-      <ScrollView style={styles.page} keyboardDismissMode={'on-drag'} contentContainerStyle={{ paddingBottom: 300 }}>
-        <View style={{ paddingHorizontal: 15 }}>
-          <AddChartTable />
-          <View style={styles.optionRow}>
-            <View style={styles.underlineButtonWrap}>
-              <PlemText>반복</PlemText>
-              <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
-                <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
-                  {getRepeatOptions()}
-                </PlemText>
-                <ArrowRightSvg style={styles.arrowImage} />
-              </PlemButton>
+    <PanGestureHandler onHandlerStateChange={handleGesture}>
+      <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
+        <Header
+          title={isEdit ? '계획표 수정' : '계획표 추가'}
+          buttonName={isEdit ? '완료' : '등록'}
+          buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
+        />
+        <ScrollView style={styles.page} keyboardDismissMode={'on-drag'} contentContainerStyle={{ paddingBottom: 300 }}>
+          <View style={{ paddingHorizontal: 15 }}>
+            <AddChartTable />
+            <View style={styles.optionRow}>
+              <View style={styles.underlineButtonWrap}>
+                <PlemText>반복</PlemText>
+                <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
+                  <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
+                    {getRepeatOptions()}
+                  </PlemText>
+                  <ArrowRightSvg style={styles.arrowImage} />
+                </PlemButton>
+              </View>
+              <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
             </View>
-            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-          </View>
-          <View style={styles.optionRow}>
-            <View style={styles.underlineButtonWrap}>
-              <PlemText>계획</PlemText>
-              <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
-                <ArrowRightSvg style={styles.arrowImage} />
-              </PlemButton>
+            <View style={styles.optionRow}>
+              <View style={styles.underlineButtonWrap}>
+                <PlemText>계획</PlemText>
+                <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
+                  <ArrowRightSvg style={styles.arrowImage} />
+                </PlemButton>
+              </View>
+              <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
             </View>
-            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-          </View>
-          <View style={styles.planContainer}>
-            {chart.plans.map((plan, planIndex) => {
-              const { startHour, startMin, endHour, endMin } = plan;
-              return (
-                <View key={`plan_${planIndex}}`}>
-                  <View style={styles.planWrap}>
-                    <PlemButton style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
-                      <PlemText>{plan.name}</PlemText>
-                      <Image source={yellowLineImage} style={styles.yellowLine} />
-                    </PlemButton>
-                    <View style={styles.notificationContainer}>
-                      <PlemText>
-                        {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
-                        {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
-                      </PlemText>
-                      {plan.notification === null ? (
-                        <NotificationInactiveSvg style={{ marginLeft: 4 }} />
-                      ) : (
-                        <NotificationActiveSvg style={{ marginLeft: 4 }} />
-                      )}
+            <View style={styles.planContainer}>
+              {chart.plans.map((plan, planIndex) => {
+                const { startHour, startMin, endHour, endMin } = plan;
+                return (
+                  <View key={`plan_${planIndex}}`}>
+                    <View style={styles.planWrap}>
+                      <PlemButton style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
+                        <PlemText>{plan.name}</PlemText>
+                        <Image source={yellowLineImage} style={styles.yellowLine} />
+                      </PlemButton>
+                      <View style={styles.notificationContainer}>
+                        <PlemText>
+                          {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
+                          {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
+                        </PlemText>
+                        {plan.notification === null ? (
+                          <NotificationInactiveSvg style={{ marginLeft: 4 }} />
+                        ) : (
+                          <NotificationActiveSvg style={{ marginLeft: 4 }} />
+                        )}
+                      </View>
                     </View>
-                  </View>
-                  <View>
-                    {plan.subPlans.map((subPlan, subPlanIndex) => {
-                      return (
-                        <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
-                          <View style={styles.subPlanNameWrap}>
-                            <UncheckedSvg />
-                            <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                    <View>
+                      {plan.subPlans.map((subPlan, subPlanIndex) => {
+                        return (
+                          <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
+                            <View style={styles.subPlanNameWrap}>
+                              <UncheckedSvg />
+                              <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                            </View>
+                            <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
+                              <DeleteRedSvg style={{ marginLeft: 4 }} />
+                            </PlemButton>
                           </View>
-                          <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
-                            <DeleteRedSvg style={{ marginLeft: 4 }} />
-                          </PlemButton>
-                        </View>
-                      );
-                    })}
+                        );
+                      })}
+                    </View>
+                    <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
                   </View>
-                  <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
-                </View>
-              );
-            })}
+                );
+              })}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      <EmptyPlanAlert
-        open={openEmptyPlanAlert}
-        size="small"
-        onCancel={handleEmptyPlanAlertCancel}
-        onConfirm={handleEmptyPlanAlertConfirm}
-        cancelText="계속 작성할게요"
-      />
-    </KeyboardAvoidingView>
+        </ScrollView>
+        <EmptyPlanAlert
+          open={openEmptyPlanAlert}
+          size="small"
+          onCancel={handleEmptyPlanAlertCancel}
+          onConfirm={handleEmptyPlanAlertConfirm}
+          cancelText="계속 작성할게요"
+        />
+        <PopInEditingAlert
+          open={openPopInEditingAlert}
+          size="small"
+          onCancel={handlePopInEditingAlertCancel}
+          onConfirm={handlePopInEditingAlertConfirm}
+          cancelText="나갈게요"
+          confirmText="계속 할게요"
+        />
+      </KeyboardAvoidingView>
+    </PanGestureHandler>
   );
 };
 
