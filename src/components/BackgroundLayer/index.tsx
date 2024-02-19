@@ -2,8 +2,8 @@ import { StyleSheet, View } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 import { ReactNode } from 'react';
 
-const BackgroundLayer = ({ children }: { children: ReactNode }) => {
-  return <View style={styles.loadingWrap}>{children}</View>;
+const BackgroundLayer = ({ children, zIndex }: { children: ReactNode; zIndex: number }) => {
+  return <View style={{ ...styles.loadingWrap, zIndex }}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    zIndex: 9000,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });

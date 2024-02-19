@@ -5,7 +5,7 @@ const spinnerGif = require('../../assets/images/loading.gif');
 
 const Loading = () => {
   return (
-    <BackgroundLayer>
+    <BackgroundLayer zIndex={9000}>
       <Image source={spinnerGif} style={styles.spinner} />
     </BackgroundLayer>
   );

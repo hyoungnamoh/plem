@@ -50,8 +50,14 @@ const Tab = createBottomTabNavigator<LoggedInTabParamList>();
 const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
 function AppInner({ routeName }: { routeName: string }) {
-  const { checkCodePush, needAppVersionUpdate, setNeedAppVersionUpdate, isCodePushUpdating, syncDownloadProgress } =
-    useCodePush();
+  const {
+    checkCodePush,
+    needAppVersionUpdate,
+    setNeedAppVersionUpdate,
+    isCodePushUpdating,
+    syncDownloadProgress,
+    syncStateMessage,
+  } = useCodePush();
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
   const navigation = useNavigation<NavigationProp<LoggedOutStackParamList>>();
@@ -215,7 +221,7 @@ function AppInner({ routeName }: { routeName: string }) {
   console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
-      {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} />}
+      {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} syncStateMessage={syncStateMessage} />}
       {(isFetching || isMutating) && !disableLoading && !isCodePushUpdating ? <Loading /> : null}
       <PlemToast ref={globalToastRef} />
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />

@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import CodePush, { DownloadProgress, LocalPackage, RemotePackage } from 'react-native-code-push';
 
 export const useCodePush = () => {
-  const [syncStateMessage, setStateSyncMessage] = useState('업데이트 확인중');
+  const [syncStateMessage, setStateSyncMessage] = useState('업데이트 확인 중...');
   const [isCodePushUpdating, setIsCodePushUpdating] = useState<boolean>(false);
   const [needAppVersionUpdate, setNeedAppVersionUpdate] = useState<boolean>(true);
   const [syncDownloadProgress, setSyncDownloadProgress] = useState<DownloadProgress>({
@@ -57,14 +57,14 @@ export const useCodePush = () => {
           setSyncDownloadProgress(progress); // { totalBytes: number, receivedBytes: number }
           console.log('pakage downloading..', progress);
 
-          setStateSyncMessage('패키지 다운로드 중입니다.');
+          setStateSyncMessage('상큼함 다운로드 중...');
         })
         .then((newPackage: LocalPackage) => {
           // 다운로드 된 패키지 적용 중
-          setStateSyncMessage('패키지 적용중 입니다.');
+          setStateSyncMessage('상큼함 업데이트 중...');
           newPackage.install(CodePush.InstallMode.ON_NEXT_RESTART).then(() => {
             // 패키지 적용 완료됐을때
-            setStateSyncMessage('적용 완료! 곧 앱이 재실행 됩니다.');
+            setStateSyncMessage('업데이트 완료!');
             setTimeout(() => {
               setIsCodePushUpdating(false);
               CodePush.restartApp(); // 앱 재시작
