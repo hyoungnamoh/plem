@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useQuery } from 'react-query';
-import { ApiResponse } from 'types/axios';
 import { PlanChart } from 'types/chart';
-import { getPlanChartList } from 'api/charts/getPlanChartListApi';
 import PlemText from 'components/Atoms/PlemText';
 import { MAIN_COLOR } from 'constants/colors';
 import ChartList from './ChartList';
@@ -12,18 +9,19 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import AddChartButton from './AddChartButton';
 import SurprisedPlemmonSvg from 'assets/images/surprised_plemmon_39x44.svg';
-import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
+import { useGetChartList } from 'hooks/queries/useGetChartList';
+import MaximumChartAlert from 'components/MaximumChartAlert';
+import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
+import UnderlineSvg from 'assets/images/underline.svg';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
 const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
-  const { data, status } = useQuery<ApiResponse<PlanChart[]>>({
-    queryKey: ['chartList'],
-    queryFn: getPlanChartList,
-  });
+  const { data, status } = useGetChartList();
   const [charts, setCharts] = useState<PlanChart[]>(data?.data || []);
   const [isEditing, setIsEditing] = useState(false);
+  const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
   const isEmpty = charts && charts.length < 1;
 
   useEffect(() => {
@@ -32,42 +30,75 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
     }
   }, [status, data]);
 
-  const onPressEditComplete = () => {
+  const handleEditComplete = () => {
     setIsEditing(false);
   };
 
-  const onPressEdit = () => {
+  const handleEdit = () => {
     setIsEditing(true);
   };
 
+  const handleAddChart = () => {
+    if (isMaximumChartList()) {
+      setOpenMaximumAlert(true);
+    } else {
+      navigation.navigate('AddChartPage');
+    }
+  };
+
+  const isMaximumChartList = () => {
+    return charts.length >= NUM_OF_MAXIMUM_CHART;
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
-      <View style={styles.header}>
-        <PlemText style={{ fontSize: 24 }}>나의 계획표</PlemText>
-        <PlemButton disabled={isEmpty} onPress={isEditing ? onPressEditComplete : onPressEdit}>
-          <PlemText style={{ fontSize: 20, color: isEmpty ? '#AAAAAA' : '#000' }}>
-            {isEditing ? '완료' : '편집'}
-          </PlemText>
-        </PlemButton>
-      </View>
-      {charts.length > 0 ? (
-        // ChartList header부분(usePieChart) useEffect 부분 성능 문제로 컴포넌트가 언마운트 되지 않도록 임시 조치
-        <>
-          <View style={{ height: isEditing ? '100%' : 0 }}>
-            <DraggableChartList charts={charts} setCharts={setCharts} />
+    <>
+      <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
+        <View style={styles.header}>
+          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+            <PlemText style={{ fontSize: 24 }}>나의 계획표 </PlemText>
+            <PlemText style={{ color: '#AAAAAA' }}>
+              {charts.length}/{NUM_OF_MAXIMUM_CHART}
+            </PlemText>
           </View>
-          <View style={{ height: isEditing ? 0 : '100%' }}>
-            <ChartList list={charts} />
-          </View>
-        </>
-      ) : (
-        <View style={styles.emptyWrap}>
-          <SurprisedPlemmonSvg />
-          <PlemText style={styles.emptyText}>만들어진 계획표가 없어요.</PlemText>
-          <AddChartButton />
+          <PlemButton disabled={isEmpty} onPress={isEditing ? handleEditComplete : handleEdit}>
+            <PlemText style={{ fontSize: 20, color: isEmpty ? '#AAAAAA' : '#000' }}>
+              {isEditing ? '완료' : '편집'}
+            </PlemText>
+          </PlemButton>
         </View>
-      )}
-    </View>
+        <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
+        {charts.length > 0 ? (
+          // ChartList header부분(usePieChart) useEffect 부분 성능 문제로 컴포넌트가 언마운트 되지 않도록 임시 조치
+          <>
+            <View style={{ height: isEditing ? '100%' : 0 }}>
+              <DraggableChartList
+                charts={charts}
+                setCharts={setCharts}
+                isMaximumChartList={isMaximumChartList()}
+                setOpenMaximumAlert={setOpenMaximumAlert}
+                handleEditComplete={handleEditComplete}
+              />
+            </View>
+            <View style={{ height: isEditing ? 0 : '100%' }}>
+              <ChartList list={charts} onPressAddChart={handleAddChart} />
+            </View>
+          </>
+        ) : (
+          <View style={styles.emptyWrap}>
+            <SurprisedPlemmonSvg />
+            <PlemText style={styles.emptyText}>만들어진 계획표가 없어요.</PlemText>
+            <AddChartButton onPress={handleAddChart} />
+          </View>
+        )}
+      </View>
+      <MaximumChartAlert
+        open={openMaximumAlert}
+        onCancel={() => setOpenMaximumAlert(false)}
+        onConfirm={() => setOpenMaximumAlert(false)}
+        cancelText="나중에 할게요"
+        confirmText="정리하러 갈래요"
+      />
+    </>
   );
 };
 
@@ -77,9 +108,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 18,
-  },
-  headerLine: {
-    width: SCREEN_WIDTH,
   },
   content: {
     paddingVertical: 12,

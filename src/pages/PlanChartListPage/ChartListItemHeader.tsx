@@ -51,7 +51,7 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
 const styles = StyleSheet.create({
   header: {
     paddingVertical: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

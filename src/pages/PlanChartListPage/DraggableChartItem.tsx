@@ -8,17 +8,23 @@ import { PieChart } from 'react-native-gifted-charts';
 import { usePieChart } from 'hooks/usePieChart';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
+import { Dispatch, SetStateAction } from 'react';
+import UnderlineSvg from 'assets/images/underline.svg';
 
 const DraggableChartItem = ({
   item,
   drag,
   onDeleteUpdate,
   onCloneUpdate,
+  isMaximumChartList,
+  setOpenMaximumAlert,
 }: {
   item: PlanChart;
   drag: () => void;
   onDeleteUpdate: ({ id }: { id: number }) => void;
   onCloneUpdate: ({ newItem }: { newItem: PlanChart; originId: number }) => void;
+  isMaximumChartList: boolean;
+  setOpenMaximumAlert: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { pieChartData, initialAngle } = usePieChart({ chart: item, hideName: true });
 
@@ -39,6 +45,10 @@ const DraggableChartItem = ({
   });
 
   const handleClonePress = (id: number) => {
+    if (isMaximumChartList) {
+      setOpenMaximumAlert(true);
+      return;
+    }
     cloneChart({ id });
   };
 
@@ -47,38 +57,41 @@ const DraggableChartItem = ({
   };
 
   return (
-    <View style={styles.wrap}>
-      <View style={styles.contentContainer}>
-        <PlemButton onPressIn={drag} style={{ marginRight: 16 }}>
-          <HamburgerBarSvg />
-        </PlemButton>
-        <PieChart
-          data={pieChartData}
-          initialAngle={initialAngle}
-          showText
-          textColor={'#000'}
-          labelsPosition={'outward'}
-          textSize={14}
-          font={'LeeSeoyun'}
-          strokeColor={'black'}
-          strokeWidth={2}
-          radius={32}
-        />
-        <View style={styles.chartNameWrap}>
-          <PlemText style={styles.chartName} numberOfLines={2}>
-            {item.name}
-          </PlemText>
+    <>
+      <View style={styles.wrap}>
+        <View style={styles.contentContainer}>
+          <PlemButton onPressIn={drag} style={{ marginRight: 16 }}>
+            <HamburgerBarSvg />
+          </PlemButton>
+          <PieChart
+            data={pieChartData}
+            initialAngle={initialAngle}
+            showText
+            textColor={'#000'}
+            labelsPosition={'outward'}
+            textSize={14}
+            font={'LeeSeoyun'}
+            strokeColor={'black'}
+            strokeWidth={2}
+            radius={32}
+          />
+          <View style={styles.chartNameWrap}>
+            <PlemText style={styles.chartName} numberOfLines={2}>
+              {item.name}
+            </PlemText>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <PlemButton style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
+            <PlemText style={styles.cloneText}>복사</PlemText>
+          </PlemButton>
+          <PlemButton style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
+            <PlemText style={styles.removeText}>삭제</PlemText>
+          </PlemButton>
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <PlemButton style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
-          <PlemText style={styles.cloneText}>복사</PlemText>
-        </PlemButton>
-        <PlemButton style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
-          <PlemText style={styles.removeText}>삭제</PlemText>
-        </PlemButton>
-      </View>
-    </View>
+      <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
+    </>
   );
 };
 

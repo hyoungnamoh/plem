@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   content: {
     width: ALERT_WIDTH,
     padding: 24,
+    justifyContent: 'center',
   },
   buttonContainer: { height: 60, flexDirection: 'row' },
   button: {

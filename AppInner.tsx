@@ -218,11 +218,12 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
-  console.log('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
+  const apiLoading = (isFetching || isMutating) && !disableLoading;
+  console.info('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
   return (
     <>
       {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} syncStateMessage={syncStateMessage} />}
-      {(isFetching || isMutating) && !disableLoading && !isCodePushUpdating ? <Loading /> : null}
+      {apiLoading && !isCodePushUpdating ? <Loading /> : null}
       <PlemToast ref={globalToastRef} />
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>

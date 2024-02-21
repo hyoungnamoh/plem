@@ -36,6 +36,8 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import { PopInEditingAlert } from './components/PopInEditingAlert.tsx/PopInEditingAlert';
+import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
+import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -56,8 +58,9 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       if (responseData.status === 200) {
         unsubscribe.current && unsubscribe.current();
         await AsyncStorage.removeItem('chart_data');
-        queryClient.invalidateQueries('chartList');
+        queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+        queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
         navigation.dispatch(TabActions.jumpTo('PlanChartListTab'));
         navigation.dispatch(StackActions.popToTop());
       } else {
@@ -71,8 +74,9 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         unsubscribe.current && unsubscribe.current();
-        queryClient.invalidateQueries('chartList');
+        queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+        queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
         navigation.goBack();
       }
     },

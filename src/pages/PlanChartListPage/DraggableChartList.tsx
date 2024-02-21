@@ -7,13 +7,21 @@ import { useUpdateChartsOrder } from 'hooks/mutations/useUpdateList';
 import { useSetRecoilState } from 'recoil';
 import { disableLoadingState } from 'states/disableLoadingState';
 import { useQueryClient } from 'react-query';
+import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
+import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
 
 const DraggableChartList = ({
   charts,
   setCharts,
+  setOpenMaximumAlert,
+  isMaximumChartList,
+  handleEditComplete,
 }: {
   charts: PlanChart[];
   setCharts: Dispatch<SetStateAction<PlanChart[]>>;
+  setOpenMaximumAlert: Dispatch<SetStateAction<boolean>>;
+  isMaximumChartList: boolean;
+  handleEditComplete: () => void;
 }) => {
   const queryClient = useQueryClient();
   const setDisableLoading = useSetRecoilState(disableLoadingState);
@@ -52,12 +60,17 @@ const DraggableChartList = ({
   };
 
   const onDeleteUpdate = ({ id }: { id: number }) => {
+    queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
+    queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
     const newList = [...charts].filter((item) => item.id !== id);
+    if (newList.length === 0) {
+      handleEditComplete();
+    }
     setCharts(newList);
-    queryClient.invalidateQueries('chartList');
   };
 
   const onCloneUpdate = ({ newItem, originId }: { newItem: PlanChart; originId: number }) => {
+    queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
     const newCharts = [...charts];
     const foundIndex = newCharts.findIndex((item) => item.id === originId);
     const splicedList = newCharts.splice(foundIndex + 1, newCharts.length);
@@ -70,7 +83,14 @@ const DraggableChartList = ({
     <DraggableFlatList
       data={charts}
       renderItem={({ item, drag }) => (
-        <DraggableChartItem item={item} drag={drag} onDeleteUpdate={onDeleteUpdate} onCloneUpdate={onCloneUpdate} />
+        <DraggableChartItem
+          item={item}
+          drag={drag}
+          onDeleteUpdate={onDeleteUpdate}
+          onCloneUpdate={onCloneUpdate}
+          isMaximumChartList={isMaximumChartList}
+          setOpenMaximumAlert={setOpenMaximumAlert}
+        />
       )}
       ListFooterComponent={<View style={{ marginBottom: 20 }} />}
       keyExtractor={(item) => `draggableChart${item.id}`}

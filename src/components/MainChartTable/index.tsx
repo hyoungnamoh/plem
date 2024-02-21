@@ -10,6 +10,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import PlemButton from 'components/Atoms/PlemButton';
+import { Dispatch, SetStateAction } from 'react';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
@@ -18,9 +19,13 @@ const chartRadius = SCREEN_WIDTH / 2.65;
 const MainChartTable = ({
   chart,
   navigation,
+  isMaximumChartList,
+  setOpenMaximumAlert,
 }: {
   chart: PlanChart | null;
   navigation: NativeStackNavigationProp<MainTabStackParamList, 'MainPage', undefined>;
+  isMaximumChartList: boolean;
+  setOpenMaximumAlert: Dispatch<SetStateAction<boolean>>;
 }) => {
   const hasTodayChart = !!chart;
   const chartData = chart || SAMPLE_EMPTY_CHART;
@@ -33,6 +38,10 @@ const MainChartTable = ({
     if (chart) {
       navigation.navigate('AddChartPage', { chart });
     } else {
+      if (isMaximumChartList) {
+        setOpenMaximumAlert(true);
+        return;
+      }
       navigation.navigate('AddChartPage');
     }
   };

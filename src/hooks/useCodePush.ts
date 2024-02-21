@@ -55,8 +55,6 @@ export const useCodePush = () => {
           // 패키지 다운로드 중
           // IntroScreen 에서 보여줄 progressBar state 와 stateMessage 셋팅
           setSyncDownloadProgress(progress); // { totalBytes: number, receivedBytes: number }
-          console.log('pakage downloading..', progress);
-
           setStateSyncMessage('상큼함 다운로드 중...');
         })
         .then((newPackage: LocalPackage) => {
@@ -86,7 +84,6 @@ export const useCodePush = () => {
     try {
       update.download().then((newPackage: any) => {
         newPackage.install().done(() => {
-          console.log('optional updating done');
           CodePush.allowRestart();
         });
       });

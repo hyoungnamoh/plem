@@ -5,19 +5,19 @@ export const permissionChecker = () => {
     .then((result) => {
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          console.log('This feature is not available (on this device / in this context)');
+          console.info('This feature is not available (on this device / in this context)');
           break;
         case RESULTS.DENIED:
-          console.log('The permission has not been requested / is denied but requestable');
+          console.info('The permission has not been requested / is denied but requestable');
           break;
         case RESULTS.LIMITED:
-          console.log('The permission is limited: some actions are possible');
+          console.info('The permission is limited: some actions are possible');
           break;
         case RESULTS.GRANTED:
-          console.log('The permission is granted');
+          console.info('The permission is granted');
           break;
         case RESULTS.BLOCKED:
-          console.log('The permission is denied and not requestable anymore');
+          console.info('The permission is denied and not requestable anymore');
           break;
       }
     })

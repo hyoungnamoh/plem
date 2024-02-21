@@ -6,8 +6,9 @@ import AddChartButton from './AddChartButton';
 import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
 import ChartListHeader from './ChartListItemHeader';
 import ChartListItemContent from './ChartListItemContent';
+import UnderlineSvg from 'assets/images/underline.svg';
 
-const ChartList = ({ list }: { list: PlanChart[] }) => {
+const ChartList = ({ list, onPressAddChart }: { list: PlanChart[]; onPressAddChart: () => void }) => {
   const [activeSections, setAciveSections] = useState<number[]>([]);
 
   const renderAccordionHeader = (chart: PlanChart, _: number, isActive: boolean) => {
@@ -23,12 +24,14 @@ const ChartList = ({ list }: { list: PlanChart[] }) => {
   };
 
   const renderAccordionFooter = (content: PlanChart, index: number) => {
+    // return <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />;
     return list.length - 1 === index ? (
       <View key={`footer${content.id}`} style={styles.footerWrap}>
-        <AddChartButton />
+        <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
+        <AddChartButton onPress={onPressAddChart} />
       </View>
     ) : (
-      <></>
+      <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
     );
   };
 

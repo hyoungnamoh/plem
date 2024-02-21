@@ -1,17 +1,10 @@
 import { StyleSheet } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
-import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import PlemButton from 'components/Atoms/PlemButton';
 
-const AddChartButton = () => {
-  const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
-  const onPressAddChart = () => {
-    navigation.navigate('AddChartPage');
-  };
-
+const AddChartButton = ({ onPress }: { onPress: () => void }) => {
   return (
-    <PlemButton style={styles.addChartButton} onPress={onPressAddChart}>
+    <PlemButton style={styles.addChartButton} onPress={onPress}>
       <PlemText>계획표 작성</PlemText>
     </PlemButton>
   );
