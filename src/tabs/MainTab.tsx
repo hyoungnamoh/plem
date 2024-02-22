@@ -10,7 +10,7 @@ import PlanChartListPage from 'pages/PlanChartListPage';
 
 export type MainTabStackParamList = {
   MainPage: undefined;
-  AddChartPage?: { chart: PlanChart };
+  AddChartPage?: { chart: PlanChart | null };
   RepeatSettingPage: undefined;
   SelectRepeatDatePage: undefined;
   AddPlanPage?: { planIndex?: number };

@@ -179,7 +179,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const onPressUpdate = () => {
-    if (updateChartLoading || !route.params?.chart.id) {
+    if (updateChartLoading || !route.params?.chart?.id) {
       return;
     }
     if (!checkEmptyPlan()) {

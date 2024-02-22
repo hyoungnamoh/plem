@@ -1,12 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, StyleSheet, View } from 'react-native';
-import { useSetRecoilState } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import { MAIN_COLOR } from 'constants/colors';
-import { useFocusEffect } from '@react-navigation/native';
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import NotificationActiveSvg from 'assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from 'assets/images/notification_inactive_32x32.svg';
@@ -14,7 +13,6 @@ import MainLogoSvg from 'assets/images/mainpage_logo_134x40.svg';
 import PlusSvg from 'assets/images/plus_40x40.svg';
 import UncheckboxSvg from 'assets/images/uncheckedbox_24x24.svg';
 import CheckboxSvg from 'assets/images/checkedbox_24x24.svg';
-import { addPlanChartState } from 'states/addPlanChartState';
 import MainChartTable from 'components/MainChartTable';
 import { useQueryClient } from 'react-query';
 import { TODAY_PLAN_CHART_QUERY_KEY, useGetTodayPlanChart } from 'hooks/queries/useGetTodayPlanChart';
@@ -24,14 +22,15 @@ import PlemButton from 'components/Atoms/PlemButton';
 import MaximumChartAlert from 'components/MaximumChartAlert';
 import { useGetChartListCount } from 'hooks/queries/useGetChartListCount';
 import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
+import { LoggedInTabParamList } from 'types/appInner';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
 const yellowLineImage = require('assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
+  const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
   const queryClient = useQueryClient();
-  const setChart = useSetRecoilState(addPlanChartState);
   const [checkedList, setCheckedList] = useState<number[]>([]);
   const [currentDate, setCorrentDate] = useState(dayjs().get('date'));
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
@@ -105,31 +104,41 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptyPlanPress = () => {
-    if (!todayPlanChart) {
+    if (isMaximumChartList) {
+      setOpenMaximumAlert(true);
       return;
     }
-    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
+    navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
     navigation.navigate('AddPlanPage');
   };
 
   const handleEmptySubPlanPress = () => {
-    if (!todayPlanChart) {
+    if (isMaximumChartList) {
+      setOpenMaximumAlert(true);
       return;
     }
-    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
+    navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
   };
 
   const handlePlanPress = (planIndex: number) => {
-    if (!todayPlanChart || planIndex < 0) {
+    if (planIndex < 0) {
       return;
     }
-    setChart(todayPlanChart.data);
-    navigation.navigate('AddChartPage', { chart: todayPlanChart.data });
+    if (isMaximumChartList) {
+      setOpenMaximumAlert(true);
+      return;
+    }
+    if (isMaximumChartList) {
+      setOpenMaximumAlert(true);
+      return;
+    }
+    navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
     navigation.navigate('AddPlanPage', { planIndex });
   };
 
   const handleMoveChartList = () => {
-    navigation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
+    // FIXME: 타입 수정
+    tabNaviation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
     // navigation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
     setOpenMaximumAlert(false);
   };
