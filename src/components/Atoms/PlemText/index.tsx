@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 
+export type PlemTextProps = TextProps;
+
 const PlemText = forwardRef<Text, TextProps>((props, ref) => {
   const propStyle = props.style as TextStyle | undefined;
   const lineHeight = propStyle?.lineHeight || 1;

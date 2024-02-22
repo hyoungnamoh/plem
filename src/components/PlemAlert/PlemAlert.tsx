@@ -3,7 +3,7 @@ import PlemAlertMediumSvg from 'assets/images/plem-alert-md.svg';
 import PlemAlertSmallSvg from 'assets/images/plem-alert-sm.svg';
 import PlemAlertLargeSvg from 'assets/images/plem-alert-lg.svg';
 import Modal from 'react-native-modal';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, View } from 'react-native';
 import PlemButton from 'components/Atoms/PlemButton';
 import PlemText from 'components/Atoms/PlemText';
 import {
@@ -21,9 +21,19 @@ export type PlemAlertProps = {
   onCancel: () => void;
   onConfirm: () => void;
   open: boolean;
+  confirmTextStyle?: StyleProp<TextStyle>;
 };
 
-const PlemAlert = ({ size, children, cancelText, confirmText, onCancel, onConfirm, open }: PlemAlertProps) => {
+const PlemAlert = ({
+  size,
+  children,
+  cancelText,
+  confirmText,
+  onCancel,
+  onConfirm,
+  open,
+  confirmTextStyle,
+}: PlemAlertProps) => {
   const getModalBySize = () => {
     if (size === 'small') {
       return <PlemAlertSmallSvg preserveAspectRatio="none" width={ALERT_WIDTH} />;
@@ -58,8 +68,8 @@ const PlemAlert = ({ size, children, cancelText, confirmText, onCancel, onConfir
             <PlemButton style={styles.button} onPress={onCancel}>
               <PlemText>{cancelText || '아니요'}</PlemText>
             </PlemButton>
-            <PlemButton style={styles.button} onPress={onConfirm}>
-              <PlemText>{confirmText || '네'}</PlemText>
+            <PlemButton style={[styles.button]} onPress={onConfirm}>
+              <PlemText style={[confirmTextStyle]}>{confirmText || '네'}</PlemText>
             </PlemButton>
           </View>
         </View>

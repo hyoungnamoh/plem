@@ -8,22 +8,22 @@ import PlemButton from 'components/Atoms/PlemButton';
 const ITEM_HEIGHT = 40;
 
 export type DropdownItem<T = string | number> = { label: string; value: T };
-export type DropdownProps = {
+export type DropdownProps<T = string | number> = {
   open: boolean;
-  list: DropdownItem[];
+  list: DropdownItem<T>[];
   scrollViewProps?: ScrollViewProps;
   onPressRow: () => void;
-  onChange: (item: DropdownItem<any>) => void;
-  value: DropdownItem;
+  onChange: (item: DropdownItem<T>) => void;
+  value: DropdownItem<T>;
 };
 
-export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownProps) => {
-  const onChangeItem = (item: DropdownItem) => {
+export function Dropdown<T>({ open, list, onPressRow, onChange, value }: DropdownProps<T>) {
+  const onChangeItem = (item: DropdownItem<T>) => {
     onChange(item);
   };
 
   const renderItem = useCallback(
-    ({ item }: { item: DropdownItem }) => {
+    ({ item }: { item: DropdownItem<T> }) => {
       return (
         <PlemButton style={{ height: ITEM_HEIGHT, justifyContent: 'center' }} onPress={() => onChangeItem(item)}>
           <PlemText>{item.label}</PlemText>
@@ -34,7 +34,7 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
   );
 
   const getItemLayout = useCallback(
-    (data: DropdownItem[] | undefined | null, index: number) => ({
+    (data: DropdownItem<T>[] | undefined | null, index: number) => ({
       length: ITEM_HEIGHT,
       offset: ITEM_HEIGHT * index,
       index,
@@ -42,7 +42,7 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
     [list]
   );
 
-  const keyExtractor = useCallback((item: DropdownItem) => item.value.toString(), [list]);
+  const keyExtractor = useCallback((item: DropdownItem<T>) => String(item.value), [list]);
 
   return (
     <View>
@@ -77,7 +77,7 @@ export const Dropdown = ({ open, list, onPressRow, onChange, value }: DropdownPr
       )}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   label: {

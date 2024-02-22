@@ -2,14 +2,14 @@ import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { Dropdown, DropdownProps } from 'components/Dropdown';
 
-export const DropdownWithLabel = ({ label, ...dropdownProps }: { label: string } & DropdownProps) => {
+export function DropdownWithLabel<T>({ label, ...dropdownProps }: { label: string } & DropdownProps<T>) {
   return (
     <View style={{ zIndex: 1 }}>
       <PlemText style={styles.label}>{label}</PlemText>
-      <Dropdown {...dropdownProps} />
+      <Dropdown<T> {...dropdownProps} />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   label: {
