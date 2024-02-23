@@ -19,7 +19,8 @@ import PlemButton from 'components/Atoms/PlemButton';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
-const inquiryTypeList: DropdownItem<InquiryType>[] = [
+const inquiryTypeList: DropdownItem<InquiryType | ''>[] = [
+  { label: '문의 유형을 선택해 주세요.', value: '' },
   { label: '계정 관련', value: 'account' },
   { label: '기능 관련', value: 'function' },
   { label: '버그 신고', value: 'bug' },
@@ -44,7 +45,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
     },
   });
 
-  const onChangeType = (item: DropdownItem<InquiryType>) => {
+  const onChangeType = (item: DropdownItem<InquiryType | ''>) => {
     setInquiryType(item);
     setOpenDropdown(false);
   };
@@ -68,6 +69,10 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
     }
     if (isInvalidEmail) {
       Alert.alert('이메일 형식을 확인해 주세요.');
+      return;
+    }
+    if (!inquiryType.value) {
+      Alert.alert('문의 유형을 선택해 주세요.');
       return;
     }
 
@@ -106,7 +111,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
             }}
           />
           <View style={styles.content}>
-            <DropdownWithLabel
+            <DropdownWithLabel<InquiryType | ''>
               label="문의 유형"
               open={openDropdown}
               list={inquiryTypeList}
@@ -125,13 +130,14 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
             </View>
             <PlemButton onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
               <WhiteBoard preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
-              <View style={{ position: 'absolute', padding: 12 }}>
+              <View style={{ position: 'absolute', padding: 12, height: 210 }}>
                 <PlemTextInput
                   ref={contentRef}
                   value={content}
                   onChangeText={setContent}
                   placeholder="문의 내용을 입력해 주세요."
                   multiline={true}
+                  maxLength={500}
                 />
               </View>
             </PlemButton>
