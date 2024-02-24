@@ -39,8 +39,13 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const [password, setPassword] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
+  const [isLoginFailed, setIsLoginFailed] = useState(false);
 
   const onChangeEmail = (value: string) => {
+    if (isLoginFailed) {
+      setIsLoginFailed(false);
+      setIsInvalidPassword(false);
+    }
     if (isInvalidEmail) {
       setIsInvalidEmail(false);
     }
@@ -48,6 +53,10 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   };
 
   const onChangePassword = (value: string) => {
+    if (isLoginFailed) {
+      setIsLoginFailed(false);
+      setIsInvalidEmail(false);
+    }
     if (isInvalidPassword) {
       setIsInvalidPassword(false);
     }
@@ -74,17 +83,18 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
 
   const loginMutation = useMutation<ApiResponse<LoginResponse>, AxiosError, LoginMutationParams>('loginApi', loginApi, {
     onSuccess: async (responseData, variables, context) => {
-      if (responseData.status === 200) {
-        queryClient.invalidateQueries('loginUser');
-        const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
-        await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
-        await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
-        await getPhoneToken();
-        setLoggedInUser(user);
-      } else if (responseData.data) {
-        Alert.alert(responseData.data);
-      } else {
-        Alert.alert('이메일과 비밀번호를 입력해주세요.');
+      queryClient.invalidateQueries('loginUser');
+      const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
+      await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
+      await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
+      await getPhoneToken();
+      setLoggedInUser(user);
+    },
+    onError: (error) => {
+      if (error.response?.status === 401) {
+        setIsLoginFailed(true);
+        setIsInvalidEmail(true);
+        setIsInvalidPassword(true);
       }
     },
   });
@@ -139,7 +149,6 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
             keyboardType="email-address"
             isInvalidValue={isInvalidEmail}
           />
-          {/* {isInvalidEmail && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>} */}
           <View style={{ marginTop: 32 }}>
             <PlemText style={{ color: isInvalidPassword ? '#E40C0C' : '#000' }}>비밀번호</PlemText>
             <UnderlineTextInput
@@ -150,7 +159,9 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
               secureTextEntry
               isInvalidValue={isInvalidPassword}
             />
-            {/* {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>} */}
+            {isLoginFailed && (
+              <PlemText style={styles.errorText}>가입되지 않은 계정이거나 이메일 또는 비밀번호가 틀렸어요.</PlemText>
+            )}
           </View>
         </View>
         <View style={styles.buttonContainer}>

@@ -7,7 +7,8 @@ export type UnderlineTextInputProps = TextInputProps & { wrapperProps?: ViewProp
 const UnderlineTextInput = (props: UnderlineTextInputProps) => {
   return (
     <View {...props.wrapperProps}>
-      <PlemTextInput {...props} style={[props.style, props.isInvalidValue && styles.invalidColor]} />
+      {/* , props.isInvalidValue && styles.invalidColor */}
+      <PlemTextInput {...props} style={[props.style]} />
       <UnderlineSvg
         preserveAspectRatio="none"
         width={'100%'}
