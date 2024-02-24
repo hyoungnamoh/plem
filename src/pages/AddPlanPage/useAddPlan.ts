@@ -37,7 +37,7 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   }, []);
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
+    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
   };
 
   const isDuplicatedTime = () => {

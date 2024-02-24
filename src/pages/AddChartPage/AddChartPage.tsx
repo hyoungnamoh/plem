@@ -116,16 +116,16 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   }, [navigation, chart, route.params?.chart, isEdit]);
 
   const checkDrafts = async () => {
-    const hasDraft = await AsyncStorage.getItem('chart_data');
+    const hasDraft = await AsyncStorage.getItem('chartData');
     return !!hasDraft;
   };
 
   const setStorageChartData = async () => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chart));
+    await AsyncStorage.setItem('chartData', JSON.stringify(chart));
   };
 
   const initChartData = async () => {
-    const item = await AsyncStorage.getItem('chart_data');
+    const item = await AsyncStorage.getItem('chartData');
     const chartData = item ? (JSON.parse(item) as AddPlanChart) : null;
 
     // test

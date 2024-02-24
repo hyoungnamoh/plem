@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs, ManipulateType } from 'dayjs';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import { useGetScheduleList } from 'hooks/queries/useGetScheduleList';
@@ -97,13 +97,27 @@ const getRepeatScheduleMap = ({
   return newScheduleMap;
 };
 
-const CalendarPage = ({ navigation }: CalendarPageProps) => {
+const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
   const categoryList = useRecoilValue(categoryListState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedCalendarDateState);
   const [openScheduleModal, setOpenScheduleModal] = useRecoilState(openScheduleModalState);
 
   const [currentCalendar, setCurrentCalendar] = useState(dayjs());
   const { data: calendarSchedule } = useGetScheduleList();
+
+  useEffect(() => {
+    if (route.params?.selectedDate) {
+      setSelectedDate(dayjs.unix(route.params.selectedDate));
+      setOpenScheduleModal(true);
+    }
+  }, [route.params?.selectedDate]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentCalendar(dayjs());
+    }, [])
+  );
+
   const yearlyRepeatScheduleMap = useMemo(
     () =>
       getRepeatScheduleMap({
@@ -149,12 +163,6 @@ const CalendarPage = ({ navigation }: CalendarPageProps) => {
         repeatUnit: 'day',
       }),
     [calendarSchedule?.data.repeatSchedules?.dailyRepeatSchedules]
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      setCurrentCalendar(dayjs());
-    }, [])
   );
 
   const onPressScheduleModalClose = useCallback(() => {

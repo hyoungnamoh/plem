@@ -23,6 +23,9 @@ import MaximumChartAlert from 'components/MaximumChartAlert';
 import { useGetChartListCount } from 'hooks/queries/useGetChartListCount';
 import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
 import { LoggedInTabParamList } from 'types/appInner';
+import TodayScheduleBox from 'components/TodayScheduleBox';
+import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
+import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -36,6 +39,8 @@ const MainPage = ({ navigation }: MainPageProps) => {
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
   const { data: todayPlanChart } = useGetTodayPlanChart();
   const { data: chartListCount } = useGetChartListCount();
+  const { data: todayScheduleList } = useGetTodayScheduleList({ date: dayjs().format('YYYY-MM-DD') });
+  const { isConfirmedSchedule } = useScheduleConfirmDate();
   const isMaximumChartList = !!(chartListCount && chartListCount.data.count >= NUM_OF_MAXIMUM_CHART);
 
   useEffect(() => {
@@ -45,18 +50,19 @@ const MainPage = ({ navigation }: MainPageProps) => {
   useFocusEffect(() => {
     if (currentDate !== dayjs().get('date')) {
       queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+      queryClient.invalidateQueries(TODAY_SCHEDULE_LIST);
       setCorrentDate(dayjs().get('date'));
     }
   });
 
   const setCheckedListToStorageData = async () => {
-    const item = await AsyncStorage.getItem('plan_checked_list');
+    const item = await AsyncStorage.getItem('planCheckedList');
     const planCheckList = item ? JSON.parse(item) : [];
     setCheckedList(planCheckList);
   };
 
   const handleSubPlanPress = async (id: number) => {
-    const asyncStorageItem = await AsyncStorage.getItem('plan_checked_list');
+    const asyncStorageItem = await AsyncStorage.getItem('planCheckedList');
     const planCheckList: number[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
     const idIndex = planCheckList.findIndex((e) => e === id);
 
@@ -67,7 +73,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
     }
 
     setCheckedList(planCheckList);
-    await AsyncStorage.setItem('plan_checked_list', JSON.stringify(planCheckList));
+    await AsyncStorage.setItem('planCheckedList', JSON.stringify(planCheckList));
   };
 
   const handleAddChartPress = () => {
@@ -139,7 +145,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
   const handleMoveChartList = () => {
     // FIXME: 타입 수정
     tabNaviation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
-    // navigation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
     setOpenMaximumAlert(false);
   };
 
@@ -218,6 +223,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
           </CustomScrollView>
         </View>
       </View>
+      {todayScheduleList && todayScheduleList.data.length > 0 && !isConfirmedSchedule() && (
+        <TodayScheduleBox todayScheduleCount={todayScheduleList.data.length} />
+      )}
       <MaximumChartAlert
         open={openMaximumAlert}
         onCancel={() => setOpenMaximumAlert(false)}

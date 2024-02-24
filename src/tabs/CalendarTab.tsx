@@ -7,7 +7,7 @@ import RepeatCustomSettingPage from 'pages/RepeatCustomSettingPage';
 import { Schedule } from 'types/calendar';
 
 export type CalendarTabStackParamList = {
-  CalendarPage: undefined;
+  CalendarPage?: { selectedDate?: number };
   AddSchedulePage: { schedule?: Schedule; date: string };
   ScheduleNotiSettingPage: undefined;
   ScheduleRepeatSettingPage: undefined;

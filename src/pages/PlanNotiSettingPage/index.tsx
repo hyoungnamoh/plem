@@ -34,7 +34,7 @@ const PlanNotiSettingPage = ({ navigation }: SetPlanNotificationPageProps) => {
   };
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chart_data', JSON.stringify(chartData));
+    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
   };
 
   const onPressBottomButton = () => {

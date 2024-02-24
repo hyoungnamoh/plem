@@ -3,7 +3,7 @@ import CloseSVG from 'assets/images/header_close_40x40.svg';
 import UnderlineButton from 'components/UnderlineButton';
 import PlemText from 'components/Atoms/PlemText';
 import AddScheduleModalSvg from 'assets/images/add_schedule_modal.svg';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { NUMBER_TO_DAY_KOR } from 'constants/dates';
 import { DaysOfWeekNum } from 'types/date';
 import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
@@ -17,6 +17,8 @@ import { SCREEN_WIDTH } from 'constants/etc';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import PlemButton from 'components/Atoms/PlemButton';
+import { useEffect } from 'react';
+import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 
 type AddScheduleModalProps = {
   open: boolean;
@@ -45,9 +47,16 @@ export const AddScheduleModal = ({
 }: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
+  const { updateScheduleConfirmDate } = useScheduleConfirmDate();
   const year = targetDate.year();
   const month = targetDate.month();
   const date = targetDate.date();
+
+  useEffect(() => {
+    if (open && targetDate.startOf('date').isSame(dayjs().startOf('date'))) {
+      updateScheduleConfirmDate(dayjs().format('YYYY-MM-DD'));
+    }
+  }, [open, targetDate]);
 
   const handleScheduleClick = (schedule: Schedule) => {
     navigate('AddSchedulePage', { schedule, date: targetDate.startOf('date').toISOString() });

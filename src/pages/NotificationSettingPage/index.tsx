@@ -87,7 +87,7 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
   };
 
   const setStorageNotificationInfo = async (info: NotificationInfo) => {
-    await AsyncStorage.setItem('notification_info', JSON.stringify(info));
+    await AsyncStorage.setItem('notificationInfo', JSON.stringify(info));
   };
 
   return (

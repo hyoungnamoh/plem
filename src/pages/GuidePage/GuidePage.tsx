@@ -76,7 +76,7 @@ const GuidePage = () => {
         onPress={async () => {
           if (guideIndex === PAGES.length - 1) {
             const accessDate = dayjs().format('YYYY-MM-DD HH:mm:ss');
-            await AsyncStorage.setItem('last_access', accessDate);
+            await AsyncStorage.setItem('lastAccess', accessDate);
             setLastAccessDate(accessDate);
             navigate('IntroPage');
             return;

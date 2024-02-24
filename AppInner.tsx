@@ -43,6 +43,7 @@ import CodePushUpdating from 'components/CodePushUpdating';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
 import PlemToast from 'components/PlemToast';
 import { globalToastState } from 'states/globalToastState';
+import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 
 configureNotification();
 
@@ -71,6 +72,8 @@ function AppInner({ routeName }: { routeName: string }) {
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
 
+  const { initSchedulConfirmDate } = useScheduleConfirmDate();
+
   const appState = useRef(AppState.currentState);
   const globalToastRef = useRef<Toast>(null);
 
@@ -80,6 +83,7 @@ function AppInner({ routeName }: { routeName: string }) {
       loginCheck(),
       setScheduleCategoryList(),
       getNotificationInfo(),
+      initSchedulConfirmDate(),
     ]);
   }, []);
 
@@ -169,7 +173,7 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const getStorageNotificationInfo = async () => {
-    const asyncStorageItem = await AsyncStorage.getItem('notification_info');
+    const asyncStorageItem = await AsyncStorage.getItem('notificationInfo');
     return asyncStorageItem ? (JSON.parse(asyncStorageItem) as NotificationInfo) : null;
   };
 
@@ -208,7 +212,7 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const setLastAccessDateFromStorage = async () => {
-    const lastAccess = await AsyncStorage.getItem('last_access');
+    const lastAccess = await AsyncStorage.getItem('lastAccess');
 
     if (lastAccess) {
       setLastAccessDate(lastAccess);
