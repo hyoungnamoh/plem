@@ -61,7 +61,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
               onChangeText={onChangeName}
               style={{ marginTop: 12 }}
               maxLength={14}
-              placeholder={'최대 14글자'}
+              placeholder={'최대 14자리'}
             />
           </View>
           <View>

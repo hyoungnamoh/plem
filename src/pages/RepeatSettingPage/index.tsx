@@ -32,17 +32,18 @@ export type RepeatOptionItem = {
   value: RepeatOptionItemValue;
   label: RepeatOptionKor;
   day?: DaysOfWeekKor;
+  order?: number;
 };
 
 export const repeatOptionList: RepeatOptionItem[] = [
   { value: null, label: '안 함' },
-  { value: 0, label: '일요일마다', day: '일' },
-  { value: 1, label: '월요일마다', day: '월' },
-  { value: 2, label: '화요일마다', day: '화' },
-  { value: 3, label: '수요일마다', day: '수' },
-  { value: 4, label: '목요일마다', day: '목' },
-  { value: 5, label: '금요일마다', day: '금' },
-  { value: 6, label: '토요일마다', day: '토' },
+  { value: 1, label: '월요일마다', day: '월', order: 1 },
+  { value: 2, label: '화요일마다', day: '화', order: 2 },
+  { value: 3, label: '수요일마다', day: '수', order: 3 },
+  { value: 4, label: '목요일마다', day: '목', order: 4 },
+  { value: 5, label: '금요일마다', day: '금', order: 5 },
+  { value: 6, label: '토요일마다', day: '토', order: 6 },
+  { value: 0, label: '일요일마다', day: '일', order: 7 },
   { value: 7, label: '날짜 지정' },
 ];
 
@@ -72,6 +73,10 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       const copiedOptions = [...repeatOptions];
       const index = copiedOptions.findIndex((e) => e === option);
       copiedOptions.splice(index, 1);
+      if (copiedOptions.length === 0) {
+        setRepeatOptions([null]);
+        return;
+      }
       setRepeatOptions(copiedOptions);
       return;
     }

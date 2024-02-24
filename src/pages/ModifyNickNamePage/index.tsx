@@ -48,12 +48,18 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
     setNickname(makeNickname());
   };
 
+  const isInvalidNickname = nickname.length < 2 || nickname.length > 12 || nickname === loggedInUser?.nickname;
+
   if (!loggedInUser) {
     return null;
   }
   return (
     <CustomScrollView contentContainerStyle={styles.page}>
-      <Header title="닉네임" buttonName="완료" buttonProps={{ onPress: () => onPressComplete() }} />
+      <Header
+        title="닉네임"
+        buttonName="완료"
+        buttonProps={{ onPress: () => onPressComplete(), disabled: isInvalidNickname }}
+      />
       <View style={styles.content}>
         <View style={styles.nicknameWrap}>
           <PlemText>닉네임</PlemText>
@@ -62,7 +68,8 @@ const ModifyNickNamePage = ({ navigation }: ModifyNickNamePageProps) => {
               style={styles.input}
               value={nickname}
               onChangeText={setNickname}
-              placeholder="닉네임을 입력해 주세요."
+              placeholder="닉네임을 입력해 주세요. 2-12자리"
+              maxLength={12}
               wrapperProps={{ style: styles.inputWrap }}
             />
             <View style={styles.randomButtonWrap}>

@@ -5,13 +5,13 @@ import CheckSvg from 'assets/images/check_32x32.svg';
 import PlemButton from 'components/Atoms/PlemButton';
 
 const REPEAT_DAY_LIST = [
-  { value: 0, label: '일요일마다' },
   { value: 1, label: '월요일마다' },
   { value: 2, label: '화요일마다' },
   { value: 3, label: '수요일마다' },
   { value: 4, label: '목요일마다' },
   { value: 5, label: '금요일마다' },
   { value: 6, label: '토요일마다' },
+  { value: 0, label: '일요일마다' },
 ];
 
 type WeeklyRepetitionProps = {

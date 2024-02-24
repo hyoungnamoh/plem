@@ -201,11 +201,29 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     if (chart.repeats.includes(7) && chart.repeatDates) {
       return chart.repeatDates.map((date) => `${date}일`).join(', ');
     }
-    return repeatOptionList
+
+    const sortedRepeatList = repeatOptionList
       .filter((option) => chart.repeats.includes(option.value))
-      .sort((a, b) => a.value! - b.value!)
-      .map((option) => option.day)
-      .join(', ');
+      .sort((a, b) => a.order! - b.order!);
+
+    const isWeekend =
+      sortedRepeatList.length === 2 && sortedRepeatList.every((option) => option.value === 0 || option.value === 6);
+    const isWeekdays =
+      sortedRepeatList.length === 5 && sortedRepeatList.every((option) => option.value !== 0 && option.value !== 6);
+
+    if (isWeekend) {
+      return '주말';
+    }
+
+    if (isWeekdays) {
+      return '주중';
+    }
+
+    if (sortedRepeatList.length === 7) {
+      return '매일';
+    }
+
+    return sortedRepeatList.map((option) => option.day).join(', ');
   };
 
   const checkEmptyPlan = () => {

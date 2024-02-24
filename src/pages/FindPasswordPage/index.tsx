@@ -126,7 +126,7 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
         fadeOutDuration={300}
         textStyle={styles.toastText}
       />
-      <Header />
+      <Header close />
       <View style={styles.content}>
         <View style={styles.titleWrap}>
           <PlemText style={styles.title}>비밀번호 재설정을 위해</PlemText>

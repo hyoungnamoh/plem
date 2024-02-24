@@ -10,15 +10,18 @@ import { validator } from 'helper/validator';
 import { LoggedOutStackParamList } from 'types/appInner';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import { useInitPassword } from 'hooks/mutations/useInitPassword';
+import { useSetRecoilState } from 'recoil';
+import { globalToastState } from 'states/globalToastState';
 
 type PasswordSettingPage = NativeStackScreenProps<LoggedOutStackParamList, 'PasswordSettingPage'>;
 
 const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
   const { email, isFindingPassword } = route.params;
+  const setGlobalToast = useSetRecoilState(globalToastState);
   const { mutate: updatePassword } = useInitPassword({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
-        Alert.alert('비밀번호 재설정이 완료되었습니다.');
+        setGlobalToast({ text: '비밀번호 재설정이 완료되었습니다.', duration: 2000 });
         navigation.popToTop();
         navigation.push('LoginPage');
       } else if (responseData.data) {

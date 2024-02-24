@@ -28,7 +28,8 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
 
   const [nickname, setNickname] = useState('');
 
-  const canSignUp = email && password && nickname && isVerifiedEmail;
+  const isInvalidNickname = nickname.length < 2 || nickname.length > 12;
+  const canSignUp = email && password && !isInvalidNickname && isVerifiedEmail;
 
   useEffect(() => {
     if (canSignUp) {
@@ -80,7 +81,7 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
 
   return (
     <CustomScrollView contentContainerStyle={styles.page}>
-      <Header />
+      <Header buttonProps={{ disabled: true }} />
       <View style={styles.content}>
         <View style={styles.titleWrap}>
           <PlemText style={styles.title}>플렘에서 사용할</PlemText>
@@ -93,8 +94,9 @@ const NicknameSettingPage = ({ navigation, route }: NicknameSettingPageProps) =>
               style={styles.input}
               value={nickname}
               onChangeText={setNickname}
-              placeholder="닉네임을 입력해 주세요."
+              placeholder="닉네임을 입력해 주세요. 2-12자리"
               wrapperProps={{ style: styles.inputWrap }}
+              maxLength={12}
             />
             <View style={styles.randomButtonWrap}>
               <UnderlineButton style={styles.randomButton} onPress={onPressMakeNickname}>

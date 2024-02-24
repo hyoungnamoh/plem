@@ -68,7 +68,7 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
         await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
         const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
         setLoggedInUser(user);
-        Alert.alert('이메일 변경이 완료되었습니다.');
+        setGlobalToast({ text: '이메일 변경이 완료되었습니다.', duration: 2000 });
         navigation.goBack();
       } else if (responseData.data) {
         Alert.alert(responseData.data);
@@ -104,11 +104,11 @@ const ModifyEmailPage = ({ navigation }: ModifyEmailPageProps) => {
       Alert.alert('기존 이메일과 동일합니다.');
       return;
     }
-    if (verificationCode === receivedCode) {
-      updateEmail({ newEmail: email });
-      return;
+    if (verificationCode !== receivedCode) {
+      Alert.alert('인증번호가 일치하지 않습니다.');
     }
-    Alert.alert('인증번호가 일치하지 않습니다.');
+    updateEmail({ newEmail: email });
+    return;
   };
 
   return (

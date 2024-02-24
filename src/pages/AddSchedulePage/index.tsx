@@ -215,7 +215,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                 value={schedule.name}
                 onChangeText={handleNameChange}
                 maxLength={14}
-                placeholder={'최대 14글자'}
+                placeholder={'최대 14자리'}
               />
               <View style={{ marginTop: 32, zIndex: 1000 }}>
                 <PaletteInputRow

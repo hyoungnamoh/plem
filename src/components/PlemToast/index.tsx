@@ -1,4 +1,5 @@
 import Toast, { ToastComponentProps } from '@hyoungnamoh/react-native-easy-toast';
+import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
 import { forwardRef } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -8,7 +9,7 @@ const PlemToast = forwardRef<Toast, ToastComponentProps>((props, ref) => {
       ref={ref}
       style={styles.toast}
       position="bottom"
-      positionValue={200}
+      positionValue={BOTTOM_TAB_HEIGHT + 100}
       fadeInDuration={300}
       fadeOutDuration={300}
       textStyle={styles.toastText}
