@@ -1,5 +1,4 @@
 export const ADJECTIVES = [
-  '형용사',
   '같은',
   '고른',
   '고운',

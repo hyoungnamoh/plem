@@ -37,12 +37,20 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+  const [isInvalidPassword, setIsInvalidPassword] = useState(false);
 
   const onChangeEmail = (value: string) => {
+    if (isInvalidEmail) {
+      setIsInvalidEmail(false);
+    }
     setEmail(removeWhitespace(value));
   };
 
   const onChangePassword = (value: string) => {
+    if (isInvalidPassword) {
+      setIsInvalidPassword(false);
+    }
     setPassword(value);
   };
 
@@ -50,6 +58,17 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
     if (loginMutation.isLoading) {
       return;
     }
+    if (!email) {
+      setIsInvalidEmail(true);
+    }
+    if (!password) {
+      setIsInvalidPassword(true);
+    }
+
+    if (!email || !password) {
+      return;
+    }
+
     loginMutation.mutate({ email, password });
   };
 
@@ -111,23 +130,27 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
       <View style={styles.content}>
         <View>{getTitle()}</View>
         <View style={{ marginTop: 40 }}>
-          <PlemText>이메일</PlemText>
+          <PlemText style={{ color: isInvalidEmail ? '#E40C0C' : '#000' }}>이메일</PlemText>
           <UnderlineTextInput
             wrapperProps={{ style: { marginTop: 12 } }}
             value={email}
             onChangeText={onChangeEmail}
             placeholder={'이메일을 입력해 주세요.'}
             keyboardType="email-address"
+            isInvalidValue={isInvalidEmail}
           />
+          {/* {isInvalidEmail && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>} */}
           <View style={{ marginTop: 32 }}>
-            <PlemText>비밀번호</PlemText>
+            <PlemText style={{ color: isInvalidPassword ? '#E40C0C' : '#000' }}>비밀번호</PlemText>
             <UnderlineTextInput
               wrapperProps={{ style: { marginTop: 12 } }}
               value={password}
               onChangeText={onChangePassword}
               placeholder={'영문, 숫자 포함 8-20자리'}
               secureTextEntry
+              isInvalidValue={isInvalidPassword}
             />
+            {/* {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>} */}
           </View>
         </View>
         <View style={styles.buttonContainer}>
@@ -161,6 +184,11 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 28,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#E40C0C',
+    marginTop: 5,
   },
 });
 
