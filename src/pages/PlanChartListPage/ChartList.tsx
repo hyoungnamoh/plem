@@ -28,7 +28,7 @@ const ChartList = ({ list, onPressAddChart }: { list: PlanChart[]; onPressAddCha
     return list.length - 1 === index ? (
       <View key={`footer${content.id}`} style={styles.footerWrap}>
         <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
-        <AddChartButton onPress={onPressAddChart} />
+        {list.length < 10 && <AddChartButton onPress={onPressAddChart} />}
       </View>
     ) : (
       <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />
