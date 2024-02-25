@@ -9,6 +9,7 @@ import { MAIN_COLOR } from 'constants/colors';
 import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import StartPlemButtonTitle from './StartPlemButtonTitle';
 import { LoggedOutStackParamList } from 'types/appInner';
+import PlemSmileSvg from 'assets/images/plem-smile.svg';
 
 type SignUpSuccessPage = NativeStackScreenProps<LoggedOutStackParamList, 'SignUpSuccessPage'>;
 
@@ -39,6 +40,10 @@ const SignUpSuccessPage = ({ route, navigation }: SignUpSuccessPage) => {
           <PlemText style={styles.title}>{nickname}님!</PlemText>
           <PlemText style={styles.title}>회원가입을 축하합니다.</PlemText>
         </View>
+        <View>
+          <PlemText style={styles.subTitle}>{'플렘과 함께 계획대로 흘러가는\n온전한 하루를 만들어볼까요?'}</PlemText>
+        </View>
+        <PlemSmileSvg style={{ position: 'absolute', bottom: '15%', right: 48 }} />
       </View>
       <BottomButton onPress={onPressStart} title={<StartPlemButtonTitle />} />
     </View>
@@ -86,6 +91,10 @@ const styles = StyleSheet.create({
   checkText: {
     marginTop: 16,
     color: '#888888',
+  },
+  subTitle: {
+    lineHeight: 1.44,
+    marginTop: 36,
   },
 });
 
