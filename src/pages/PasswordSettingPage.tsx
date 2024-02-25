@@ -95,7 +95,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
           <PlemText style={styles.title}>비밀번호를 설정하세요.</PlemText>
         </View>
         <View style={styles.passwordWrap}>
-          <PlemText style={[styles.label, isInvalidPassword ? styles.errorText : null]}>비밀번호</PlemText>
+          <PlemText style={[styles.label, isInvalidPassword ? styles.errorTextColor : null]}>비밀번호</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={password}
@@ -111,7 +111,9 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
           )}
         </View>
         <View style={styles.passwordWrap}>
-          <PlemText style={[styles.label, isInvalidPassword ? styles.errorText : null]}>비밀번호 확인</PlemText>
+          <PlemText style={[styles.label, isInvalidPasswordConfirm ? styles.errorTextColor : null]}>
+            비밀번호 확인
+          </PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={passwordConfirm}

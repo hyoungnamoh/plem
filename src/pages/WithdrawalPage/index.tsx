@@ -28,6 +28,7 @@ import { WithdrawalReason } from 'api/users/deleteUserApi';
 import WhiteBoard from 'assets/images/white_board.svg';
 import PlemTextInput from 'components/Atoms/PlemTextInput';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
+import dayjs from 'dayjs';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'WithdrawalPage'>;
 
@@ -79,6 +80,8 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
   const clearAllUserData = async () => {
     await AsyncStorage.clear();
     await EncryptedStorage.clear();
+    const accessDate = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    await AsyncStorage.setItem('lastAccess', accessDate);
     setLoggedInUser(null);
     setPhoneToken('');
   };

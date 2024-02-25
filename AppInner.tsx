@@ -218,7 +218,6 @@ function AppInner({ routeName }: { routeName: string }) {
       setLastAccessDate(lastAccess);
       navigation.reset({ index: 0, routes: [{ name: 'IntroPage' }] });
     }
-    // await AsyncStorage.removeItem('last_access');
   };
 
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];

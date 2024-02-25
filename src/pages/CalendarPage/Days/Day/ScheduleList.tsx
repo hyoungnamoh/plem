@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     height: 6,
   },
   scheduleName: {
-    fontSize: 10,
+    fontSize: 12,
     marginLeft: 2,
   },
   svg: {

@@ -398,7 +398,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       </CustomScrollView>
       <BottomButton
         title={propSchedule ? '편집' : '등록'}
-        disabled={false}
+        disabled={!schedule.name}
         onPress={propSchedule ? handleScheduleUpdate : handleScheduleSubmit}
       />
     </>
