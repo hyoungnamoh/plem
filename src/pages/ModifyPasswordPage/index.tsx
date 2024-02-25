@@ -11,6 +11,7 @@ import PlemText from 'components/Atoms/PlemText';
 import { useUpdatePassword } from 'hooks/mutations/useUpdatePassword';
 import { useRecoilValue } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
+import UnderlineButton from 'components/UnderlineButton';
 
 type ModifyPasswordPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyPasswordPage'>;
 
@@ -85,6 +86,10 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
     setIsInvalidPasswordConfirm(value !== newPassword);
   };
 
+  const onPressFindAccount = () => {
+    navigation.navigate('FindPasswordPage', { from: 'ModifyPasswordPage' });
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
       <Header title="비밀번호 변경" />
@@ -97,6 +102,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
             placeholder="영문, 숫자 포함 8-20자리"
             secureTextEntry
             maxLength={20}
+            isInvalidValue={isInvalidCurrentPassword}
           />
         </View>
         {isInvalidCurrentPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
@@ -124,8 +130,11 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
           />
         </View>
         {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
+        <UnderlineButton style={styles.fintPassword} onPress={onPressFindAccount}>
+          비밀번호가 생각나지 않으시나요?
+        </UnderlineButton>
       </View>
-      <BottomButton title="다음" onPress={handleNextButton} disabled={isInvalidAccount()} />
+      <BottomButton title="변경" onPress={handleNextButton} disabled={isInvalidAccount()} />
     </View>
   );
 };
@@ -165,6 +174,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#E40C0C',
     marginTop: 5,
+  },
+  fintPassword: {
+    marginTop: 40,
+    alignSelf: 'center',
   },
 });
 

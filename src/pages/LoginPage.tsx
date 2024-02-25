@@ -40,6 +40,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
   const [isLoginFailed, setIsLoginFailed] = useState(false);
+  const fromSuccessPage = route.params?.from === 'SignUpSuccessPage';
 
   const onChangeEmail = (value: string) => {
     if (isLoginFailed) {
@@ -136,7 +137,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
 
   return (
     <View style={styles.page}>
-      <Header />
+      <Header close={fromSuccessPage} />
       <View style={styles.content}>
         <View>{getTitle()}</View>
         <View style={{ marginTop: 40 }}>

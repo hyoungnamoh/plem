@@ -17,7 +17,7 @@ export type LoggedInTabParamList = {
 
 export type LoggedOutStackParamList = {
   LoginPage: { from?: string } | undefined;
-  PasswordSettingPage: { email: string; isFindingPassword?: boolean };
+  PasswordSettingPage: { email: string; isFindingPassword?: boolean; from?: string };
   IntroPage: undefined;
   NicknameSettingPage: { email: string; password: string };
   EmailVerifyIntroPage: { email: string; password: string; nickname: string };
@@ -34,6 +34,6 @@ export type LoggedOutStackParamList = {
   SignUpSuccessPage: {
     nickname: string;
   };
-  FindPasswordPage: undefined;
+  FindPasswordPage?: { from?: string };
   GuidePage: undefined;
 };

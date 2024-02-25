@@ -26,7 +26,7 @@ import { globalToastState } from 'states/globalToastState';
 
 type FindPasswordPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'FindPasswordPage'>;
 
-const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
+const FindPasswordPage = ({ navigation, route }: FindPasswordPageProps) => {
   const [isVerifiedEmail, setIsVerifiedEmail] = useRecoilState(isVerifiedEmailState);
   const setGlobalToast = useSetRecoilState(globalToastState);
 
@@ -107,12 +107,16 @@ const FindPasswordPage = ({ navigation }: FindPasswordPageProps) => {
   };
 
   const onPressVerify = () => {
-    if (verificationCode === receivedCode) {
-      setIsVerifiedEmail(true);
-      navigation.navigate('PasswordSettingPage', { email, isFindingPassword: true });
+    if (verificationCode !== receivedCode) {
+      Alert.alert('인증번호가 일치하지 않습니다.');
       return;
     }
-    Alert.alert('인증번호가 일치하지 않습니다.');
+    if (route.params?.from === 'ModifyPasswordPage') {
+      navigation.navigate('PasswordSettingPage', { email, isFindingPassword: true, from: 'ModifyPasswordPage' });
+      return;
+    }
+    setIsVerifiedEmail(true);
+    navigation.navigate('PasswordSettingPage', { email, isFindingPassword: true });
   };
 
   return (

@@ -22,6 +22,10 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         setGlobalToast({ text: '비밀번호 재설정이 완료되었습니다.', duration: 2000 });
+        if (route.params.from === 'ModifyPasswordPage') {
+          navigation.pop(3);
+          return;
+        }
         navigation.popToTop();
         navigation.push('LoginPage');
       } else if (responseData.data) {

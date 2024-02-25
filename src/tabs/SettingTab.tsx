@@ -16,6 +16,8 @@ import NotReceivedMailPage from 'pages/NotReceivedMailPage';
 import WithdrawalPage from 'pages/WithdrawalPage';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import TermsOfServicePage from 'pages/TermsOfServicePage';
+import FindPasswordPage from 'pages/FindPasswordPage';
+import PasswordSettingPage from 'pages/PasswordSettingPage';
 
 export type SettingTabStackParamList = {
   SettingPage: undefined;
@@ -41,6 +43,8 @@ export type SettingTabStackParamList = {
     email: string;
   };
   WithdrawalPage: undefined;
+  FindPasswordPage?: { from?: string };
+  PasswordSettingPage: { email: string; isFindingPassword?: boolean; from?: string };
 };
 
 const Stack = createNativeStackNavigator<SettingTabStackParamList>();
@@ -65,6 +69,8 @@ const SettingTab = () => {
       <Stack.Screen name="WithdrawalPage" component={WithdrawalPage} />
       <Stack.Screen name="TermsOfServicePage" component={TermsOfServicePage} />
       <Stack.Screen name="PrivacyPolicyPage" component={PrivacyPolicyPage} />
+      <Stack.Screen name="FindPasswordPage" component={FindPasswordPage} />
+      <Stack.Screen name="PasswordSettingPage" component={PasswordSettingPage} />
     </Stack.Navigator>
   );
 };
