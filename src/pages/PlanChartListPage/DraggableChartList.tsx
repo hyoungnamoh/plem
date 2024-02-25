@@ -9,18 +9,19 @@ import { disableLoadingState } from 'states/disableLoadingState';
 import { useQueryClient } from 'react-query';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
+import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
 
 const DraggableChartList = ({
   charts,
   setCharts,
   setOpenMaximumAlert,
-  isMaximumChartList,
+  isChartListMaximum,
   handleEditComplete,
 }: {
   charts: PlanChart[];
   setCharts: Dispatch<SetStateAction<PlanChart[]>>;
   setOpenMaximumAlert: Dispatch<SetStateAction<boolean>>;
-  isMaximumChartList: boolean;
+  isChartListMaximum: boolean;
   handleEditComplete: () => void;
 }) => {
   const queryClient = useQueryClient();
@@ -62,6 +63,7 @@ const DraggableChartList = ({
   const onDeleteUpdate = ({ id }: { id: number }) => {
     queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
     queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+    queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
     const newList = [...charts].filter((item) => item.id !== id);
     if (newList.length === 0) {
       handleEditComplete();
@@ -88,7 +90,7 @@ const DraggableChartList = ({
           drag={drag}
           onDeleteUpdate={onDeleteUpdate}
           onCloneUpdate={onCloneUpdate}
-          isMaximumChartList={isMaximumChartList}
+          isChartListMaximum={isChartListMaximum}
           setOpenMaximumAlert={setOpenMaximumAlert}
         />
       )}

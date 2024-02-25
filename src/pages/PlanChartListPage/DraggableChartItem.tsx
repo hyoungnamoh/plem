@@ -16,14 +16,14 @@ const DraggableChartItem = ({
   drag,
   onDeleteUpdate,
   onCloneUpdate,
-  isMaximumChartList,
+  isChartListMaximum,
   setOpenMaximumAlert,
 }: {
   item: PlanChart;
   drag: () => void;
   onDeleteUpdate: ({ id }: { id: number }) => void;
   onCloneUpdate: ({ newItem }: { newItem: PlanChart; originId: number }) => void;
-  isMaximumChartList: boolean;
+  isChartListMaximum: boolean;
   setOpenMaximumAlert: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { pieChartData, initialAngle } = usePieChart({ chart: item, hideName: true });
@@ -45,10 +45,6 @@ const DraggableChartItem = ({
   });
 
   const handleClonePress = (id: number) => {
-    if (isMaximumChartList) {
-      setOpenMaximumAlert(true);
-      return;
-    }
     cloneChart({ id });
   };
 
@@ -82,8 +78,12 @@ const DraggableChartItem = ({
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <PlemButton style={styles.cloneButton} hitSlop={8} onPress={() => handleClonePress(item.id)}>
-            <PlemText style={styles.cloneText}>복사</PlemText>
+          <PlemButton
+            style={styles.cloneButton}
+            hitSlop={8}
+            onPress={() => handleClonePress(item.id)}
+            disabled={isChartListMaximum}>
+            <PlemText style={[styles.cloneText, isChartListMaximum && styles.disabledCloen]}>복사</PlemText>
           </PlemButton>
           <PlemButton style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
             <PlemText style={styles.removeText}>삭제</PlemText>
@@ -130,6 +130,9 @@ const styles = StyleSheet.create({
   removeText: {
     fontSize: 16,
     color: '#E40C0C',
+  },
+  disabledCloen: {
+    color: '#CCCCCC',
   },
 });
 

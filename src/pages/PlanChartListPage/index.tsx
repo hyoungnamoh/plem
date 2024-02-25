@@ -39,14 +39,14 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
   };
 
   const handleAddChart = () => {
-    if (isMaximumChartList()) {
+    if (isChartListMaximum()) {
       setOpenMaximumAlert(true);
     } else {
       navigation.navigate('AddChartPage');
     }
   };
 
-  const isMaximumChartList = () => {
+  const isChartListMaximum = () => {
     return charts.length >= NUM_OF_MAXIMUM_CHART;
   };
 
@@ -74,7 +74,7 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
               <DraggableChartList
                 charts={charts}
                 setCharts={setCharts}
-                isMaximumChartList={isMaximumChartList()}
+                isChartListMaximum={isChartListMaximum()}
                 setOpenMaximumAlert={setOpenMaximumAlert}
                 handleEditComplete={handleEditComplete}
               />
