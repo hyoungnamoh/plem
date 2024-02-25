@@ -57,7 +57,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
         unsubscribe.current && unsubscribe.current();
-        await AsyncStorage.removeItem('chart_data');
+        await AsyncStorage.removeItem('chartData');
         queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
@@ -145,7 +145,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       {
         text: '아니요',
         onPress: async () => {
-          await AsyncStorage.removeItem('chart_data');
+          await AsyncStorage.removeItem('chartData');
         },
         style: 'cancel',
       },
