@@ -95,7 +95,7 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
           <PlemText style={styles.title}>비밀번호를 설정하세요.</PlemText>
         </View>
         <View style={styles.passwordWrap}>
-          <PlemText style={styles.label}>비밀번호</PlemText>
+          <PlemText style={[styles.label, isInvalidPassword ? styles.errorText : null]}>비밀번호</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={password}
@@ -106,10 +106,12 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
             maxLength={20}
             isInvalidValue={isInvalidPassword}
           />
-          {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
+          {isInvalidPassword && (
+            <PlemText style={[styles.errorText, styles.errorTextColor]}>비밀번호 형식이 올바르지 않습니다.</PlemText>
+          )}
         </View>
         <View style={styles.passwordWrap}>
-          <PlemText style={styles.label}>비밀번호 확인</PlemText>
+          <PlemText style={[styles.label, isInvalidPassword ? styles.errorText : null]}>비밀번호 확인</PlemText>
           <UnderlineTextInput
             style={styles.input}
             value={passwordConfirm}
@@ -120,7 +122,9 @@ const PasswordSettingPage = ({ navigation, route }: PasswordSettingPage) => {
             maxLength={20}
             isInvalidValue={isInvalidPasswordConfirm}
           />
-          {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
+          {isInvalidPasswordConfirm && (
+            <PlemText style={[styles.errorText, styles.errorTextColor]}>비밀번호가 일치하지 않습니다.</PlemText>
+          )}
         </View>
       </View>
       <BottomButton
@@ -165,8 +169,10 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#E40C0C',
     marginTop: 5,
+  },
+  errorTextColor: {
+    color: '#E40C0C',
   },
 });
 
