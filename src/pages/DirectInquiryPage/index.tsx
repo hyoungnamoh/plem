@@ -16,6 +16,8 @@ import { useAddInquiry } from 'hooks/mutations/useAddInquiry';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import { validator } from 'helper/validator';
 import PlemButton from 'components/Atoms/PlemButton';
+import { loggedInUserState } from 'states/loggedInUserState';
+import { useRecoilValue } from 'recoil';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -31,10 +33,11 @@ const inquiryTypeList: DropdownItem<InquiryType | ''>[] = [
 export type InquiryType = 'account' | 'function' | 'bug' | 'proposal' | 'etc';
 
 const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
+  const loggedInUser = useRecoilValue(loggedInUserState);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [inquiryType, setInquiryType] = useState(inquiryTypeList[0]);
   const [title, setTitle] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(loggedInUser?.email || '');
   const [content, setContent] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const contentRef = useRef<TextInput>(null);
@@ -146,7 +149,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                 label="답변받을 이메일 주소"
                 value={email}
                 onChangeText={handleEmailChange}
-                placeholder={'제목을 입력해 주세요. (20자 이내)'}
+                placeholder={'이메일을 입력해 주세요.'}
                 keyboardType="email-address"
                 isInvalidValue={isInvalidEmail}
               />
