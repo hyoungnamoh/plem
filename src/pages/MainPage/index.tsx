@@ -114,6 +114,10 @@ const MainPage = ({ navigation }: MainPageProps) => {
       setOpenMaximumAlert(true);
       return;
     }
+    if (!todayPlanChart?.data) {
+      navigation.navigate('AddChartPage');
+      return;
+    }
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
     navigation.navigate('AddPlanPage');
   };

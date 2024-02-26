@@ -14,10 +14,6 @@ export type PaletteListItemType = Category;
 type PaletteInputRowProps = {
   label: string;
   open: boolean;
-  palettePosition?: {
-    x?: number;
-    y?: number;
-  };
   list: PaletteListItemType[];
   selectedItem: PaletteListItemType;
   onSelect: (value: number) => void;
@@ -27,27 +23,22 @@ type PaletteInputRowProps = {
 const PaletteInputRow = ({
   label,
   open,
-  palettePosition,
   onPress,
   list,
   selectedItem,
   onSelect,
   onClose,
 }: PaletteInputRowProps & PlemButtonProps) => {
-  const [paletteBoxPosition, setPaletteBoxPosition] = useState({ x: 0, y: 0 });
   const [isEditing, setIsEditing] = useState(false);
   const [paletteList, setPaletteList] = useState<PaletteListItemType[]>(cloneDeep(list));
   const paletteModalRef = useRef<View>(null);
+  const paletteImageRef = useRef<View>(null);
 
   useEffect(() => {
     setIsEditing(false);
   }, [open]);
 
   const onPressPalette = (e: GestureResponderEvent) => {
-    setPaletteBoxPosition({
-      x: e.nativeEvent.pageX - 252 + (palettePosition?.x || 0),
-      y: e.nativeEvent.pageY - 216 + (palettePosition?.y || 0),
-    });
     onPress && onPress(e);
   };
 
@@ -64,20 +55,20 @@ const PaletteInputRow = ({
 
   return (
     <TouchableWithoutFeedback>
-      <View>
+      <PlemButton onPress={onPressPalette}>
         <PlemText style={styles.label}>{label}</PlemText>
         <View style={styles.underlineButtonWrap}>
           <PlemText>{selectedItem.label}</PlemText>
-          <PlemButton style={styles.paletteButton} onPress={onPressPalette} hitSlop={10}>
+          <View style={styles.paletteButton} ref={paletteImageRef}>
             <PaletteSvg size="medium" color={selectedItem.color} />
-          </PlemButton>
+          </View>
           {open && (
             <View
               ref={paletteModalRef}
               style={{
                 position: 'absolute',
-                left: paletteBoxPosition.x,
-                top: paletteBoxPosition.y,
+                right: 0,
+                top: 40,
               }}>
               <CalendarPaletteBoxSvg />
               {/* <Image source={calendarPaletteBoxImage} /> */}
@@ -112,7 +103,7 @@ const PaletteInputRow = ({
           )}
         </View>
         <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-      </View>
+      </PlemButton>
     </TouchableWithoutFeedback>
   );
 };

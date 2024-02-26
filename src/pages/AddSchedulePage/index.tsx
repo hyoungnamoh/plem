@@ -222,7 +222,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   label="카테고리"
                   onPress={() => setOpenPalette(!openPalette)}
                   open={openPalette}
-                  palettePosition={{ x: -10, y: 8 }}
                   list={categoryList}
                   selectedItem={categoryList.find((item) => item.value === schedule.category) || categoryList[0]}
                   onSelect={handleCatecorySelect}

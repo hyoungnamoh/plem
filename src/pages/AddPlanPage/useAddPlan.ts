@@ -128,7 +128,17 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     );
   };
 
+  const isSameTime = (times: { startHour: number; startMin: number; endHour: number; endMin: number }) => {
+    const start = dayjs().set('hour', times.startHour).set('minute', times.startMin).startOf('minute');
+    const end = dayjs().set('hour', times.endHour).set('minute', times.endMin).startOf('minute');
+
+    return start.isSame(end);
+  };
+
   const onPressAddPlan = () => {
+    if (isSameTime({ startHour, startMin, endHour, endMin })) {
+      return Alert.alert('시작시간과 종료시간이 같을 수 없습니다.');
+    }
     if (isDuplicatedTime()) {
       return Alert.alert('시간이 중복되는 계획이 있어요.');
     }

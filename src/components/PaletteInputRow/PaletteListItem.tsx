@@ -1,10 +1,10 @@
 import { Dispatch, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
-import PlemTextInput from 'components/Atoms/PlemTextInput';
 import { PaletteListItemType } from 'components/PaletteInputRow';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import { Category } from 'states/categoryListState';
 import PlemButton from 'components/Atoms/PlemButton';
+import PlemText from 'components/Atoms/PlemText';
 
 const PaletteListItem = ({
   index,
@@ -45,14 +45,18 @@ const PaletteListItem = ({
 
   return (
     <PlemButton onPress={() => onSelect(item.value)} style={styles.categoryRow}>
-      <PlemTextInput
+      <PlemText ref={inputRef} style={{ width: '80%' }}>
+        {paletteList[index].label}
+      </PlemText>
+      {/* TODO:  */}
+      {/* <PlemTextInput
         ref={inputRef}
         value={paletteList[index].label}
         editable={isEditing}
         onChangeText={handleLabelChange}
         style={{ width: '80%' }}
         maxLength={12}
-      />
+      /> */}
       <PaletteSvg size="medium" color={item.color} />
     </PlemButton>
   );

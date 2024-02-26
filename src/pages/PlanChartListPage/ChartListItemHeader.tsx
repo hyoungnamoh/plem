@@ -4,20 +4,47 @@ import ArrowUpSvg from 'assets/images/arrow_up_32x32.svg';
 import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
-import { numToDayKorParser } from 'helper/numToDayKorParser';
 import { PlanChart, Repeats } from 'types/chart';
 import { usePieChart } from 'hooks/usePieChart';
 import { PieChart } from 'react-native-gifted-charts';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
+import { repeatOptionList } from 'pages/RepeatSettingPage';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
   const { pieChartData, initialAngle } = usePieChart({ chart, hideName: true });
 
-  const repeatsSorting = (repeats: Repeats) => {
-    const newRepeats = [...repeats];
-    return newRepeats.sort((a, b) => a! - b!);
+  const getRepeatOptions = (repeats: Repeats) => {
+    if (repeats.includes(null)) {
+      return '안 함';
+    }
+    if (repeats.includes(7) && chart.repeatDates) {
+      return '날짜 지정';
+    }
+
+    const sortedRepeatList = repeatOptionList
+      .filter((option) => repeats.includes(option.value))
+      .sort((a, b) => a.order! - b.order!);
+
+    const isWeekend =
+      sortedRepeatList.length === 2 && sortedRepeatList.every((option) => option.value === 0 || option.value === 6);
+    const isWeekdays =
+      sortedRepeatList.length === 5 && sortedRepeatList.every((option) => option.value !== 0 && option.value !== 6);
+
+    if (isWeekend) {
+      return '주말';
+    }
+
+    if (isWeekdays) {
+      return '주중';
+    }
+
+    if (sortedRepeatList.length === 7) {
+      return '매일';
+    }
+
+    return sortedRepeatList.map((option) => option.day).join(', ');
   };
 
   return (
@@ -37,9 +64,9 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
         />
         <View style={styles.headerInfo}>
           <PlemText>{chart.name}</PlemText>
-          <PlemText style={styles.repeats}>{numToDayKorParser(repeatsSorting(chart.repeats))}</PlemText>
+          <PlemText style={styles.repeats}>{getRepeatOptions(chart.repeats)}</PlemText>
           <PlemText style={styles.plans} numberOfLines={1}>
-            {chart.plans.map((plan) => plan.name).join(' / ')}
+            {isActive ? '' : chart.plans.map((plan) => plan.name).join(' / ')}
           </PlemText>
         </View>
       </PlemButton>

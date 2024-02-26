@@ -6,16 +6,16 @@ import PlemButton, { PlemButtonProps } from 'components/Atoms/PlemButton';
 
 const OptionsInputRow = ({ label, value, ...pressableProps }: { label: string; value?: string } & PlemButtonProps) => {
   return (
-    <View>
+    <PlemButton {...pressableProps}>
       <View style={styles.underlineButtonWrap}>
         <PlemText>{label}</PlemText>
-        <PlemButton style={styles.underlineButton} {...pressableProps}>
+        <View style={styles.underlineButton}>
           <PlemText>{value}</PlemText>
           <ArrowRightSvg style={styles.arrowRightImage} />
-        </PlemButton>
+        </View>
       </View>
       <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-    </View>
+    </PlemButton>
   );
 };
 
