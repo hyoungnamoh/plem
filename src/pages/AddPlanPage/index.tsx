@@ -92,15 +92,15 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
                 <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
               </View>
             </View>
-            <View style={styles.underlineButtonWrap}>
+            <PlemButton style={styles.underlineButtonWrap} onPress={onPressSetNotification}>
               <PlemText>알림</PlemText>
-              <PlemButton style={styles.underlineButton} onPress={onPressSetNotification}>
+              <View style={styles.underlineButton}>
                 <PlemText>
                   {notiOptiosList.find((notification) => notification.key === plan.notification)?.label}
                 </PlemText>
                 <ArrowRightSvg style={styles.arrowRightImage} />
-              </PlemButton>
-            </View>
+              </View>
+            </PlemButton>
             <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
           </View>
         </View>
