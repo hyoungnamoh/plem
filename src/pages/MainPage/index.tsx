@@ -138,10 +138,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
       setOpenMaximumAlert(true);
       return;
     }
-    if (isMaximumChartList) {
-      setOpenMaximumAlert(true);
-      return;
-    }
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
     navigation.navigate('AddPlanPage', { planIndex });
   };

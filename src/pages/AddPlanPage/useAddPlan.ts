@@ -3,16 +3,18 @@ import dayjs, { Dayjs } from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlanPageProps } from 'pages/AddPlanPage';
 import { AddPlan, AddPlanChart } from 'types/chart';
 import { addPlanChartState } from 'states/addPlanChartState';
 import { addPlanDefault, addPlanState } from 'states/addPlanState';
+import { globalToastState } from 'states/globalToastState';
 
 export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   const isModify = route.params?.planIndex !== undefined;
   const [chart, setChart] = useRecoilState(addPlanChartState);
   const [plan, setPlan] = useRecoilState(addPlanState);
+  const setGlobalToast = useSetRecoilState(globalToastState);
 
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndPicker, setOpenEndTimePicker] = useState(false);
@@ -23,18 +25,20 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    if (isModify) {
+    if (isModify && chart.plans.length > 0) {
       const modifyPlan = chart.plans[route.params.planIndex];
-      setPlan(modifyPlan);
-      setName(modifyPlan.name);
-      setStartHour(modifyPlan.startHour);
-      setStartMin(modifyPlan.startMin);
-      setEndHour(modifyPlan.endHour);
-      setEndMin(modifyPlan.endMin);
+      if (modifyPlan) {
+        setPlan(modifyPlan);
+        setName(modifyPlan.name);
+        setStartHour(modifyPlan.startHour);
+        setStartMin(modifyPlan.startMin);
+        setEndHour(modifyPlan.endHour);
+        setEndMin(modifyPlan.endMin);
+      }
     }
 
     return () => setPlan(addPlanDefault);
-  }, []);
+  }, [chart]);
 
   const setStorageChartData = async (chartData: AddPlanChart) => {
     await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
@@ -137,7 +141,7 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
   const onPressAddPlan = () => {
     if (isSameTime({ startHour, startMin, endHour, endMin })) {
-      return Alert.alert('시작시간과 종료시간이 같을 수 없습니다.');
+      return setGlobalToast({ text: '시작 시간과 종료 시간을 다르게 입력해 주세요.', duration: 2000 });
     }
     if (isDuplicatedTime()) {
       return Alert.alert('시간이 중복되는 계획이 있어요.');
