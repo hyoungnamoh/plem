@@ -9,14 +9,16 @@ import BottomButton from 'components/BottomButton';
 import { validator } from 'helper/validator';
 import PlemText from 'components/Atoms/PlemText';
 import { useUpdatePassword } from 'hooks/mutations/useUpdatePassword';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
 import UnderlineButton from 'components/UnderlineButton';
+import { globalToastState } from 'states/globalToastState';
 
 type ModifyPasswordPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyPasswordPage'>;
 
 const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
   const loggedInUser = useRecoilValue(loggedInUserState);
+  const setGlobalToast = useSetRecoilState(globalToastState);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -29,7 +31,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
   const { mutate: updatePassword } = useUpdatePassword({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
-        Alert.alert('비밀번호 재설정이 완료되었습니다.');
+        setGlobalToast({ text: '비밀번호 재설정이 완료되었습니다.', duration: 2000 });
         navigation.goBack();
       } else if (responseData.data) {
         Alert.alert(responseData.data);
