@@ -94,7 +94,7 @@ const ScheduleList = ({
                 categoryList.find((category) => category.value === schedule.category)?.color || categoryList[0].color
               }
             />
-            <PlemText style={styles.scheduleName}>{schedule.name}</PlemText>
+            <PlemText style={styles.scheduleName}>{schedule.name.slice(0, 5)}</PlemText>
           </View>
         );
       })}
