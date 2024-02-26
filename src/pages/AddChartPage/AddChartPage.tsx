@@ -27,7 +27,7 @@ import { useUpdateChart } from 'hooks/mutations/useUpdateChart';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
 import { globalToastState } from 'states/globalToastState';
-import { DAY_TO_MIN, HOUR_TO_MIN } from 'constants/times';
+import { DAY_TO_MIN } from 'constants/times';
 import { EmptyPlanAlert } from './components/EmptyPlanAlert/EmptyPlanAlert';
 import {
   HandlerStateChangeEvent,
@@ -38,6 +38,7 @@ import {
 import { PopInEditingAlert } from './components/PopInEditingAlert.tsx/PopInEditingAlert';
 import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
+import dayjs from 'dayjs';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -229,9 +230,16 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const checkEmptyPlan = () => {
     let totalPlanMin = 0;
     chart.plans.map((plan) => {
-      totalPlanMin += plan.endHour * HOUR_TO_MIN + plan.endMin - (plan.startHour * HOUR_TO_MIN + plan.startMin);
+      const hasMidnight = plan.startHour > plan.endHour;
+      totalPlanMin += dayjs()
+        .set('hour', plan.endHour)
+        .set('minute', plan.endMin)
+        .startOf('minute')
+        .diff(dayjs().set('hour', plan.startHour).set('minute', plan.startMin).startOf('minute'), 'minute');
+      if (hasMidnight) {
+        totalPlanMin += DAY_TO_MIN;
+      }
     });
-
     return totalPlanMin === DAY_TO_MIN;
   };
 
