@@ -384,6 +384,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               onConfirm={handleStartDateConfirm}
               onCancel={() => setOpenStartDatePicker(false)}
               date={startDate.toDate()}
+              locale="ko-KR"
             />
             <DateTimePickerModal
               isVisible={openEndDatePicker}
@@ -391,6 +392,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               onConfirm={handleEndDateConfirm}
               onCancel={() => setOpenEndDatePicker(false)}
               date={endDate.toDate()}
+              locale="ko-KR"
             />
           </View>
         </TouchableWithoutFeedback>
