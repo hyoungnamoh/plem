@@ -29,10 +29,12 @@ import WhiteBoard from 'assets/images/white_board.svg';
 import PlemTextInput from 'components/Atoms/PlemTextInput';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import dayjs from 'dayjs';
+import { useQueryClient } from 'react-query';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'WithdrawalPage'>;
 
 const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
+  const queryClient = useQueryClient();
   const setPhoneToken = useSetRecoilState(phoneTokenState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const [openReasonDropdown, setOpenReasonDropdown] = useState(false);
@@ -84,6 +86,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
     await AsyncStorage.setItem('lastAccess', accessDate);
     setLoggedInUser(null);
     setPhoneToken('');
+    queryClient.clear();
   };
 
   const closeConfirmAlert = () => {

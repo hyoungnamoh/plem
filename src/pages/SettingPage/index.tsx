@@ -11,10 +11,12 @@ import { useLogout } from 'hooks/mutations/useLogout';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { phoneTokenState } from 'states/phoneTokenState';
 import UnderlineSvg from 'assets/images/underline.svg';
+import { useQueryClient } from 'react-query';
 
 type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'SettingPage'>;
 
 const SettingPage = ({ navigation }: SettingPageProps) => {
+  const queryClient = useQueryClient();
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const [phoneToken, setPhoneToken] = useRecoilState(phoneTokenState);
 
@@ -38,6 +40,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
     logout({ phoneToken });
     setLoggedInUser(null);
     setPhoneToken('');
+    queryClient.clear();
   };
 
   if (!loggedInUser) {
