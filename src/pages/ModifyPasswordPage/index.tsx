@@ -13,6 +13,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserState } from 'states/loggedInUserState';
 import UnderlineButton from 'components/UnderlineButton';
 import { globalToastState } from 'states/globalToastState';
+import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 
 type ModifyPasswordPageProps = NativeStackScreenProps<SettingTabStackParamList, 'ModifyPasswordPage'>;
 
@@ -93,51 +94,53 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
-      <Header title="비밀번호 변경" />
-      <View style={styles.content}>
-        <View style={{ marginTop: 20 }}>
-          <LabelInput
-            value={currentPassword}
-            onChangeText={onChangeCurrentPassword}
-            label="현재 비밀번호"
-            placeholder="영문, 숫자 포함 8-20자리"
-            secureTextEntry
-            maxLength={20}
-            isInvalidValue={isInvalidCurrentPassword}
-          />
+    <>
+      <CustomScrollView>
+        <Header title="비밀번호 변경" />
+        <View style={styles.content}>
+          <View style={{ marginTop: 20 }}>
+            <LabelInput
+              value={currentPassword}
+              onChangeText={onChangeCurrentPassword}
+              label="현재 비밀번호"
+              placeholder="영문, 숫자 포함 8-20자리"
+              secureTextEntry
+              maxLength={20}
+              isInvalidValue={isInvalidCurrentPassword}
+            />
+          </View>
+          {isInvalidCurrentPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
+          <View style={{ marginTop: 32 }}>
+            <LabelInput
+              value={newPassword}
+              onChangeText={onChangeNewPassword}
+              label="새로운 비밀번호"
+              placeholder="영문, 숫자 포함 8-20자리"
+              secureTextEntry
+              maxLength={20}
+              isInvalidValue={isInvalidPassword}
+            />
+          </View>
+          {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
+          <View style={{ marginTop: 32 }}>
+            <LabelInput
+              value={newPasswordConfirm}
+              onChangeText={onChangeNewPasswordConfirm}
+              label="새로운 비밀번호 확인"
+              placeholder="영문, 숫자 포함 8-20자리"
+              secureTextEntry
+              maxLength={20}
+              isInvalidValue={isInvalidPasswordConfirm}
+            />
+          </View>
+          {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
+          <UnderlineButton style={styles.fintPassword} onPress={onPressFindAccount}>
+            비밀번호가 생각나지 않으시나요?
+          </UnderlineButton>
         </View>
-        {isInvalidCurrentPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
-        <View style={{ marginTop: 32 }}>
-          <LabelInput
-            value={newPassword}
-            onChangeText={onChangeNewPassword}
-            label="새로운 비밀번호"
-            placeholder="영문, 숫자 포함 8-20자리"
-            secureTextEntry
-            maxLength={20}
-            isInvalidValue={isInvalidPassword}
-          />
-        </View>
-        {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
-        <View style={{ marginTop: 32 }}>
-          <LabelInput
-            value={newPasswordConfirm}
-            onChangeText={onChangeNewPasswordConfirm}
-            label="새로운 비밀번호 확인"
-            placeholder="영문, 숫자 포함 8-20자리"
-            secureTextEntry
-            maxLength={20}
-            isInvalidValue={isInvalidPasswordConfirm}
-          />
-        </View>
-        {isInvalidPasswordConfirm && <PlemText style={styles.errorText}>비밀번호가 일치하지 않습니다.</PlemText>}
-        <UnderlineButton style={styles.fintPassword} onPress={onPressFindAccount}>
-          비밀번호가 생각나지 않으시나요?
-        </UnderlineButton>
-      </View>
+      </CustomScrollView>
       <BottomButton title="변경" onPress={handleNextButton} disabled={isInvalidAccount()} />
-    </View>
+    </>
   );
 };
 
