@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Dimensions, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DropdownWithLabel } from 'components/DropdownWithLabel';
 import LabelInput from 'components/LabelInput';
 import PlemText from 'components/Atoms/PlemText';
@@ -18,6 +18,13 @@ import { validator } from 'helper/validator';
 import PlemButton from 'components/Atoms/PlemButton';
 import { loggedInUserState } from 'states/loggedInUserState';
 import { useRecoilValue } from 'recoil';
+import {
+  HandlerStateChangeEvent,
+  PanGestureHandler,
+  PanGestureHandlerEventPayload,
+  State,
+} from 'react-native-gesture-handler';
+import { PopInEditingAlert } from 'pages/AddChartPage/components/PopInEditingAlert.tsx/PopInEditingAlert';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -40,13 +47,32 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
   const [email, setEmail] = useState(loggedInUser?.email || '');
   const [content, setContent] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+  const [openPopInWritingAlert, setPopInWritingAlert] = useState(false);
   const contentRef = useRef<TextInput>(null);
+  const swipeStartX = useRef<number | null>();
+  const unsubscribe = useRef<() => void>();
+  const isWriting = title || content || email !== loggedInUser?.email;
+
   const { mutate: addInquiry } = useAddInquiry({
     onSuccess: () => {
       Alert.alert('문의가 성공적으로 등록되었습니다. 빠른 시일 내에 답변드리겠습니다. 감사합니다.');
       navigation.goBack();
     },
   });
+
+  useEffect(() => {
+    unsubscribe.current = navigation.addListener('beforeRemove', (e) => {
+      if (isWriting) {
+        e.preventDefault();
+        setPopInWritingAlert(true);
+      }
+    });
+    return () => {
+      if (unsubscribe.current) {
+        unsubscribe.current();
+      }
+    };
+  }, [navigation, isWriting]);
 
   const onChangeType = (item: DropdownItem<InquiryType | ''>) => {
     setInquiryType(item);
@@ -97,74 +123,117 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
     setIsInvalidEmail(!validator({ value: newEmail, type: 'email' }));
   };
 
+  const handleGesture = (event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      if (event.nativeEvent.x > 80 || swipeStartX.current) {
+        return;
+      }
+      swipeStartX.current = event.nativeEvent.x;
+    } else if (event.nativeEvent.state === State.END) {
+      // 스와이프 완료 시 동작 처리
+      if (!swipeStartX.current) {
+        return;
+      }
+
+      if (event.nativeEvent.x - swipeStartX.current > 50 && isWriting) {
+        setPopInWritingAlert(true);
+      } else {
+        navigation.goBack();
+      }
+      swipeStartX.current = null;
+    }
+  };
+
+  const handlePopInEditingAlertCancel = () => {
+    unsubscribe.current && unsubscribe.current();
+    setPopInWritingAlert(false);
+    navigation.goBack();
+  };
+
+  const handlePopInEditingAlertConfirm = () => {
+    setPopInWritingAlert(false);
+  };
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setOpenDropdown(false);
-      }}>
+    <PanGestureHandler onHandlerStateChange={handleGesture}>
       <View>
-        <CustomScrollView contentContainerStyle={{ backgroundColor: MAIN_COLOR, paddingBottom: 20 }}>
-          <Header
-            title="1:1 문의"
-            buttonName="SNS 문의"
-            buttonProps={{
-              onPress: () => {
-                console.log('hi');
-              },
-            }}
-          />
-          <View style={styles.content}>
-            <DropdownWithLabel<InquiryType | ''>
-              label="문의 유형"
-              open={openDropdown}
-              list={inquiryTypeList}
-              onChange={onChangeType}
-              onPressRow={onPressDrondown}
-              value={inquiryType}
-            />
-            <View style={{ marginTop: 32 }}>
-              <LabelInput
-                label="제목"
-                value={title}
-                onChangeText={setTitle}
-                placeholder={'제목을 입력해 주세요. (20자 이내)'}
-                maxLength={20}
+        <TouchableNativeFeedback
+          onPress={() => {
+            setOpenDropdown(false);
+          }}>
+          <View>
+            <CustomScrollView contentContainerStyle={{ backgroundColor: MAIN_COLOR, paddingBottom: 20 }}>
+              <Header
+                title="1:1 문의"
+                buttonName="SNS 문의"
+                buttonProps={{
+                  onPress: () => {
+                    console.log('hi');
+                  },
+                }}
               />
-            </View>
-            <PlemButton onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
-              <WhiteBoard preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
-              <View style={{ position: 'absolute', padding: 12, height: 210 }}>
-                <PlemTextInput
-                  ref={contentRef}
-                  value={content}
-                  onChangeText={setContent}
-                  placeholder="문의 내용을 입력해 주세요."
-                  multiline={true}
-                  maxLength={500}
+              <View style={styles.content}>
+                <DropdownWithLabel<InquiryType | ''>
+                  label="문의 유형"
+                  open={openDropdown}
+                  list={inquiryTypeList}
+                  onChange={onChangeType}
+                  onPressRow={onPressDrondown}
+                  value={inquiryType}
                 />
+                <View style={{ marginTop: 32 }}>
+                  <LabelInput
+                    label="제목"
+                    value={title}
+                    onChangeText={setTitle}
+                    placeholder={'제목을 입력해 주세요. (20자 이내)'}
+                    maxLength={20}
+                  />
+                </View>
+                <PlemButton onPress={() => contentRef.current?.focus()} style={{ marginTop: 12 }}>
+                  <WhiteBoard preserveAspectRatio="none" width={Dimensions.get('window').width - 32} />
+                  <View style={{ position: 'absolute', padding: 12, height: 210 }}>
+                    <PlemTextInput
+                      ref={contentRef}
+                      value={content}
+                      onChangeText={setContent}
+                      placeholder="문의 내용을 입력해 주세요."
+                      multiline={true}
+                      maxLength={500}
+                    />
+                  </View>
+                </PlemButton>
+                <View style={{ marginTop: 32 }}>
+                  <LabelInput
+                    label="답변받을 이메일 주소"
+                    value={email}
+                    onChangeText={handleEmailChange}
+                    placeholder={'이메일을 입력해 주세요.'}
+                    keyboardType="email-address"
+                    isInvalidValue={isInvalidEmail}
+                  />
+                  {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
+                </View>
+                <PlemText style={{ color: '#888888', marginTop: 12 }}>
+                  {'* plemsupport@gmail.com으로 부터\n메일을 수신 가능한 상태로 설정해 주세요.'}
+                </PlemText>
+                <BlackButton style={{ marginTop: 32 }} onPress={handleInquiry}>
+                  <PlemText style={{ color: '#fff' }}>문의하기</PlemText>
+                </BlackButton>
               </View>
-            </PlemButton>
-            <View style={{ marginTop: 32 }}>
-              <LabelInput
-                label="답변받을 이메일 주소"
-                value={email}
-                onChangeText={handleEmailChange}
-                placeholder={'이메일을 입력해 주세요.'}
-                keyboardType="email-address"
-                isInvalidValue={isInvalidEmail}
+              <PopInEditingAlert
+                open={openPopInWritingAlert}
+                size="small"
+                onCancel={handlePopInEditingAlertCancel}
+                onConfirm={handlePopInEditingAlertConfirm}
+                cancelText="나갈게요"
+                confirmText="계속 할게요"
               />
-              {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
-            </View>
-            <PlemText style={{ color: '#888888', marginTop: 12 }}>
-              {'* plemsupport@gmail.com으로 부터\n메일을 수신 가능한 상태로 설정해 주세요.'}
-            </PlemText>
-            <BlackButton style={{ marginTop: 32 }} onPress={handleInquiry}>
-              <PlemText style={{ color: '#fff' }}>문의하기</PlemText>
-            </BlackButton>
+            </CustomScrollView>
           </View>
-        </CustomScrollView>
+        </TouchableNativeFeedback>
       </View>
-    </TouchableWithoutFeedback>
+    </PanGestureHandler>
   );
 };
 
