@@ -2,7 +2,7 @@ import LoginPage from './src/pages/LoginPage';
 import PasswordSettingPage from './src/pages/PasswordSettingPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, AppState, AppStateStatus, Linking, SafeAreaView } from 'react-native';
+import { Alert, AppState, AppStateStatus, Keyboard, Linking, SafeAreaView, View } from 'react-native';
 import IntroPage from './src/pages/IntroPage';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from './src/states/bottomSafeAreaState';
@@ -44,6 +44,8 @@ import Toast from '@hyoungnamoh/react-native-easy-toast';
 import PlemToast from 'components/PlemToast';
 import { globalToastState } from 'states/globalToastState';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
+import { keyboardHeightState } from 'states/keyboardHeightState';
+import { bottomNochHeightState } from 'states/bottomNochHeightState';
 
 configureNotification();
 
@@ -65,6 +67,8 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const [lastAccessDate, setLastAccessDate] = useRecoilState(lastAccessDateState);
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
+  const setKeyboardHeight = useSetRecoilState(keyboardHeightState);
+  const setBottomNochHeight = useSetRecoilState(bottomNochHeightState);
   const setNotificationInfoState = useSetRecoilState(notificationInfoState);
   const [appInfo, setAppInfo] = useRecoilState(appInfoState);
   const [globalToast, setGlobalToast] = useRecoilState(globalToastState);
@@ -78,6 +82,14 @@ function AppInner({ routeName }: { routeName: string }) {
   const globalToastRef = useRef<Toast>(null);
 
   useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+    });
+
+    const keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', () => {
+      setKeyboardHeight(0);
+    });
+
     splashScreenHandler([
       setLastAccessDateFromStorage(),
       loginCheck(),
@@ -85,6 +97,11 @@ function AppInner({ routeName }: { routeName: string }) {
       getNotificationInfo(),
       initSchedulConfirmDate(),
     ]);
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
   }, []);
 
   useEffect(() => {
@@ -223,13 +240,14 @@ function AppInner({ routeName }: { routeName: string }) {
   const bottomTabVisibleList = ['MainPage', 'CalendarPage', 'PlanChartListPage', 'SettingPage'];
   const apiLoading = (isFetching || isMutating) && !disableLoading;
   console.info('isFetching, isMutating, !disableLoading', isFetching, isMutating, !disableLoading);
+
   return (
     <>
       {isCodePushUpdating && <CodePushUpdating progress={syncDownloadProgress} syncStateMessage={syncStateMessage} />}
       {apiLoading && !isCodePushUpdating ? <Loading /> : null}
       <PlemToast ref={globalToastRef} />
       <SafeAreaView style={{ flex: 0, backgroundColor: MAIN_COLOR }} />
-      <SafeAreaView style={{ flex: 1, backgroundColor: bottomSafeArea }}>
+      <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
         {loggedInUser?.id ? (
           <Tab.Navigator
             tabBar={bottomTabVisibleList.includes(routeName) ? (props) => <BottomTabBar {...props} /> : () => <></>}>
@@ -281,7 +299,11 @@ function AppInner({ routeName }: { routeName: string }) {
             <Stack.Screen name="FindPasswordPage" component={FindPasswordPage} />
           </Stack.Navigator>
         )}
-      </SafeAreaView>
+      </View>
+      <SafeAreaView
+        onLayout={(e) => setBottomNochHeight(e.nativeEvent.layout.height)}
+        style={{ flex: 0, backgroundColor: bottomSafeArea }}
+      />
     </>
   );
 }
