@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: MAIN_COLOR,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
   },
   chartWrap: {
     position: 'relative',
