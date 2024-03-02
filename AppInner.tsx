@@ -69,7 +69,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const setKeyboardHeight = useSetRecoilState(keyboardHeightState);
   const setBottomNochHeight = useSetRecoilState(bottomNochHeightState);
-  const setNotificationInfoState = useSetRecoilState(notificationInfoState);
+  const setNotificationInfo = useSetRecoilState(notificationInfoState);
   const [appInfo, setAppInfo] = useRecoilState(appInfoState);
   const [globalToast, setGlobalToast] = useRecoilState(globalToastState);
   const setCategoryList = useSetRecoilState(categoryListState);
@@ -180,12 +180,12 @@ function AppInner({ routeName }: { routeName: string }) {
     const storageNotifiactionInfo = await getStorageNotificationInfo();
     if (status === 'granted') {
       if (storageNotifiactionInfo) {
-        setNotificationInfoState({ notice: storageNotifiactionInfo.notice, plan: storageNotifiactionInfo.plan });
+        setNotificationInfo({ notice: storageNotifiactionInfo.notice, plan: storageNotifiactionInfo.plan });
       } else {
-        setNotificationInfoState({ notice: true, plan: true });
+        setNotificationInfo({ notice: true, plan: true });
       }
     } else {
-      setNotificationInfoState({ notice: false, plan: false });
+      setNotificationInfo({ notice: false, plan: false });
     }
   };
 
