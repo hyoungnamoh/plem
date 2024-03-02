@@ -6,7 +6,7 @@ export const errorHandler = (error: any) => {
     Alert.alert(error.response.data.data);
     console.info(error.response.data);
   } else {
-    Alert.alert('알 수 없는 에러가 발생했습니다.');
+    Alert.alert('서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.');
     console.info(error.response);
   }
 };

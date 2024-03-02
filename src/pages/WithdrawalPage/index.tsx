@@ -154,7 +154,10 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
                 </View>
               </View>
               <View style={{ alignItems: 'center', marginTop: 60 }}>
-                <PlemButton onPress={handleWithdrwalButton} style={{ width: '100%' }}>
+                <PlemText style={{ color: '#444444' }}>
+                  계정 삭제 시 모든 데이터가 삭제되며, 동일 이메일로 재가입이 불가능합니다.
+                </PlemText>
+                <PlemButton onPress={handleWithdrwalButton} style={{ width: '100%', marginTop: 32 }}>
                   <WithDrawalButton preserveAspectRatio="none" width={'100%'} />
                 </PlemButton>
                 <PlemButton onPress={navigation.goBack}>
