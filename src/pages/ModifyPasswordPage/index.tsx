@@ -26,6 +26,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
   const [isInvalidCurrentPassword, setIsInvalidCurrentPassword] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
   const [isInvalidPasswordConfirm, setIsInvalidPasswordConfirm] = useState(false);
+  const isCurrentPassword = !isInvalidCurrentPassword && !!currentPassword && currentPassword === newPassword;
 
   const hasEmptyValue = !currentPassword || !newPassword || !newPasswordConfirm;
 
@@ -41,7 +42,9 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
   });
 
   const isInvalidAccount = () => {
-    return isInvalidCurrentPassword || isInvalidPassword || isInvalidPasswordConfirm || hasEmptyValue;
+    return (
+      isInvalidCurrentPassword || isInvalidPassword || isInvalidPasswordConfirm || hasEmptyValue || isCurrentPassword
+    );
   };
 
   const handleNextButton = () => {
@@ -122,6 +125,7 @@ const ModifyPasswordPage = ({ navigation }: ModifyPasswordPageProps) => {
             />
           </View>
           {isInvalidPassword && <PlemText style={styles.errorText}>비밀번호 형식이 올바르지 않습니다.</PlemText>}
+          {isCurrentPassword && <PlemText style={styles.errorText}>현재 사용 중인 비밀번호입니다.</PlemText>}
           <View style={{ marginTop: 32 }}>
             <LabelInput
               value={newPasswordConfirm}
