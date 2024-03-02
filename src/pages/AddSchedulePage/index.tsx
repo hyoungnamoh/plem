@@ -58,6 +58,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
         endDate: defaultEndDate,
         notification: propSchedule.notification,
         repeats: propSchedule.repeats,
+        repeatEndDate: propSchedule.repeatEndDate,
       });
     } else {
       setSchedule({ ...schedule, startDate: defaultStartDate, endDate: defaultEndDate });
@@ -196,6 +197,13 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   const handleNameChange = (value: string) => {
     setSchedule({ ...schedule, name: value });
+  };
+
+  const getRepeatOptionValue = () => {
+    const repeatOption = repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함';
+    const repeatEndDate = schedule.repeatEndDate ? `${dayjs(schedule.repeatEndDate).format('YY.MM.DD')} 까지` : '';
+
+    return `${repeatEndDate} ${repeatOption}`;
   };
 
   return (
@@ -352,7 +360,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                 <View style={{ marginTop: 32 }}>
                   <OptionsInputRow
                     label={'반복'}
-                    value={repeatOptionList.find((option) => option.value === schedule.repeats)?.label || '안 함'}
+                    value={getRepeatOptionValue()}
                     onPress={() => navigation.navigate('ScheduleRepeatSettingPage')}
                   />
                 </View>

@@ -6,6 +6,15 @@ import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
 
 const ITEM_HEIGHT = 40;
+const SMALL_LIST_HEIGHT = 104;
+const MEDIUM_LIST_HEIGHT = 144;
+const LARGE_LIST_HEIGHT = 184;
+
+const DropdownListSize = {
+  small: SMALL_LIST_HEIGHT,
+  medium: MEDIUM_LIST_HEIGHT,
+  large: LARGE_LIST_HEIGHT,
+};
 
 export type DropdownItem<T = string | number> = { label: string; value: T };
 export type DropdownProps<T = string | number> = {
@@ -15,9 +24,10 @@ export type DropdownProps<T = string | number> = {
   onPressRow: () => void;
   onChange: (item: DropdownItem<T>) => void;
   value: DropdownItem<T>;
+  size?: 'small' | 'medium' | 'large';
 };
 
-export function Dropdown<T>({ open, list, onPressRow, onChange, value }: DropdownProps<T>) {
+export function Dropdown<T>({ open, list, onPressRow, onChange, value, size }: DropdownProps<T>) {
   const onChangeItem = (item: DropdownItem<T>) => {
     onChange(item);
   };
@@ -64,7 +74,7 @@ export function Dropdown<T>({ open, list, onPressRow, onChange, value }: Dropdow
             removeClippedSubviews={true}
             style={{
               width: '100%',
-              height: 196,
+              height: size ? DropdownListSize[size] : LARGE_LIST_HEIGHT,
               backgroundColor: '#fff',
               borderColor: '#000',
               borderRadius: 5,

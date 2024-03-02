@@ -11,6 +11,7 @@ export type Schedule = {
   createdAt: Date;
   updatedAt: Date | null;
   removedAt: Date | null;
+  repeatEndDate: string | null;
   // customRepeat: { unit: RepeatUnit; value: number[] } | RepeatSpecificCondition;
 };
 
