@@ -24,7 +24,7 @@ import {
   PanGestureHandlerEventPayload,
   State,
 } from 'react-native-gesture-handler';
-import { PopInEditingAlert } from 'pages/AddChartPage/components/PopInEditingAlert.tsx/PopInEditingAlert';
+import { PopInWritingAlert } from './components/PopInWrtingAlert';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'DirectInquiryPage'>;
 
@@ -55,6 +55,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
 
   const { mutate: addInquiry } = useAddInquiry({
     onSuccess: () => {
+      unsubscribe.current && unsubscribe.current();
       Alert.alert('문의가 성공적으로 등록되었습니다. 빠른 시일 내에 답변드리겠습니다. 감사합니다.');
       navigation.goBack();
     },
@@ -144,13 +145,13 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
     }
   };
 
-  const handlePopInEditingAlertCancel = () => {
+  const handlePopInWritingAlertCancel = () => {
     unsubscribe.current && unsubscribe.current();
     setPopInWritingAlert(false);
     navigation.goBack();
   };
 
-  const handlePopInEditingAlertConfirm = () => {
+  const handlePopInWritingAlertConfirm = () => {
     setPopInWritingAlert(false);
   };
 
@@ -221,11 +222,11 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                   <PlemText style={{ color: '#fff' }}>문의하기</PlemText>
                 </BlackButton>
               </View>
-              <PopInEditingAlert
+              <PopInWritingAlert
                 open={openPopInWritingAlert}
                 size="small"
-                onCancel={handlePopInEditingAlertCancel}
-                onConfirm={handlePopInEditingAlertConfirm}
+                onCancel={handlePopInWritingAlertCancel}
+                onConfirm={handlePopInWritingAlertConfirm}
                 cancelText="나갈게요"
                 confirmText="계속 할게요"
               />
