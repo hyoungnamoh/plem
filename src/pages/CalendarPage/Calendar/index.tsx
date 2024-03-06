@@ -9,7 +9,6 @@ import { MAIN_COLOR } from 'constants/colors';
 import { StyleSheet } from 'react-native';
 import { DAYS_OF_WEEK } from 'constants/dates';
 import Days from 'pages/CalendarPage/Days';
-import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from 'constants/etc';
 import { Category } from 'states/categoryListState';
 import PlemButton from 'components/Atoms/PlemButton';
@@ -17,23 +16,11 @@ import PlemButton from 'components/Atoms/PlemButton';
 const Calendar = ({
   year,
   month,
-  noRepeatScheduleMap,
-  yearlyRepeatScheduleMap,
-  monthlyRepeatScheduleMap,
-  twoWeeklyRepeatScheduleMap,
-  weeklyRepeatScheduleMap,
-  dailyRepeatScheduleMap,
   onPressAddSchedule,
   onPressScheduleModalClose,
 }: {
   year: number;
   month: number;
-  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  yearlyRepeatScheduleMap?: ScheduleMap;
-  monthlyRepeatScheduleMap?: ScheduleMap;
-  twoWeeklyRepeatScheduleMap?: ScheduleMap;
-  weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleMap?: ScheduleMap;
   categoryList: Category[];
   onPressAddSchedule: (date: Dayjs) => void;
   onPressScheduleModalClose: () => void;
@@ -64,16 +51,7 @@ const Calendar = ({
         <View style={styles.daysOfWeekWrap}>{renderDaysOfWeek}</View>
         <CalendarHeaderLineSvg width={'100%'} viewBox={`0 0 ${SCREEN_WIDTH} 4`} />
         <View style={styles.daysWrap}>
-          <Days
-            month={month}
-            year={year}
-            noRepeatScheduleMap={noRepeatScheduleMap}
-            yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
-            monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
-            twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
-            weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-            dailyRepeatScheduleMap={dailyRepeatScheduleMap}
-          />
+          <Days month={month} year={year} />
         </View>
       </View>
     </TouchableWithoutFeedback>

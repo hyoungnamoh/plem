@@ -185,14 +185,8 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
               categoryList={categoryList}
               month={month}
               year={currentCalendar.year() + year}
-              noRepeatScheduleMap={calendarSchedule?.data.noRepeatSchedules}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
-              monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
-              twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
-              weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-              dailyRepeatScheduleMap={dailyRepeatScheduleMap}
-              yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
             />
           );
         });
@@ -219,12 +213,6 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
         targetDate={selectedDate || currentCalendar}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
-        scheduleList={calendarSchedule?.data}
-        monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
-        twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
-        weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-        dailyRepeatScheduleMap={dailyRepeatScheduleMap}
-        yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
       />
     </>
   );

@@ -1,87 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import { categoryListState } from 'states/categoryListState';
 import { useRecoilValue } from 'recoil';
-import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import PlemText from 'components/Atoms/PlemText';
 import { SCREEN_WIDTH } from 'constants/etc';
 import { memo } from 'react';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
+import { Schedule } from 'types/calendar';
 
-const ScheduleList = ({
-  noRepeatScheduleMap,
-  yearlyRepeatScheduleMap,
-  monthlyRepeatScheduleMap,
-  twoWeeklyRepeatScheduleMap,
-  weeklyRepeatScheduleMap,
-  dailyRepeatScheduleMap,
-  year,
-  month,
-  date,
-}: {
-  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  yearlyRepeatScheduleMap?: ScheduleMap;
-  monthlyRepeatScheduleMap?: ScheduleMap;
-  twoWeeklyRepeatScheduleMap?: ScheduleMap;
-  weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleMap?: ScheduleMap;
-  year: number;
-  month: number;
-  date: number;
-}) => {
+const ScheduleList = ({ allScheduleList }: { allScheduleList: Schedule[] }) => {
   const categoryList = useRecoilValue(categoryListState);
-  // const targetDate = useMemo(
-  //   () => dayjs().set('year', year).set('month', month).set('date', date),
-  //   [year, month, date]
-  // );
-
-  const getAllScheduleList = () => {
-    const noRepeatScheduleList = getNoRepeatScheduleList();
-    const yearly = getYealyRepeatScheduleList();
-    const monthly = getMonthlyRepeatScheduleList();
-    const twoWeekly = getTwoWeeklyRepeatScheduleList();
-    const weekly = getWeeklyRepeatScheduleList();
-    const daily = getDailyRepeatScheduleList();
-
-    return yearly.concat(monthly, weekly, twoWeekly, daily, noRepeatScheduleList);
-  };
-
-  const getNoRepeatScheduleList = () => {
-    return noRepeatScheduleMap && noRepeatScheduleMap[year] && noRepeatScheduleMap[year][month]
-      ? noRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getYealyRepeatScheduleList = () => {
-    return yearlyRepeatScheduleMap && yearlyRepeatScheduleMap[year] && yearlyRepeatScheduleMap[year][month]
-      ? yearlyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getMonthlyRepeatScheduleList = () => {
-    return monthlyRepeatScheduleMap && monthlyRepeatScheduleMap[year] && monthlyRepeatScheduleMap[year][month]
-      ? monthlyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getTwoWeeklyRepeatScheduleList = () => {
-    return twoWeeklyRepeatScheduleMap && twoWeeklyRepeatScheduleMap[year] && twoWeeklyRepeatScheduleMap[year][month]
-      ? twoWeeklyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getWeeklyRepeatScheduleList = () => {
-    return weeklyRepeatScheduleMap && weeklyRepeatScheduleMap[year] && weeklyRepeatScheduleMap[year][month]
-      ? weeklyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getDailyRepeatScheduleList = () => {
-    return dailyRepeatScheduleMap && dailyRepeatScheduleMap[year] && dailyRepeatScheduleMap[year][month]
-      ? dailyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const allScheduleList = getAllScheduleList();
 
   return (
     <View style={{ marginTop: 2 }}>

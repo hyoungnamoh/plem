@@ -195,6 +195,11 @@ function AppInner({ routeName }: { routeName: string }) {
   };
 
   const getAppInfo = async () => {
+    if (__DEV__) {
+      const storeUrl = 'https://apps.apple.com/kr/app/netflix/id363590051';
+      setAppInfo({ currentVersion: '1.0.29', latestVersion: '', storeUrl });
+      return { currentVersion: '1.0.29', latestVersion: '', storeUrl };
+    }
     const appVersion = await getAppVersion();
     const storeUrl = 'https://apps.apple.com/kr/app/netflix/id363590051';
     // const storeUrl = await VersionCheck.getStoreUrl();

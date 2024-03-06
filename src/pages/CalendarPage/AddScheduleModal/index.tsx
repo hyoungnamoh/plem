@@ -12,39 +12,22 @@ import { categoryListState } from 'states/categoryListState';
 import { Schedule } from 'types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
-import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import { SCREEN_WIDTH } from 'constants/etc';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import PlemButton from 'components/Atoms/PlemButton';
 import { useEffect } from 'react';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
+import { useScheduleList } from 'hooks/useScheduleList';
 
 type AddScheduleModalProps = {
   open: boolean;
   targetDate: Dayjs;
   close: () => void;
   onPressAddSchedule: () => void;
-  scheduleList?: CalendarSchedule;
-  yearlyRepeatScheduleMap: ScheduleMap;
-  monthlyRepeatScheduleMap: ScheduleMap;
-  twoWeeklyRepeatScheduleMap: ScheduleMap;
-  weeklyRepeatScheduleMap: ScheduleMap;
-  dailyRepeatScheduleMap: ScheduleMap;
 };
 
-export const AddScheduleModal = ({
-  open,
-  targetDate,
-  close,
-  onPressAddSchedule,
-  scheduleList,
-  monthlyRepeatScheduleMap,
-  twoWeeklyRepeatScheduleMap,
-  weeklyRepeatScheduleMap,
-  dailyRepeatScheduleMap,
-  yearlyRepeatScheduleMap,
-}: AddScheduleModalProps) => {
+export const AddScheduleModal = ({ open, targetDate, close, onPressAddSchedule }: AddScheduleModalProps) => {
   const { navigate } = useNavigation<NavigationProp<CalendarTabStackParamList>>();
   const categoryList = useRecoilValue(categoryListState);
   const { updateScheduleConfirmDate } = useScheduleConfirmDate();
@@ -62,60 +45,11 @@ export const AddScheduleModal = ({
     navigate('AddSchedulePage', { schedule, date: targetDate.startOf('date').toISOString() });
   };
 
+  const { allScheduleList } = useScheduleList({ year, month, date });
+
   if (!open) {
     return null;
   }
-
-  const getAllScheduleList = () => {
-    if (!scheduleList) {
-      return [];
-    }
-    const noRepeatScheduleList =
-      scheduleList.noRepeatSchedules &&
-      scheduleList.noRepeatSchedules[year] &&
-      scheduleList.noRepeatSchedules[year][month]
-        ? scheduleList.noRepeatSchedules[year][month][date]
-        : [];
-    const yearly = getYearlyRepeayScheduleList();
-    const monthly = getMonthlyRepeayScheduleList();
-    const twoWeekly = getTwoWeeklyRepeatScheduleList();
-    const weekly = getWeeklyRepeatScheduleList();
-    const daily = getDailyRepeatScheduleList();
-
-    return yearly.concat(monthly, twoWeekly, weekly, daily, noRepeatScheduleList);
-  };
-
-  const getYearlyRepeayScheduleList = () => {
-    return yearlyRepeatScheduleMap && yearlyRepeatScheduleMap[year] && yearlyRepeatScheduleMap[year][month]
-      ? yearlyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getMonthlyRepeayScheduleList = () => {
-    return monthlyRepeatScheduleMap && monthlyRepeatScheduleMap[year] && monthlyRepeatScheduleMap[year][month]
-      ? monthlyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getTwoWeeklyRepeatScheduleList = () => {
-    return twoWeeklyRepeatScheduleMap && twoWeeklyRepeatScheduleMap[year] && twoWeeklyRepeatScheduleMap[year][month]
-      ? twoWeeklyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getWeeklyRepeatScheduleList = () => {
-    return weeklyRepeatScheduleMap && weeklyRepeatScheduleMap[year] && weeklyRepeatScheduleMap[year][month]
-      ? weeklyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const getDailyRepeatScheduleList = () => {
-    return dailyRepeatScheduleMap && dailyRepeatScheduleMap[year] && dailyRepeatScheduleMap[year][month]
-      ? dailyRepeatScheduleMap[year][month][date]
-      : [];
-  };
-
-  const allScheduleList = getAllScheduleList();
   return (
     <View style={styles.wrap}>
       <AddScheduleModalSvg style={{ position: 'absolute' }} width={345} />

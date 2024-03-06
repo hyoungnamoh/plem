@@ -11,7 +11,7 @@ export type ScheduleMap = {
 };
 
 export type CalendarSchedule = {
-  noRepeatSchedules: ScheduleMap;
+  noRepeatSchedules: Schedule[];
   repeatSchedules: {
     yearlyRepeatSchedules: Schedule[];
     monthlyRepeatSchedules: Schedule[];

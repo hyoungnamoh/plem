@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import { Dispatch, SetStateAction, memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { CalendarSchedule, ScheduleMap } from 'api/schedules/getScheduleListApi';
 import dayjs from 'dayjs';
 import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
 import { openScheduleModalState } from 'states/openScheduleModalState';
@@ -10,16 +9,11 @@ import Sticker from './Sticker';
 import { SCREEN_WIDTH } from 'constants/etc';
 import ScheduleList from './ScheduleList';
 import PlemButton from 'components/Atoms/PlemButton';
+import { useScheduleList } from 'hooks/useScheduleList';
 
 const Day = ({
   isToday,
   firstDateIndex,
-  noRepeatScheduleMap,
-  yearlyRepeatScheduleMap,
-  monthlyRepeatScheduleMap,
-  twoWeeklyRepeatScheduleMap,
-  weeklyRepeatScheduleMap,
-  dailyRepeatScheduleMap,
   date,
   year,
   month,
@@ -28,12 +22,6 @@ const Day = ({
 }: {
   isToday: boolean;
   firstDateIndex: number;
-  noRepeatScheduleMap?: CalendarSchedule['noRepeatSchedules'];
-  yearlyRepeatScheduleMap?: ScheduleMap;
-  monthlyRepeatScheduleMap?: ScheduleMap;
-  twoWeeklyRepeatScheduleMap?: ScheduleMap;
-  weeklyRepeatScheduleMap?: ScheduleMap;
-  dailyRepeatScheduleMap?: ScheduleMap;
   date: number;
   year: number;
   month: number;
@@ -42,6 +30,7 @@ const Day = ({
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
+  const { allScheduleList } = useScheduleList({ year, month, date });
 
   const getDateColor = useCallback(() => {
     if (isToday) {
@@ -80,17 +69,7 @@ const Day = ({
           {date}
         </PlemText>
       </View>
-      <ScheduleList
-        noRepeatScheduleMap={noRepeatScheduleMap}
-        yearlyRepeatScheduleMap={yearlyRepeatScheduleMap}
-        monthlyRepeatScheduleMap={monthlyRepeatScheduleMap}
-        twoWeeklyRepeatScheduleMap={twoWeeklyRepeatScheduleMap}
-        weeklyRepeatScheduleMap={weeklyRepeatScheduleMap}
-        dailyRepeatScheduleMap={dailyRepeatScheduleMap}
-        year={year}
-        month={month}
-        date={date}
-      />
+      <ScheduleList allScheduleList={allScheduleList} />
     </PlemButton>
   );
 };
