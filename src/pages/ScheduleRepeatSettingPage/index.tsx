@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { Repeat } from 'types/calendar';
@@ -43,14 +43,13 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
   const [repeatEndDateType, setRepeatEndDateType] = useState<DropdownItem<string | null>>(
     schedule.repeatEndDate ? repeatEndDateList[1] : repeatEndDateList[0]
   );
+
   const [openHandleRepeatEndDateList, setOpenHandleRepeatEndDateList] = useState(false);
   const [repeatEndDate, setRepeatEndDate] = useState<Dayjs | null>(
     schedule.repeatEndDate ? dayjs(schedule.repeatEndDate) : null
   );
   // const repeatEndDate = schedule.repeatEndDate ? dayjs(schedule.repeatEndDate) : null;
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-
-  useEffect(() => {}, []);
 
   const onPressRepeatOption = (option: Repeat) => {
     setRepeatOption(option);
@@ -77,7 +76,7 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
   const handleRepeatEndDateList = (item: DropdownItem<string | null>) => {
     setRepeatEndDateType(item);
-    setRepeatEndDate(item.value === 'date' ? dayjs() : null);
+    setRepeatEndDate(item.value === 'date' ? dayjs(schedule.startDate) : null);
     setOpenHandleRepeatEndDateList(false);
   };
 
@@ -117,7 +116,7 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
             />
             {repeatEndDate && (
               <View style={styles.dateInputWrap}>
-                <PlemText style={{ fontSize: 14 }}>반봉 종료일</PlemText>
+                <PlemText style={{ fontSize: 14 }}>반복 종료일</PlemText>
                 <PlemButton style={styles.dateInput} onPress={() => setOpenEndDatePicker(true)}>
                   <PlemText>{repeatEndDate.format('YY.MM.DD')}</PlemText>
                   <ArrowDownSvg style={styles.arrowDownImage} />
@@ -136,7 +135,7 @@ const ScheduleRepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
           onCancel={() => setOpenEndDatePicker(false)}
           date={repeatEndDate.toDate()}
           locale="ko-KR"
-          minimumDate={dayjs().toDate()}
+          minimumDate={dayjs(schedule.startDate).toDate()}
         />
       )}
       <BottomButton title={'완료'} onPress={onPressBottomButton} />
