@@ -226,7 +226,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
               x={item.x}
               y={item.y}
               dragAreaInfo={props.dragAreaInfo}>
-              <PlemText style={{ fontSize: 14 }}>{item.id}</PlemText>
+              <PlemText style={{ fontSize: 14 }}>{item.text}</PlemText>
             </Draggable>
           );
         })}
