@@ -46,14 +46,19 @@ type AddChartPageProps = NativeStackScreenProps<MainTabStackParamList, 'AddChart
 
 const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const queryClient = useQueryClient();
+  const isEdit = !!route.params?.chart;
+
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const setGlobalToast = useSetRecoilState(globalToastState);
-  const isEdit = !!route.params?.chart;
+
   const [openEmptyPlanAlert, setOpenEmptyPlanAlert] = useState(false);
   const [openPopInEditingAlert, setPopInEditingAlert] = useState(false);
+  const [planCoordinates, setPlanCoordinates] = useState<{ [id: string]: { x: number; y: number } }>({});
+
   const swipeStartX = useRef<number | null>();
   const unsubscribe = useRef<() => void>();
 
+  // AsyncStorage.removeItem('planCoordinates');
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
     onSuccess: async (responseData) => {
       if (responseData.status === 200) {
@@ -92,21 +97,27 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   useEffect(() => {
     initChartData();
-
     return () => {
       setChart(addPlanChartDefault);
     };
   }, []);
 
   useEffect(() => {
+    initPlanCoordinates(chart);
+  }, [chart.plans.length]);
+
+  useEffect(() => {
     unsubscribe.current = navigation.addListener('beforeRemove', (e) => {
       if (isEdit && checkChangesEdit()) {
         e.preventDefault();
         setPopInEditingAlert(true);
+        return;
       }
       if (!isEdit && checkChangesAdd()) {
         setStorageChartData();
         showDraftsToast();
+        setStoragePlanCoordinates();
+        return;
       }
     });
     return () => {
@@ -114,7 +125,26 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         unsubscribe.current();
       }
     };
-  }, [navigation, chart, route.params?.chart, isEdit]);
+  }, [navigation, chart, route.params?.chart, isEdit, planCoordinates]);
+
+  const initPlanCoordinates = async (chartData: AddPlanChart) => {
+    const storageCoordinates = await AsyncStorage.getItem('planCoordinates');
+    if (storageCoordinates) {
+      const coordinates = JSON.parse(storageCoordinates) as { [tmpeId: string]: { x: number; y: number } };
+      const chartCoordinates: { [tmpeId: string]: { x: number; y: number } } = {};
+      chartData.plans.forEach((plan) => {
+        const tmpeId = plan.tempId;
+        if (!tmpeId) {
+          return;
+        }
+        const coordinate = coordinates[tmpeId];
+        if (coordinate) {
+          chartCoordinates[tmpeId] = coordinate;
+        }
+      });
+      setPlanCoordinates(chartCoordinates);
+    }
+  };
 
   const checkDrafts = async () => {
     const hasDraft = await AsyncStorage.getItem('chartData');
@@ -146,7 +176,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       {
         text: '아니요',
         onPress: async () => {
-          await AsyncStorage.removeItem('chartData');
+          AsyncStorage.removeItem('chartData');
+          clearStorageChartCoordinates(chartData);
         },
         style: 'cancel',
       },
@@ -154,13 +185,30 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         text: '네',
         onPress: () => {
           setChart(chartData);
+          initPlanCoordinates(chartData);
         },
       },
     ]);
     // setChart(chartData);
   };
 
-  const onPressAddChart = () => {
+  const clearStorageChartCoordinates = async (chartData: AddPlanChart) => {
+    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+    if (!storagePlanCoordinates) {
+      return;
+    }
+    const parsedPlanCoordinates = JSON.parse(storagePlanCoordinates);
+    const tmpeIdList = chartData.plans.map((plan) => plan.tempId);
+    tmpeIdList.forEach(async (id) => {
+      if (!id) {
+        return;
+      }
+      delete parsedPlanCoordinates[id];
+    });
+    AsyncStorage.setItem('planCoordinates', JSON.stringify(parsedPlanCoordinates));
+  };
+
+  const handAddPress = () => {
     if (addChartLoading) {
       return;
     }
@@ -176,10 +224,15 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       showEmptyPlanAlert();
       return;
     }
-    addChart(chart);
+    handleAddChart();
   };
 
-  const onPressUpdate = () => {
+  const handleAddChart = () => {
+    addChart(chart);
+    setStoragePlanCoordinates();
+  };
+
+  const handleUpdatePress = () => {
     if (updateChartLoading || !route.params?.chart?.id) {
       return;
     }
@@ -187,8 +240,17 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       showEmptyPlanAlert();
       return;
     }
+    handleUpdate();
+  };
+
+  const handleUpdate = () => {
+    if (!route.params?.chart?.id) {
+      return;
+    }
+
     const newChart = { ...chart, id: route.params?.chart.id };
     updateChart(newChart);
+    setStoragePlanCoordinates();
   };
 
   const onPressRepeatSetting = () => {
@@ -275,12 +337,9 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     setOpenEmptyPlanAlert(false);
 
     if (isEdit) {
-      if (route.params?.chart.id) {
-        const newChart = { ...chart, id: route.params.chart.id };
-        updateChart(newChart);
-      }
+      handleUpdate();
     } else {
-      addChart(chart);
+      handleAddChart();
     }
   };
 
@@ -322,17 +381,55 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     setPopInEditingAlert(false);
   };
 
+  const handleTextDragEnd = async ({ id, x, y }: { id: string; x: number; y: number }) => {
+    setPlanCoordinates((prev) => ({ ...prev, [id]: { x, y } }));
+  };
+
+  const setStoragePlanCoordinates = async () => {
+    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+
+    if (!storagePlanCoordinates) {
+      AsyncStorage.setItem('planCoordinates', JSON.stringify(planCoordinates));
+    } else {
+      const originCoordinates = JSON.parse(storagePlanCoordinates) as { [id: string]: { x: number; y: number } };
+      if (isEdit) {
+        const originPlanIds = route.params.chart.plans.map((plan) => plan.id);
+        const newPlanIds = chart.plans.map((plan) => plan.id);
+        const deletedPlanIds = originPlanIds.filter((id) => !newPlanIds.includes(id));
+        deletedPlanIds.forEach((id) => {
+          delete originCoordinates[id];
+        });
+      }
+
+      const newCoords = { ...originCoordinates, ...planCoordinates };
+      AsyncStorage.setItem('planCoordinates', JSON.stringify(newCoords));
+    }
+  };
+
+  // const setStorageTempPlanCoordinates = async () => {
+  //   const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+  //   // const tempPlanCoordinates = chart.plans.
+
+  //   if (!storagePlanCoordinates) {
+  //     AsyncStorage.setItem('planCoordinates', JSON.stringify(planCoordinates));
+  //   } else {
+  //     const originCoordinates = JSON.parse(storagePlanCoordinates) as { [id: string]: { x: number; y: number } };
+  //     const newCoords = { ...originCoordinates, ...planCoordinates };
+  //     AsyncStorage.setItem('planCoordinates', JSON.stringify(newCoords));
+  //   }
+  // };
+
   return (
     <PanGestureHandler onHandlerStateChange={handleGesture}>
       <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
         <Header
           title={isEdit ? '계획표 수정' : '계획표 추가'}
           buttonName={isEdit ? '완료' : '등록'}
-          buttonProps={{ onPress: isEdit ? onPressUpdate : onPressAddChart }}
+          buttonProps={{ onPress: isEdit ? handleUpdatePress : handAddPress }}
         />
         <ScrollView style={styles.page} keyboardDismissMode={'on-drag'} contentContainerStyle={{ paddingBottom: 300 }}>
           <View style={{ paddingHorizontal: 15 }}>
-            <AddChartTable />
+            <AddChartTable onTextDragEnd={handleTextDragEnd} planCoordinates={planCoordinates} />
             <View style={styles.optionRow}>
               <View style={styles.underlineButtonWrap}>
                 <PlemText>반복</PlemText>

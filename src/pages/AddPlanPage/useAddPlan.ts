@@ -9,6 +9,7 @@ import { AddPlan, AddPlanChart } from 'types/chart';
 import { addPlanChartState } from 'states/addPlanChartState';
 import { addPlanDefault, addPlanState } from 'states/addPlanState';
 import { globalToastState } from 'states/globalToastState';
+import uuid from 'react-uuid';
 
 export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
   const isModify = route.params?.planIndex !== undefined;
@@ -162,10 +163,11 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
       copiedChart.plans[route.params?.planIndex] = newPlan;
       copiedChart.plans = plansSortingByTime(copiedChart.plans);
       setChart(copiedChart);
-      setStorageChartData(copiedChart);
+      // setStorageChartData(copiedChart);
     } else {
+      newPlan.tempId = uuid();
       setChart({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
-      setStorageChartData({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
+      // setStorageChartData({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
     }
 
     navigation.goBack();
@@ -233,20 +235,20 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     setName(value);
   };
 
-  const onPressDelete = () => {
+  const handleDeletePlan = () => {
     if (!isModify) {
       return;
     }
     const copiedChart = cloneDeep(chart);
     copiedChart.plans.splice(route.params?.planIndex, 1);
     setChart(copiedChart);
-    setStorageChartData(copiedChart);
+    // setStorageChartData(copiedChart);
 
     navigation.goBack();
   };
 
   return {
-    onPressDelete,
+    handleDeletePlan,
     isModify,
     name,
     onChangeName,

@@ -6,10 +6,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PlanChartListTabStackParamList } from 'tabs/PlanChartListTab';
 import { PlanChart, Repeats } from 'types/chart';
 import { usePieChart } from 'hooks/usePieChart';
-import { PieChart } from 'react-native-gifted-charts';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
 import { repeatOptionList } from 'pages/RepeatSettingPage';
+import { PieChart } from 'components/PieChart';
+import { CHART_RADIUS, STROKE_WIDTH } from './constants';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
@@ -50,18 +51,19 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
   return (
     <View key={`header${chart.id}`} style={styles.header}>
       <PlemButton style={styles.headerContent} onPress={() => navigation.navigate('AddChartPage', { chart: chart })}>
-        <PieChart
-          data={pieChartData}
-          initialAngle={initialAngle}
-          showText
-          textColor={'#000'}
-          labelsPosition={'outward'}
-          textSize={14}
-          font={'LeeSeoyun'}
-          strokeColor={'black'}
-          strokeWidth={2}
-          radius={32}
-        />
+        <View style={{ width: CHART_RADIUS * 2 + STROKE_WIDTH, height: CHART_RADIUS * 2 + STROKE_WIDTH }}>
+          <PieChart
+            data={pieChartData}
+            initialAngle={initialAngle}
+            textColor={'#000'}
+            labelsPosition={'outward'}
+            textSize={14}
+            font={'LeeSeoyun'}
+            strokeColor={'black'}
+            strokeWidth={STROKE_WIDTH}
+            radius={CHART_RADIUS}
+          />
+        </View>
         <View style={styles.headerInfo}>
           <PlemText>{chart.name}</PlemText>
           <PlemText style={styles.repeats}>{getRepeatOptions(chart.repeats)}</PlemText>

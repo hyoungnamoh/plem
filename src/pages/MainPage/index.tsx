@@ -153,6 +153,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
   return (
     <>
       <View style={styles.page}>
+        {/* <DraggableText /> */}
         <View style={styles.mainHeader}>
           <PlemButton>
             <MainLogoSvg />

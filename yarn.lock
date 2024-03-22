@@ -1394,6 +1394,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@mgcrea/react-native-dnd@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@mgcrea/react-native-dnd/-/react-native-dnd-2.2.0.tgz#d782881e67076d7a79f9e4f1f00dad558daa9638"
+  integrity sha512-gD6vn/ui7wn/GpaBJM5lWlvM+K6x4tBQftS/rjO97979B/Ue2JTc9/ybrJCF7adOH4BrW9aaRmjyBb/exJ4DOQ==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -8401,6 +8406,11 @@ react-native-gradle-plugin@^0.70.3:
   version "0.70.3"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
+
+react-native-haptic-feedback@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-haptic-feedback/-/react-native-haptic-feedback-2.2.0.tgz#bc46edd1f053265bfbe6c32487cbce074e099429"
+  integrity sha512-3tqJOjCguWhIrX0nkURn4yw6kXdsSDjjrvZCRjKXYGlL28hdQmoW2okAHduDTD9FWj9lA+lHgwFWgGs4aFNN7A==
 
 react-native-iphone-x-helper@^1.0.3:
   version "1.3.1"

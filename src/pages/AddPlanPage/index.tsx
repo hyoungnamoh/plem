@@ -19,7 +19,7 @@ export type AddPlanPageProps = NativeStackScreenProps<MainTabStackParamList, 'Ad
 
 const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
   const {
-    onPressDelete,
+    handleDeletePlan,
     isModify,
     name,
     startHour,
@@ -50,7 +50,7 @@ const AddPlanPage = ({ navigation, route }: AddPlanPageProps) => {
         <Header
           title="계획 추가"
           buttonName={'삭제'}
-          buttonProps={{ onPress: onPressDelete, style: { display: isModify ? 'flex' : 'none' } }}
+          buttonProps={{ onPress: handleDeletePlan, style: { display: isModify ? 'flex' : 'none' } }}
           buttonNameProps={{ style: { color: '#E40C0C' } }}
         />
         <View style={styles.content}>

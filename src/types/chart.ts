@@ -20,6 +20,7 @@ export type Plan = {
   startMin: number;
   endHour: number;
   endMin: number;
+  tempId?: string;
 };
 
 // export type PlanTime = { hour: number; minute: number };
@@ -46,14 +47,17 @@ export type Repeats = (null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)[]; // 안함 | 일 
 // };
 export type AddPlanChart = Omit<
   PlanChart,
-  'id' | 'UserId' | 'createdAt' | 'removedAt' | 'updatedAt' | 'plans' | 'orderNum'
+  'UserId' | 'createdAt' | 'removedAt' | 'updatedAt' | 'plans' | 'orderNum'
 > & {
   plans: AddPlan[];
 };
 
-export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'id' | 'updatedAt' | 'subPlans'> & {
+export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'updatedAt' | 'subPlans'> & {
+  id?: number;
   subPlans: AddSubPlan[];
 };
+
+export type EmptyPlan = Pick<Plan, 'name' | 'startHour' | 'startMin' | 'endHour' | 'endMin' | 'tempId'>;
 
 export type AddSubPlan = Omit<SubPlan, 'PlanId' | 'createdAt' | 'id' | 'updatedAt'>;
 

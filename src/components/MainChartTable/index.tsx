@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native';
-import { PieChart } from 'react-native-gifted-charts';
 import { PlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
 import dayjs from 'dayjs';
@@ -10,7 +9,9 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import PlemButton from 'components/Atoms/PlemButton';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { PieChart } from 'components/PieChart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
@@ -34,6 +35,8 @@ const MainChartTable = ({
     renderCurrentTime: !!chart,
   });
 
+  useEffect(() => {}, []);
+
   const handleChartPress = () => {
     if (chart) {
       navigation.navigate('AddChartPage', { chart });
@@ -43,6 +46,17 @@ const MainChartTable = ({
         return;
       }
       navigation.navigate('AddChartPage');
+    }
+  };
+
+  const handleTextDragEnd = async ({ id, x, y }: { id: string; x: number; y: number }) => {
+    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+    if (!storagePlanCoordinates) {
+      AsyncStorage.setItem('planCoordinates', JSON.stringify({ [id]: { x, y } }));
+    } else {
+      const planCoordinates = JSON.parse(storagePlanCoordinates) as { [id: string]: { x: number; y: number } };
+      planCoordinates[id] = { x, y };
+      AsyncStorage.setItem('planCoordinates', JSON.stringify(planCoordinates));
     }
   };
 
@@ -67,25 +81,23 @@ const MainChartTable = ({
             </View>
           </View>
           <View style={styles.chartBox}>
-            <View style={{ marginLeft: '8%', marginTop: '10%' }}>
-              <PlemText style={[styles.baseTimes, { top: '-8%', left: '42%' }]}>24</PlemText>
-              <PlemText style={[styles.baseTimes, { top: '43%', left: '92%' }]}>6</PlemText>
-              <PlemText style={[styles.baseTimes, { top: '93%', left: '42%' }]}>12</PlemText>
-              <PlemText style={[styles.baseTimes, { top: '43%', left: '-7%' }]}>18</PlemText>
-              <PieChart
-                data={pieChartData}
-                initialAngle={initialAngle}
-                showText
-                textColor={'#000'}
-                labelsPosition={'outward'}
-                textSize={14}
-                font={'LeeSeoyun'}
-                strokeColor={'black'}
-                strokeWidth={2}
-                radius={chartRadius}
-                onPress={handleChartPress}
-              />
-            </View>
+            <PlemText style={[styles.baseTimes, { top: 8 }]}>24</PlemText>
+            <PlemText style={[styles.baseTimes, { right: 8 }]}>6</PlemText>
+            <PlemText style={[styles.baseTimes, { bottom: 8 }]}>12</PlemText>
+            <PlemText style={[styles.baseTimes, { left: 8 }]}>18</PlemText>
+            <PieChart
+              data={pieChartData}
+              initialAngle={initialAngle}
+              showText={true}
+              textColor={'#000'}
+              labelsPosition={'outward'}
+              textSize={14}
+              font={'LeeSeoyun'}
+              strokeColor={'black'}
+              strokeWidth={2}
+              radius={chartRadius}
+              onPress={handleChartPress}
+            />
             {hasTodayChart && (
               <View
                 style={[
@@ -154,6 +166,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 2,
     borderColor: '#000',
+    // padding: 16,
   },
   todayPlanEmptyWrap: {
     position: 'absolute',

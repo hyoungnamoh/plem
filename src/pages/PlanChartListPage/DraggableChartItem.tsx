@@ -4,12 +4,15 @@ import PlemText from 'components/Atoms/PlemText';
 import { useCloneChart } from 'hooks/mutations/useCloneChart';
 import { useDeleteChart } from 'hooks/mutations/useDeleteChart';
 import HamburgerBarSvg from 'assets/images/hamburgerbar_32x32.svg';
-import { PieChart } from 'react-native-gifted-charts';
 import { usePieChart } from 'hooks/usePieChart';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
 import { Dispatch, SetStateAction } from 'react';
 import UnderlineSvg from 'assets/images/underline.svg';
+import { PieChart } from 'components/PieChart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MAIN_COLOR } from 'constants/colors';
+import { CHART_RADIUS, STROKE_WIDTH } from './constants';
 
 const DraggableChartItem = ({
   item,
@@ -50,6 +53,23 @@ const DraggableChartItem = ({
 
   const handleDeletePress = (id: number) => {
     deleteChart({ id });
+    clearStorageChartCoordinates(item);
+  };
+
+  const clearStorageChartCoordinates = async (chartData: PlanChart) => {
+    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+    if (!storagePlanCoordinates) {
+      return;
+    }
+    const parsedPlanCoordinates = JSON.parse(storagePlanCoordinates);
+    const tmpeIdList = chartData.plans.map((plan) => plan.tempId);
+    tmpeIdList.forEach(async (id) => {
+      if (!id) {
+        return;
+      }
+      delete parsedPlanCoordinates[id];
+    });
+    AsyncStorage.setItem('planCoordinates', JSON.stringify(parsedPlanCoordinates));
   };
 
   return (
@@ -59,18 +79,19 @@ const DraggableChartItem = ({
           <PlemButton onPressIn={drag} style={{ marginRight: 16 }}>
             <HamburgerBarSvg />
           </PlemButton>
-          <PieChart
-            data={pieChartData}
-            initialAngle={initialAngle}
-            showText
-            textColor={'#000'}
-            labelsPosition={'outward'}
-            textSize={14}
-            font={'LeeSeoyun'}
-            strokeColor={'black'}
-            strokeWidth={2}
-            radius={32}
-          />
+          <View style={{ width: CHART_RADIUS * 2 + STROKE_WIDTH, height: CHART_RADIUS * 2 + STROKE_WIDTH }}>
+            <PieChart
+              data={pieChartData}
+              initialAngle={initialAngle}
+              textColor={'#000'}
+              labelsPosition={'outward'}
+              textSize={14}
+              font={'LeeSeoyun'}
+              strokeColor={'black'}
+              strokeWidth={STROKE_WIDTH}
+              radius={CHART_RADIUS}
+            />
+          </View>
           <View style={styles.chartNameWrap}>
             <PlemText style={styles.chartName} numberOfLines={2}>
               {item.name}
@@ -101,6 +122,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: MAIN_COLOR,
   },
   contentContainer: {
     flexDirection: 'row',

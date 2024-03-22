@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native';
-import { PieChart } from 'react-native-gifted-charts';
 import { AddPlanChart } from 'types/chart';
 import PlemText from './../Atoms/PlemText';
 import { usePieChart } from 'hooks/usePieChart';
@@ -8,14 +7,21 @@ import PlemTextInput from 'components/Atoms/PlemTextInput';
 import { useRecoilState } from 'recoil';
 import { addPlanChartState } from 'states/addPlanChartState';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constants/etc';
+import { PieChart } from 'components/PieChart';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
 const chartRadius = SCREEN_WIDTH / 2.65;
 
-const AddChartTable = () => {
+const AddChartTable = ({
+  onTextDragEnd,
+  planCoordinates,
+}: {
+  onTextDragEnd: ({ id, x, y }: { id: string; x: number; y: number }) => Promise<void>;
+  planCoordinates: { [key: string]: { x: number; y: number } };
+}) => {
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
-  const { pieChartData, initialAngle } = usePieChart({ chart });
+  const { pieChartData, initialAngle } = usePieChart({ chart, coordinates: planCoordinates });
 
   const handleNameChange = (value: string) => {
     setChart({ ...chart, name: value });
@@ -43,25 +49,26 @@ const AddChartTable = () => {
           </View>
         </View>
         <View style={styles.chartBox}>
-          <View style={{ marginLeft: '9%', marginTop: '10%', height: chartRadius * 2 + 30 }}>
-            <PlemText style={[styles.baseTimes, { top: '-8%', left: '43%', fontSize: 14 }]}>24</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '93%', fontSize: 14 }]}>6</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '93%', left: '43%', fontSize: 14 }]}>12</PlemText>
-            <PlemText style={[styles.baseTimes, { top: '43%', left: '-6%', fontSize: 14 }]}>18</PlemText>
-            {chart.plans.length > 0 ? (
-              <PieChart
-                data={pieChartData}
-                initialAngle={initialAngle}
-                showText
-                textColor={'#000'}
-                labelsPosition={'outward'}
-                textSize={14}
-                font={'LeeSeoyun'}
-                strokeColor={'black'}
-                strokeWidth={2}
-                radius={chartRadius}
-              />
-            ) : (
+          <PlemText style={[styles.baseTimes, { top: 8 }]}>24</PlemText>
+          <PlemText style={[styles.baseTimes, { right: 8 }]}>6</PlemText>
+          <PlemText style={[styles.baseTimes, { bottom: 8 }]}>12</PlemText>
+          <PlemText style={[styles.baseTimes, { left: 8 }]}>18</PlemText>
+          {chart.plans.length > 0 ? (
+            <PieChart
+              data={pieChartData}
+              initialAngle={initialAngle}
+              showText
+              textColor={'#000'}
+              labelsPosition={'outward'}
+              textSize={14}
+              font={'LeeSeoyun'}
+              strokeColor={'black'}
+              strokeWidth={2}
+              radius={chartRadius}
+              onTextDragEnd={onTextDragEnd}
+            />
+          ) : (
+            <View style={{ padding: 32 }}>
               <View
                 style={{
                   width: chartRadius * 2,
@@ -75,8 +82,8 @@ const AddChartTable = () => {
                 <SurprisedPlemmonSvg />
                 <PlemText style={{ marginVertical: 20, fontSize: 14 }}>계획을 추가해 주세요.</PlemText>
               </View>
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -120,9 +127,11 @@ const styles = StyleSheet.create({
   },
   chartBox: {
     justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
     borderWidth: 2,
     borderColor: '#000',
+    // padding: 16,
   },
 });
 

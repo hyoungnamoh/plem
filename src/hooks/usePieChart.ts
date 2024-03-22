@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
-import { itemType } from 'react-native-gifted-charts/src/LineChart/types';
 import { useFocusEffect } from '@react-navigation/native';
 import { DAY_TO_MS, MIN_TO_MS } from 'constants/times';
 import dayjs from 'dayjs';
-import { AddPlanChart, PlanChart } from 'types/chart';
+import { AddPlan, AddPlanChart, EmptyPlan, Plan, PlanChart } from 'types/chart';
+import { PieChartItem } from 'components/PieChart/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const usePieChart = ({
   chart,
   renderCurrentTime,
   hideName,
+  coordinates,
 }: {
-  chart: PlanChart | AddPlanChart | null;
+  chart: AddPlanChart | PlanChart;
   renderCurrentTime?: boolean;
   hideName?: boolean;
+  coordinates?: { [key: string]: { x: number; y: number } };
 }) => {
-  const [pieChartData, setChartData] = useState<itemType[]>([]);
+  const [pieChartData, setChartData] = useState<PieChartItem[]>([]);
   const [currentTimeDegree, setCurrentTimeDegree] = useState(
     renderCurrentTime ? (dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360 : 0
   );
@@ -47,14 +50,27 @@ export const usePieChart = ({
     if (!chart) {
       return;
     }
-    setChartData(getPieChartData());
-  }, [chart]);
+    initChartData();
+  }, [chart, coordinates]);
 
-  const getPieChartData = () => {
+  const initChartData = async () => {
+    const data = await getPieChartData();
+    setChartData(data);
+  };
+
+  const getStoragePlanCoordinates = async () => {
+    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
+    return storagePlanCoordinates
+      ? (JSON.parse(storagePlanCoordinates) as { [key: string]: { x: number; y: number } })
+      : null;
+  };
+
+  const getPieChartData = async (): Promise<PieChartItem[]> => {
     if (!chart) {
       return [];
     }
-    const chartData = [];
+    const coords = coordinates || (await getStoragePlanCoordinates());
+    const chartData: (Plan | AddPlan | EmptyPlan)[] = [];
     for (let index = 0; index < chart.plans.length; index++) {
       const element = chart.plans[index];
 
@@ -82,7 +98,6 @@ export const usePieChart = ({
             // 빈 시간이 있을 경우
             chartData.push(element);
             chartData.push({
-              id: Math.random(),
               name: '',
               startHour: element.endHour,
               startMin: element.endMin,
@@ -94,7 +109,6 @@ export const usePieChart = ({
         } else {
           chartData.push(element);
           chartData.push({
-            id: Math.random(),
             name: '',
             startHour: element.endHour,
             startMin: element.endMin,
@@ -118,7 +132,7 @@ export const usePieChart = ({
           // 빈 시간이 있을 경우
           chartData.push(element);
           chartData.push({
-            id: Math.random(),
+            // id: Math.random(),
             name: '',
             startHour: element.endHour,
             startMin: element.endMin,
@@ -138,7 +152,7 @@ export const usePieChart = ({
         } else {
           chartData.push(element);
           chartData.push({
-            id: Math.random(),
+            // id: Math.random(),
             name: '',
             startHour: element.endHour,
             startMin: element.endMin,
@@ -148,7 +162,6 @@ export const usePieChart = ({
         }
       }
     }
-
     return chartData.map((plan) => {
       const startTime = dayjs()
         .set('hour', plan.startHour)
@@ -161,11 +174,14 @@ export const usePieChart = ({
         .set('second', 0)
         .set('millisecond', 0);
       return {
+        id: plan.tempId,
         value: startTime.isAfter(endTime) ? endTime.diff(startTime) + DAY_TO_MS : endTime.diff(startTime),
         text: hideName ? '' : plan.name,
         shiftTextX: plan.name.length * -3,
         color: 'transparent',
         labelPosition: 'outward',
+        x: coords && plan.tempId ? coords[plan.tempId]?.x : undefined,
+        y: coords && plan.tempId ? coords[plan.tempId]?.y : undefined,
       };
     });
   };
