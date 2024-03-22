@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
 import PlemText from 'components/Atoms/PlemText';
-import Draggable from 'components/Test/Draggable';
+import Draggable from 'components/Draggable/Draggable';
 import { PieChartMainItem, PieChartMainProps } from './types';
 
 export const PieChartMain = (props: PieChartMainProps) => {
