@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { AddPlanChart } from 'types/chart';
+import { AddPlan, AddPlanChart } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
 import { addPlanChartDefault, addPlanChartState } from 'states/addPlanChartState';
@@ -103,7 +103,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   }, []);
 
   useEffect(() => {
-    initPlanCoordinates(chart);
+    updatePlanCoordinates(chart.plans);
   }, [chart.plans.length]);
 
   useEffect(() => {
@@ -146,6 +146,21 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     }
   };
 
+  const updatePlanCoordinates = (plans: AddPlan[]) => {
+    const chartCoordinates: { [tmpeId: string]: { x: number; y: number } } = {};
+    plans.forEach((plan) => {
+      const tmpeId = plan.tempId;
+      if (!tmpeId) {
+        return;
+      }
+      const coordinate = planCoordinates[tmpeId];
+      if (coordinate) {
+        chartCoordinates[tmpeId] = coordinate;
+      }
+    });
+    setPlanCoordinates(chartCoordinates);
+  };
+
   const checkDrafts = async () => {
     const hasDraft = await AsyncStorage.getItem('chartData');
     return !!hasDraft;
@@ -165,6 +180,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     // 수정
     if (route.params?.chart) {
       setChart(route.params.chart);
+      initPlanCoordinates(route.params.chart);
       return;
     }
 
