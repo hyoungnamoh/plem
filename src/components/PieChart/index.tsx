@@ -12,13 +12,20 @@ export const PieChart = (props: PieChartProps) => {
   const canvasRef = useRef<View>(null);
 
   useEffect(() => {
-    if (!canvasRef.current) {
+    const canvasRefCurrent = canvasRef.current;
+    if (!canvasRefCurrent) {
       return;
     }
-    canvasRef.current.measure((_, __, width, height, pageX, pageY) => {
-      setDragAreaInfo({ minX: pageX, minY: pageY, maxX: pageX + width * 2, maxY: pageY + height });
-    });
-  }, [canvasRef.current, props.data]);
+    // FIXME: 계획표 처음 작성할 때 첫번째 계획 등록 후 텍스트 이동 시 이동이 안되는 버그 임시 조치, 수정 필요
+    setTimeout(() => {
+      if (!canvasRefCurrent) {
+        return;
+      }
+      canvasRefCurrent.measure((_, __, width, height, pageX, pageY) => {
+        setDragAreaInfo({ minX: pageX, minY: pageY, maxX: pageX + width * 2, maxY: pageY + height });
+      });
+    }, 1);
+  }, [canvasRef.current, props.data.length]);
 
   let startAngle = props.initialAngle || (props.semiCircle ? -pi : 0);
   let total = 0;
