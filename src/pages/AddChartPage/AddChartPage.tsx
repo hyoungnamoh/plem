@@ -472,11 +472,11 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                 const { startHour, startMin, endHour, endMin } = plan;
                 return (
                   <View key={`plan_${planIndex}}`}>
-                    <View style={styles.planWrap}>
-                      <PlemButton style={styles.yellowLineText} onPress={() => onPressModifyPlan({ planIndex })}>
+                    <PlemButton style={styles.planWrap} onPress={() => onPressModifyPlan({ planIndex })}>
+                      <View style={styles.yellowLineText}>
                         <PlemText>{plan.name}</PlemText>
                         <Image source={yellowLineImage} style={styles.yellowLine} />
-                      </PlemButton>
+                      </View>
                       <View style={styles.notificationContainer}>
                         <PlemText>
                           {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
@@ -488,7 +488,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                           <NotificationActiveSvg style={{ marginLeft: 4 }} />
                         )}
                       </View>
-                    </View>
+                    </PlemButton>
                     <View>
                       {plan.subPlans.map((subPlan, subPlanIndex) => {
                         return (
