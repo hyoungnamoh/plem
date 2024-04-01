@@ -11,7 +11,6 @@ import { MainTabStackParamList } from 'tabs/MainTab';
 import PlemButton from 'components/Atoms/PlemButton';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { PieChart } from 'components/PieChart';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = SCREEN_WIDTH;
 const screenHight = SCREEN_HEIGHT;
@@ -46,17 +45,6 @@ const MainChartTable = ({
         return;
       }
       navigation.navigate('AddChartPage');
-    }
-  };
-
-  const handleTextDragEnd = async ({ id, x, y }: { id: string; x: number; y: number }) => {
-    const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
-    if (!storagePlanCoordinates) {
-      AsyncStorage.setItem('planCoordinates', JSON.stringify({ [id]: { x, y } }));
-    } else {
-      const planCoordinates = JSON.parse(storagePlanCoordinates) as { [id: string]: { x: number; y: number } };
-      planCoordinates[id] = { x, y };
-      AsyncStorage.setItem('planCoordinates', JSON.stringify(planCoordinates));
     }
   };
 

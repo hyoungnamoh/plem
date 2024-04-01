@@ -26,8 +26,8 @@ const Carousel = ({
   };
 
   const onScroll = (e: any) => {
-    const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth + gap));
-    setPage(newPage);
+    // const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth + gap));
+    // setPage(newPage);
   };
 
   return (
