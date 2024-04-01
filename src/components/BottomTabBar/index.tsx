@@ -1,15 +1,16 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { MAIN_COLOR } from 'constants/colors';
 import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
+import UnderlineSvg from 'assets/images/underline.svg';
 
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
     <View style={styles.bottomTabBar}>
       <View>
-        <Image source={require('../../assets/images/underline.png')} style={styles.bottomTabBarLine} />
+        <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} />
       </View>
       <View style={styles.tabContainer}>
         {state.routes.map((route, index) => {
@@ -53,9 +54,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     backgroundColor: MAIN_COLOR,
-  },
-  bottomTabBarLine: {
-    flex: 1,
     width: SCREEN_WIDTH,
   },
   tabContainer: {
