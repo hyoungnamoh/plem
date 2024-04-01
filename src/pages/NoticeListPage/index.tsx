@@ -10,13 +10,12 @@ import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import ArrowUpSvg from 'assets/images/arrow_up_32x32.svg';
 import { useGetNoticeList } from 'hooks/queries/useGetNoticeList';
 import { Notice } from 'types/notice';
-import { SCREEN_WIDTH } from 'constants/etc';
 import Image from '@hyoungnamoh/react-native-scalable-image';
 import { baseUrl } from 'api';
+import UnderlineSvg from 'assets/images/underline.svg';
+import { SCREEN_WIDTH } from 'constants/etc';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
-
-const lineGray = require('../../assets/images/line_gray.png');
 
 const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
   const [activeNotice, setAciveNotice] = useState<number[]>([]);
@@ -40,13 +39,12 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
         {notice.contents.map((content) => {
           return <Image source={{ uri: `${baseUrl}/${content}` }} width={SCREEN_WIDTH - 40} />;
         })}
-        {/* <PlemText>{notice.content}</PlemText> */}
       </View>
     );
   };
 
   const renderAccordionFooter = () => {
-    return <Image source={lineGray} style={{ width: SCREEN_WIDTH }} />;
+    return <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#CCCCCC'} />;
   };
 
   const updateSections = (sectionIndexs: number[]) => {
@@ -79,7 +77,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingVertical: 12,
-    paddingHorizontal: 20,
   },
   accordionHeader: {
     flexDirection: 'row',
