@@ -77,6 +77,7 @@ export type PieChartItem = {
   x?: number;
   y?: number;
   id?: string;
+  isEmpty?: boolean;
 };
 
 export type PieChartMainProps = {
@@ -154,4 +155,5 @@ export type PieChartMainItem = {
   x?: number;
   y?: number;
   id?: string;
+  isEmpty?: boolean;
 };

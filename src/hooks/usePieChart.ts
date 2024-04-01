@@ -99,6 +99,7 @@ export const usePieChart = ({
             chartData.push(element);
             chartData.push({
               name: '',
+              isEmpty: true,
               startHour: element.endHour,
               startMin: element.endMin,
               endHour: nextPlan.startHour,
@@ -110,6 +111,7 @@ export const usePieChart = ({
           chartData.push(element);
           chartData.push({
             name: '',
+            isEmpty: true,
             startHour: element.endHour,
             startMin: element.endMin,
             endHour: element.startHour,
@@ -132,8 +134,8 @@ export const usePieChart = ({
           // 빈 시간이 있을 경우
           chartData.push(element);
           chartData.push({
-            // id: Math.random(),
             name: '',
+            isEmpty: true,
             startHour: element.endHour,
             startMin: element.endMin,
             endHour: firstPlan.startHour,
@@ -152,8 +154,8 @@ export const usePieChart = ({
         } else {
           chartData.push(element);
           chartData.push({
-            // id: Math.random(),
             name: '',
+            isEmpty: true,
             startHour: element.endHour,
             startMin: element.endMin,
             endHour: nextPlan.startHour,
@@ -162,6 +164,7 @@ export const usePieChart = ({
         }
       }
     }
+
     return chartData.map((plan) => {
       const startTime = dayjs()
         .set('hour', plan.startHour)
@@ -173,7 +176,8 @@ export const usePieChart = ({
         .set('minute', plan.endMin)
         .set('second', 0)
         .set('millisecond', 0);
-      return {
+
+      const item: PieChartItem = {
         id: plan.tempId,
         value: startTime.isAfter(endTime) ? endTime.diff(startTime) + DAY_TO_MS : endTime.diff(startTime),
         text: hideName ? '' : plan.name,
@@ -182,7 +186,9 @@ export const usePieChart = ({
         labelPosition: 'outward',
         x: coords && plan.tempId ? coords[plan.tempId]?.x : undefined,
         y: coords && plan.tempId ? coords[plan.tempId]?.y : undefined,
+        isEmpty: plan.isEmpty,
       };
+      return item;
     });
   };
 

@@ -139,6 +139,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
 
             return (
               <Path
+                strokeOpacity={item.isEmpty ? 0.2 : 1}
                 key={index + 'a'}
                 d={`M ${cx + (item.shiftX || 0)} ${cy + (item.shiftY || 0)} L ${sx} ${sy} A ${radius} ${radius} 0 ${
                   semiCircle ? 0 : data[index].value > total / 2 ? 1 : 0

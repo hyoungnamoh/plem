@@ -21,6 +21,7 @@ export type Plan = {
   endHour: number;
   endMin: number;
   tempId?: string;
+  isEmpty: false;
 };
 
 // export type PlanTime = { hour: number; minute: number };
@@ -55,9 +56,12 @@ export type AddPlanChart = Omit<
 export type AddPlan = Omit<Plan, 'PlanChartId' | 'createdAt' | 'updatedAt' | 'subPlans'> & {
   id?: number;
   subPlans: AddSubPlan[];
+  isEmpty: false;
 };
 
-export type EmptyPlan = Pick<Plan, 'name' | 'startHour' | 'startMin' | 'endHour' | 'endMin' | 'tempId'>;
+export type EmptyPlan = Pick<Plan, 'name' | 'startHour' | 'startMin' | 'endHour' | 'endMin' | 'tempId'> & {
+  isEmpty: true;
+};
 
 export type AddSubPlan = Omit<SubPlan, 'PlanId' | 'createdAt' | 'id' | 'updatedAt'>;
 
