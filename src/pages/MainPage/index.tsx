@@ -26,6 +26,7 @@ import { LoggedInTabParamList } from 'types/appInner';
 import TodayScheduleBox from 'components/TodayScheduleBox';
 import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
+import { Plan } from 'types/chart';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -35,12 +36,14 @@ const MainPage = ({ navigation }: MainPageProps) => {
   const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
   const queryClient = useQueryClient();
   const [checkedList, setCheckedList] = useState<number[]>([]);
-  const [currentDate, setCorrentDate] = useState(dayjs().get('date'));
+  const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
   const { data: todayPlanChart } = useGetTodayPlanChart();
   const { data: chartListCount } = useGetChartListCount();
   const { data: todayScheduleList } = useGetTodayScheduleList({ date: dayjs().format('YYYY-MM-DD') });
   const { isConfirmedSchedule } = useScheduleConfirmDate();
+  const [doItNowPlanIndex, setDoItNowPlanIndex] = useState(-1);
+  const [doItNowPlan, setDoItNowPlan] = useState<Plan | null>(null);
   const isMaximumChartList = !!(chartListCount && chartListCount.data.count >= NUM_OF_MAXIMUM_CHART);
 
   useEffect(() => {
@@ -51,8 +54,11 @@ const MainPage = ({ navigation }: MainPageProps) => {
     if (currentDate !== dayjs().get('date')) {
       queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
       queryClient.invalidateQueries(TODAY_SCHEDULE_LIST);
-      setCorrentDate(dayjs().get('date'));
+      setCurrentDate(dayjs().get('date'));
     }
+    const { nowPlan, nowPlanIndex } = getDoItNowPlan();
+    setDoItNowPlanIndex(nowPlanIndex);
+    setDoItNowPlan(nowPlan);
   });
 
   const setCheckedListToStorageData = async () => {
@@ -86,9 +92,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
 
   const getDoItNowPlan = () => {
     if (!todayPlanChart?.data || !todayPlanChart.success) {
-      return { doItNowPlan: null, doItNowPlanIndex: -1 };
+      return { nowPlan: null, nowPlanIndex: -1 };
     }
-    const doItNowPlanIndex = todayPlanChart.data.plans.findIndex((plan) => {
+    const nowPlanIndex = todayPlanChart.data.plans.findIndex((plan) => {
       const current = dayjs();
       const startTime = dayjs().set('hour', plan.startHour).set('minute', plan.startMin).startOf('minute');
       const endTime = dayjs().set('hour', plan.endHour).set('minute', plan.endMin).startOf('minute');
@@ -104,9 +110,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
       return hasMidnight ? hasMidnight && (beforeMidnightCondition || afterMidnightCondition) : generalCondition;
     });
 
-    const doItNowPlan = doItNowPlanIndex > -1 ? todayPlanChart.data.plans[doItNowPlanIndex] : null;
+    const nowPlan = nowPlanIndex > -1 ? todayPlanChart.data.plans[nowPlanIndex] : null;
 
-    return { doItNowPlan, doItNowPlanIndex };
+    return { nowPlan, nowPlanIndex };
   };
 
   const handleEmptyPlanPress = () => {
@@ -147,8 +153,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
     tabNaviation.navigate('PlanChartListTab', { screen: 'PlanChartListPage' });
     setOpenMaximumAlert(false);
   };
-
-  const { doItNowPlan, doItNowPlanIndex } = getDoItNowPlan();
 
   return (
     <>
