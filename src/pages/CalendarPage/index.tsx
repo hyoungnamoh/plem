@@ -23,8 +23,8 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
   const [selectedDate, setSelectedDate] = useRecoilState(selectedCalendarDateState);
   const [openScheduleModal, setOpenScheduleModal] = useRecoilState(openScheduleModalState);
 
-  const [currentCalendar, setCurrentCalendar] = useState(dayjs());
   const { data: calendarSchedule } = useGetScheduleList();
+  const [currentDate, setCurrentDate] = useState(dayjs());
 
   useEffect(() => {
     if (route.params?.selectedDate) {
@@ -33,11 +33,11 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
     }
   }, [route.params?.selectedDate]);
 
-  useFocusEffect(
-    useCallback(() => {
-      setCurrentCalendar(dayjs());
-    }, [])
-  );
+  useFocusEffect(() => {
+    if (currentDate.get('date') !== dayjs().get('date')) {
+      setCurrentDate(dayjs());
+    }
+  });
 
   // useEffect(() => {
   //   // TODO: 공식문서(6 버전)에서도 쓰는데 addListener의 tabPress가 없다고 함
@@ -67,7 +67,7 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
             <Calendar
               categoryList={categoryList}
               month={month}
-              year={currentCalendar.year() + year}
+              year={currentDate.year() + year}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
             />
@@ -77,9 +77,9 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
       .flatMap((item) => item);
   }, [
     categoryList,
-    currentCalendar.year(),
-    currentCalendar.month(),
-    currentCalendar.date(),
+    currentDate.year(),
+    currentDate.month(),
+    currentDate.date(),
     calendarSchedule?.data,
     onPressAddSchedule,
     onPressScheduleModalClose,
@@ -90,11 +90,11 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
       <Carousel
         pageWidth={SCREEN_WIDTH}
         pages={makeCalendar}
-        defaultPage={makeCalendar.length / 2 + currentCalendar.month()}
+        defaultPage={makeCalendar.length / 2 + currentDate.month()}
       />
       <AddScheduleModal
         open={openScheduleModal}
-        targetDate={selectedDate || currentCalendar}
+        targetDate={selectedDate || currentDate}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
       />
