@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { addPlanChartState } from 'states/addPlanChartState';
 import PlemTextInput from 'components/Atoms/PlemTextInput';
 import UncheckedSvg from 'assets/images/unchecked_black_24x24.svg';
 import PlemButton from 'components/Atoms/PlemButton';
@@ -13,8 +11,6 @@ const SubPlanInput = ({
   planIndex: number;
   saveSubPlan: (args: { planIndex: number; subPlanName: string }) => void;
 }) => {
-  const [chart, setChart] = useRecoilState(addPlanChartState);
-
   const [subPlan, setSubPlan] = useState('');
 
   const onEndEditingSubPlan = ({ targetPlanIndex, subPlanName }: { targetPlanIndex: number; subPlanName: string }) => {

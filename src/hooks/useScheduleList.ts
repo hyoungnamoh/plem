@@ -18,34 +18,50 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
     dailyRepeatSchedules: [],
   };
 
+  const makeDateRange = (start: Date, end: Date) => {
+    const dateRangeArray = [];
+    for (let i = start.getDate(); i <= end.getDate(); i++) {
+      dateRangeArray.push(i);
+    }
+
+    return dateRangeArray;
+  };
+
   const repeatScheduleList = useMemo(
     () =>
       yearlyRepeatSchedules
         .concat(monthlyRepeatSchedules, twoWeeklyRepeatSchedules, weeklyRepeatSchedules, dailyRepeatSchedules)
         .filter((schedule) => {
           const scheduleStartDate = new Date(schedule.startDate);
+          const scheduleEndDate = new Date(schedule.endDate);
           const scheduleStartDateMonth = scheduleStartDate.getMonth();
           const scheduleStartDateOfMonth = scheduleStartDate.getDate();
           const todayMonth = today.getMonth();
           const todayDateOfMonth = today.getDate();
           const startOfToday = new Date(today);
           const startOfScheduleStartDate = new Date(scheduleStartDate);
+          const endOfScheduleEndDate = new Date(scheduleEndDate);
           startOfToday.setHours(0, 0, 0, 0);
           startOfScheduleStartDate.setHours(0, 0, 0, 0);
+          endOfScheduleEndDate.setHours(23, 59, 59, 999);
 
           if (startOfScheduleStartDate.getTime() > startOfToday.getTime()) {
             return;
           }
           const dateDiff = (startOfToday.getTime() - startOfScheduleStartDate.getTime()) / 1000 / 24 / 60 / 60;
+          const dateRange = (endOfScheduleEndDate.getTime() - startOfScheduleStartDate.getTime()) / 1000 / 24 / 60 / 60;
+          const dateRangeArray = makeDateRange(startOfScheduleStartDate, endOfScheduleEndDate);
           const isSameDay = today.getDay() === scheduleStartDate.getDay();
           const isSameMonth = todayMonth === scheduleStartDateMonth;
-          const isSameDateOfMonth = todayDateOfMonth === scheduleStartDateOfMonth;
+          const inDateArray = dateRangeArray.includes(todayDateOfMonth);
 
           const everyCondition = schedule.repeats === 'every';
-          const weekCondition = schedule.repeats === 'week' && isSameDay;
-          const twoWeeksCondition = schedule.repeats === 'twoWeeks' && (dateDiff === 0 || dateDiff % 14 === 0);
-          const monthCondition = schedule.repeats === 'month' && isSameDateOfMonth;
-          const yearCondition = schedule.repeats === 'year' && isSameMonth && isSameDateOfMonth;
+          const weekCondition =
+            schedule.repeats === 'week' && (isSameDay || dateDiff < dateRange || dateDiff % 7 < dateRange);
+          const twoWeeksCondition =
+            schedule.repeats === 'twoWeeks' && (dateDiff < dateRange || dateDiff % 14 < dateRange);
+          const monthCondition = schedule.repeats === 'month' && inDateArray;
+          const yearCondition = schedule.repeats === 'year' && isSameMonth && inDateArray;
 
           if (everyCondition || weekCondition || twoWeeksCondition || monthCondition || yearCondition) {
             if (schedule.repeatEndDate) {
