@@ -54,6 +54,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const [openEmptyPlanAlert, setOpenEmptyPlanAlert] = useState(false);
   const [openPopInEditingAlert, setPopInEditingAlert] = useState(false);
   const [planCoordinates, setPlanCoordinates] = useState<{ [id: string]: { x: number; y: number } }>({});
+  const [scrollDisabled, setScrollDisabled] = useState(false);
 
   const swipeStartX = useRef<number | null>();
   const unsubscribe = useRef<() => void>();
@@ -399,6 +400,11 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const handleTextDragEnd = async ({ id, x, y }: { id: string; x: number; y: number }) => {
     setPlanCoordinates((prev) => ({ ...prev, [id]: { x, y } }));
+    setScrollDisabled(false);
+  };
+
+  const handleTextDragStart = async () => {
+    setScrollDisabled(true);
   };
 
   const setStoragePlanCoordinates = async () => {
@@ -422,19 +428,6 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     }
   };
 
-  // const setStorageTempPlanCoordinates = async () => {
-  //   const storagePlanCoordinates = await AsyncStorage.getItem('planCoordinates');
-  //   // const tempPlanCoordinates = chart.plans.
-
-  //   if (!storagePlanCoordinates) {
-  //     AsyncStorage.setItem('planCoordinates', JSON.stringify(planCoordinates));
-  //   } else {
-  //     const originCoordinates = JSON.parse(storagePlanCoordinates) as { [id: string]: { x: number; y: number } };
-  //     const newCoords = { ...originCoordinates, ...planCoordinates };
-  //     AsyncStorage.setItem('planCoordinates', JSON.stringify(newCoords));
-  //   }
-  // };
-
   return (
     <PanGestureHandler onHandlerStateChange={handleGesture}>
       <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
@@ -443,9 +436,13 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           buttonName={isEdit ? '완료' : '등록'}
           buttonProps={{ onPress: isEdit ? handleUpdatePress : handAddPress }}
         />
-        <ScrollView style={styles.page} keyboardDismissMode={'on-drag'} contentContainerStyle={{ paddingBottom: 300 }}>
+        <ScrollView style={styles.page} contentContainerStyle={{ paddingBottom: 200 }} scrollEnabled={!scrollDisabled}>
           <View style={{ paddingHorizontal: 15 }}>
-            <AddChartTable onTextDragEnd={handleTextDragEnd} planCoordinates={planCoordinates} />
+            <AddChartTable
+              onTextDragStart={handleTextDragStart}
+              onTextDragEnd={handleTextDragEnd}
+              planCoordinates={planCoordinates}
+            />
             <View style={styles.optionRow}>
               <View style={styles.underlineButtonWrap}>
                 <PlemText>반복</PlemText>

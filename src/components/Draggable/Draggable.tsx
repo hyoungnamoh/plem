@@ -4,6 +4,7 @@ import { PanResponder, Animated, GestureResponderEvent } from 'react-native';
 const Draggable = ({
   children,
   onDragEnd,
+  onDragStart,
   id,
   x,
   y,
@@ -12,7 +13,8 @@ const Draggable = ({
   dragAreaInfo,
 }: {
   children: ReactNode;
-  onDragEnd: ((data: { x: number; y: number; id: string }) => Promise<void>) | undefined;
+  onDragEnd?: (data: { x: number; y: number; id: string }) => Promise<void>;
+  onDragStart?: () => void;
   id?: string;
   x?: number;
   y?: number;
@@ -39,6 +41,9 @@ const Draggable = ({
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (e, gesture) => !!onDragEnd,
     onPanResponderGrant: () => {
+      if (typeof onDragStart === 'function') {
+        onDragStart();
+      }
       pan.setOffset({
         x: val.current.x,
         y: val.current.y,
@@ -86,7 +91,6 @@ const Draggable = ({
           zIndex: 100,
           left: coordX,
           top: coordY,
-          backgroundColor: '#F4F1E8',
         },
       ]}>
       {children}

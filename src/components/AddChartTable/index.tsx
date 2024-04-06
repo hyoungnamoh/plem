@@ -16,9 +16,11 @@ const chartRadius = SCREEN_WIDTH / 2.65;
 const AddChartTable = ({
   onTextDragEnd,
   planCoordinates,
+  onTextDragStart,
 }: {
   onTextDragEnd: ({ id, x, y }: { id: string; x: number; y: number }) => Promise<void>;
   planCoordinates: { [key: string]: { x: number; y: number } };
+  onTextDragStart: () => void;
 }) => {
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const { pieChartData, initialAngle } = usePieChart({ chart, coordinates: planCoordinates });
@@ -66,6 +68,7 @@ const AddChartTable = ({
               strokeWidth={2}
               radius={chartRadius}
               onTextDragEnd={onTextDragEnd}
+              onTextDragStart={onTextDragStart}
             />
           ) : (
             <View style={{ padding: 32 }}>

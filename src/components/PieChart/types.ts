@@ -48,6 +48,7 @@ export type PieChartProps = {
 
   // custom
   onTextDragEnd?: ({ id, x, y }: { id: string; x: number; y: number }) => Promise<void>;
+  onTextDragStart?: () => void;
 };
 
 export type PieChartItem = {
@@ -126,6 +127,7 @@ export type PieChartMainProps = {
 
   // custom
   onTextDragEnd?: ({ id, x, y }: { id: string; x: number; y: number }) => Promise<void>;
+  onTextDragStart?: () => void;
   dragAreaInfo: { minX: number; minY: number; maxX: number; maxY: number };
 };
 export type PieChartMainItem = {
