@@ -4,6 +4,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import PlemText from 'components/Atoms/PlemText';
 import Draggable from 'components/Draggable/Draggable';
 import { PieChartMainItem, PieChartMainProps } from './types';
+import { MAIN_COLOR } from 'constants/colors';
 
 export const PieChartMain = (props: PieChartMainProps) => {
   const { isThreeD } = props;
@@ -228,7 +229,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
               x={item.x}
               y={item.y}
               dragAreaInfo={props.dragAreaInfo}>
-              <View style={{ borderRadius: 4, padding: item.text ? 2 : 0, backgroundColor: 'red' }}>
+              <View style={{ borderRadius: 4, padding: item.text ? 2 : 0, backgroundColor: MAIN_COLOR }}>
                 <PlemText style={{ fontSize: 14 }}>{item.text}</PlemText>
               </View>
             </Draggable>
