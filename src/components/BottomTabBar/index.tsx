@@ -5,8 +5,16 @@ import { BOTTOM_TABS, BOTTOM_TAB_HEIGHT } from './constants';
 import { SCREEN_WIDTH } from 'constants/etc';
 import PlemButton from 'components/Atoms/PlemButton';
 import UnderlineSvg from 'assets/images/underline.svg';
+import { hideBottomTabBarState } from 'states/hideBottomTabBarState';
+import { useRecoilValue } from 'recoil';
 
 const BottomTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const hideBottomTabBar = useRecoilValue(hideBottomTabBarState);
+
+  if (hideBottomTabBar) {
+    return null;
+  }
+
   return (
     <View style={styles.bottomTabBar}>
       <View>
