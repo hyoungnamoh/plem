@@ -116,11 +116,11 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptyPlanPress = () => {
-    if (isMaximumChartList) {
-      setOpenMaximumAlert(true);
-      return;
-    }
     if (!todayPlanChart?.data) {
+      if (isMaximumChartList) {
+        setOpenMaximumAlert(true);
+        return;
+      }
       navigation.navigate('AddChartPage');
       return;
     }
@@ -129,19 +129,11 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptySubPlanPress = () => {
-    if (isMaximumChartList) {
-      setOpenMaximumAlert(true);
-      return;
-    }
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
   };
 
   const handlePlanPress = (planIndex: number) => {
     if (planIndex < 0) {
-      return;
-    }
-    if (isMaximumChartList) {
-      setOpenMaximumAlert(true);
       return;
     }
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
