@@ -230,7 +230,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       return;
     }
     if (!chart.name) {
-      Alert.alert('계획표명을 입력해주세요.');
+      Alert.alert('계획표 이름을 입력해주세요.');
       return;
     }
     if (chart.plans.length === 0) {
@@ -250,6 +250,14 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const handleUpdatePress = () => {
+    if (!chart.name) {
+      Alert.alert('계획표 이름을 입력해주세요.');
+      return;
+    }
+    if (chart.plans.length === 0) {
+      Alert.alert('계획을 추가해주세요.');
+      return;
+    }
     if (updateChartLoading || !route.params?.chart?.id) {
       return;
     }
