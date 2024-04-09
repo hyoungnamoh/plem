@@ -14,11 +14,14 @@ import { useGetChartList } from 'hooks/queries/useGetChartList';
 import MaximumChartAlert from 'components/MaximumChartAlert';
 import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
 import UnderlineSvg from 'assets/images/underline.svg';
+import { useSetRecoilState } from 'recoil';
+import { hideBottomTabBarState } from 'states/hideBottomTabBarState';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
 const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
   const { data, status } = useGetChartList();
+  const setHideBottomTabBar = useSetRecoilState(hideBottomTabBarState);
   const [charts, setCharts] = useState<PlanChart[]>(data?.data || []);
   const [isEditing, setIsEditing] = useState(false);
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
@@ -32,10 +35,12 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
 
   const handleEditComplete = () => {
     setIsEditing(false);
+    setHideBottomTabBar(false);
   };
 
   const handleEdit = () => {
     setIsEditing(true);
+    setHideBottomTabBar(true);
   };
 
   const handleAddChart = () => {
