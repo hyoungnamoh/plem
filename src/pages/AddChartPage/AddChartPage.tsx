@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Image, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlan, AddPlanChart } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
@@ -39,6 +39,7 @@ import { PopInEditingAlert } from './components/PopInEditingAlert.tsx/PopInEditi
 import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import dayjs from 'dayjs';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -438,7 +439,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   return (
     <PanGestureHandler onHandlerStateChange={handleGesture}>
-      <KeyboardAvoidingView style={styles.page} behavior={Platform.select({ ios: 'padding', android: undefined })}>
+      <KeyboardAwareScrollView style={styles.page} onScrollBeginDrag={Keyboard.dismiss}>
         <Header
           title={isEdit ? '계획표 수정' : '계획표 추가'}
           buttonName={isEdit ? '완료' : '등록'}
@@ -531,7 +532,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
           cancelText="나갈게요"
           confirmText="계속 할게요"
         />
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </PanGestureHandler>
   );
 };
