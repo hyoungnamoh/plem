@@ -91,17 +91,17 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
     () =>
       calendarSchedule?.data.noRepeatSchedules?.filter((schedule) => {
         const scheduleStartDate = new Date(schedule.startDate);
-        const scheduleStartDateYear = scheduleStartDate.getFullYear();
-        const scheduleStartDateMonth = scheduleStartDate.getMonth();
-        const scheduleStartDateOfMonth = scheduleStartDate.getDate();
-        const todayYear = today.getFullYear();
-        const todayMonth = today.getMonth();
-        const todayDateOfMonth = today.getDate();
+        const scheduleEndDate = new Date(schedule.endDate);
+        const startOfToday = new Date(today);
+        const startOfScheduleStartDate = new Date(scheduleStartDate);
+        const endOfScheduleEndDate = new Date(scheduleEndDate);
+        startOfToday.setHours(0, 0, 0, 0);
+        startOfScheduleStartDate.setHours(0, 0, 0, 0);
+        endOfScheduleEndDate.setHours(23, 59, 59, 999);
 
         return (
-          scheduleStartDateYear === todayYear &&
-          scheduleStartDateMonth === todayMonth &&
-          scheduleStartDateOfMonth === todayDateOfMonth
+          startOfScheduleStartDate.getTime() <= startOfToday.getTime() &&
+          startOfToday.getTime() <= endOfScheduleEndDate.getTime()
         );
       }) || [],
     [calendarSchedule?.data.noRepeatSchedules, year, month, date]
