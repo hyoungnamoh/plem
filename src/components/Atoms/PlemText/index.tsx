@@ -5,7 +5,7 @@ export type PlemTextProps = TextProps;
 
 const PlemText = forwardRef<Text, TextProps>((props, ref) => {
   const propStyle = props.style as TextStyle | undefined;
-  const lineHeight = propStyle?.lineHeight || 1;
+  const lineHeight = propStyle?.lineHeight || 1.12;
   const fontSize = propStyle?.fontSize || 18;
 
   return (
@@ -17,7 +17,7 @@ const PlemText = forwardRef<Text, TextProps>((props, ref) => {
 
 const styles = StyleSheet.create({
   plemText: {
-    fontFamily: 'LeeSeoyun',
+    fontFamily: 'AaGongCatPen',
     fontSize: 18,
   },
 });

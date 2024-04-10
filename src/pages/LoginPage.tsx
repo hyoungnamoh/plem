@@ -129,8 +129,8 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
     }
     return (
       <>
-        <PlemText style={styles.titleText}>돌아오셨군요!</PlemText>
-        <PlemText style={styles.titleText}>다시 만나 반가워요.</PlemText>
+        <PlemText style={styles.titleText}>{'돌아오셨군요!\n다시 만나 반가워요.'}</PlemText>
+        {/* <PlemText style={styles.titleText}>다시 만나 반가워요.</PlemText> */}
       </>
     );
   };
@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 28,
+    lineHeight: 1.12,
   },
   errorText: {
     fontSize: 14,
