@@ -1,11 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs, { Dayjs } from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AddPlanPageProps } from 'pages/AddPlanPage';
-import { AddPlan, AddPlanChart } from 'types/chart';
+import { AddPlan } from 'types/chart';
 import { addPlanChartState } from 'states/addPlanChartState';
 import { addPlanDefault, addPlanState } from 'states/addPlanState';
 import { globalToastState } from 'states/globalToastState';
@@ -40,10 +39,6 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
 
     return () => setPlan(addPlanDefault);
   }, [chart]);
-
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
-  };
 
   const isDuplicatedTime = () => {
     const duplicatePlan = chart.plans.find((p, pIndex) => {
@@ -163,11 +158,9 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
       copiedChart.plans[route.params?.planIndex] = newPlan;
       copiedChart.plans = plansSortingByTime(copiedChart.plans);
       setChart(copiedChart);
-      // setStorageChartData(copiedChart);
     } else {
       newPlan.tempId = uuid();
       setChart({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
-      // setStorageChartData({ ...copiedChart, plans: plansSortingByTime([...copiedChart.plans, newPlan]) });
     }
 
     navigation.goBack();
@@ -242,8 +235,6 @@ export const useAddPlan = ({ route, navigation }: AddPlanPageProps) => {
     const copiedChart = cloneDeep(chart);
     copiedChart.plans.splice(route.params?.planIndex, 1);
     setChart(copiedChart);
-    // setStorageChartData(copiedChart);
-
     navigation.goBack();
   };
 

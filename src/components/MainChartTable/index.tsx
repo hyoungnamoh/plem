@@ -92,8 +92,8 @@ const MainChartTable = ({
                   styles.currentTimeBar,
                   {
                     transform: [
-                      // FIXME: -12? 정확한 원인 찾고 수정 필요, 임시조치
-                      { translateY: (chartRadius - 12) / 2 },
+                      // FIXME: -10? 정확한 원인 찾고 수정 필요, 임시조치
+                      { translateY: (chartRadius - 10) / 2 },
                       { rotate: `${currentTimeDegree}deg` },
                       { translateY: -(chartRadius / 2) },
                     ],

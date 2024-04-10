@@ -116,7 +116,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         return;
       }
       if (!isEdit && checkChangesAdd()) {
-        setStorageChartData();
+        setStorageChartData(chart);
         showDraftsToast();
         setStoragePlanCoordinates();
         return;
@@ -168,8 +168,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     return !!hasDraft;
   };
 
-  const setStorageChartData = async () => {
-    await AsyncStorage.setItem('chartData', JSON.stringify(chart));
+  const setStorageChartData = async (chartData: AddPlanChart) => {
+    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
   };
 
   const initChartData = async () => {

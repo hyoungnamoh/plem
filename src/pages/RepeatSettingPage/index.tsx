@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, Repeats } from 'types/chart';
+import { Repeats } from 'types/chart';
 import { DaysOfWeekKor } from 'types/date';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
@@ -83,10 +82,6 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
     setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 7 || e === null)));
   };
 
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
-  };
-
   const onPressBottomButton = () => {
     const copiedChart = { ...chart };
     copiedChart.repeats = repeatOptions;
@@ -96,7 +91,6 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       copiedChart.repeatDates = repeatDates;
     }
     setChart(copiedChart);
-    setStorageChartData(copiedChart);
 
     navigation.goBack();
   };

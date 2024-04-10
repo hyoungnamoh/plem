@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { AddPlanChart, PlanNotification, PlanNotiOptionItem } from 'types/chart';
+import { PlanNotification, PlanNotiOptionItem } from 'types/chart';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
 import Header from 'components/Header';
@@ -31,10 +30,6 @@ const PlanNotiSettingPage = ({ navigation }: SetPlanNotificationPageProps) => {
 
   const onPressRepeatOption = (option: PlanNotification) => {
     setNotification(option);
-  };
-
-  const setStorageChartData = async (chartData: AddPlanChart) => {
-    await AsyncStorage.setItem('chartData', JSON.stringify(chartData));
   };
 
   const onPressBottomButton = () => {
