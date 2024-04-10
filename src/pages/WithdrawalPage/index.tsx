@@ -1,12 +1,4 @@
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TextInput,
-  TouchableNativeFeedback,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
 import Header from 'components/Header';
 import { DropdownWithLabel } from 'components/DropdownWithLabel';
@@ -30,6 +22,7 @@ import PlemTextInput from 'components/Atoms/PlemTextInput';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import dayjs from 'dayjs';
 import { useQueryClient } from 'react-query';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type DirectInquiryPageProps = NativeStackScreenProps<SettingTabStackParamList, 'WithdrawalPage'>;
 
@@ -104,17 +97,12 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
   return (
     <>
       <TouchableNativeFeedback onPress={closeWithdrawalDropdown}>
-        <KeyboardAvoidingView behavior={Platform.select({ ios: 'padding', android: undefined })}>
+        <KeyboardAwareScrollView>
           <Header close title="계정 삭제하기" />
           <CustomScrollView contentContainerStyle={styles.page}>
             <View style={{ padding: 16, height: '100%', position: 'relative' }}>
               <PlemText style={{ fontSize: 28 }}>조금 아쉽지만,</PlemText>
               <PlemText style={{ fontSize: 28 }}>플렘은 모든 계획을 응원합니다!</PlemText>
-              <View style={{ marginTop: 16 }}>
-                <PlemText style={{ color: '#444444', lineHeight: 1.22 }}>
-                  {'다시 돌아오고 싶은 서비스가 되도록\n계속 발전하겠습니다.'}
-                </PlemText>
-              </View>
               <View style={{ marginTop: 40 }}>
                 <DropdownWithLabel<WithdrawalReason | ''>
                   label="탈퇴사유"
@@ -125,8 +113,8 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
                   value={selectedReason}
                 />
                 <PlemButton onPress={() => reasonRef.current?.focus()} style={{ marginTop: 12 }}>
-                  <WhiteBoard preserveAspectRatio="none" width={'100%'} />
-                  <View style={{ position: 'absolute', padding: 12, height: 210 }}>
+                  <WhiteBoard preserveAspectRatio="none" width={'100%'} height={180} />
+                  <View style={{ position: 'absolute', padding: 12, height: 180 }}>
                     <PlemTextInput
                       ref={reasonRef}
                       value={reason}
@@ -137,7 +125,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
                     />
                   </View>
                 </PlemButton>
-                <View style={{ marginTop: 32 }}>
+                <View style={{ marginTop: 24 }}>
                   <PlemText style={{ color: '#444444', lineHeight: 1.44 }}>
                     {'잠깐! 플렘은 소통에 진심입니다.'}
                   </PlemText>
@@ -166,7 +154,7 @@ const WithdrawalPage = ({ navigation }: DirectInquiryPageProps) => {
               </View>
             </View>
           </CustomScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </TouchableNativeFeedback>
       <WithdrawalConfirmAlert
         open={openConfirmAlert}
