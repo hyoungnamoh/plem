@@ -9,14 +9,14 @@ import { LoggedOutStackParamList } from 'types/appInner';
 type NotReceivedMailPageProps = NativeStackScreenProps<LoggedOutStackParamList, 'NotReceivedMailPage'>;
 
 const NotReceivedMailPage = ({ route, navigation }: NotReceivedMailPageProps) => {
-  const { usePostVerificationEmail, email } = route.params;
+  const { usePostVerificationEmail, email, isReset } = route.params;
   const { isLoading: sendEmailLoading, mutate: sendEmail, data } = usePostVerificationEmail;
 
   const onPressSend = () => {
     if (sendEmailLoading) {
       return;
     }
-    sendEmail({ email }, { onSuccess: () => navigation.goBack() });
+    sendEmail({ email, isReset }, { onSuccess: () => navigation.goBack() });
   };
 
   return (
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingBottom: 36,
   },
   content: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     flex: 1,
     paddingBottom: 36,
   },

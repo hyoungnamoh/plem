@@ -30,6 +30,7 @@ export type LoggedOutStackParamList = {
       unknown
     >;
     email: string;
+    isReset?: boolean;
   };
   SignUpSuccessPage: {
     nickname: string;
