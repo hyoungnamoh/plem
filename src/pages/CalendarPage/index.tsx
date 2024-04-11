@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs, { Dayjs } from 'dayjs';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import { useGetScheduleList } from 'hooks/queries/useGetScheduleList';
@@ -12,6 +12,7 @@ import { AddScheduleModal } from './AddScheduleModal';
 import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
 import { openScheduleModalState } from 'states/openScheduleModalState';
 import { SCREEN_WIDTH } from 'constants/etc';
+import { globalCurrentDateState } from 'states/globalCurrentDateState';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'CalendarPage'>;
 
@@ -20,11 +21,11 @@ const NUM_OF_MONTHS = 12;
 
 const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
   const categoryList = useRecoilValue(categoryListState);
+  const [globalCurrentDate, setGlobalCurrentDate] = useRecoilState(globalCurrentDateState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedCalendarDateState);
   const [openScheduleModal, setOpenScheduleModal] = useRecoilState(openScheduleModalState);
 
   const { data: calendarSchedule } = useGetScheduleList();
-  const [currentDate, setCurrentDate] = useState(dayjs());
 
   useEffect(() => {
     if (route.params?.selectedDate) {
@@ -34,8 +35,8 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
   }, [route.params?.selectedDate]);
 
   useFocusEffect(() => {
-    if (currentDate.get('date') !== dayjs().get('date')) {
-      setCurrentDate(dayjs());
+    if (globalCurrentDate.get('date') !== dayjs().get('date')) {
+      setGlobalCurrentDate(dayjs());
     }
   });
 
@@ -67,7 +68,7 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
             <Calendar
               categoryList={categoryList}
               month={month}
-              year={currentDate.year() + year}
+              year={globalCurrentDate.year() + year}
               onPressAddSchedule={onPressAddSchedule}
               onPressScheduleModalClose={onPressScheduleModalClose}
             />
@@ -77,9 +78,9 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
       .flatMap((item) => item);
   }, [
     categoryList,
-    currentDate.year(),
-    currentDate.month(),
-    currentDate.date(),
+    globalCurrentDate.year(),
+    globalCurrentDate.month(),
+    globalCurrentDate.date(),
     calendarSchedule?.data,
     onPressAddSchedule,
     onPressScheduleModalClose,
@@ -90,11 +91,11 @@ const CalendarPage = ({ navigation, route }: CalendarPageProps) => {
       <Carousel
         pageWidth={SCREEN_WIDTH}
         pages={makeCalendar}
-        defaultPage={makeCalendar.length / 2 + currentDate.month()}
+        defaultPage={makeCalendar.length / 2 + globalCurrentDate.month()}
       />
       <AddScheduleModal
         open={openScheduleModal}
-        targetDate={selectedDate || currentDate}
+        targetDate={selectedDate || globalCurrentDate}
         close={onPressScheduleModalClose}
         onPressAddSchedule={() => selectedDate && onPressAddSchedule(selectedDate)}
       />

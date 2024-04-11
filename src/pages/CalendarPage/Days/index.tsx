@@ -3,11 +3,13 @@ import Day from './Day';
 import uuid from 'react-uuid';
 import { Fragment, memo, useMemo, useState } from 'react';
 import EmptyDates from './EmptyDates';
+import { useRecoilValue } from 'recoil';
+import { globalCurrentDateState } from 'states/globalCurrentDateState';
 
 const Days = ({ year, month }: { year: number; month: number }) => {
   const [localSelectedDate, setLocalSelectedDate] = useState<number>(0);
+  const globalCurrentDate = useRecoilValue(globalCurrentDateState);
 
-  const today = useMemo(() => dayjs().startOf('date'), []); // 현재일의 시작 시간 00:00
   const targetDate = useMemo(() => dayjs().set('year', year).set('month', month), [year, month]);
   const datesOfMonth = useMemo(
     () => Array.from(new Array(targetDate.daysInMonth()).fill(0), (_, index) => index + 1),
@@ -22,7 +24,8 @@ const Days = ({ year, month }: { year: number; month: number }) => {
     <>
       <EmptyDates firstDateIndex={firstDateIndex} />
       {datesOfMonth.map((date) => {
-        const isToday = today.date() === date && today.year() === year && today.month() === month;
+        const isToday =
+          globalCurrentDate.date() === date && globalCurrentDate.year() === year && globalCurrentDate.month() === month;
         return (
           <Day
             key={uuid()}
