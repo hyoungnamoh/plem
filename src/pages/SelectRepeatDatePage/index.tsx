@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   infoMessageWrap: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     marginTop: 20,
   },
   infoMessage: {

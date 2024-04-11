@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
   toastText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: 'AaGongCatPen',
   },
   notReceivedButtonWrap: {
     alignItems: 'center',

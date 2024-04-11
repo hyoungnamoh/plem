@@ -111,12 +111,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 18,
-  },
-  content: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
   },
   accordionHeader: {
     flexDirection: 'row',

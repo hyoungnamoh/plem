@@ -74,7 +74,7 @@ const FindPasswordPage = ({ navigation, route }: FindPasswordPageProps) => {
   };
 
   const onPressNotReceived = () => {
-    navigation.navigate('NotReceivedMailPage', { usePostVerificationEmail, email });
+    navigation.navigate('NotReceivedMailPage', { usePostVerificationEmail, email, isReset: true });
   };
 
   const onChangeEmail = (value: string) => {
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
   toastText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: 'AaGongCatPen',
   },
   notReceivedButtonWrap: {
     alignItems: 'center',

@@ -191,9 +191,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     flex: 1,
-    paddingBottom: 36,
   },
   titleWrap: {
     marginTop: 20,
@@ -242,6 +241,7 @@ const styles = StyleSheet.create({
   toastText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: 'AaGongCatPen',
   },
   notReceivedButtonWrap: {
     alignItems: 'center',

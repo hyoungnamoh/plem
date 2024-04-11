@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginApi, LoginResponse } from 'api/auth/loginApi';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -127,55 +127,51 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
         </>
       );
     }
-    return (
-      <>
-        <PlemText style={styles.titleText}>{'돌아오셨군요!\n다시 만나 반가워요.'}</PlemText>
-        {/* <PlemText style={styles.titleText}>다시 만나 반가워요.</PlemText> */}
-      </>
-    );
+    return <PlemText style={styles.titleText}>{'돌아오셨군요!\n다시 만나 반가워요.'}</PlemText>;
   };
 
   return (
-    <View style={styles.page}>
-      <Header close={fromSuccessPage} />
-      <View style={styles.content}>
-        <View>{getTitle()}</View>
-        <View style={{ marginTop: 40 }}>
-          <PlemText style={{ color: isInvalidEmail ? '#E40C0C' : '#000' }}>이메일</PlemText>
-          <UnderlineTextInput
-            wrapperProps={{ style: { marginTop: 12 } }}
-            value={email}
-            onChangeText={onChangeEmail}
-            placeholder={'이메일을 입력해 주세요.'}
-            keyboardType="email-address"
-            isInvalidValue={isInvalidEmail}
-          />
-          <View style={{ marginTop: 32 }}>
-            <PlemText style={{ color: isInvalidPassword ? '#E40C0C' : '#000' }}>비밀번호</PlemText>
+    <TouchableNativeFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.page}>
+        <Header close={fromSuccessPage} />
+        <View style={styles.content}>
+          <View>{getTitle()}</View>
+          <View style={{ marginTop: 40 }}>
+            <PlemText style={{ color: isInvalidEmail ? '#E40C0C' : '#000' }}>이메일</PlemText>
             <UnderlineTextInput
               wrapperProps={{ style: { marginTop: 12 } }}
-              value={password}
-              onChangeText={onChangePassword}
-              placeholder={'영문, 숫자 포함 8-20자리'}
-              secureTextEntry
-              isInvalidValue={isInvalidPassword}
+              value={email}
+              onChangeText={onChangeEmail}
+              placeholder={'이메일을 입력해 주세요.'}
+              keyboardType="email-address"
+              isInvalidValue={isInvalidEmail}
             />
-            {isLoginFailed && (
-              <PlemText style={styles.errorText}>가입되지 않은 계정이거나 이메일 또는 비밀번호가 틀렸어요.</PlemText>
-            )}
+            <View style={{ marginTop: 32 }}>
+              <PlemText style={{ color: isInvalidPassword ? '#E40C0C' : '#000' }}>비밀번호</PlemText>
+              <UnderlineTextInput
+                wrapperProps={{ style: { marginTop: 12 } }}
+                value={password}
+                onChangeText={onChangePassword}
+                placeholder={'영문, 숫자 포함 8-20자리'}
+                secureTextEntry
+                isInvalidValue={isInvalidPassword}
+              />
+              {isLoginFailed && (
+                <PlemText style={styles.errorText}>가입되지 않은 계정이거나 이메일 또는 비밀번호가 틀렸어요.</PlemText>
+              )}
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <BlackButton onPress={onPressLoginButton} style={{ marginTop: 40 }}>
+              <PlemText style={{ color: '#fff' }}>로그인</PlemText>
+            </BlackButton>
+            <UnderlineButton style={styles.findAccount} onPress={onPressFindAccount}>
+              비밀번호가 생각나지 않으시나요?
+            </UnderlineButton>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <BlackButton onPress={onPressLoginButton} style={{ marginTop: 40 }}>
-            <PlemText style={{ color: '#fff' }}>로그인</PlemText>
-          </BlackButton>
-          <UnderlineButton style={styles.findAccount} onPress={onPressFindAccount}>
-            비밀번호가 생각나지 않으시나요?
-          </UnderlineButton>
-        </View>
       </View>
-      {/* {loginMutation.isLoading && <Loading />} */}
-    </View>
+    </TouchableNativeFeedback>
   );
 };
 
@@ -191,7 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: MAIN_COLOR,
   },
   content: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     marginTop: 12,
   },
   titleText: {

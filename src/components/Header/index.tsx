@@ -38,7 +38,7 @@ const Header = (props: HeaderProps) => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',

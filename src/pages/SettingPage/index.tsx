@@ -49,7 +49,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: MAIN_COLOR }}>
-      <View style={{ padding: 20 }}>
+      <View style={{ padding: 16 }}>
         <PlemText style={styles.title}>안녕하세요! {loggedInUser.nickname}님</PlemText>
         <PlemText style={styles.email}>{loggedInUser.email}</PlemText>
       </View>
