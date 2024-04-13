@@ -153,7 +153,7 @@ function AppInner({ routeName }: { routeName: string }) {
     await Promise.all(preCheckList);
     const info = await getAppInfo();
     const endTime = Date.now();
-    const delayTime = 2500 - (endTime - startTime);
+    const delayTime = 1000 - (endTime - startTime);
 
     if (delayTime > 0) {
       setTimeout(() => {
