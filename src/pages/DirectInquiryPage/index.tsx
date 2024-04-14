@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Dimensions, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
+import { Alert, Dimensions, Linking, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
 import Header from 'components/Header';
 import { MAIN_COLOR } from 'constants/colors';
 import { SettingTabStackParamList } from 'tabs/SettingTab';
@@ -169,7 +169,9 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                 buttonName="SNS 문의"
                 buttonProps={{
                   onPress: () => {
-                    console.log('hi');
+                    Linking.openURL(
+                      'https://www.instagram.com/plemapp_official?igsh=MTdvOWU5a2V3Zm1zcw%3D%3D&utm_source=qr'
+                    );
                   },
                 }}
               />
