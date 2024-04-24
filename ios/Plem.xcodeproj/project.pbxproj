@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1E793E4D2BC6DAE200CDE5B6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 1E5E21CC292FBFC50079DF25 /* fonts */; };
+		1E793E4F2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1E793E4E2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy */; };
+		1E793E502BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1E793E4E2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy */; };
 		1E8603E12B525736003A4C57 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E8603E02B525736003A4C57 /* GoogleService-Info.plist */; };
 		1E926FD32B59555100548ED7 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E926FD22B59555000548ED7 /* AppCenter-Config.plist */; };
 		54C2EB6778EB43EDB792D59E /* libPods-Plem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9583370E0116F91A31F7B16 /* libPods-Plem.a */; };
@@ -42,6 +44,7 @@
 		1DBA4E6F9F48F2F7F47D8646 /* Pods-Plem-PlemTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plem-PlemTests.release.xcconfig"; path = "Target Support Files/Pods-Plem-PlemTests/Pods-Plem-PlemTests.release.xcconfig"; sourceTree = "<group>"; };
 		1E5E21CC292FBFC50079DF25 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../src/assets/fonts; sourceTree = "<group>"; };
 		1E64BE4E291F8CBE00A37928 /* Plem.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Plem.entitlements; path = Plem/Plem.entitlements; sourceTree = "<group>"; };
+		1E793E4E2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ../PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1E8603E02B525736003A4C57 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1E926FD22B59555000548ED7 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Plem/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -124,6 +127,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				1E793E4E2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy */,
 				1E926FD22B59555000548ED7 /* AppCenter-Config.plist */,
 				1E8603E02B525736003A4C57 /* GoogleService-Info.plist */,
 				1E5E21CC292FBFC50079DF25 /* fonts */,
@@ -247,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E793E502BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E793E4F2BD94A5700CDE5B6 /* PrivacyInfo.xcprivacy in Resources */,
 				1E793E4D2BC6DAE200CDE5B6 /* fonts in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				1E926FD32B59555100548ED7 /* AppCenter-Config.plist in Resources */,
