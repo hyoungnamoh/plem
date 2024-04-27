@@ -5,7 +5,7 @@ import { PlanChart } from 'types/chart';
 const ChartListItemContent = ({ chart }: { chart: PlanChart }) => {
   return (
     <View key={`content${chart.id}`} style={styles.content}>
-      <View style={{ marginLeft: 76 }}>
+      <View style={{ marginLeft: 76, paddingVertical: 8 }}>
         {chart.plans.map((plan) => {
           const startHour = String(plan.startHour).padStart(2, '0');
           const startMin = String(plan.startMin).padStart(2, '0');
@@ -48,13 +48,7 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 4,
     flex: 1,
-  },
-  test: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 5,
-    height: 64,
-    width: 64,
+    paddingTop: 3,
   },
 });
 

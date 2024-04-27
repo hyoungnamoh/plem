@@ -26,7 +26,8 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
       <View style={styles.accordionHeader}>
         <View>
           <PlemText>{notice.title}</PlemText>
-          <PlemText style={styles.date}>2023.01.27</PlemText>
+          {/* FIXME: 서버에서 받은 시간으로 수정 필요 */}
+          <PlemText style={styles.date}>2024.04.24</PlemText>
         </View>
         {isActive ? <ArrowUpSvg /> : <ArrowDownSvg />}
       </View>

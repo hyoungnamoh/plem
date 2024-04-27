@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   },
   chartName: {
     width: SCREEN_WIDTH - 260,
+    paddingTop: 3,
   },
   removeButton: {
     width: 40,

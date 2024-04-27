@@ -65,7 +65,7 @@ const MainChartTable = ({
               <PlemText>Title</PlemText>
             </View>
             <View style={styles.valueCell}>
-              <PlemText>{chartData.name}</PlemText>
+              <PlemText style={{ paddingTop: 3 }}>{chartData.name}</PlemText>
             </View>
           </View>
           <View style={styles.chartBox}>
