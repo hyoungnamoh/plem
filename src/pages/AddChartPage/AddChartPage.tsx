@@ -538,6 +538,7 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: MAIN_COLOR,
     height: '100%',
+    paddingBottom: 200, // FIXME: dragAreaInfo 잘못 지정되는 버그, 삭제하면 영역이 잘못 지정됨, 수정 필요
   },
   underlineButtonWrap: {
     flexDirection: 'row',
