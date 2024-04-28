@@ -21,6 +21,10 @@ import messaging from '@react-native-firebase/messaging';
 import { phoneTokenState } from 'states/phoneTokenState';
 import { useRegisterPhoneToken } from 'hooks/mutations/useRegisterPhoneToken';
 import { removeWhitespace } from 'helper/removeWhitespace';
+import { notificationInfoState } from 'states/notificationInfoState';
+import { checkNotifications } from 'react-native-permissions';
+import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
+import { useUpdatePlanNotification } from 'hooks/mutations/useUpdatePlanNotification';
 
 type LoginMutationParams = {
   email: string;
@@ -33,7 +37,9 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const queryClient = useQueryClient();
   const setLoggedInUser = useSetRecoilState(loggedInUserState);
   const setPhoneToken = useSetRecoilState(phoneTokenState);
+  const setNotificationInfo = useSetRecoilState(notificationInfoState);
   const { mutate: registerPhoneToken } = useRegisterPhoneToken({});
+  const { mutate: updatePlanNotification } = useUpdatePlanNotification({});
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -84,12 +90,24 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
 
   const loginMutation = useMutation<ApiResponse<LoginResponse>, AxiosError, LoginMutationParams>('loginApi', loginApi, {
     onSuccess: async (responseData, variables, context) => {
+      const { status, settings } = await checkNotifications();
+      const storageNotifiactionInfo = await getStorageNotificationInfo();
       queryClient.invalidateQueries('loginUser');
       const user = jwt_decode<LoggedInUser>(responseData.data.accessToken);
       await EncryptedStorage.setItem('accessToken', responseData.data.accessToken);
       await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
       await getPhoneToken();
       setLoggedInUser(user);
+      if (status === 'granted') {
+        if (storageNotifiactionInfo) {
+          setNotificationInfo({ notice: storageNotifiactionInfo.notice, plan: storageNotifiactionInfo.plan });
+        } else {
+          setNotificationInfo({ notice: true, plan: true });
+          updatePlanNotification({ planNotification: true });
+        }
+      } else {
+        setNotificationInfo({ plan: false, notice: false });
+      }
     },
     onError: (error) => {
       if (error.response?.status === 401) {

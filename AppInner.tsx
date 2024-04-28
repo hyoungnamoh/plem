@@ -37,7 +37,7 @@ import { appInfoState } from 'states/appInfoState';
 import { getAppVersion } from 'helper/getAppVersion';
 import SplashScreen from 'react-native-splash-screen';
 import { checkNotifications } from 'react-native-permissions';
-import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
+import { notificationInfoState } from 'states/notificationInfoState';
 import { useCodePush } from 'hooks/useCodePush';
 import CodePushUpdating from 'components/CodePushUpdating';
 import Toast from '@hyoungnamoh/react-native-easy-toast';
@@ -47,6 +47,7 @@ import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { keyboardHeightState } from 'states/keyboardHeightState';
 import { bottomNochHeightState } from 'states/bottomNochHeightState';
 import { checkNeedUpdate } from 'helper/checkNeedUpdate';
+import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
 
 configureNotification();
 
@@ -161,8 +162,8 @@ function AppInner({ routeName }: { routeName: string }) {
       SplashScreen.hide();
     }
 
-    const updateInfo = await checkNeedUpdate(info); // TODO:
-    if (updateInfo.isNeeded) {
+    const updateInfo = await checkNeedUpdate(info);
+    if (updateInfo?.isNeeded) {
       setNeedAppVersionUpdate(true);
       showUpdateAlert(info.storeUrl);
     } else {
@@ -173,7 +174,6 @@ function AppInner({ routeName }: { routeName: string }) {
 
   const getNotificationInfo = async () => {
     const { status, settings } = await checkNotifications();
-
     const storageNotifiactionInfo = await getStorageNotificationInfo();
     if (status === 'granted') {
       if (storageNotifiactionInfo) {
@@ -184,11 +184,6 @@ function AppInner({ routeName }: { routeName: string }) {
     } else {
       setNotificationInfo({ notice: false, plan: false });
     }
-  };
-
-  const getStorageNotificationInfo = async () => {
-    const asyncStorageItem = await AsyncStorage.getItem('notificationInfo');
-    return asyncStorageItem ? (JSON.parse(asyncStorageItem) as NotificationInfo) : null;
   };
 
   const getAppInfo = async () => {

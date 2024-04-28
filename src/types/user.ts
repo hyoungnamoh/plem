@@ -6,4 +6,5 @@ export type LoggedInUser = {
   id: number;
   isCertified: 0 | 1;
   nickname: string;
+  planNotification: boolean;
 };
