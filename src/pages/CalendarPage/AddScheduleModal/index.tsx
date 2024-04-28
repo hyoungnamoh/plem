@@ -132,6 +132,5 @@ const styles = StyleSheet.create({
   },
   scheduleText: {
     marginLeft: 8,
-    paddingTop: 3,
   },
 });

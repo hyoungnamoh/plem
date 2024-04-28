@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 4,
     flex: 1,
-    paddingTop: 3,
   },
 });
 

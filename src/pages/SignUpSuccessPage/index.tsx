@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     lineHeight: 1.28,
-    paddingTop: 3,
   },
   confirmListContainer: {
     marginTop: 16,

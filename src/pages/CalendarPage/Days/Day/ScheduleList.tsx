@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   scheduleName: {
     fontSize: 12,
     marginLeft: 2,
-    paddingTop: 3,
   },
   svg: {
     position: 'absolute',

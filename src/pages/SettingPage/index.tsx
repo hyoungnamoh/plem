@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    paddingTop: 3,
   },
   buttonList: {
     paddingHorizontal: 15,

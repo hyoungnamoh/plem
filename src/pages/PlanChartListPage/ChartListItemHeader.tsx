@@ -65,7 +65,7 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
           />
         </View>
         <View style={styles.headerInfo}>
-          <PlemText style={{ paddingTop: 3 }}>{chart.name}</PlemText>
+          <PlemText>{chart.name}</PlemText>
           <PlemText style={styles.repeats}>{getRepeatOptions(chart.repeats)}</PlemText>
           <PlemText style={styles.plans} numberOfLines={1}>
             {isActive ? '' : chart.plans.map((plan) => plan.name).join(' / ')}
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
     marginTop: 4,
-    paddingTop: 3,
   },
 });
 

@@ -184,7 +184,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
               <View>
                 <View style={styles.planWrap}>
                   <PlemButton style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowPlanIndex)}>
-                    <PlemText style={{ fontSize: 22.5, paddingTop: 3 }}>{doItNowPlan.name}</PlemText>
+                    <PlemText style={{ fontSize: 22.5 }}>{doItNowPlan.name}</PlemText>
                     <Image source={yellowLineImage} style={styles.yellowLine} />
                   </PlemButton>
                   <PlemButton>
@@ -203,7 +203,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
                         style={{
                           marginLeft: 4,
                           textDecorationLine: isChecked ? 'line-through' : 'none',
-                          paddingTop: 3,
                         }}>
                         {sub.name}
                       </PlemText>

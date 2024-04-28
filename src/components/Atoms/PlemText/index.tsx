@@ -5,11 +5,11 @@ export type PlemTextProps = TextProps;
 
 const PlemText = forwardRef<Text, TextProps>((props, ref) => {
   const propStyle = props.style as TextStyle | undefined;
-  const lineHeight = propStyle?.lineHeight || 1.12;
   const fontSize = propStyle?.fontSize || 18;
+  const lineHeight = propStyle?.lineHeight ? propStyle?.lineHeight * fontSize : undefined;
 
   return (
-    <Text {...props} style={[styles.plemText, props.style, { lineHeight: lineHeight * fontSize }]}>
+    <Text {...props} style={[styles.plemText, props.style, { lineHeight }]}>
       {props.children}
     </Text>
   );

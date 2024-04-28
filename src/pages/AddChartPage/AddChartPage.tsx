@@ -478,7 +478,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                 <View key={`plan_${planIndex}}`}>
                   <PlemButton style={styles.planWrap} onPress={() => onPressModifyPlan({ planIndex })}>
                     <View style={styles.yellowLineText}>
-                      <PlemText style={{ paddingTop: 3 }}>{plan.name}</PlemText>
+                      <PlemText>{plan.name}</PlemText>
                       <Image source={yellowLineImage} style={styles.yellowLine} />
                     </View>
                     <View style={styles.notificationContainer}>
@@ -499,7 +499,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                         <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
                           <View style={styles.subPlanNameWrap}>
                             <UncheckedSvg />
-                            <PlemText style={{ marginLeft: 4, paddingTop: 3 }}>{subPlan.name}</PlemText>
+                            <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
                           </View>
                           <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
                             <DeleteRedSvg style={{ marginLeft: 4 }} />
