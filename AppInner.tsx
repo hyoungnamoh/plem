@@ -46,6 +46,7 @@ import { globalToastState } from 'states/globalToastState';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { keyboardHeightState } from 'states/keyboardHeightState';
 import { bottomNochHeightState } from 'states/bottomNochHeightState';
+import { checkNeedUpdate } from 'helper/checkNeedUpdate';
 
 configureNotification();
 
@@ -160,8 +161,7 @@ function AppInner({ routeName }: { routeName: string }) {
       SplashScreen.hide();
     }
 
-    const updateInfo = { isNeeded: false };
-    // const updateInfo = await checkNeedUpdate(info); // TODO:
+    const updateInfo = await checkNeedUpdate(info); // TODO:
     if (updateInfo.isNeeded) {
       setNeedAppVersionUpdate(true);
       showUpdateAlert(info.storeUrl);
