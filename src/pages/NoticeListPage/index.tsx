@@ -14,6 +14,7 @@ import Image from '@hyoungnamoh/react-native-scalable-image';
 import { baseUrl } from 'api';
 import UnderlineSvg from 'assets/images/underline.svg';
 import { SCREEN_WIDTH } from 'constants/etc';
+import dayjs from 'dayjs';
 
 type NoticeListPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NoticeListPage'>;
 
@@ -26,8 +27,7 @@ const NoticeListPage = ({ navigation }: NoticeListPageProps) => {
       <View style={styles.accordionHeader}>
         <View>
           <PlemText>{notice.title}</PlemText>
-          {/* FIXME: 서버에서 받은 시간으로 수정 필요 */}
-          <PlemText style={styles.date}>2024.04.24</PlemText>
+          <PlemText style={styles.date}>{dayjs(notice.createdAt).format('YYYY.MM.DD')}</PlemText>
         </View>
         {isActive ? <ArrowUpSvg /> : <ArrowDownSvg />}
       </View>
