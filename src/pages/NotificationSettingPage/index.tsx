@@ -7,10 +7,10 @@ import { SettingTabStackParamList } from 'tabs/SettingTab';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { NotificationInfo, notificationInfoState } from 'states/notificationInfoState';
 import { checkNotifications } from 'react-native-permissions';
-import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUpdatePlanNotification } from 'hooks/mutations/useUpdatePlanNotification';
 import { disableLoadingState } from 'states/disableLoadingState';
+import { useUpdateNoticeNotification } from 'hooks/mutations/useUpdateNoticeNotification';
 
 type NotificationSettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'NotificationSettingPage'>;
 
@@ -18,11 +18,12 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
   const [notificationInfo, setNotificationInfo] = useRecoilState(notificationInfoState);
   const setDisableLoading = useSetRecoilState(disableLoadingState);
   const { mutate: updatePlanNotification } = useUpdatePlanNotification({});
+  const { mutate: updateNoticeNotification } = useUpdateNoticeNotification({});
 
   const handlePlanNotification = async (value: boolean) => {
     const { status } = await checkNotifications();
 
-    if (status !== 'granted') {
+    if (status !== 'granted' && !notificationInfo.plan) {
       confirmSetNoficiation();
       return;
     }
@@ -34,6 +35,34 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
     setStorageNotificationInfo(newNotificationInfo);
     updatePlanNotification(
       { planNotification: value },
+      {
+        onError: () => {
+          setNotificationInfo(originNoficiationInfo);
+          setStorageNotificationInfo(originNoficiationInfo);
+          setDisableLoading(false);
+        },
+        onSuccess: () => {
+          setDisableLoading(false);
+        },
+      }
+    );
+  };
+
+  const handleNoticeNotification = async (value: boolean) => {
+    const { status } = await checkNotifications();
+
+    if (status !== 'granted' && !notificationInfo.notice) {
+      confirmSetNoficiation();
+      return;
+    }
+
+    const originNoficiationInfo = { ...notificationInfo, notice: !value };
+    const newNotificationInfo = { ...notificationInfo, notice: value };
+    setDisableLoading(true);
+    setNotificationInfo(newNotificationInfo);
+    setStorageNotificationInfo(newNotificationInfo);
+    updateNoticeNotification(
+      { noticeNotification: value },
       {
         onError: () => {
           setNotificationInfo(originNoficiationInfo);
@@ -63,45 +92,6 @@ const NotificationSettingPage = ({ navigation }: NotificationSettingPageProps) =
         },
       },
     ]);
-  };
-
-  const handleNoticeNotification = async (value: boolean) => {
-    const { status } = await checkNotifications();
-
-    if (status !== 'granted') {
-      confirmSetNoficiation();
-      return;
-    }
-
-    const originNoficiationInfo = { ...notificationInfo };
-    const newNotificationInfo = { ...notificationInfo, notice: value };
-    setNotificationInfo(newNotificationInfo);
-
-    if (value) {
-      messaging()
-        .subscribeToTopic('notice')
-        .then(() => {
-          setStorageNotificationInfo(newNotificationInfo);
-        })
-        .catch((error) => {
-          setNotificationInfo(originNoficiationInfo);
-          setStorageNotificationInfo(originNoficiationInfo);
-          Alert.alert('알림 설정에 실패했습니다. 다시 시도해주세요.');
-          console.info(error);
-        });
-    } else {
-      messaging()
-        .unsubscribeFromTopic('notice')
-        .then(() => {
-          setStorageNotificationInfo(newNotificationInfo);
-        })
-        .catch((error) => {
-          setNotificationInfo(originNoficiationInfo);
-          setStorageNotificationInfo(originNoficiationInfo);
-          Alert.alert('알림 설정에 실패했습니다. 다시 시도해주세요.');
-          console.info(error);
-        });
-    }
   };
 
   const setStorageNotificationInfo = async (info: NotificationInfo) => {

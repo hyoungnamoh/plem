@@ -25,6 +25,7 @@ import { notificationInfoState } from 'states/notificationInfoState';
 import { checkNotifications } from 'react-native-permissions';
 import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
 import { useUpdatePlanNotification } from 'hooks/mutations/useUpdatePlanNotification';
+import { useUpdateNoticeNotification } from 'hooks/mutations/useUpdateNoticeNotification';
 
 type LoginMutationParams = {
   email: string;
@@ -40,6 +41,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
   const setNotificationInfo = useSetRecoilState(notificationInfoState);
   const { mutate: registerPhoneToken } = useRegisterPhoneToken({});
   const { mutate: updatePlanNotification } = useUpdatePlanNotification({});
+  const { mutate: updateNoticeNotification } = useUpdateNoticeNotification({});
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -104,6 +106,7 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
         } else {
           setNotificationInfo({ notice: true, plan: true });
           updatePlanNotification({ planNotification: true });
+          updateNoticeNotification({ noticeNotification: true });
         }
       } else {
         setNotificationInfo({ plan: false, notice: false });
