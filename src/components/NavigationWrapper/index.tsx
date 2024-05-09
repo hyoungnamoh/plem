@@ -1,10 +1,11 @@
 import { NavigationContainer, DefaultTheme, createNavigationContainerRef } from '@react-navigation/native';
 import { MAIN_COLOR } from 'constants/colors';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import analytics from '@react-native-firebase/analytics';
 
 const NAVIGATION_IDS = ['home', 'post', 'noticeListPage'];
 
@@ -15,8 +16,9 @@ const NavigationWrapper = ({
   children: ReactNode;
   setRouteName: Dispatch<SetStateAction<string>>;
 }) => {
-  const navigationRef = createNavigationContainerRef();
   const setBottomSafeArea = useSetRecoilState(bottomSafeAreaState);
+  const navigationRef = createNavigationContainerRef();
+  const routeNameRef = useRef<string>();
 
   function buildDeepLinkFromNotificationData(data: any): string | null {
     const navigationId = data?.navigationId;
@@ -97,14 +99,23 @@ const NavigationWrapper = ({
         const currentRoute = navigationRef.getCurrentRoute();
         if (currentRoute) {
           setRouteName(currentRoute.name);
+          routeNameRef.current = currentRoute.name;
         }
       }}
       onStateChange={async () => {
         setBottomSafeArea(MAIN_COLOR);
         const currentRoute = navigationRef.getCurrentRoute();
+        const previousRouteName = routeNameRef.current;
+
         if (currentRoute) {
           const currentRouteName = currentRoute.name;
           setRouteName(currentRouteName);
+
+          if (previousRouteName !== currentRouteName) {
+            analytics().logScreenView({
+              screen_name: currentRouteName,
+            });
+          }
         }
       }}
       linking={linking}>

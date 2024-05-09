@@ -27,6 +27,7 @@ import TodayScheduleBox from 'components/TodayScheduleBox';
 import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { Plan } from 'types/chart';
+import analytics from '@react-native-firebase/analytics';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -84,8 +85,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
     await AsyncStorage.setItem('planCheckedList', JSON.stringify(planCheckList));
   };
 
-  const handleAddChartPress = () => {
+  const handleAddChartPress = async () => {
     if (isMaximumChartList) {
+      analytics().logEvent('maximum_chart_alert_open');
       setOpenMaximumAlert(true);
       return;
     }
