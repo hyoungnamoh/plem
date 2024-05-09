@@ -35,7 +35,7 @@ const yellowLineImage = require('assets/images/yellow_line.png');
 const MainPage = ({ navigation }: MainPageProps) => {
   const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
   const queryClient = useQueryClient();
-  const [checkedList, setCheckedList] = useState<number[]>([]);
+  const [checkedList, setCheckedList] = useState<string[]>([]);
   const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
   const { data: todayPlanChart } = useGetTodayPlanChart();
@@ -68,12 +68,14 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleSubPlanPress = async (id: number) => {
+    const current = dayjs();
+    const date = current.format('YYYY-MM-DD');
     const asyncStorageItem = await AsyncStorage.getItem('planCheckedList');
-    const planCheckList: number[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
-    const idIndex = planCheckList.findIndex((e) => e === id);
+    const planCheckList: string[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
+    const idIndex = planCheckList.findIndex((e) => e === `${date}-${id}`);
 
     if (idIndex < 0) {
-      planCheckList.push(id);
+      planCheckList.push(`${date}-${id}`);
     } else {
       planCheckList.splice(idIndex, 1);
     }
@@ -192,7 +194,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
                   </PlemButton>
                 </View>
                 {doItNowPlan.subPlans.map((sub) => {
-                  const isChecked = checkedList.includes(sub.id);
+                  const current = dayjs();
+                  const date = current.format('YYYY-MM-DD');
+                  const isChecked = checkedList.includes(`${date}-${sub.id}`);
                   return (
                     <PlemButton
                       key={`subPlan${sub.id}`}
