@@ -5,23 +5,28 @@ import PlemText from 'components/Atoms/PlemText';
 import { SCREEN_WIDTH } from 'constants/etc';
 import { memo } from 'react';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
-import { Schedule } from 'types/calendar';
+import { Holiday, Schedule } from 'types/calendar';
 
-const ScheduleList = ({ allScheduleList }: { allScheduleList: Schedule[] }) => {
+const ScheduleList = ({ allScheduleList }: { allScheduleList: (Schedule | Holiday)[] }) => {
   const categoryList = useRecoilValue(categoryListState);
 
   return (
     <View style={{ marginTop: 2 }}>
       {allScheduleList.map((schedule) => {
+        const isHoliday = schedule.type === 'holiday';
         return (
           <View key={schedule.id} style={styles.scheduleRow}>
-            <PaletteSvg
-              size="small"
-              color={
-                categoryList.find((category) => category.value === schedule.category)?.color || categoryList[0].color
-              }
-            />
-            <PlemText style={styles.scheduleName}>{schedule.name.slice(0, 5)}</PlemText>
+            {!isHoliday && (
+              <PaletteSvg
+                size="small"
+                color={
+                  categoryList.find((category) => category.value === schedule.category)?.color || categoryList[0].color
+                }
+              />
+            )}
+            <PlemText style={[styles.scheduleName, { color: isHoliday ? '#E40C0C' : '#000' }]}>
+              {schedule.name.slice(0, 5)}
+            </PlemText>
           </View>
         );
       })}

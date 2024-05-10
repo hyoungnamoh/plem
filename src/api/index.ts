@@ -13,7 +13,7 @@ apiRequest.defaults.timeout = 20000;
 
 apiRequest.interceptors.request.use(
   async (config) => {
-    console.info(config.url);
+    console.info(`${config.url} request`);
     const token = await EncryptedStorage.getItem('accessToken');
     if (config.headers && token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -61,6 +61,7 @@ apiRequest.interceptors.response.use(
       await EncryptedStorage.removeItem('refreshToken');
       return response;
     }
+    console.info(`${response.config.url} response`);
     return response;
   },
   (error) => {

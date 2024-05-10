@@ -33,6 +33,11 @@ const Day = ({
   const { allScheduleList } = useScheduleList({ year, month, date });
 
   const getDateColor = useCallback(() => {
+    const isHoliday = allScheduleList.find((schedule) => schedule.type === 'holiday');
+
+    if (isHoliday) {
+      return '#E40C0C';
+    }
     if (isToday) {
       return '#fff';
     }
@@ -41,7 +46,7 @@ const Day = ({
     }
 
     return '#000';
-  }, [isToday, date, firstDateIndex]);
+  }, [isToday, date, firstDateIndex, allScheduleList.length]);
 
   const onPressDate = () => {
     const selectedDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');

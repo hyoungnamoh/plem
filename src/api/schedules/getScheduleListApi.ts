@@ -1,6 +1,6 @@
 import apiRequest from 'api';
 import { ApiResponse } from 'types/axios';
-import { Schedule } from 'types/calendar';
+import { Holiday, Schedule } from 'types/calendar';
 
 export type ScheduleMap = {
   [year: number]: {
@@ -11,6 +11,7 @@ export type ScheduleMap = {
 };
 
 export type CalendarSchedule = {
+  holidays: Holiday[];
   noRepeatSchedules: Schedule[];
   repeatSchedules: {
     yearlyRepeatSchedules: Schedule[];

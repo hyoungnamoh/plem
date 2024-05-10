@@ -3,6 +3,7 @@ import { useGetScheduleList } from './queries/useGetScheduleList';
 
 export const useScheduleList = ({ year, month, date }: { year: number; month: number; date: number }) => {
   const { data: calendarSchedule } = useGetScheduleList();
+
   const today = useMemo(() => new Date(year, month, date, 0, 0, 0, 0), [year, month, date]);
   const {
     yearlyRepeatSchedules,
@@ -10,7 +11,7 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
     twoWeeklyRepeatSchedules,
     weeklyRepeatSchedules,
     dailyRepeatSchedules,
-  } = calendarSchedule?.data.repeatSchedules || {
+  } = calendarSchedule?.data?.repeatSchedules || {
     yearlyRepeatSchedules: [],
     monthlyRepeatSchedules: [],
     twoWeeklyRepeatSchedules: [],
@@ -89,7 +90,7 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
 
   const noRepeatScheduleList = useMemo(
     () =>
-      calendarSchedule?.data.noRepeatSchedules?.filter((schedule) => {
+      (calendarSchedule?.data?.noRepeatSchedules || [])?.filter((schedule) => {
         const scheduleStartDate = new Date(schedule.startDate);
         const scheduleEndDate = new Date(schedule.endDate);
         const startOfToday = new Date(today);
@@ -104,11 +105,25 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
           startOfToday.getTime() <= endOfScheduleEndDate.getTime()
         );
       }) || [],
-    [calendarSchedule?.data.noRepeatSchedules, year, month, date]
+    [calendarSchedule?.data?.noRepeatSchedules, year, month, date]
+  );
+
+  const holidayList = useMemo(
+    () =>
+      (calendarSchedule?.data?.holidays || []).filter((holiday) => {
+        const startOfToday = new Date(today);
+
+        const startDate = new Date(holiday.date);
+        const endDate = new Date(holiday.date);
+        endDate.setHours(23, 59, 59, 999);
+
+        return startDate.getTime() <= startOfToday.getTime() && startOfToday.getTime() <= endDate.getTime();
+      }) || [],
+    [calendarSchedule?.data?.holidays?.length, year, month, date]
   );
 
   const allScheduleList = useMemo(
-    () => repeatScheduleList.concat(noRepeatScheduleList),
+    () => [...holidayList, ...repeatScheduleList, ...noRepeatScheduleList],
     [noRepeatScheduleList, repeatScheduleList, year, month, date]
   );
 

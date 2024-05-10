@@ -1,6 +1,7 @@
 import { DaysOfWeekNum } from './date';
 
 export type Schedule = {
+  type: 'schedule';
   id: number;
   name: string;
   category: number;
@@ -24,5 +25,15 @@ export type AddSchedule = Omit<Schedule, 'createdAt' | 'id' | 'updatedAt' | 'rem
 export type CategoryId = number;
 
 export type Repeat = null | 'every' | 'week' | 'twoWeeks' | 'month' | 'year' | 'custom';
+
 export type RepeatUnitKor = '일' | '주' | '개월' | '년';
+
 export type RepeatUnit = 'day' | 'week' | 'month' | 'year';
+
+export type Holiday = {
+  type: 'holiday';
+  id: number;
+  dateKind: string;
+  name: string;
+  date: string;
+};

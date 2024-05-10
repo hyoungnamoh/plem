@@ -9,7 +9,7 @@ import { DaysOfWeekNum } from 'types/date';
 import { BOTTOM_TAB_HEIGHT } from 'components/BottomTabBar/constants';
 import { useRecoilValue } from 'recoil';
 import { categoryListState } from 'states/categoryListState';
-import { Schedule } from 'types/calendar';
+import { Holiday, Schedule } from 'types/calendar';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
 import { SCREEN_WIDTH } from 'constants/etc';
@@ -41,7 +41,10 @@ export const AddScheduleModal = ({ open, targetDate, close, onPressAddSchedule }
     }
   }, [open, targetDate]);
 
-  const handleScheduleClick = (schedule: Schedule) => {
+  const handleScheduleClick = (schedule: Schedule | Holiday) => {
+    if (schedule.type === 'holiday') {
+      return;
+    }
     navigate('AddSchedulePage', { schedule, date: targetDate.startOf('date').toISOString() });
   };
 
@@ -68,19 +71,24 @@ export const AddScheduleModal = ({ open, targetDate, close, onPressAddSchedule }
           <CustomScrollView>
             {allScheduleList.length > 0 ? (
               allScheduleList.map((schedule) => {
+                const isHoliday = schedule.type === 'holiday';
                 return (
                   <PlemButton
                     key={schedule.id}
                     style={styles.scheduleRow}
                     onPress={() => handleScheduleClick(schedule)}>
-                    <PaletteSvg
-                      size="medium"
-                      color={
-                        categoryList.find((category) => category.value === schedule.category)?.color ||
-                        categoryList[0].color
-                      }
-                    />
-                    <PlemText style={styles.scheduleText}>{schedule.name}</PlemText>
+                    {schedule.type === 'schedule' && (
+                      <PaletteSvg
+                        size="medium"
+                        color={
+                          categoryList.find((category) => category.value === schedule.category)?.color ||
+                          categoryList[0].color
+                        }
+                      />
+                    )}
+                    <PlemText style={[styles.scheduleText, isHoliday && { color: '#E40C0C', marginLeft: 0 }]}>
+                      {schedule.name}
+                    </PlemText>
                   </PlemButton>
                 );
               })
