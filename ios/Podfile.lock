@@ -533,11 +533,11 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.6.1):
     - React-Core
-  - RNFBAnalytics (18.7.3):
+  - RNFBAnalytics (19.2.2):
     - Firebase/Analytics (= 10.19.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (18.7.3):
+  - RNFBApp (19.2.2):
     - Firebase/CoreOnly (= 10.19.0)
     - React-Core
   - RNFBMessaging (18.7.3):
@@ -550,6 +550,8 @@ PODS:
   - RNGestureHandler (2.9.0):
     - React-Core
   - RNPermissions (4.1.0):
+    - React-Core
+  - RNReactNativeHapticFeedback (2.2.0):
     - React-Core
   - RNReanimated (3.1.0):
     - DoubleConversion
@@ -672,6 +674,7 @@ DEPENDENCIES:
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -819,6 +822,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNReactNativeHapticFeedback:
+    :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -905,12 +910,13 @@ SPEC CHECKSUMS:
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
-  RNFBAnalytics: f03fafb67e8bdc03b13938abb6dca0407b4034bf
-  RNFBApp: c21258de1485419a845efbba9c09ec946c89891d
+  RNFBAnalytics: 18097a72f881f0a3050643f1ee7bffece7aaba4e
+  RNFBApp: becc8d10a8756c018ead449841c812eba7363b00
   RNFBMessaging: e52a76a97ec5ff75e186c150e2bfab86c9e655d1
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNPermissions: 702b75857d930a8ac7c5e52c9458e595230fd6fc
+  RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
