@@ -44,11 +44,12 @@ const NavigationWrapper = ({
       screens: {
         Home: 'home',
         Post: 'post/:id',
-        SettingTab: {
-          screens: {
-            NoticeListPage: 'noticeListPage',
-          },
-        },
+        SettingTab: 'noticeListPage',
+        // SettingTab: {
+        //   screens: {
+        //     NoticeListPage: 'noticeListPage',
+        //   },
+        // },
       },
     },
     async getInitialURL() {
