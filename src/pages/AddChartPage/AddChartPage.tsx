@@ -40,7 +40,7 @@ import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import dayjs from 'dayjs';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import analytics from '@react-native-firebase/analytics';
+import { logEvent } from 'helper/analytics';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -414,7 +414,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const handleTextDragStart = async () => {
-    analytics().logEvent('AddChartPage_planTextDragStart');
+    logEvent('AddChartPage_planTextDragStart');
     setScrollDisabled(true);
   };
 

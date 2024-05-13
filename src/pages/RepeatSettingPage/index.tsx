@@ -13,7 +13,8 @@ import { repeatDaysDefault, repeatDatesState } from 'states/repeatDatesState';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import CheckSvg from 'assets/images/check_32x32.svg';
 import PlemButton from 'components/Atoms/PlemButton';
-import analytics from '@react-native-firebase/analytics';
+import { logEvent } from 'helper/analytics';
+
 import { NUMBER_TO_DAY_KOR } from 'constants/dates';
 
 type RepeatOptionKor =
@@ -62,21 +63,21 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
   const onPressRepeatOption = (option: RepeatOptionItemValue) => {
     if (option === null) {
-      analytics().logEvent('RepeatSettingPage_onPressRepeatOption', { option: '안 함 선택' });
+      logEvent('RepeatSettingPage_onPressRepeatOption', { option: '안 함 선택' });
       setRepeatOptions([null]);
       return;
     }
     if (option === 7) {
       setRepeatOptions([7]);
       navigation.navigate('SelectRepeatDatePage');
-      analytics().logEvent('RepeatSettingPage_onPressRepeatOption', { option: '날짜 지정 선택' });
+      logEvent('RepeatSettingPage_onPressRepeatOption', { option: '날짜 지정 선택' });
       return;
     }
     if (repeatOptions.includes(option)) {
       const copiedOptions = [...repeatOptions];
       const index = copiedOptions.findIndex((e) => e === option);
       copiedOptions.splice(index, 1);
-      analytics().logEvent('RepeatSettingPage_onPressRepeatOption', {
+      logEvent('RepeatSettingPage_onPressRepeatOption', {
         option: `${NUMBER_TO_DAY_KOR[option]} 선택 해제`,
       });
       if (copiedOptions.length === 0) {
@@ -87,7 +88,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       return;
     }
     setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 7 || e === null)));
-    analytics().logEvent('RepeatSettingPage_onPressRepeatOption', {
+    logEvent('RepeatSettingPage_onPressRepeatOption', {
       option: `${NUMBER_TO_DAY_KOR[option]} 선택`,
     });
   };

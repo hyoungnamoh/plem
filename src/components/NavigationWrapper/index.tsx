@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { bottomSafeAreaState } from 'states/bottomSafeAreaState';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import analytics from '@react-native-firebase/analytics';
+import { logScreenView } from 'helper/analytics';
 
 const NAVIGATION_IDS = ['home', 'post', 'noticeListPage'];
 
@@ -112,7 +112,7 @@ const NavigationWrapper = ({
           setRouteName(currentRouteName);
 
           if (previousRouteName !== currentRouteName) {
-            analytics().logScreenView({
+            logScreenView({
               screen_class: currentRouteName,
               screen_name: currentRouteName,
             });

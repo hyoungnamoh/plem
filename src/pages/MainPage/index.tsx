@@ -27,7 +27,7 @@ import TodayScheduleBox from 'components/TodayScheduleBox';
 import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { Plan } from 'types/chart';
-import analytics from '@react-native-firebase/analytics';
+import { logEvent } from 'helper/analytics';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -87,7 +87,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
 
   const handleAddChartPress = async () => {
     if (isMaximumChartList) {
-      analytics().logEvent('MainPage_maximumChartAlertOpen');
+      logEvent('MainPage_maximumChartAlertOpen');
       setOpenMaximumAlert(true);
       return;
     }
@@ -133,7 +133,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptySubPlanPress = () => {
-    analytics().logEvent('MainPage_addSubPlan');
+    logEvent('MainPage_addSubPlan');
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
   };
 
