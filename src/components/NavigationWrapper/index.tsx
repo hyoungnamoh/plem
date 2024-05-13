@@ -21,7 +21,11 @@ const NavigationWrapper = ({
   const routeNameRef = useRef<string>();
 
   function buildDeepLinkFromNotificationData(data: any): string | null {
-    const navigationId = data?.navigationId;
+    if (!data) {
+      return null;
+    }
+
+    const navigationId = data.navigationId;
     if (!NAVIGATION_IDS.includes(navigationId)) {
       console.warn('Unverified navigationId', navigationId);
       return null;
@@ -32,11 +36,10 @@ const NavigationWrapper = ({
     if (navigationId === 'noticeListPage') {
       return 'plem://noticeListPage';
     }
-    const postId = data?.postId;
+    const postId = data.postId;
     if (typeof postId === 'string') {
       return `plem://post/${postId}`;
     }
-    console.warn('Missing postId');
     return null;
   }
 
