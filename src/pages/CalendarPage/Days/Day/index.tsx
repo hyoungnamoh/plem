@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
-import { Dispatch, SetStateAction, memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import dayjs from 'dayjs';
 import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
@@ -18,7 +18,6 @@ const Day = ({
   year,
   month,
   isSelected,
-  setLocalSelectedDate,
 }: {
   isToday: boolean;
   firstDateIndex: number;
@@ -26,11 +25,10 @@ const Day = ({
   year: number;
   month: number;
   isSelected: boolean;
-  setLocalSelectedDate: Dispatch<SetStateAction<number>>;
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
-  const { allScheduleList } = useScheduleList({ year, month, date });
+  const { allScheduleList } = useScheduleList({ year, month, date, test: 3 });
 
   const getDateColor = useCallback(() => {
     const isHoliday = allScheduleList.find((schedule) => schedule.type === 'holiday');
@@ -48,19 +46,17 @@ const Day = ({
     return '#000';
   }, [isToday, date, firstDateIndex, allScheduleList.length]);
 
-  const onPressDate = () => {
+  const onPressDate = useCallback(() => {
     const selectedDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');
 
     if (isSelected) {
       setOpenScheduleModal(false);
       setSelectedDate(null);
-      setLocalSelectedDate(0);
     } else {
       setOpenScheduleModal(true);
       setSelectedDate(selectedDate);
-      setLocalSelectedDate(date);
     }
-  };
+  }, [year, month, date, isSelected]);
 
   return (
     <PlemButton key={date} onPress={onPressDate} style={styles.dateCell}>

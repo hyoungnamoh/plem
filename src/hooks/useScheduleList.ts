@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useGetScheduleList } from './queries/useGetScheduleList';
 
 export const useScheduleList = ({ year, month, date }: { year: number; month: number; date: number }) => {
   const { data: calendarSchedule } = useGetScheduleList();
 
   const today = useMemo(() => new Date(year, month, date, 0, 0, 0, 0), [year, month, date]);
+
   const {
     yearlyRepeatSchedules,
     monthlyRepeatSchedules,
@@ -19,14 +20,14 @@ export const useScheduleList = ({ year, month, date }: { year: number; month: nu
     dailyRepeatSchedules: [],
   };
 
-  const makeDateRange = (start: Date, end: Date) => {
+  const makeDateRange = useCallback((start: Date, end: Date) => {
     const dateRangeArray = [];
     for (let i = start.getDate(); i <= end.getDate(); i++) {
       dateRangeArray.push(i);
     }
 
     return dateRangeArray;
-  };
+  }, []);
 
   const repeatScheduleList = useMemo(
     () =>

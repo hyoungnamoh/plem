@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 import Day from './Day';
-import uuid from 'react-uuid';
-import { Fragment, memo, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import EmptyDates from './EmptyDates';
 import { useRecoilValue } from 'recoil';
 import { globalCurrentDateState } from 'states/globalCurrentDateState';
+import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
 
 const Days = ({ year, month }: { year: number; month: number }) => {
-  const [localSelectedDate, setLocalSelectedDate] = useState<number>(0);
   const globalCurrentDate = useRecoilValue(globalCurrentDateState);
+  const selectedDate = useRecoilValue(selectedCalendarDateState);
 
   const targetDate = useMemo(() => dayjs().set('year', year).set('month', month), [year, month]);
   const datesOfMonth = useMemo(
@@ -26,16 +26,17 @@ const Days = ({ year, month }: { year: number; month: number }) => {
       {datesOfMonth.map((date) => {
         const isToday =
           globalCurrentDate.date() === date && globalCurrentDate.year() === year && globalCurrentDate.month() === month;
+        const isSelectedDate =
+          selectedDate?.date() === date && selectedDate?.year() === year && selectedDate?.month() === month;
         return (
           <Day
-            key={uuid()}
+            key={`day-${year}-${month}-${date}`}
             isToday={isToday}
             firstDateIndex={firstDateIndex}
             date={date}
             year={year}
             month={month}
-            isSelected={localSelectedDate === date}
-            setLocalSelectedDate={setLocalSelectedDate}
+            isSelected={isSelectedDate}
           />
         );
       })}
