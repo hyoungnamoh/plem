@@ -94,6 +94,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const showDraftsToast = async () => {
     const hasDraft = await checkDrafts();
     if (hasDraft) {
+      logEvent('AddChartPage_drafted');
       setGlobalToast({ text: '작성 중인 계획표가 임시 저장되었어요.', duration: 2000 });
     }
   };
@@ -362,7 +363,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const handleEmptyPlanAlertConfirm = () => {
     setOpenEmptyPlanAlert(false);
-
+    logEvent('AddChartPage_emptyChartCompleted');
     if (isEdit) {
       handleUpdate();
     } else {
