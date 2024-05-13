@@ -414,7 +414,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const handleTextDragStart = async () => {
-    analytics().logEvent('plan_text_drag_start');
+    analytics().logEvent('AddChartPage_planTextDragStart');
     setScrollDisabled(true);
   };
 

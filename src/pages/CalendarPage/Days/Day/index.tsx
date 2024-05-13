@@ -10,6 +10,7 @@ import { SCREEN_WIDTH } from 'constants/etc';
 import ScheduleList from './ScheduleList';
 import PlemButton from 'components/Atoms/PlemButton';
 import { useScheduleList } from 'hooks/useScheduleList';
+import analytics from '@react-native-firebase/analytics';
 
 const Day = ({
   isToday,
@@ -50,6 +51,7 @@ const Day = ({
 
   const onPressDate = () => {
     const selectedDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');
+    analytics().logEvent('CalendarPage_onPressDate');
 
     if (isSelected) {
       setOpenScheduleModal(false);

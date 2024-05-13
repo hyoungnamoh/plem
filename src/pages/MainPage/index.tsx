@@ -87,7 +87,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
 
   const handleAddChartPress = async () => {
     if (isMaximumChartList) {
-      analytics().logEvent('maximum_chart_alert_open');
+      analytics().logEvent('MainPage_maximumChartAlertOpen');
       setOpenMaximumAlert(true);
       return;
     }
@@ -133,6 +133,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptySubPlanPress = () => {
+    analytics().logEvent('MainPage_addSubPlan');
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
   };
 

@@ -49,12 +49,12 @@ const DraggableChartItem = ({
   });
 
   const handleClonePress = (id: number) => {
-    analytics().logEvent('clone_chart_button_click');
+    analytics().logEvent('PlanChartListPage_cloneChartButtonClick');
     cloneChart({ id });
   };
 
   const handleDeletePress = (id: number) => {
-    analytics().logEvent('delete_chart_button_click');
+    analytics().logEvent('PlanChartListPage_deleteChartButtonClick');
     deleteChart({ id });
     clearStorageChartCoordinates(item);
   };

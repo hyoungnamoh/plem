@@ -40,7 +40,7 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
   };
 
   const handleEdit = () => {
-    analytics().logEvent('edit_chart_list_button_click');
+    analytics().logEvent('PlanChartListPage_editChartListButtonClick');
     setIsEditing(true);
     setHideBottomTabBar(true);
   };

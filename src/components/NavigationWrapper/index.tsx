@@ -113,6 +113,7 @@ const NavigationWrapper = ({
 
           if (previousRouteName !== currentRouteName) {
             analytics().logScreenView({
+              screen_class: currentRouteName,
               screen_name: currentRouteName,
             });
           }
