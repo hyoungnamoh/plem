@@ -40,6 +40,7 @@ import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import dayjs from 'dayjs';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { logEvent } from 'helper/analytics';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -93,6 +94,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   const showDraftsToast = async () => {
     const hasDraft = await checkDrafts();
     if (hasDraft) {
+      logEvent('AddChartPage_drafted');
       setGlobalToast({ text: '작성 중인 계획표가 임시 저장되었어요.', duration: 2000 });
     }
   };
@@ -361,7 +363,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const handleEmptyPlanAlertConfirm = () => {
     setOpenEmptyPlanAlert(false);
-
+    logEvent('AddChartPage_emptyChartCompleted');
     if (isEdit) {
       handleUpdate();
     } else {
@@ -413,6 +415,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const handleTextDragStart = async () => {
+    logEvent('AddChartPage_planTextDragStart');
     setScrollDisabled(true);
   };
 

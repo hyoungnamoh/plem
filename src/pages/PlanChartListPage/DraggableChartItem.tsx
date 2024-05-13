@@ -13,6 +13,7 @@ import { PieChart } from 'components/PieChart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MAIN_COLOR } from 'constants/colors';
 import { CHART_RADIUS, STROKE_WIDTH } from './constants';
+import { logEvent } from 'helper/analytics';
 
 const DraggableChartItem = ({
   item,
@@ -48,10 +49,12 @@ const DraggableChartItem = ({
   });
 
   const handleClonePress = (id: number) => {
+    logEvent('PlanChartListPage_cloneChartButtonClick');
     cloneChart({ id });
   };
 
   const handleDeletePress = (id: number) => {
+    logEvent('PlanChartListPage_deleteChartButtonClick');
     deleteChart({ id });
     clearStorageChartCoordinates(item);
   };
