@@ -440,100 +440,105 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     }
   };
   return (
-    <PanGestureHandler onHandlerStateChange={handleGesture}>
-      <KeyboardAwareScrollView style={styles.page} onScrollBeginDrag={Keyboard.dismiss} scrollEnabled={!scrollDisabled}>
-        <Header
-          title={isEdit ? '계획표 수정' : '계획표 추가'}
-          buttonName={isEdit ? '완료' : '등록'}
-          buttonProps={{ onPress: isEdit ? handleUpdatePress : handAddPress }}
-        />
-        <View style={{ paddingHorizontal: 15 }}>
-          <AddChartTable
-            onTextDragStart={handleTextDragStart}
-            onTextDragEnd={handleTextDragEnd}
-            planCoordinates={planCoordinates}
-          />
-          <View style={styles.optionRow}>
-            <View style={styles.underlineButtonWrap}>
-              <PlemText>반복</PlemText>
-              <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
-                <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
-                  {getRepeatOptions()}
-                </PlemText>
-                <ArrowRightSvg style={styles.arrowImage} />
-              </PlemButton>
+    <>
+      <Header
+        title={isEdit ? '계획표 수정' : '계획표 추가'}
+        buttonName={isEdit ? '완료' : '등록'}
+        buttonProps={{ onPress: isEdit ? handleUpdatePress : handAddPress }}
+      />
+      <PanGestureHandler onHandlerStateChange={handleGesture}>
+        <KeyboardAwareScrollView
+          style={styles.page}
+          onScrollBeginDrag={Keyboard.dismiss}
+          scrollEnabled={!scrollDisabled}>
+          <View style={{ paddingHorizontal: 15 }}>
+            <AddChartTable
+              onTextDragStart={handleTextDragStart}
+              onTextDragEnd={handleTextDragEnd}
+              planCoordinates={planCoordinates}
+            />
+            <View style={styles.optionRow}>
+              <View style={styles.underlineButtonWrap}>
+                <PlemText>반복</PlemText>
+                <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
+                  <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
+                    {getRepeatOptions()}
+                  </PlemText>
+                  <ArrowRightSvg style={styles.arrowImage} />
+                </PlemButton>
+              </View>
+              <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
             </View>
-            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-          </View>
-          <View style={styles.optionRow}>
-            <View style={styles.underlineButtonWrap}>
-              <PlemText>계획</PlemText>
-              <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
-                <ArrowRightSvg style={styles.arrowImage} />
-              </PlemButton>
+            <View style={styles.optionRow}>
+              <View style={styles.underlineButtonWrap}>
+                <PlemText>계획</PlemText>
+                <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
+                  <ArrowRightSvg style={styles.arrowImage} />
+                </PlemButton>
+              </View>
+              <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
             </View>
-            <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
-          </View>
-          <View style={styles.planContainer}>
-            {chart.plans.map((plan, planIndex) => {
-              const { startHour, startMin, endHour, endMin } = plan;
-              return (
-                <View key={`plan_${planIndex}}`}>
-                  <PlemButton style={styles.planWrap} onPress={() => onPressModifyPlan({ planIndex })}>
-                    <View style={styles.yellowLineText}>
-                      <PlemText>{plan.name}</PlemText>
-                      <Image source={yellowLineImage} style={styles.yellowLine} />
-                    </View>
-                    <View style={styles.notificationContainer}>
-                      <PlemText>
-                        {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
-                        {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
-                      </PlemText>
-                      {plan.notification === null ? (
-                        <NotificationInactiveSvg style={{ marginLeft: 4 }} />
-                      ) : (
-                        <NotificationActiveSvg style={{ marginLeft: 4 }} />
-                      )}
-                    </View>
-                  </PlemButton>
-                  <View>
-                    {plan.subPlans.map((subPlan, subPlanIndex) => {
-                      return (
-                        <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
-                          <View style={styles.subPlanNameWrap}>
-                            <UncheckedSvg />
-                            <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+            <View style={styles.planContainer}>
+              {chart.plans.map((plan, planIndex) => {
+                const { startHour, startMin, endHour, endMin } = plan;
+                return (
+                  <View key={`plan_${planIndex}}`}>
+                    <PlemButton style={styles.planWrap} onPress={() => onPressModifyPlan({ planIndex })}>
+                      <View style={styles.yellowLineText}>
+                        <PlemText>{plan.name}</PlemText>
+                        <Image source={yellowLineImage} style={styles.yellowLine} />
+                      </View>
+                      <View style={styles.notificationContainer}>
+                        <PlemText>
+                          {`${timePadStart(startHour)}:${timePadStart(startMin)}`} -{' '}
+                          {`${timePadStart(endHour)}:${timePadStart(endMin)}`}
+                        </PlemText>
+                        {plan.notification === null ? (
+                          <NotificationInactiveSvg style={{ marginLeft: 4 }} />
+                        ) : (
+                          <NotificationActiveSvg style={{ marginLeft: 4 }} />
+                        )}
+                      </View>
+                    </PlemButton>
+                    <View>
+                      {plan.subPlans.map((subPlan, subPlanIndex) => {
+                        return (
+                          <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
+                            <View style={styles.subPlanNameWrap}>
+                              <UncheckedSvg />
+                              <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                            </View>
+                            <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
+                              <DeleteRedSvg style={{ marginLeft: 4 }} />
+                            </PlemButton>
                           </View>
-                          <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
-                            <DeleteRedSvg style={{ marginLeft: 4 }} />
-                          </PlemButton>
-                        </View>
-                      );
-                    })}
+                        );
+                      })}
+                    </View>
+                    <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
                   </View>
-                  <SubPlanInput planIndex={planIndex} saveSubPlan={saveSubPlan} />
-                </View>
-              );
-            })}
+                );
+              })}
+            </View>
           </View>
-        </View>
-        <EmptyPlanAlert
-          open={openEmptyPlanAlert}
-          size="small"
-          onCancel={handleEmptyPlanAlertCancel}
-          onConfirm={handleEmptyPlanAlertConfirm}
-          cancelText="계속 작성할게요"
-        />
-        <PopInEditingAlert
-          open={openPopInEditingAlert}
-          size="small"
-          onCancel={handlePopInEditingAlertCancel}
-          onConfirm={handlePopInEditingAlertConfirm}
-          cancelText="나갈게요"
-          confirmText="계속 할게요"
-        />
-      </KeyboardAwareScrollView>
-    </PanGestureHandler>
+          <EmptyPlanAlert
+            open={openEmptyPlanAlert}
+            size="small"
+            onCancel={handleEmptyPlanAlertCancel}
+            onConfirm={handleEmptyPlanAlertConfirm}
+            cancelText="계속 작성할게요"
+          />
+          <PopInEditingAlert
+            open={openPopInEditingAlert}
+            size="small"
+            onCancel={handlePopInEditingAlertCancel}
+            onConfirm={handlePopInEditingAlertConfirm}
+            cancelText="나갈게요"
+            confirmText="계속 할게요"
+          />
+        </KeyboardAwareScrollView>
+      </PanGestureHandler>
+    </>
   );
 };
 
