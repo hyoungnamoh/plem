@@ -9,7 +9,6 @@ import Header from 'components/Header';
 import LabelInput from 'components/LabelInput';
 import OptionsInputRow from 'components/OptionsInputRow';
 import PaletteInputRow from 'components/PaletteInputRow';
-import SwitchInputRow from 'components/SwitchInputRow';
 import { MAIN_COLOR } from 'constants/colors';
 import { addScheduleDefault, addScheduleState } from 'states/addScheduleState';
 import { CalendarTabStackParamList } from 'tabs/CalendarTab';
@@ -26,6 +25,7 @@ import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
+import SwitchInputRow from 'components/SwitchInputRow';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -46,22 +46,14 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
   useEffect(() => {
-    const defaultStartDate = propSchedule ? propSchedule.startDate : route.params.date;
-    const defaultEndDate = propSchedule ? propSchedule.endDate : dayjs(route.params.date).set('hour', 1).toISOString();
-    // getCategoryList();
-
     if (propSchedule) {
-      setSchedule({
-        name: propSchedule.name,
-        category: propSchedule.category,
-        startDate: defaultStartDate,
-        endDate: defaultEndDate,
-        notification: propSchedule.notification,
-        repeats: propSchedule.repeats,
-        repeatEndDate: propSchedule.repeatEndDate,
-      });
+      setSchedule({ ...propSchedule });
     } else {
-      setSchedule({ ...schedule, startDate: defaultStartDate, endDate: defaultEndDate });
+      setSchedule({
+        ...schedule,
+        startDate: route.params.date,
+        endDate: dayjs(route.params.date).set('hour', 1).toISOString(),
+      });
     }
 
     return () => setSchedule(addScheduleDefault);
@@ -72,9 +64,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       if (responseData.status === 200) {
         navigation.pop();
         queryClient.invalidateQueries('getScheduleList');
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('useAddSchedule Error: ', responseData);
       }
     },
   });
@@ -84,9 +73,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       if (responseData.status === 200) {
         navigation.pop();
         queryClient.invalidateQueries('getScheduleList');
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('useDeleteSchedule Error: ', responseData);
       }
     },
   });
@@ -96,9 +82,6 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
       if (responseData.status === 200) {
         navigation.pop();
         queryClient.invalidateQueries('getScheduleList');
-      } else {
-        Alert.alert('알 수 없는 오류가 발생했어요 ;ㅂ;');
-        console.info('useAddSchedule Error: ', responseData);
       }
     },
   });
@@ -208,15 +191,15 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
 
   return (
     <>
+      <Header
+        title="일정 추가"
+        buttonName={propSchedule ? '삭제' : ''}
+        buttonProps={propSchedule ? { onPress: handleScheduleDelete } : null}
+        buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
+      />
       <CustomScrollView contentContainerStyle={styles.scroll}>
         <TouchableWithoutFeedback onPress={() => setOpenPalette(false)}>
           <View style={styles.page}>
-            <Header
-              title="일정 추가"
-              buttonName={propSchedule ? '삭제' : ''}
-              buttonProps={propSchedule ? { onPress: handleScheduleDelete } : null}
-              buttonNameProps={propSchedule ? { style: { color: '#E40C0C' } } : null}
-            />
             <View style={styles.content}>
               <LabelInput
                 label={'일정명'}
