@@ -16,6 +16,7 @@ import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
 import UnderlineSvg from 'assets/images/underline.svg';
 import { useSetRecoilState } from 'recoil';
 import { hideBottomTabBarState } from 'states/hideBottomTabBarState';
+import { logEvent } from 'helper/analytics';
 
 type PlanChartListPageProps = NativeStackScreenProps<PlanChartListTabStackParamList, 'PlanChartListPage'>;
 
@@ -39,6 +40,7 @@ const PlanChartListPage = ({ navigation }: PlanChartListPageProps) => {
   };
 
   const handleEdit = () => {
+    logEvent('PlanChartListPage_editChartListButtonClick');
     setIsEditing(true);
     setHideBottomTabBar(true);
   };

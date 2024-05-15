@@ -162,13 +162,15 @@ function AppInner({ routeName }: { routeName: string }) {
       SplashScreen.hide();
     }
 
-    const updateInfo = await checkNeedUpdate(info);
-    if (updateInfo?.isNeeded) {
-      setNeedAppVersionUpdate(true);
-      showUpdateAlert(info.storeUrl);
-    } else {
-      setNeedAppVersionUpdate(false);
-      checkCodePush();
+    if (!__DEV__) {
+      const updateInfo = await checkNeedUpdate(info);
+      if (updateInfo?.isNeeded) {
+        setNeedAppVersionUpdate(true);
+        showUpdateAlert(info.storeUrl);
+      } else {
+        setNeedAppVersionUpdate(false);
+        checkCodePush();
+      }
     }
   };
 

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
-import { Dispatch, SetStateAction, memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import dayjs from 'dayjs';
 import { selectedCalendarDateState } from 'states/selectedCalendarDateState';
@@ -10,6 +10,7 @@ import { SCREEN_WIDTH } from 'constants/etc';
 import ScheduleList from './ScheduleList';
 import PlemButton from 'components/Atoms/PlemButton';
 import { useScheduleList } from 'hooks/useScheduleList';
+import { logEvent } from 'helper/analytics';
 
 const Day = ({
   isToday,
@@ -18,7 +19,6 @@ const Day = ({
   year,
   month,
   isSelected,
-  setLocalSelectedDate,
 }: {
   isToday: boolean;
   firstDateIndex: number;
@@ -26,7 +26,6 @@ const Day = ({
   year: number;
   month: number;
   isSelected: boolean;
-  setLocalSelectedDate: Dispatch<SetStateAction<number>>;
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
@@ -34,33 +33,30 @@ const Day = ({
 
   const getDateColor = useCallback(() => {
     const isHoliday = allScheduleList.find((schedule) => schedule.type === 'holiday');
+    const isSunday = (date + firstDateIndex) % 7 === 1;
 
-    if (isHoliday) {
-      return '#E40C0C';
-    }
     if (isToday) {
       return '#fff';
     }
-    if ((date + firstDateIndex) % 7 === 1) {
+    if (isHoliday || isSunday) {
       return '#E40C0C';
     }
 
     return '#000';
   }, [isToday, date, firstDateIndex, allScheduleList.length]);
 
-  const onPressDate = () => {
+  const onPressDate = useCallback(() => {
     const selectedDate = dayjs().set('year', year).set('month', month).set('date', date).startOf('date');
+    logEvent('CalendarPage_onPressDate');
 
     if (isSelected) {
       setOpenScheduleModal(false);
       setSelectedDate(null);
-      setLocalSelectedDate(0);
     } else {
       setOpenScheduleModal(true);
       setSelectedDate(selectedDate);
-      setLocalSelectedDate(date);
     }
-  };
+  }, [year, month, date, isSelected]);
 
   return (
     <PlemButton key={date} onPress={onPressDate} style={styles.dateCell}>

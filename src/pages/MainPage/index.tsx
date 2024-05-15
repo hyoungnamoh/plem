@@ -27,6 +27,7 @@ import TodayScheduleBox from 'components/TodayScheduleBox';
 import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { Plan } from 'types/chart';
+import { logEvent } from 'helper/analytics';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -84,8 +85,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
     await AsyncStorage.setItem('planCheckedList', JSON.stringify(planCheckList));
   };
 
-  const handleAddChartPress = () => {
+  const handleAddChartPress = async () => {
     if (isMaximumChartList) {
+      logEvent('MainPage_maximumChartAlertOpen');
       setOpenMaximumAlert(true);
       return;
     }
@@ -131,6 +133,7 @@ const MainPage = ({ navigation }: MainPageProps) => {
   };
 
   const handleEmptySubPlanPress = () => {
+    logEvent('MainPage_addSubPlan');
     navigation.navigate('AddChartPage', { chart: todayPlanChart?.data || null });
   };
 

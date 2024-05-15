@@ -533,11 +533,11 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.6.1):
     - React-Core
-  - RNFBAnalytics (19.2.2):
+  - RNFBAnalytics (18.9.0):
     - Firebase/Analytics (= 10.19.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (19.2.2):
+  - RNFBApp (18.9.0):
     - Firebase/CoreOnly (= 10.19.0)
     - React-Core
   - RNFBMessaging (18.7.3):
@@ -910,8 +910,8 @@ SPEC CHECKSUMS:
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
-  RNFBAnalytics: 18097a72f881f0a3050643f1ee7bffece7aaba4e
-  RNFBApp: becc8d10a8756c018ead449841c812eba7363b00
+  RNFBAnalytics: 3dedd67a10bc065f18feb2bdca46d5bff3cb26bb
+  RNFBApp: e780fc76f19c4bd766f31efd26c1554d3a8fac73
   RNFBMessaging: e52a76a97ec5ff75e186c150e2bfab86c9e655d1
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39

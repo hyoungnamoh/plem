@@ -5,6 +5,7 @@ import PlemText from 'components/Atoms/PlemText';
 import Draggable from 'components/Draggable/Draggable';
 import { PieChartMainItem, PieChartMainProps } from './types';
 import { MAIN_COLOR } from 'constants/colors';
+import uuid from 'react-uuid';
 
 export const PieChartMain = (props: PieChartMainProps) => {
   const { isThreeD } = props;
@@ -141,7 +142,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
             return (
               <Path
                 strokeOpacity={item.isEmpty ? 0.2 : 1}
-                key={index + 'a'}
+                key={`path-${uuid()}`}
                 d={`M ${cx + (item.shiftX || 0)} ${cy + (item.shiftY || 0)} L ${sx} ${sy} A ${radius} ${radius} 0 ${
                   semiCircle ? 0 : data[index].value > total / 2 ? 1 : 0
                 } 1 ${ax} ${ay} L ${cx + (item.shiftX || 0)} ${cy + (item.shiftY || 0)}`}
@@ -221,6 +222,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
           }
           return (
             <Draggable
+              key={`draggable-${index}`}
               id={item.id}
               onDragEnd={props.onTextDragEnd}
               onDragStart={props.onTextDragStart}

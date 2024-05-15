@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 import { categoryListState } from 'states/categoryListState';
 import { useRecoilValue } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
-import { SCREEN_WIDTH } from 'constants/etc';
 import { memo } from 'react';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import { Holiday, Schedule } from 'types/calendar';
@@ -17,15 +16,18 @@ const ScheduleList = ({ allScheduleList }: { allScheduleList: (Schedule | Holida
         return (
           <View key={schedule.id} style={styles.scheduleRow}>
             {!isHoliday && (
-              <PaletteSvg
-                size="small"
-                color={
-                  categoryList.find((category) => category.value === schedule.category)?.color || categoryList[0].color
-                }
-              />
+              <View style={{ height: 14, justifyContent: 'center' }}>
+                <PaletteSvg
+                  size="small"
+                  color={
+                    categoryList.find((category) => category.value === schedule.category)?.color ||
+                    categoryList[0].color
+                  }
+                />
+              </View>
             )}
             <PlemText style={[styles.scheduleName, { color: isHoliday ? '#E40C0C' : '#000' }]}>
-              {schedule.name.slice(0, 5)}
+              {schedule.name}
             </PlemText>
           </View>
         );
@@ -41,23 +43,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dateCell: {
-    width: Math.floor(SCREEN_WIDTH / 7),
-    alignItems: 'center',
-    minHeight: 64,
-  },
   scheduleRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     width: '100%',
     marginTop: 2,
+    paddingHorizontal: 2,
   },
   scheduleSticker: {
     width: 6,
     height: 6,
   },
   scheduleName: {
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 2,
   },
   svg: {
