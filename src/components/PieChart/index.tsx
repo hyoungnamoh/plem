@@ -22,7 +22,7 @@ export const PieChart = (props: PieChartProps) => {
         return;
       }
       canvasRefCurrent.measure((_, __, width, height, pageX, pageY) => {
-        setDragAreaInfo({ minX: pageX, minY: pageY, maxX: pageX + width * 2, maxY: pageY + height });
+        setDragAreaInfo({ minX: pageX, minY: pageY, maxX: pageX + width, maxY: pageY + height });
       });
     }, 1);
   }, [canvasRef.current, props.data.length]);
