@@ -25,7 +25,6 @@ import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
-import SwitchInputRow from 'components/SwitchInputRow';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -219,9 +218,9 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   onClose={() => setOpenPalette(false)}
                 />
               </View>
-              <View style={{ marginTop: 32 }}>
+              {/* <View style={{ marginTop: 32 }}>
                 <SwitchInputRow label={'하루 종일'} value={isAllDay} onPress={() => setIsAllDay(!isAllDay)} />
-              </View>
+              </View> */}
               <View>
                 {isAllDay ? (
                   <>
