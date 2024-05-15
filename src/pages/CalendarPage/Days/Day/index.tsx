@@ -29,18 +29,16 @@ const Day = ({
 }) => {
   const setSelectedDate = useSetRecoilState(selectedCalendarDateState);
   const setOpenScheduleModal = useSetRecoilState(openScheduleModalState);
-  const { allScheduleList } = useScheduleList({ year, month, date, test: 3 });
+  const { allScheduleList } = useScheduleList({ year, month, date });
 
   const getDateColor = useCallback(() => {
     const isHoliday = allScheduleList.find((schedule) => schedule.type === 'holiday');
+    const isSunday = (date + firstDateIndex) % 7 === 1;
 
-    if (isHoliday) {
-      return '#E40C0C';
-    }
     if (isToday) {
       return '#fff';
     }
-    if ((date + firstDateIndex) % 7 === 1) {
+    if (isHoliday || isSunday) {
       return '#E40C0C';
     }
 
