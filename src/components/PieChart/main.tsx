@@ -222,7 +222,7 @@ export const PieChartMain = (props: PieChartMainProps) => {
           }
           return (
             <Draggable
-              key={`draggable-${uuid()}`}
+              key={`draggable-${index}`}
               id={item.id}
               onDragEnd={props.onTextDragEnd}
               onDragStart={props.onTextDragStart}
