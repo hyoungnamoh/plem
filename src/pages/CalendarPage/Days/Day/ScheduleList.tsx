@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 import { categoryListState } from 'states/categoryListState';
 import { useRecoilValue } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
-import { SCREEN_WIDTH } from 'constants/etc';
 import { memo } from 'react';
 import PaletteSvg from 'components/PaletteSvg/PaletteSvg';
 import { Holiday, Schedule } from 'types/calendar';
@@ -17,7 +16,7 @@ const ScheduleList = ({ allScheduleList }: { allScheduleList: (Schedule | Holida
         return (
           <View key={schedule.id} style={styles.scheduleRow}>
             {!isHoliday && (
-              <View style={{ height: 12, justifyContent: 'center' }}>
+              <View style={{ height: 14, justifyContent: 'center' }}>
                 <PaletteSvg
                   size="small"
                   color={
@@ -44,11 +43,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dateCell: {
-    width: Math.floor(SCREEN_WIDTH / 7),
-    alignItems: 'center',
-    minHeight: 64,
-  },
   scheduleRow: {
     flexDirection: 'row',
     width: '100%',
@@ -60,7 +54,7 @@ const styles = StyleSheet.create({
     height: 6,
   },
   scheduleName: {
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 2,
   },
   svg: {
