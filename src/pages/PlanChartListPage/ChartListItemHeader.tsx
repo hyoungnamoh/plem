@@ -11,10 +11,12 @@ import PlemButton from 'components/Atoms/PlemButton';
 import { repeatOptionList } from 'pages/RepeatSettingPage';
 import { PieChart } from 'components/PieChart';
 import { CHART_RADIUS, STROKE_WIDTH } from './constants';
+import NoticeSvg from 'assets/images/notice_16x16.svg';
 
 const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: boolean }) => {
   const navigation = useNavigation<NavigationProp<PlanChartListTabStackParamList>>();
   const { pieChartData, initialAngle } = usePieChart({ chart, hideName: true });
+  const isNoRepeat = chart.repeats.includes(null);
 
   const getRepeatOptions = (repeats: Repeats) => {
     if (repeats.includes(null)) {
@@ -66,7 +68,10 @@ const ChartListItemHeader = ({ chart, isActive }: { chart: PlanChart; isActive: 
         </View>
         <View style={styles.headerInfo}>
           <PlemText>{chart.name}</PlemText>
-          <PlemText style={styles.repeats}>{getRepeatOptions(chart.repeats)}</PlemText>
+          <View style={styles.repeatsWrapper}>
+            <PlemText style={styles.repeats}>{getRepeatOptions(chart.repeats)}</PlemText>
+            {isNoRepeat && <NoticeSvg />}
+          </View>
           <PlemText style={styles.plans} numberOfLines={1}>
             {isActive ? '' : chart.plans.map((plan) => plan.name).join(' / ')}
           </PlemText>
@@ -95,11 +100,16 @@ const styles = StyleSheet.create({
   },
   repeats: {
     fontSize: 16,
-    marginTop: 4,
+    marginRight: 4,
   },
   plans: {
     fontSize: 14,
     color: '#888',
+    marginTop: 4,
+  },
+  repeatsWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 4,
   },
 });

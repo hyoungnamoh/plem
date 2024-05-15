@@ -17,6 +17,7 @@ import { MainTabStackParamList } from 'tabs/MainTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import NotificationActiveSvg from 'assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from 'assets/images/notification_inactive_32x32.svg';
+import NoticeSvg from 'assets/images/notice_16x16.svg';
 import ArrowRightSvg from 'assets/images/arrow_right_32x32.svg';
 import UncheckedSvg from 'assets/images/uncheckedbox_24x24.svg';
 import DeleteRedSvg from 'assets/images/delete_red_24x24.svg';
@@ -60,6 +61,8 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const swipeStartX = useRef<number | null>();
   const unsubscribe = useRef<() => void>();
+
+  const isNoRepeat = chart.repeats.includes(null);
 
   // AsyncStorage.removeItem('planCoordinates');
   const { isLoading: addChartLoading, mutate: addChart } = useAddChart({
@@ -286,10 +289,12 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const getRepeatOptions = () => {
-    if (chart.repeats.includes(null)) {
+    const isSpecificRepeat = chart.repeats.includes(7);
+
+    if (isNoRepeat) {
       return '안 함';
     }
-    if (chart.repeats.includes(7) && chart.repeatDates) {
+    if (isSpecificRepeat && chart.repeatDates) {
       return chart.repeatDates.map((date) => `${date}일`).join(', ');
     }
 
@@ -439,6 +444,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
       AsyncStorage.setItem('planCoordinates', JSON.stringify(newCoords));
     }
   };
+
   return (
     <>
       <Header
@@ -468,6 +474,14 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                 </PlemButton>
               </View>
               <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.underline} />
+              {isNoRepeat && (
+                <View style={styles.noRepeatNotice}>
+                  <NoticeSvg />
+                  <PlemText style={styles.noRepeatNoticeText}>
+                    반복일을 설정하지 않으면 계획표가 노출되지 않아요!
+                  </PlemText>
+                </View>
+              )}
             </View>
             <View style={styles.optionRow}>
               <View style={styles.underlineButtonWrap}>
@@ -610,6 +624,15 @@ const styles = StyleSheet.create({
   subPlanNameWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  noRepeatNotice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  noRepeatNoticeText: {
+    marginLeft: 4,
+    fontSize: 16,
   },
 });
 
