@@ -24,7 +24,7 @@ export const PieChart = (props: PieChartProps) => {
       canvasRefCurrent.measure((_, __, width, height, pageX, pageY) => {
         setDragAreaInfo({ minX: pageX, minY: pageY, maxX: pageX + width, maxY: pageY + height });
       });
-    }, 1);
+    }, 100);
   }, [canvasRef.current, props.data.length]);
 
   let startAngle = props.initialAngle || (props.semiCircle ? -pi : 0);
