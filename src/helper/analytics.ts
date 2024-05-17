@@ -1,4 +1,4 @@
-import { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
+import analytics, { FirebaseAnalyticsTypes } from '@react-native-firebase/analytics';
 
 export const logEvent = (
   name: string,
@@ -8,12 +8,12 @@ export const logEvent = (
   if (__DEV__) {
     return;
   }
-  logEvent(name, params, options);
+  analytics().logEvent(name, params, options);
 };
 
 export const logScreenView = (params: FirebaseAnalyticsTypes.ScreenViewParameters) => {
   if (__DEV__) {
     return;
   }
-  logScreenView(params);
+  analytics().logScreenView(params);
 };
