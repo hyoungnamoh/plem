@@ -63,21 +63,21 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
   const onPressRepeatOption = (option: RepeatOptionItemValue) => {
     if (option === null) {
-      logEvent('RepeatSettingPage_onPressRepeatOption', { option: '안 함 선택' });
+      logEvent('RepeatSettingPage_repeatOption', { option: '안 함 선택' });
       setRepeatOptions([null]);
       return;
     }
     if (option === 7) {
       setRepeatOptions([7]);
       navigation.navigate('SelectRepeatDatePage');
-      logEvent('RepeatSettingPage_onPressRepeatOption', { option: '날짜 지정 선택' });
+      logEvent('RepeatSettingPage_repeatOption', { option: '날짜 지정 선택' });
       return;
     }
     if (repeatOptions.includes(option)) {
       const copiedOptions = [...repeatOptions];
       const index = copiedOptions.findIndex((e) => e === option);
       copiedOptions.splice(index, 1);
-      logEvent('RepeatSettingPage_onPressRepeatOption', {
+      logEvent('RepeatSettingPage_repeatOption', {
         option: `${NUMBER_TO_DAY_KOR[option]} 선택 해제`,
       });
       if (copiedOptions.length === 0) {
@@ -88,7 +88,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
       return;
     }
     setRepeatOptions(repeatOptions.concat([option]).filter((e) => !(e === 7 || e === null)));
-    logEvent('RepeatSettingPage_onPressRepeatOption', {
+    logEvent('RepeatSettingPage_repeatOption', {
       option: `${NUMBER_TO_DAY_KOR[option]} 선택`,
     });
   };
