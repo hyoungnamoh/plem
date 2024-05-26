@@ -108,7 +108,7 @@ const RepeatSettingPage = ({ navigation }: RepeatSettingPageProps) => {
 
   return (
     <View style={styles.page}>
-      <Header title="반복" />
+      <Header title="반복 설정" />
       <View style={styles.listWrap}>
         {repeatOptionList.map((repeat) => {
           return (

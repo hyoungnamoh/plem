@@ -465,7 +465,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
             />
             <View style={styles.optionRow}>
               <View style={styles.underlineButtonWrap}>
-                <PlemText>반복</PlemText>
+                <PlemText>반복 설정</PlemText>
                 <PlemButton style={styles.underlineButton} onPress={onPressRepeatSetting}>
                   <PlemText numberOfLines={1} style={{ flex: 1, textAlign: 'right' }}>
                     {getRepeatOptions()}
@@ -485,7 +485,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
             </View>
             <View style={styles.optionRow}>
               <View style={styles.underlineButtonWrap}>
-                <PlemText>계획</PlemText>
+                <PlemText>계획 추가</PlemText>
                 <PlemButton style={styles.underlineButton} onPress={onPressAddPlan}>
                   <ArrowRightSvg style={styles.arrowImage} />
                 </PlemButton>

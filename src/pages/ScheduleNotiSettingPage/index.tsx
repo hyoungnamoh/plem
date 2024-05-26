@@ -40,7 +40,7 @@ const ScheduleNotiSettingPage = ({ navigation }: SetScheduleNotificationPageProp
 
   return (
     <View style={styles.page}>
-      <Header title="알림" />
+      <Header title="알림 설정" />
       <View style={styles.listWrap}>
         {notiOptiosList.map((option) => {
           return (

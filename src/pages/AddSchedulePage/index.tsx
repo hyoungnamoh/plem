@@ -334,14 +334,14 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                 )}
                 <View style={{ marginTop: 32 }}>
                   <OptionsInputRow
-                    label={'알림'}
+                    label={'알림 설정'}
                     value={notiOptiosList.find((e) => e.key === schedule.notification)?.label}
                     onPress={() => navigation.navigate('ScheduleNotiSettingPage')}
                   />
                 </View>
                 <View style={{ marginTop: 32 }}>
                   <OptionsInputRow
-                    label={'반복'}
+                    label={'반복 설정'}
                     value={getRepeatOptionValue()}
                     onPress={() => navigation.navigate('ScheduleRepeatSettingPage')}
                   />
