@@ -231,8 +231,10 @@ export const PieChartMain = (props: PieChartMainProps) => {
               x={item.x}
               y={item.y}
               dragAreaInfo={props.dragAreaInfo}>
-              <View style={{ borderRadius: 4, padding: item.text ? 2 : 0, backgroundColor: MAIN_COLOR }}>
-                <PlemText style={{ fontSize: 14, paddingTop: 3 }}>{item.text}</PlemText>
+              <View style={{ padding: item.text ? 2 : 0, backgroundColor: 'transparent' }}>
+                <View style={{ borderRadius: 4, backgroundColor: MAIN_COLOR, padding: item.text ? 1 : 0 }}>
+                  <PlemText style={{ fontSize: 14 }}>{item.text}</PlemText>
+                </View>
               </View>
             </Draggable>
           );
