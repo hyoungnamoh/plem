@@ -1,6 +1,6 @@
 {
   "name": "plem",
-  "version": "1.5.2",
+  "version": "1.5.4",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
