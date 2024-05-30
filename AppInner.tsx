@@ -48,6 +48,9 @@ import { keyboardHeightState } from 'states/keyboardHeightState';
 import { bottomNochHeightState } from 'states/bottomNochHeightState';
 import { checkNeedUpdate } from 'helper/checkNeedUpdate';
 import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
+import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
+import dayjs from 'dayjs';
+import { DAY_TO_MS } from 'constants/times';
 
 configureNotification();
 
@@ -74,6 +77,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const setNotificationInfo = useSetRecoilState(notificationInfoState);
   const [appInfo, setAppInfo] = useRecoilState(appInfoState);
   const [globalToast, setGlobalToast] = useRecoilState(globalToastState);
+  const setCurrentTimeDegree = useSetRecoilState(currentTimeDegreeState);
   const setCategoryList = useSetRecoilState(categoryListState);
   const bottomSafeArea = useRecoilValue(bottomSafeAreaState);
   const disableLoading = useRecoilValue(disableLoadingState);
@@ -123,13 +127,15 @@ function AppInner({ routeName }: { routeName: string }) {
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     // 포어그라운드 진입
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      setCurrentTimeDegree((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
     }
     // 백그라운드로 이동
     if (
       needAppVersionUpdate &&
       appInfo.storeUrl &&
       appState.current.match(/inactive|active/) &&
-      nextAppState === 'background'
+      nextAppState === 'background' &&
+      !__DEV__
     ) {
       showUpdateAlert(appInfo.storeUrl);
     }

@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import { AddPlan, AddPlanChart, EmptyPlan, Plan, PlanChart } from 'types/chart';
 import { PieChartItem } from 'components/PieChart/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRecoilState } from 'recoil';
+import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
 
 export const usePieChart = ({
   chart,
@@ -18,9 +20,8 @@ export const usePieChart = ({
   coordinates?: { [key: string]: { x: number; y: number } };
 }) => {
   const [pieChartData, setChartData] = useState<PieChartItem[]>([]);
-  const [currentTimeDegree, setCurrentTimeDegree] = useState(
-    renderCurrentTime ? (dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360 : 0
-  );
+  const [currentTimeDegree, setCurrentTimeDegree] = useRecoilState(currentTimeDegreeState);
+
   const initialAngle =
     chart && chart.plans.length > 0
       ? (dayjs()

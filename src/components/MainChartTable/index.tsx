@@ -34,8 +34,6 @@ const MainChartTable = ({
     renderCurrentTime: !!chart,
   });
 
-  useEffect(() => {}, []);
-
   const handleChartPress = () => {
     if (chart) {
       navigation.navigate('AddChartPage', { chart });

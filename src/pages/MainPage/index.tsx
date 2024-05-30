@@ -28,6 +28,8 @@ import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useG
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { Plan } from 'types/chart';
 import { logEvent } from 'helper/analytics';
+import { useRecoilValue } from 'recoil';
+import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -36,14 +38,15 @@ const yellowLineImage = require('assets/images/yellow_line.png');
 const MainPage = ({ navigation }: MainPageProps) => {
   const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
   const queryClient = useQueryClient();
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
-  const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
   const { data: todayPlanChart } = useGetTodayPlanChart();
   const { data: chartListCount } = useGetChartListCount();
   const { data: todayScheduleList } = useGetTodayScheduleList({ date: dayjs().format('YYYY-MM-DD') });
   const { isConfirmedSchedule } = useScheduleConfirmDate();
+  const currentTimeDegree = useRecoilValue(currentTimeDegreeState);
   const [doItNowPlanIndex, setDoItNowPlanIndex] = useState(-1);
+  const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
+  const [checkedList, setCheckedList] = useState<string[]>([]);
+  const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
   const [doItNowPlan, setDoItNowPlan] = useState<Plan | null>(null);
   const isMaximumChartList = !!(chartListCount && chartListCount.data.count >= NUM_OF_MAXIMUM_CHART);
 
@@ -51,16 +54,32 @@ const MainPage = ({ navigation }: MainPageProps) => {
     setCheckedListToStorageData();
   }, []);
 
+  useEffect(() => {
+    updateChart();
+  }, [currentTimeDegree]);
+
   useFocusEffect(() => {
+    updateChart();
+  });
+
+  const updateChart = () => {
     if (currentDate !== dayjs().get('date')) {
-      queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
-      queryClient.invalidateQueries(TODAY_SCHEDULE_LIST);
-      setCurrentDate(dayjs().get('date'));
+      updateTodayChart();
     }
+    updateDoItNowPlan();
+  };
+
+  const updateDoItNowPlan = () => {
     const { nowPlan, nowPlanIndex } = getDoItNowPlan();
     setDoItNowPlanIndex(nowPlanIndex);
     setDoItNowPlan(nowPlan);
-  });
+  };
+
+  const updateTodayChart = () => {
+    queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
+    queryClient.invalidateQueries(TODAY_SCHEDULE_LIST);
+    setCurrentDate(dayjs().get('date'));
+  };
 
   const setCheckedListToStorageData = async () => {
     const item = await AsyncStorage.getItem('planCheckedList');
