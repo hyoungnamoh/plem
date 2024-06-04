@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import CloseSVG from 'assets/images/header_close_40x40.svg';
+import CloseSVG from 'assets/images/modal_close_24x24.svg';
 import UnderlineButton from 'components/UnderlineButton';
 import PlemText from 'components/Atoms/PlemText';
 import AddScheduleModalSvg from 'assets/images/add_schedule_modal.svg';
@@ -72,28 +72,39 @@ export const AddScheduleModal = ({ open, targetDate, close, onPressAddSchedule }
             {allScheduleList.length > 0 ? (
               allScheduleList.map((schedule) => {
                 const isHoliday = schedule.type === 'holiday';
+                const isSchedule = schedule.type === 'schedule';
+
                 return (
                   <PlemButton
                     key={schedule.id}
                     style={styles.scheduleRow}
                     onPress={() => handleScheduleClick(schedule)}>
-                    {schedule.type === 'schedule' && (
-                      <PaletteSvg
-                        size="medium"
-                        color={
-                          categoryList.find((category) => category.value === schedule.category)?.color ||
-                          categoryList[0].color
-                        }
-                      />
+                    {isSchedule && (
+                      <View style={styles.paletteWrap}>
+                        <PaletteSvg
+                          size="medium"
+                          color={
+                            categoryList.find((category) => category.value === schedule.category)?.color ||
+                            categoryList[0].color
+                          }
+                        />
+                      </View>
                     )}
-                    <PlemText style={[styles.scheduleText, isHoliday && { color: '#E40C0C', marginLeft: 0 }]}>
-                      {schedule.name}
-                    </PlemText>
+                    <View style={[styles.scheduleWrap, isHoliday && { marginLeft: 0 }]}>
+                      <View style={styles.scheduleNameWrap}>
+                        <PlemText style={isHoliday && { color: '#E40C0C' }}>{schedule.name}</PlemText>
+                      </View>
+                      {isSchedule && schedule.memo && (
+                        <PlemText numberOfLines={1} style={styles.memo}>
+                          {schedule.memo}
+                        </PlemText>
+                      )}
+                    </View>
                   </PlemButton>
                 );
               })
             ) : (
-              <View style={styles.scheduleRow}>
+              <View style={styles.emptySchedule}>
                 <PlemText>등록된 일정이 없습니다.</PlemText>
               </View>
             )}
@@ -119,26 +130,43 @@ const styles = StyleSheet.create({
     height: 210,
   },
   modalContent: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     height: '100%',
+    width: '100%',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 10,
+    height: 40,
   },
   scheduleRow: {
     flexDirection: 'row',
-    height: 40,
-    alignItems: 'center',
   },
   addScheduleButton: {
     alignItems: 'center',
     height: 40,
     justifyContent: 'center',
   },
-  scheduleText: {
+  scheduleWrap: {
     marginLeft: 8,
+    width: '100%',
+  },
+  paletteWrap: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  scheduleNameWrap: {
+    justifyContent: 'center',
+    height: 40,
+  },
+  emptySchedule: {
+    justifyContent: 'center',
+    height: 40,
+  },
+  memo: {
+    fontSize: 16,
+    width: '90%',
   },
 });

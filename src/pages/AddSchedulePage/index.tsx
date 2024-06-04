@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback, Alert, TextInput } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import PlemText from 'components/Atoms/PlemText';
 import BottomButton from 'components/BottomButton';
@@ -25,6 +25,8 @@ import ArrowDownSvg from 'assets/images/arrow_down_32x32.svg';
 import CustomScrollView from 'components/CustomScrollView/CustomScrollView';
 import UnderlineSvg from 'assets/images/underline.svg';
 import PlemButton from 'components/Atoms/PlemButton';
+import WhiteBoard from 'assets/images/white_board_345x140.svg';
+import PlemTextInput from 'components/Atoms/PlemTextInput';
 
 type CalendarPageProps = NativeStackScreenProps<CalendarTabStackParamList, 'AddSchedulePage'>;
 
@@ -43,6 +45,8 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
+
+  const memoInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (propSchedule) {
@@ -177,8 +181,12 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
     setOpenEndTimePicker(false);
   };
 
-  const handleNameChange = (value: string) => {
+  const handleScheduleName = (value: string) => {
     setSchedule({ ...schedule, name: value });
+  };
+
+  const handleScheduleMemo = (value: string) => {
+    setSchedule({ ...schedule, memo: value });
   };
 
   const getRepeatOptionValue = () => {
@@ -203,7 +211,7 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
               <LabelInput
                 label={'일정명'}
                 value={schedule.name}
-                onChangeText={handleNameChange}
+                onChangeText={handleScheduleName}
                 maxLength={14}
                 placeholder={'최대 14자리'}
               />
@@ -347,6 +355,19 @@ const AddSchedulePage = ({ navigation, route }: CalendarPageProps) => {
                   />
                 </View>
               </View>
+              <PlemButton onPress={() => memoInputRef.current?.focus()} style={{ marginTop: 32 }}>
+                <WhiteBoard preserveAspectRatio="none" width={'100%'} height={140} />
+                <View style={{ position: 'absolute', padding: 12, height: 140 }}>
+                  <PlemTextInput
+                    ref={memoInputRef}
+                    value={schedule.memo}
+                    onChangeText={handleScheduleMemo}
+                    placeholder="메모"
+                    multiline={true}
+                    maxLength={200}
+                  />
+                </View>
+              </PlemButton>
             </View>
             <DateTimePickerModal
               isVisible={openStartTimePicker}

@@ -13,6 +13,7 @@ export type Schedule = {
   updatedAt: Date | null;
   removedAt: Date | null;
   repeatEndDate: string | null;
+  memo: string;
   // customRepeat: { unit: RepeatUnit; value: number[] } | RepeatSpecificCondition;
 };
 
