@@ -51,12 +51,15 @@ const Draggable = ({
       pan.setValue({ x: 0, y: 0 });
     },
     onPanResponderEnd: (event, gesture) => {
-      if (isOutside(event)) {
+      if (typeof onDragEnd !== 'function' || !id) {
         return;
       }
-      if (typeof onDragEnd === 'function' && id) {
-        onDragEnd({ x: coordX + gesture.dx, y: coordY + gesture.dy, id });
+      if (isOutside(event)) {
+        onDragEnd({ x: coordX, y: coordY, id });
+        return;
       }
+
+      onDragEnd({ x: coordX + gesture.dx, y: coordY + gesture.dy, id });
     },
     onPanResponderMove: Animated.event(
       [
