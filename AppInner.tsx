@@ -29,7 +29,6 @@ import { disableLoadingState } from './src/states/disableLoadingState';
 import { LoggedInTabParamList, LoggedOutStackParamList } from './src/types/appInner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEFAULT_CATEGORY_LIST, categoryListState } from './src/states/categoryListState';
-import GuidePage from './src/pages/GuidePage/GuidePage';
 import { lastAccessDateState } from './src/states/lastAccessDateState';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { configureNotification } from './src/utils/configureNotification';
@@ -51,6 +50,7 @@ import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
 import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
 import dayjs from 'dayjs';
 import { DAY_TO_MS } from 'constants/times';
+import GuidePage from 'pages/GuidePage/GuidePage';
 
 configureNotification();
 
@@ -159,12 +159,13 @@ function AppInner({ routeName }: { routeName: string }) {
     const info = await getAppInfo();
     const endTime = Date.now();
     const delayTime = 1000 - (endTime - startTime);
-
     if (delayTime > 0) {
       setTimeout(() => {
+        console.log('hi1');
         SplashScreen.hide();
       }, delayTime);
     } else {
+      console.log('hi2');
       SplashScreen.hide();
     }
 
