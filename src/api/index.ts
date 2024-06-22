@@ -1,8 +1,7 @@
 import axios from 'axios';
-import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-export const baseUrl = Config.BASE_URL;
+export const baseUrl = 'http://192.168.219.107:3030';
 
 const apiRequest = axios.create({
   baseURL: baseUrl,
