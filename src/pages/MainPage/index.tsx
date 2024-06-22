@@ -26,10 +26,14 @@ import { LoggedInTabParamList } from 'types/appInner';
 import TodayScheduleBox from 'components/TodayScheduleBox';
 import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
-import { Plan } from 'types/chart';
+import { SubPlan } from 'types/chart';
 import { logEvent } from 'helper/analytics';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
+import SharedDefaults from 'widgets/SharedDefaults';
+import { useCheckSubPlan } from 'hooks/mutations/useCheckSubPlan';
+import { disableLoadingState } from 'states/disableLoadingState';
+import { GET_DO_IT_NOW_QUERY_KEY, useGetDoItNow } from 'hooks/queries/useGetDoItNow';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -37,22 +41,19 @@ const yellowLineImage = require('assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
+  const currentTimeDegree = useRecoilValue(currentTimeDegreeState);
+  const setDisableLoading = useSetRecoilState(disableLoadingState);
+  const { isConfirmedSchedule } = useScheduleConfirmDate();
   const queryClient = useQueryClient();
   const { data: todayPlanChart } = useGetTodayPlanChart();
   const { data: chartListCount } = useGetChartListCount();
   const { data: todayScheduleList } = useGetTodayScheduleList({ date: dayjs().format('YYYY-MM-DD') });
-  const { isConfirmedSchedule } = useScheduleConfirmDate();
-  const currentTimeDegree = useRecoilValue(currentTimeDegreeState);
-  const [doItNowPlanIndex, setDoItNowPlanIndex] = useState(-1);
+  const { data: doItNowData } = useGetDoItNow();
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
-  const [checkedList, setCheckedList] = useState<string[]>([]);
   const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
-  const [doItNowPlan, setDoItNowPlan] = useState<Plan | null>(null);
+  const doItNow = doItNowData?.data?.nowPlan ?? null;
+  const doItNowIndex = doItNowData?.data?.nowPlanIndex ?? -1;
   const isMaximumChartList = !!(chartListCount && chartListCount.data.count >= NUM_OF_MAXIMUM_CHART);
-
-  useEffect(() => {
-    setCheckedListToStorageData();
-  }, []);
 
   useEffect(() => {
     updateChart();
@@ -62,17 +63,22 @@ const MainPage = ({ navigation }: MainPageProps) => {
     updateChart();
   });
 
+  const { mutate: checkSubPlan } = useCheckSubPlan({
+    onSuccess: async () => {
+      queryClient.invalidateQueries(GET_DO_IT_NOW_QUERY_KEY);
+    },
+    onMutate: () => {
+      // FIXME: disabledLoading 처리 시점 수정
+      // 현재는 체크 후 getDoItNow 하기 때문에 getDoItNow 요청 끝나면 false 처리 하고있음
+      setDisableLoading(true);
+    },
+  });
+
   const updateChart = () => {
+    SharedDefaults.updateDoItNowBridge();
     if (currentDate !== dayjs().get('date')) {
       updateTodayChart();
     }
-    updateDoItNowPlan();
-  };
-
-  const updateDoItNowPlan = () => {
-    const { nowPlan, nowPlanIndex } = getDoItNowPlan();
-    setDoItNowPlanIndex(nowPlanIndex);
-    setDoItNowPlan(nowPlan);
   };
 
   const updateTodayChart = () => {
@@ -81,27 +87,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
     setCurrentDate(dayjs().get('date'));
   };
 
-  const setCheckedListToStorageData = async () => {
-    const item = await AsyncStorage.getItem('planCheckedList');
-    const planCheckList = item ? JSON.parse(item) : [];
-    setCheckedList(planCheckList);
-  };
-
-  const handleSubPlanPress = async (id: number) => {
-    const current = dayjs();
-    const date = current.format('YYYY-MM-DD');
-    const asyncStorageItem = await AsyncStorage.getItem('planCheckedList');
-    const planCheckList: string[] = asyncStorageItem ? JSON.parse(asyncStorageItem) : [];
-    const idIndex = planCheckList.findIndex((e) => e === `${date}-${id}`);
-
-    if (idIndex < 0) {
-      planCheckList.push(`${date}-${id}`);
-    } else {
-      planCheckList.splice(idIndex, 1);
-    }
-
-    setCheckedList(planCheckList);
-    await AsyncStorage.setItem('planCheckedList', JSON.stringify(planCheckList));
+  const handleSubPlanPress = async ({ name }: SubPlan) => {
+    checkSubPlan({ subPlanName: name, date: new Date() });
+    SharedDefaults.updateDoItNowBridge();
   };
 
   const handleAddChartPress = async () => {
@@ -111,31 +99,6 @@ const MainPage = ({ navigation }: MainPageProps) => {
       return;
     }
     navigation.navigate('AddChartPage');
-  };
-
-  const getDoItNowPlan = () => {
-    if (!todayPlanChart?.data || !todayPlanChart.success) {
-      return { nowPlan: null, nowPlanIndex: -1 };
-    }
-    const nowPlanIndex = todayPlanChart.data.plans.findIndex((plan) => {
-      const current = dayjs();
-      const startTime = dayjs().set('hour', plan.startHour).set('minute', plan.startMin).startOf('minute');
-      const endTime = dayjs().set('hour', plan.endHour).set('minute', plan.endMin).startOf('minute');
-      const midnight = dayjs().startOf('date');
-      // 자정을 포함한 경우의 조건, 자정 기준으로 앞 뒤 시간 비교 필요
-      const hasMidnight = endTime.isBefore(startTime);
-      const beforeMidnightCondition =
-        (current.isBefore(midnight) && current.isSame(startTime)) || current.isAfter(startTime);
-      const afterMidnightCondition =
-        (current.isSame(midnight) || current.isAfter(midnight)) && current.isBefore(endTime);
-      // 자정을 포함하지 않은 경우의 조건
-      const generalCondition = (current.isSame(startTime) || current.isAfter(startTime)) && current.isBefore(endTime);
-      return hasMidnight ? hasMidnight && (beforeMidnightCondition || afterMidnightCondition) : generalCondition;
-    });
-
-    const nowPlan = nowPlanIndex > -1 ? todayPlanChart.data.plans[nowPlanIndex] : null;
-
-    return { nowPlan, nowPlanIndex };
   };
 
   const handleEmptyPlanPress = () => {
@@ -191,44 +154,37 @@ const MainPage = ({ navigation }: MainPageProps) => {
           <View style={styles.doItNowHeader}>
             <PlemText style={{ fontSize: 20 }}>Do it now</PlemText>
             <PlemText style={styles.currentTimesText}>
-              {doItNowPlan
-                ? `${dayjs()
-                    .set('hour', doItNowPlan.startHour)
-                    .set('minute', doItNowPlan.startMin)
-                    .format('HH:mm')} - ${dayjs()
-                    .set('hour', doItNowPlan.endHour)
-                    .set('minute', doItNowPlan.endMin)
+              {doItNow
+                ? `${dayjs().set('hour', doItNow.startHour).set('minute', doItNow.startMin).format('HH:mm')} - ${dayjs()
+                    .set('hour', doItNow.endHour)
+                    .set('minute', doItNow.endMin)
                     .format('HH:mm')}`
                 : null}
             </PlemText>
           </View>
           <UnderlineSvg preserveAspectRatio="none" width={'100%'} stroke={'#000'} style={styles.doItNowUnderline} />
           <CustomScrollView style={{ height: '20%' }} contentContainerStyle={styles.doItNowContent}>
-            {doItNowPlan ? (
+            {doItNow ? (
               <View>
                 <View style={styles.planWrap}>
-                  <PlemButton style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowPlanIndex)}>
-                    <PlemText style={{ fontSize: 22.5 }}>{doItNowPlan.name}</PlemText>
+                  <PlemButton style={styles.yellowLineText} onPress={() => handlePlanPress(doItNowIndex)}>
+                    <PlemText style={{ fontSize: 22.5 }}>{doItNow.name}</PlemText>
                     <Image source={yellowLineImage} style={styles.yellowLine} />
                   </PlemButton>
                   <PlemButton>
-                    {doItNowPlan.notification ? <NotificationActiveSvg /> : <NotificationInactiveSvg />}
+                    {doItNow.notification ? <NotificationActiveSvg /> : <NotificationInactiveSvg />}
                   </PlemButton>
                 </View>
-                {doItNowPlan.subPlans.map((sub) => {
-                  const current = dayjs();
-                  const date = current.format('YYYY-MM-DD');
-                  const isChecked = checkedList.includes(`${date}-${sub.id}`);
+                {/* FIXME: 첫번째 인자의 요소를 사용하면 타입이 DoItNowSubPlan으로 안잡힙 */}
+                {doItNow.subPlans.map((_, index) => {
+                  const sub = doItNow.subPlans[index];
                   return (
-                    <PlemButton
-                      key={`subPlan${sub.id}`}
-                      style={styles.subPlan}
-                      onPress={() => handleSubPlanPress(sub.id)}>
-                      {isChecked ? <CheckboxSvg /> : <UncheckboxSvg />}
+                    <PlemButton key={`subPlan${sub.id}`} style={styles.subPlan} onPress={() => handleSubPlanPress(sub)}>
+                      {sub.isCompleted ? <CheckboxSvg /> : <UncheckboxSvg />}
                       <PlemText
                         style={{
                           marginLeft: 4,
-                          textDecorationLine: isChecked ? 'line-through' : 'none',
+                          textDecorationLine: sub.isCompleted ? 'line-through' : 'none',
                         }}>
                         {sub.name}
                       </PlemText>

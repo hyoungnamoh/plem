@@ -107,7 +107,7 @@ const DraggableChartItem = ({
             hitSlop={8}
             onPress={() => handleClonePress(item.id)}
             disabled={isChartListMaximum}>
-            <PlemText style={[styles.cloneText, isChartListMaximum && styles.disabledCloen]}>복사</PlemText>
+            <PlemText style={[styles.cloneText, isChartListMaximum && styles.disabledClone]}>복사</PlemText>
           </PlemButton>
           <PlemButton style={styles.removeButton} hitSlop={8} onPress={() => handleDeletePress(item.id)}>
             <PlemText style={styles.removeText}>삭제</PlemText>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#E40C0C',
   },
-  disabledCloen: {
+  disabledClone: {
     color: '#CCCCCC',
   },
 });

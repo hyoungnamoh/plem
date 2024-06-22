@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   currentTimeBar: {
     backgroundColor: '#FFE600',
     width: 2,
-    height: chartRadius * 0.75,
+    height: chartRadius * 1,
     position: 'absolute',
     marginTop: '10%',
     top: 0,

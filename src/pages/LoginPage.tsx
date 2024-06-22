@@ -26,6 +26,7 @@ import { checkNotifications } from 'react-native-permissions';
 import { getStorageNotificationInfo } from 'utils/getStorageNotificationInfo';
 import { useUpdatePlanNotification } from 'hooks/mutations/useUpdatePlanNotification';
 import { useUpdateNoticeNotification } from 'hooks/mutations/useUpdateNoticeNotification';
+import SharedDefaults from 'widgets/SharedDefaults';
 
 type LoginMutationParams = {
   email: string;
@@ -100,6 +101,8 @@ const LoginPage = ({ navigation, route }: LoginPageProps) => {
       await EncryptedStorage.setItem('refreshToken', responseData.data.refreshToken);
       await getPhoneToken();
       setLoggedInUser(user);
+      await SharedDefaults.setTokenBridge(responseData.data.accessToken);
+      await SharedDefaults.updateDoItNowBridge();
       if (status === 'granted') {
         if (storageNotifiactionInfo) {
           setNotificationInfo({ notice: storageNotifiactionInfo.notice, plan: storageNotifiactionInfo.plan });

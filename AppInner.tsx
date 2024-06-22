@@ -51,6 +51,7 @@ import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
 import dayjs from 'dayjs';
 import { DAY_TO_MS } from 'constants/times';
 import GuidePage from 'pages/GuidePage/GuidePage';
+import SharedDefaults from 'widgets/SharedDefaults';
 
 configureNotification();
 
@@ -124,7 +125,7 @@ function AppInner({ routeName }: { routeName: string }) {
     };
   }, [needAppVersionUpdate, appInfo.storeUrl]);
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     // 포어그라운드 진입
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
       setCurrentTimeDegree((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
@@ -161,11 +162,9 @@ function AppInner({ routeName }: { routeName: string }) {
     const delayTime = 1000 - (endTime - startTime);
     if (delayTime > 0) {
       setTimeout(() => {
-        console.log('hi1');
         SplashScreen.hide();
       }, delayTime);
     } else {
-      console.log('hi2');
       SplashScreen.hide();
     }
 
@@ -217,10 +216,14 @@ function AppInner({ routeName }: { routeName: string }) {
 
     if (!token) {
       setLoggedInUser(null);
+      SharedDefaults.setTokenBridge(null);
+      SharedDefaults.updateDoItNowBridge();
       return;
     }
 
     const user = jwt_decode<LoggedInUser>(token);
+    SharedDefaults.setTokenBridge(token);
+    SharedDefaults.updateDoItNowBridge();
     setLoggedInUser(user);
   };
 

@@ -13,6 +13,7 @@ import { phoneTokenState } from 'states/phoneTokenState';
 import UnderlineSvg from 'assets/images/underline.svg';
 import { useQueryClient } from 'react-query';
 import { logEvent } from 'helper/analytics';
+import SharedDefaults from 'widgets/SharedDefaults';
 
 type SettingPageProps = NativeStackScreenProps<SettingTabStackParamList, 'SettingPage'>;
 
@@ -38,6 +39,8 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
   };
 
   const onPressLogout = async () => {
+    await SharedDefaults.setTokenBridge(null);
+    await SharedDefaults.updateDoItNowBridge();
     logEvent('SettingPage_logout');
     logout({ phoneToken });
     setLoggedInUser(null);
