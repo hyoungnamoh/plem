@@ -7,7 +7,7 @@ class SharedDefaults {
   // 앱이 백그라운드로 갈 때 업데이트를 모았다가 최적화?해서 한 번에 실행함
   public async updateDoItNowBridge() {
     try {
-      const res: boolean = await NativeSharedDefaults.updateDoItNow({});
+      const res: boolean = await NativeSharedDefaults.updateDoItNow('');
       return res;
     } catch (e) {
       console.warn('updateDoItNowBridge Error', e);

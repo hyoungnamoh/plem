@@ -13,6 +13,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1E3D7FBF2C2718A400FE7562 /* DoItNowBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D7FBE2C2718A400FE7562 /* DoItNowBundle.swift */; };
+		1E3D7FC22C27203600FE7562 /* AaGongCatPen.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E3D7FC12C27203600FE7562 /* AaGongCatPen.ttf */; };
+		1E3D7FC42C2729BE00FE7562 /* SharedDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EAD52C1B3D7A006652EC /* SharedDefaults.m */; };
+		1E3D7FC62C272FD200FE7562 /* Plem-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D7FC02C27193200FE7562 /* Plem-Bridging-Header.h */; };
+		1E3D7FC72C272FD600FE7562 /* SharedDefaults.h in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EA8B2C1B2D91006652EC /* SharedDefaults.h */; };
+		1E3D7FC82C272FE500FE7562 /* SharedDefaults.h in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EA8B2C1B2D91006652EC /* SharedDefaults.h */; };
+		1E3D7FCA2C272FEC00FE7562 /* Plem-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D7FC02C27193200FE7562 /* Plem-Bridging-Header.h */; };
 		1E520DA72C1D6D6A00023EB7 /* ReloadTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E520DA62C1D6D6A00023EB7 /* ReloadTimeline.swift */; };
 		1E520DA82C1D6D6A00023EB7 /* ReloadTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E520DA62C1D6D6A00023EB7 /* ReloadTimeline.swift */; };
 		1E68EABB2C1B2F22006652EC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E68EA752C1B29BC006652EC /* WidgetKit.framework */; };
@@ -21,7 +27,6 @@
 		1E68EAC32C1B2F23006652EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E68EAC22C1B2F23006652EC /* Assets.xcassets */; };
 		1E68EAC72C1B2F23006652EC /* DoItNowExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1E68EABA2C1B2F22006652EC /* DoItNowExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1E68EACE2C1B34EA006652EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E68EACD2C1B34EA006652EC /* GoogleService-Info.plist */; };
-		1E68EAD72C1B3F65006652EC /* SharedDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EAD52C1B3D7A006652EC /* SharedDefaults.m */; };
 		1E68EAD92C1B4C88006652EC /* WidgetKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EAD82C1B4C88006652EC /* WidgetKit.swift */; };
 		459D16B832E8BDC8BB0E6100 /* libPods-Plem-PlemTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC59D44784F6C0259624FEC /* libPods-Plem-PlemTests.a */; };
 		4BD31E35735F4438A05AD165 /* LeeSeoyun.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5BFABDC37EF14E93A996BA5F /* LeeSeoyun.otf */; };
@@ -74,6 +79,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Plem/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1E3D7FBE2C2718A400FE7562 /* DoItNowBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoItNowBundle.swift; sourceTree = "<group>"; };
 		1E3D7FC02C27193200FE7562 /* Plem-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Plem-Bridging-Header.h"; sourceTree = "<group>"; };
+		1E3D7FC12C27203600FE7562 /* AaGongCatPen.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AaGongCatPen.ttf; path = ../../../src/assets/fonts/AaGongCatPen.ttf; sourceTree = "<group>"; };
 		1E520DA62C1D6D6A00023EB7 /* ReloadTimeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadTimeline.swift; sourceTree = "<group>"; };
 		1E68EA752C1B29BC006652EC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		1E68EA772C1B29BC006652EC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -178,6 +184,7 @@
 		1E68EADA2C1C7383006652EC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				1E3D7FC12C27203600FE7562 /* AaGongCatPen.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -385,6 +392,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3D7FC22C27203600FE7562 /* AaGongCatPen.ttf in Resources */,
 				1E68EAC32C1B2F23006652EC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -548,11 +556,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E68EAD72C1B3F65006652EC /* SharedDefaults.m in Sources */,
+				1E3D7FC72C272FD600FE7562 /* SharedDefaults.h in Sources */,
+				1E3D7FC62C272FD200FE7562 /* Plem-Bridging-Header.h in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				1E68EAD92C1B4C88006652EC /* WidgetKit.swift in Sources */,
 				1E520DA72C1D6D6A00023EB7 /* ReloadTimeline.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				1E3D7FC42C2729BE00FE7562 /* SharedDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +570,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3D7FCA2C272FEC00FE7562 /* Plem-Bridging-Header.h in Sources */,
+				1E3D7FC82C272FE500FE7562 /* SharedDefaults.h in Sources */,
 				1E68EAC12C1B2F22006652EC /* DoItNow.swift in Sources */,
 				1E3D7FBF2C2718A400FE7562 /* DoItNowBundle.swift in Sources */,
 				1E520DA82C1D6D6A00023EB7 /* ReloadTimeline.swift in Sources */,

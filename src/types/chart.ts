@@ -1,5 +1,3 @@
-import { Omit } from 'react-native';
-
 export type SubPlan = {
   id: number;
   PlanId: number;

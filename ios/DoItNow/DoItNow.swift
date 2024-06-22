@@ -124,7 +124,6 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         var plan: PlanModel? = nil
         let userDefaults = UserDefaults(suiteName: "group.com.plem.widget.do-it-now")
-//        print("hi")
         let token = userDefaults?.string(forKey: "token")
 
         if (token == nil) {
@@ -136,7 +135,7 @@ struct Provider: TimelineProvider {
         }
 
         let session = URLSession.shared
-        let url = URL(string: "http://192.168.219.101:3030/plans/doItNow")
+        let url = URL(string: "http://192.168.219.107:3030/plans/doItNow")
       var request = URLRequest(url: url!)
       request.httpMethod = "GET"
       request.addValue(token!, forHTTPHeaderField: "Authorization")
@@ -220,6 +219,7 @@ func timePadStart(_ time: Int) -> String {
 //}
 struct DoItNowEntryView : View {
     var entry: Provider.Entry
+    
     var body: some View {
       VStack(alignment: .leading){
           if entry.token == "snapshot_token" {
