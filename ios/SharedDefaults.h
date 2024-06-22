@@ -5,8 +5,13 @@
 //  Created by 오형남 on 6/13/24.
 //
 
-#ifndef SharedDefaults_h
-#define SharedDefaults_h
+#if __has_include("RCTBridgeModule.h")
+#import "RCTBridgeModule.h"
+#else
+#import <React/RCTBridgeModule.h>
+#endif
 
 
-#endif /* SharedDefaults_h */
+@interface SharedDefaults : NSObject<RCTBridgeModule>
+
+@end
