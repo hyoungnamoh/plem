@@ -135,7 +135,10 @@ struct Provider: TimelineProvider {
         }
 
         let session = URLSession.shared
-        let url = URL(string: "http://192.168.219.107:3030/plans/doItNow")
+        let baseUrl = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
+        let getDoItNowUrl = baseUrl + "/plans/doItNow"
+      print("getDoItNowUrl", getDoItNowUrl)
+        let url = URL(string: getDoItNowUrl)
       var request = URLRequest(url: url!)
       request.httpMethod = "GET"
       request.addValue(token!, forHTTPHeaderField: "Authorization")

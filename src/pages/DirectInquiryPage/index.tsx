@@ -218,7 +218,7 @@ const DirectInquiryPage = ({ navigation }: DirectInquiryPageProps) => {
                   {isInvalidEmail && <PlemText style={styles.errorText}>이메일 형식이 올바르지 않습니다.</PlemText>}
                 </View>
                 <PlemText style={{ color: '#888888', marginTop: 12 }}>
-                  {'* plemsupport@gmail.com으로 부터\n메일을 수신 가능한 상태로 설정해 주세요.'}
+                  {'* plemdeveloper@gmail.com으로 부터\n메일을 수신 가능한 상태로 설정해 주세요.'}
                 </PlemText>
                 <BlackButton style={{ marginTop: 32 }} onPress={handleInquiry}>
                   <PlemText style={{ color: '#fff' }}>문의하기</PlemText>

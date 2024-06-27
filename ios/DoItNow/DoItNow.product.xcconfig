@@ -1,0 +1,10 @@
+//
+//  DoItNow.product.xcconfig
+//  Plem
+//
+//  Created by 오형남 on 6/23/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+BASE_URL=https:/$()/dev.api.plem.co.kr/api
