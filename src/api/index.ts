@@ -1,7 +1,9 @@
 import axios from 'axios';
+import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import SharedDefaults from 'widgets/SharedDefaults';
 
-export const baseUrl = 'http://192.168.219.107:3030';
+export const baseUrl = Config.API_URL;
 
 const apiRequest = axios.create({
   baseURL: baseUrl,
@@ -33,6 +35,8 @@ apiRequest.interceptors.response.use(
       if (!refreshToken) {
         await EncryptedStorage.removeItem('accessToken');
         await EncryptedStorage.removeItem('refreshToken');
+        SharedDefaults.setTokenBridge(null);
+        SharedDefaults.updateDoItNowBridge();
         return response;
       }
       try {
@@ -42,9 +46,13 @@ apiRequest.interceptors.response.use(
         if (accessTokenResponse.status === 200 && accessTokenResponse.data?.data) {
           const newAccessToken = accessTokenResponse.data.data;
           await EncryptedStorage.setItem('accessToken', newAccessToken);
+          SharedDefaults.setTokenBridge(newAccessToken);
+          SharedDefaults.updateDoItNowBridge();
           if (!originalRequest.headers) {
             await EncryptedStorage.removeItem('accessToken');
             await EncryptedStorage.removeItem('refreshToken');
+            SharedDefaults.setTokenBridge(null);
+            SharedDefaults.updateDoItNowBridge();
             return response;
           }
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -58,6 +66,8 @@ apiRequest.interceptors.response.use(
     if (response.status === 411 || response.status === 420) {
       await EncryptedStorage.removeItem('accessToken');
       await EncryptedStorage.removeItem('refreshToken');
+      SharedDefaults.setTokenBridge(null);
+      SharedDefaults.updateDoItNowBridge();
       return response;
     }
     console.info(`${response.config.url} response`);

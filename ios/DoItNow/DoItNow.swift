@@ -148,15 +148,18 @@ struct Provider: TimelineProvider {
         let task = session.dataTask(with: request) { (data, response, error) in
           guard error == nil else {
                   print("request API Error: Call error")
+            self.createEmptyTimeline(completion: completion)
                   return
               }
           guard let response = response as? HTTPURLResponse, (200...300).contains(response.statusCode) else {
                   print("request API Error: Status Code not included in the scope")
+            self.createEmptyTimeline(completion: completion)
                   return
               }
 
             guard let data = data else {
                 print("No data received")
+              self.createEmptyTimeline(completion: completion)
                 return
             }
 
@@ -165,8 +168,8 @@ struct Provider: TimelineProvider {
               print("responseData.data", responseData.data)
               plan = responseData.data.nowPlan
               let currentDate = Date()
-              for secondOffset in 0 ..< 2 {
-                  let entryDate = Calendar.current.date(byAdding: .minute, value: secondOffset, to: currentDate)!
+              for minuteOffset in 0 ..< 1 {
+                  let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
                 let entry = SimpleEntry(date: entryDate, plan: plan, token: token)
                   entries.append(entry)
               }
@@ -176,35 +179,19 @@ struct Provider: TimelineProvider {
               
 
             } catch let error {
-                print("222222222222222", error)
+              print("JSON Decoding error: \(error)")
+              self.createEmptyTimeline(completion: completion)
             }
         }
       
         task.resume()
-        
-
-
-//        do {
-//          if jsonText != nil {
-//            let jsonData = Data(jsonText?.utf8 ?? "".utf8)
-//            var planData = try JSONDecoder().decode(PlanModel.self, from: jsonData)
-//            
-//            if planData.subPlans.count > 4 {
-//              planData.subPlans.removeLast(planData.subPlans.count - 2)
-//            }
-//
-//            subPlans = planData.subPlans
-//
-//          } else {
-//            
-//          }
-//        } catch {
-//          print(error)
-//        }
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        
     }
+  
+  private func createEmptyTimeline(completion: @escaping (Timeline<SimpleEntry>) -> ()) {
+      let entry = SimpleEntry(date: Date(), plan: nil, token: nil)
+      let timeline = Timeline(entries: [entry], policy: .never)
+      completion(timeline)
+  }
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -214,12 +201,7 @@ struct SimpleEntry: TimelineEntry {
 func timePadStart(_ time: Int) -> String {
     return String(format: "%02d", time)
 }
-//for secondOffset in 0 ..< 2 {
-//    let entryDate = Calendar.current.date(byAdding: .minute, value: secondOffset, to: currentDate)!
-//    print("subPlanssubPlanssubPlanssubPlans", plan)
-//  let entry = SimpleEntry(date: entryDate, plan: plan, token: token)
-//    entries.append(entry)
-//}
+
 struct DoItNowEntryView : View {
     var entry: Provider.Entry
     
@@ -232,55 +214,21 @@ struct DoItNowEntryView : View {
             Text("로그인 해주세요!").font(.custom("AaGongCatPen", size: 16)).foregroundColor(Color.black)
           }
           else if entry.plan == nil {
-            Text("계획을 추가해주세요!").font(.custom("AaGongCatPen", size: 18)).foregroundColor(Color.black).frame(width: 260, alignment: .topLeading)
-          }
-          else if entry.plan!.subPlans.count > 0 {
-            let length = entry.plan?.subPlans.count ?? 0
             
-            HStack(alignment: .top){
               ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                  .fill(Color(red: 1, green: 0.902, blue: 0))
-                  .frame(height: 6)
-                Text(entry.plan!.name)
-                    .font(.custom("AaGongCatPen", size: 16))
-                    .foregroundColor(Color.black)
-                    .background(Color.clear)
-                    .lineLimit(1)
-              }.fixedSize()
-              Spacer()
-              Text("\(timePadStart(entry.plan!.startHour)):\(timePadStart(entry.plan!.startMin)) - \(timePadStart(entry.plan!.endHour)):\(timePadStart(entry.plan!.endMin))")
-                  .font(.custom("AaGongCatPen", size: 16))
+                Text("계획을 추가해주세요!")
+                  .font(.custom("AaGongCatPen", size: 18))
                   .foregroundColor(Color.black)
                   .background(Color.clear)
                   .lineLimit(1)
-            }.frame(height: 32).padding(.top).padding(.horizontal)
-            
-            if length == 0 {
+              }.fixedSize().frame(height: 32).padding(.top).padding(.horizontal)
               PlaceHolderSubPlan()
-            }
-            if length >= 0 && length < 3 {
-              VStack(alignment: .leading){
-                ForEach(entry.plan!.subPlans, id : \.self.id){ subPlan in
-                  RowView(subPlan: subPlan)
-                }
-                PlaceHolderSubPlan()
-              }
-            }
-            if length == 3 {
-              VStack(alignment: .leading){
-                ForEach(entry.plan!.subPlans, id : \.self.id){ subPlan in
-                  RowView(subPlan: subPlan)
-                }
-              }
-            }
-            if length > 3 {
-              RowView(subPlan: entry.plan!.subPlans[0])
-              RowView(subPlan: entry.plan!.subPlans[1])
-              ViewMore(viewMoreCount: length - 2)
-            }
             Spacer()
             Spacer()
+          }
+          
+          else if entry.plan!.subPlans.count > -1 {
+            DoItNowComponent(plan: entry.plan!)
           }
           else {
             Text("계획을 추가해주세요!").font(.custom("AaGongCatPen", size: 18)).foregroundColor(Color.black).frame(width: 260, alignment: .topLeading)
@@ -378,9 +326,6 @@ struct DoItNowComponent : View {
         .lineLimit(1)
     }.frame(height: 32).padding(.top).padding(.horizontal)
     
-    if length == 0 {
-      PlaceHolderSubPlan()
-    }
     if length >= 0 && length < 3 {
       VStack(alignment: .leading){
         ForEach(plan.subPlans, id : \.self.id){ subPlan in
