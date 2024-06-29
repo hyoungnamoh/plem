@@ -21,7 +21,6 @@ const DraggableChartItem = ({
   onDeleteUpdate,
   onCloneUpdate,
   isChartListMaximum,
-  setOpenMaximumAlert,
 }: {
   item: PlanChart;
   drag: () => void;

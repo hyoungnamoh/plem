@@ -33,6 +33,7 @@ const SubPlanInput = ({
           style={{ marginLeft: 4, width: '80%' }}
           placeholder={'할 일 추가하기'}
           returnKeyType={'done'}
+          maxLength={30}
           onSubmitEditing={() => onEndEditingSubPlan({ targetPlanIndex: planIndex, subPlanName: subPlan })}
         />
       </View>

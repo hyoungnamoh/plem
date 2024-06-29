@@ -42,6 +42,7 @@ import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import dayjs from 'dayjs';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { logEvent } from 'helper/analytics';
+import { useDoItNowUpdate } from 'hooks/useDoItNowUpdate';
 
 const yellowLineImage = require('../../assets/images/yellow_line.png');
 
@@ -53,6 +54,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
 
   const [chart, setChart] = useRecoilState<AddPlanChart>(addPlanChartState);
   const setGlobalToast = useSetRecoilState(globalToastState);
+  const { update: updateDoItNow } = useDoItNowUpdate();
 
   const [openEmptyPlanAlert, setOpenEmptyPlanAlert] = useState(false);
   const [openPopInEditingAlert, setPopInEditingAlert] = useState(false);
@@ -73,6 +75,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
+        updateDoItNow();
         navigation.dispatch(TabActions.jumpTo('PlanChartListTab'));
         navigation.dispatch(StackActions.popToTop());
       } else {
@@ -89,6 +92,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
         queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
         queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
         queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
+        updateDoItNow();
         navigation.goBack();
       }
     },
@@ -520,7 +524,9 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
                           <View key={`subPlan_${subPlanIndex}`} style={styles.subPlan}>
                             <View style={styles.subPlanNameWrap}>
                               <UncheckedSvg />
-                              <PlemText style={{ marginLeft: 4 }}>{subPlan.name}</PlemText>
+                              <PlemText style={{ marginLeft: 4 }} numberOfLines={1}>
+                                {subPlan.name}
+                              </PlemText>
                             </View>
                             <PlemButton onPress={() => deleteSubPlan({ planIndex, subPlanIndex })}>
                               <DeleteRedSvg style={{ marginLeft: 4 }} />
@@ -624,6 +630,7 @@ const styles = StyleSheet.create({
   subPlanNameWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '80%',
   },
   noRepeatNotice: {
     flexDirection: 'row',

@@ -52,6 +52,7 @@ import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
 import dayjs from 'dayjs';
 import { DAY_TO_MS } from 'constants/times';
 import SharedDefaults from 'widgets/SharedDefaults';
+import { useDoItNowUpdate } from 'hooks/useDoItNowUpdate';
 
 configureNotification();
 
@@ -84,6 +85,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const disableLoading = useRecoilValue(disableLoadingState);
 
   const { initSchedulConfirmDate } = useScheduleConfirmDate();
+  const { update: updateDoItNow } = useDoItNowUpdate();
 
   const appState = useRef(AppState.currentState);
   const globalToastRef = useRef<Toast>(null);
@@ -128,6 +130,7 @@ function AppInner({ routeName }: { routeName: string }) {
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     // 포어그라운드 진입
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      updateDoItNow();
       setCurrentTimeDegree((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
     }
     // 백그라운드로 이동
@@ -135,10 +138,12 @@ function AppInner({ routeName }: { routeName: string }) {
       needAppVersionUpdate &&
       appInfo.storeUrl &&
       appState.current.match(/inactive|active/) &&
-      nextAppState === 'background' &&
-      !__DEV__
+      nextAppState === 'background'
     ) {
-      showUpdateAlert(appInfo.storeUrl);
+      updateDoItNow();
+      if (!__DEV__) {
+        showUpdateAlert(appInfo.storeUrl);
+      }
     }
     appState.current = nextAppState;
   };

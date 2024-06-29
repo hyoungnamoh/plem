@@ -10,6 +10,7 @@ import { useQueryClient } from 'react-query';
 import { CHART_LIST_COUNT_QUERY_KEY } from 'hooks/queries/useGetChartListCount';
 import { TODAY_PLAN_CHART_QUERY_KEY } from 'hooks/queries/useGetTodayPlanChart';
 import { CHART_LIST_QUERY_KEY } from 'hooks/queries/useGetChartList';
+import { useDoItNowUpdate } from 'hooks/useDoItNowUpdate';
 
 const DraggableChartList = ({
   charts,
@@ -26,6 +27,7 @@ const DraggableChartList = ({
 }) => {
   const queryClient = useQueryClient();
   const setDisableLoading = useSetRecoilState(disableLoadingState);
+  const { update: updateDoItNow } = useDoItNowUpdate();
   const { mutate: updateChartsOrder } = useUpdateChartsOrder({
     onSuccess: ({ success, data }) => {
       setDisableLoading(false);
@@ -64,6 +66,7 @@ const DraggableChartList = ({
     queryClient.invalidateQueries(CHART_LIST_COUNT_QUERY_KEY);
     queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
     queryClient.invalidateQueries(CHART_LIST_QUERY_KEY);
+    updateDoItNow();
     const newList = [...charts].filter((item) => item.id !== id);
     if (newList.length === 0) {
       handleEditComplete();

@@ -1,11 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, StyleSheet, View } from 'react-native';
 import PlemText from 'components/Atoms/PlemText';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { MainTabStackParamList } from 'tabs/MainTab';
 import { MAIN_COLOR } from 'constants/colors';
-import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import NotificationActiveSvg from 'assets/images/notification_active_32x32.svg';
 import NotificationInactiveSvg from 'assets/images/notification_inactive_32x32.svg';
@@ -24,16 +23,15 @@ import { useGetChartListCount } from 'hooks/queries/useGetChartListCount';
 import { NUM_OF_MAXIMUM_CHART } from 'constants/numOfMaximumChart';
 import { LoggedInTabParamList } from 'types/appInner';
 import TodayScheduleBox from 'components/TodayScheduleBox';
-import { TODAY_SCHEDULE_LIST, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
+import { TODAY_SCHEDULE_LIST_QUERY_KEY, useGetTodayScheduleList } from 'hooks/queries/useGetTodayScheduleList';
 import { useScheduleConfirmDate } from 'hooks/useScheduleConfirmDate';
 import { SubPlan } from 'types/chart';
 import { logEvent } from 'helper/analytics';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentTimeDegreeState } from 'states/currentTimeDegreeState';
-import SharedDefaults from 'widgets/SharedDefaults';
+import { useSetRecoilState } from 'recoil';
 import { useCheckSubPlan } from 'hooks/mutations/useCheckSubPlan';
 import { disableLoadingState } from 'states/disableLoadingState';
-import { GET_DO_IT_NOW_QUERY_KEY, useGetDoItNow } from 'hooks/queries/useGetDoItNow';
+import { useGetDoItNow } from 'hooks/queries/useGetDoItNow';
+import { useDoItNowUpdate } from 'hooks/useDoItNowUpdate';
 
 type MainPageProps = NativeStackScreenProps<MainTabStackParamList, 'MainPage'>;
 
@@ -41,7 +39,6 @@ const yellowLineImage = require('assets/images/yellow_line.png');
 
 const MainPage = ({ navigation }: MainPageProps) => {
   const tabNaviation = useNavigation<NavigationProp<LoggedInTabParamList>>();
-  const currentTimeDegree = useRecoilValue(currentTimeDegreeState);
   const setDisableLoading = useSetRecoilState(disableLoadingState);
   const { isConfirmedSchedule } = useScheduleConfirmDate();
   const queryClient = useQueryClient();
@@ -49,47 +46,37 @@ const MainPage = ({ navigation }: MainPageProps) => {
   const { data: chartListCount } = useGetChartListCount();
   const { data: todayScheduleList } = useGetTodayScheduleList({ date: dayjs().format('YYYY-MM-DD') });
   const { data: doItNowData } = useGetDoItNow();
+  const { update: updateDoItNow } = useDoItNowUpdate();
+  const isFocused = useIsFocused();
+
   const [openMaximumAlert, setOpenMaximumAlert] = useState(false);
-  const [currentDate, setCurrentDate] = useState(dayjs().get('date'));
   const doItNow = doItNowData?.data?.nowPlan ?? null;
   const doItNowIndex = doItNowData?.data?.nowPlanIndex ?? -1;
   const isMaximumChartList = !!(chartListCount && chartListCount.data.count >= NUM_OF_MAXIMUM_CHART);
 
   useEffect(() => {
-    updateChart();
-  }, [currentTimeDegree]);
-
-  useFocusEffect(() => {
-    updateChart();
-  });
+    if (isFocused) {
+      updateTodayChart();
+      updateDoItNow();
+    }
+  }, [isFocused]);
 
   const { mutate: checkSubPlan } = useCheckSubPlan({
     onSuccess: async () => {
-      queryClient.invalidateQueries(GET_DO_IT_NOW_QUERY_KEY);
-    },
-    onMutate: () => {
-      // FIXME: disabledLoading 처리 시점 수정
-      // 현재는 체크 후 getDoItNow 하기 때문에 getDoItNow 요청 끝나면 false 처리 하고있음
-      setDisableLoading(true);
+      updateDoItNow();
     },
   });
 
-  const updateChart = () => {
-    SharedDefaults.updateDoItNowBridge();
-    if (currentDate !== dayjs().get('date')) {
-      updateTodayChart();
-    }
-  };
-
   const updateTodayChart = () => {
     queryClient.invalidateQueries(TODAY_PLAN_CHART_QUERY_KEY);
-    queryClient.invalidateQueries(TODAY_SCHEDULE_LIST);
-    setCurrentDate(dayjs().get('date'));
+    queryClient.invalidateQueries(TODAY_SCHEDULE_LIST_QUERY_KEY);
+    // setCurrentDate(dayjs().get('date'));
   };
 
   const handleSubPlanPress = async ({ name }: SubPlan) => {
+    setDisableLoading(true);
+    logEvent('MainPage_checkSubPlan');
     checkSubPlan({ subPlanName: name, date: new Date() });
-    SharedDefaults.updateDoItNowBridge();
   };
 
   const handleAddChartPress = async () => {
@@ -185,7 +172,9 @@ const MainPage = ({ navigation }: MainPageProps) => {
                         style={{
                           marginLeft: 4,
                           textDecorationLine: sub.isCompleted ? 'line-through' : 'none',
-                        }}>
+                          width: '90%',
+                        }}
+                        numberOfLines={1}>
                         {sub.name}
                       </PlemText>
                     </PlemButton>

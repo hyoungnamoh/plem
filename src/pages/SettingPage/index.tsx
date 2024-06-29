@@ -22,6 +22,7 @@ const SettingPage = ({ navigation }: SettingPageProps) => {
   const [loggedInUser, setLoggedInUser] = useRecoilState(loggedInUserState);
   const [phoneToken, setPhoneToken] = useRecoilState(phoneTokenState);
 
+  // api 호출 모두 완료 후 EncryptedStorage 데이터 삭제
   const onSuccessLogout = async () => {
     await EncryptedStorage.removeItem('accessToken');
     await EncryptedStorage.removeItem('refreshToken');
