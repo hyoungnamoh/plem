@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import SharedDefaults from 'widgets/SharedDefaults';
 
-export const baseUrl = Config.API_URL;
+export const baseUrl = Config.BASE_URL;
 
 const apiRequest = axios.create({
   baseURL: baseUrl,
