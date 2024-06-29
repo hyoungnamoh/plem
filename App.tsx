@@ -7,6 +7,7 @@ import { errorHandler } from './src/utils/errorHandler';
 import CodePush from 'react-native-code-push';
 import { codePushOptions } from './src/utils/configCodepush';
 import NavigationWrapper from 'components/NavigationWrapper';
+import { SEC_TO_MS } from 'constants/times';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -14,6 +15,7 @@ const queryClient = new QueryClient({
   }),
   defaultOptions: {
     mutations: { onError: errorHandler },
+    queries: { staleTime: 10 * SEC_TO_MS },
   },
 });
 
