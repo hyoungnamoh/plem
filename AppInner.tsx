@@ -134,14 +134,9 @@ function AppInner({ routeName }: { routeName: string }) {
       setCurrentTimeDegree((dayjs().diff(dayjs().startOf('date')) / DAY_TO_MS) * 360);
     }
     // 백그라운드로 이동
-    if (
-      needAppVersionUpdate &&
-      appInfo.storeUrl &&
-      appState.current.match(/inactive|active/) &&
-      nextAppState === 'background'
-    ) {
+    if (appState.current.match(/inactive|active/) && nextAppState === 'background') {
       updateDoItNow();
-      if (!__DEV__) {
+      if (needAppVersionUpdate && appInfo.storeUrl && !__DEV__) {
         showUpdateAlert(appInfo.storeUrl);
       }
     }
