@@ -125,7 +125,7 @@ function AppInner({ routeName }: { routeName: string }) {
     return () => {
       appStateChange.remove();
     };
-  }, [needAppVersionUpdate, appInfo.storeUrl]);
+  }, [needAppVersionUpdate, appInfo.storeUrl, loggedInUser]);
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     // 포어그라운드 진입
