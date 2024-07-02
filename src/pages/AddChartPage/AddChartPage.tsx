@@ -362,6 +362,7 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
     });
 
     if (hasDuplicatedSubPlan) {
+      logEvent('AddChartPage_duplicatedSubPlan');
       setGlobalToast({ text: '중복된 할 일을 등록할 수 없어요. 내용을 수정해 주세요!', duration: 2000 });
       return false;
     }

@@ -253,8 +253,8 @@ struct DoItNow: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
           DoItNowEntryView(entry: entry).widgetBackground()
         }
-        .configurationDisplayName("Simple Todo")
-        .description("This is an simple todo widget.").supportedFamilies([.systemMedium])
+        .configurationDisplayName("Do it now")
+        .description("지금 해야할 일을 한눈에 확인할 수 있어요.").supportedFamilies([.systemMedium])
     }
 }
 
