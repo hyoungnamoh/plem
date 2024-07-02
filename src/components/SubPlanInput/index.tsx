@@ -10,7 +10,7 @@ const SubPlanInput = ({
   saveSubPlan,
 }: {
   planIndex: number;
-  saveSubPlan: (args: { planIndex: number; subPlanName: string }) => void;
+  saveSubPlan: (args: { planIndex: number; subPlanName: string }) => boolean;
 }) => {
   const [subPlan, setSubPlan] = useState('');
 
@@ -19,8 +19,10 @@ const SubPlanInput = ({
       Alert.alert('할 일을 입력해주세요.');
       return;
     }
-    saveSubPlan({ planIndex: targetPlanIndex, subPlanName });
-    setSubPlan('');
+    const isSuccess = saveSubPlan({ planIndex: targetPlanIndex, subPlanName });
+    if (isSuccess) {
+      setSubPlan('');
+    }
   };
 
   return (

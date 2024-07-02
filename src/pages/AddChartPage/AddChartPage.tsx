@@ -357,9 +357,20 @@ const AddChartPage = ({ navigation, route }: AddChartPageProps) => {
   };
 
   const saveSubPlan = ({ planIndex, subPlanName }: { planIndex: number; subPlanName: string }) => {
+    const hasDuplicatedSubPlan = chart.plans.find((plan) => {
+      return plan.subPlans.find((subPlan) => subPlan.name === subPlanName);
+    });
+
+    if (hasDuplicatedSubPlan) {
+      setGlobalToast({ text: '중복된 할 일을 등록할 수 없어요. 내용을 수정해 주세요!', duration: 2000 });
+      return false;
+    }
+
     const copiedChart = cloneDeep(chart);
     copiedChart.plans[planIndex].subPlans = [...copiedChart.plans[planIndex].subPlans, { name: subPlanName }];
     setChart(copiedChart);
+
+    return true;
   };
 
   const onPressModifyPlan = ({ planIndex }: { planIndex: number }) => {
